@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api;
 
+import de.geolykt.starloader.api.empire.ActiveEmpire;
 import snoddasmannen.galimulator.le;
 
 /**
@@ -17,5 +18,15 @@ public class Galimulator {
      */
     public static int getGameYear() {
         return le.C();
+    }
+
+    /**
+     * Convenience method to obtain the neutral empire. The neutral empire should NOT be ticked as it may create
+     * serious side effects within the ticking mechanism. Additionally merging or destroying the empire might have serious
+     * side effects, which is why that should be avoided.
+     * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
+     */
+    public static ActiveEmpire getNeutralEmpire() {
+        return (ActiveEmpire) le.w;
     }
 }

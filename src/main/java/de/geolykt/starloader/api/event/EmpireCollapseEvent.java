@@ -2,7 +2,7 @@ package de.geolykt.starloader.api.event;
 
 import org.jetbrains.annotations.NotNull;
 
-import snoddasmannen.galimulator.ax;
+import de.geolykt.starloader.api.empire.ActiveEmpire;
 
 public class EmpireCollapseEvent extends Event implements Cancellable {
 
@@ -26,9 +26,9 @@ public class EmpireCollapseEvent extends Event implements Cancellable {
 
     private boolean cancelState = false;
     private EmpireCollapseCause cause;
-    private ax empire;
+    private ActiveEmpire empire;
 
-    public EmpireCollapseEvent(@NotNull ax collapsedEmpire, @NotNull EmpireCollapseCause collapseCause) {
+    public EmpireCollapseEvent(@NotNull ActiveEmpire collapsedEmpire, @NotNull EmpireCollapseCause collapseCause) {
         cause = collapseCause;
         empire = collapsedEmpire;
     }
@@ -43,7 +43,7 @@ public class EmpireCollapseEvent extends Event implements Cancellable {
         cancelState = cancelled;
     }
 
-    public @NotNull ax getCollapsedEmpire() {
+    public @NotNull ActiveEmpire getCollapsedEmpire() {
         return empire;
     }
 

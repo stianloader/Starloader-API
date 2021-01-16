@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.DebugNagException;
+import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.EmpireCollapseEvent.EmpireCollapseCause;
 import de.geolykt.starloader.api.event.EventManager;
@@ -15,7 +16,7 @@ import snoddasmannen.galimulator.ax;
 import snoddasmannen.galimulator.le;
 
 /**
- * Mixin to intercept any calls to the static methods within the le (TODO: give it an actual name) class
+ * Mixin to intercept any calls to the static methods within the Galimulator (le) class
  *  Since sponge's mixins do not support injecting into static methods, it will also perform optimisations to them,
  *  if needed.
  */
@@ -29,7 +30,8 @@ public class InstanceMixins {
 
     @Overwrite
     public static void f(ax var0) {
-        EmpireCollapseEvent e = new EmpireCollapseEvent(var0, var0.K() == 0 ? EmpireCollapseCause.NO_STARS : EmpireCollapseCause.UNKNOWN);
+        EmpireCollapseEvent e = new EmpireCollapseEvent((ActiveEmpire) var0,
+                var0.K() == 0 ? EmpireCollapseCause.NO_STARS : EmpireCollapseCause.UNKNOWN);
         if (e.getCause() == EmpireCollapseCause.UNKNOWN) {
             DebugNagException.nag("This method is thought to be only used for GC after a empire has no stars!");
         }
