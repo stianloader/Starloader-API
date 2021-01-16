@@ -1,5 +1,8 @@
 package de.geolykt.starloader.apimixins;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -9,16 +12,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickEvent;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
+import snoddasmannen.galimulator.ax;
+import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
 @Mixin(snoddasmannen.galimulator.ax.class)
 public class EmpireMixins implements ActiveEmpire {
+
+    @Shadow
+    public int c; // uniqueId
 
     @Shadow
     private int U; // collapseYear
@@ -32,6 +41,13 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     GalColor m; // color
 
+    @SuppressWarnings("rawtypes")
+    @Shadow
+    private ArrayList K; // ships
+
+    @Shadow
+    private Flagship C; // flagship
+
     @Shadow
     private Government F;
 
@@ -39,14 +55,9 @@ public class EmpireMixins implements ActiveEmpire {
     private Religion G;
 
     @Shadow
-    public int ah() { // getYearsAlive
-        return -1;
-    }
+    int l;
 
-    @Shadow
-    public String O() { // getIdentifierName
-        return "IDENTIFIER_NAME";
-    }
+    private Field allianceField;
 
     @Shadow
     public void a(Religion var0) { // setReligion
@@ -57,40 +68,37 @@ public class EmpireMixins implements ActiveEmpire {
     public void a(StateActor var0) { // addActor
     }
 
+    @Override
+    public void addActor(StateActor actor) {
+        a(actor);
+    }
+
     @Shadow
     public void b(StateActor var0) { // removeActor
     }
 
-    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
-    public void tick(CallbackInfo info) {
-        if (((Empire) this) == Galimulator.getNeutralEmpire()) {
-            if (TickEvent.tryAquireLock()) {
-                EventManager.handleEvent(new TickEvent());
-                TickEvent.releaseLock();
-            } else {
-                DebugNagException.nag("Nested or recursive tick detected, skipping tick!");
+    @SuppressWarnings("unchecked")
+    @Override
+    public ArrayList<StateActor> getActors() {
+        return K;
+    }
+
+    @Override
+    public Alliance getAlliance() {
+        // While technically it would be something like "(Alliance) ((ax)((Object)this)).k()", this won't compile, so reflection it is!
+        if (allianceField == null) {
+            try {
+                allianceField = ax.class.getField("E");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
-    }
-
-    @Override
-    public int getAge() {
-        return ah();
-    }
-
-    @Override
-    public boolean hasCollapsed() {
-        return U != -1;
-    }
-
-    @Override
-    public int getStarCount() {
-        return V;
-    }
-
-    @Override
-    public String getEmpireName() {
-        return d;
+        try {
+            return (Alliance) allianceField.get(this);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -104,8 +112,48 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public String getEmpireName() {
+        return d;
+    }
+
+    @Override
+    public Flagship getFlagship() {
+        return C;
+    }
+
+    @Override
+    public int getFoundationYear() {
+        return l;
+    }
+
+    @Override
     public Religion getReligion() {
         return G;
+    }
+
+    @Override
+    public int getStarCount() {
+        return V;
+    }
+
+    @Override
+    public int getUID() {
+        return c;
+    }
+
+    @Override
+    public boolean hasCollapsed() {
+        return U != -1;
+    }
+
+    @Shadow
+    public String O() { // getIdentifierName
+        return "IDENTIFIER_NAME";
+    }
+
+    @Override
+    public void removeActor(StateActor actor) {
+        b(actor);
     }
 
     @Override
@@ -113,8 +161,15 @@ public class EmpireMixins implements ActiveEmpire {
         a(religion);
     }
 
-    @Override
-    public void addActor(StateActor actor) {
-        a(actor);
+    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
+    public void tick(CallbackInfo info) {
+        if (((Empire) this) == Galimulator.getNeutralEmpire()) {
+            if (TickEvent.tryAquireLock()) {
+                EventManager.handleEvent(new TickEvent());
+                TickEvent.releaseLock();
+            } else {
+                DebugNagException.nag("Nested or recursive tick detected, skipping tick!");
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "InstanceMixins",
-    "EmpireMixins"
+    "EmpireMixins",
+    "AllianceMixins"
   ]
 }
