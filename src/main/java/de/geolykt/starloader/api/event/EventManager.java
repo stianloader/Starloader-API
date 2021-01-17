@@ -1,71 +1,113 @@
 package de.geolykt.starloader.api.event;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
+import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 
-public final class EventManager {
+import de.geolykt.starloader.DebugNagException;
 
-    private static final HashMap<Class<? extends Event>, CallbackList> eventHandlers = new HashMap<>();
+// I'm open to a refractor for both efficiency and convenience
+public final class EventManager {
 
     private EventManager() {} // The class should not be constructed
 
+    private static final Map<Listener, List<Method>> LISTENERS = new HashMap<>();
+
+    private static boolean wasBuilt = false;
+
     /**
-     * Registers a callback.
-     * <br>
-     * <b>This method will be changed in the future to allow for better cancellation awareness and prioritisation.</b> <br>
-     * However right now a priority queue can be established by adding callbacks that cancel the event first
-     * and those which do something based on the cancel state later (in late init for example). The callbacks will
-     * be called regardless of cancellation state of the event though, which is used so the cancellation state 
-     * can be reverted later by other callbacks if needed.
-     * @param eventClass The event that the callback should listen for
-     * @param callback The callback itself
+     * Registers an event listener if it was not yet registered and rebuilds if needed.
+     * @param listener The {@link Listener} to add to the pool of active listeners
      */
-    public static final <T extends Event> void registerCallback(Class<T> eventClass, EventCallback<T> callback) {
-        CallbackList eventCallbacks = eventHandlers.get(eventClass);
-        if (eventCallbacks == null) {
-            eventCallbacks = new CallbackList();
-        }
-        eventCallbacks.addCallback((EventCallback<T>) callback);
-        eventHandlers.put(eventClass, eventCallbacks);
-    }
-
-    public static final <T extends Event> void removeCallback(Class<T> eventClass, Consumer<T> callback) {
-        CallbackList eventCallbacks = eventHandlers.get(eventClass);
-        if (eventCallbacks == null) {
-            eventCallbacks = new CallbackList();
-        }
-        eventCallbacks.removeCallback((EventCallback<?>) callback);
-        eventHandlers.put(eventClass, eventCallbacks);
-    }
-
-    public static final void handleEvent(@NotNull Event event) {
-        CallbackList callbacks = eventHandlers.get(event.getClass());
-        if (callbacks == null) {
+    public static void registerListener(Listener listener) {
+        if (LISTENERS.containsKey(listener)) {
             return;
-        } else {
-            callbacks.process(event);
+        }
+        List<Method> handlers = new ArrayList<>();
+        Method[] methods = listener.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(EventHandler.class)) {
+                if (method.getParameterCount() != 1) {
+                    DebugNagException.nag("Invalid parameter count for event handler within listener!");
+                    continue;
+                }
+                if (!Modifier.isPublic(method.getModifiers())) {
+                    DebugNagException.nag("Inaccessible EventHandler within listener!");
+                    continue;
+                }
+                handlers.add(method);
+            }
+        }
+        LISTENERS.put(listener, handlers);
+        if (wasBuilt) {
+            rebuild();
         }
     }
-} final class CallbackList {
 
-    private final List<EventCallback<Event>> callbacks = new CopyOnWriteArrayList<>();
-
-    protected CallbackList() {}
-
-    @SuppressWarnings("unchecked") // The casts within this method are generally safe
-    protected final void addCallback(@NotNull EventCallback<? extends Event> callback) {
-        callbacks.add((EventCallback<Event>) callback);
+    /**
+     * Removes the listener from the active listener pool and rebuilds if needed.
+     * @param listener The {@link Listener} to remove
+     */
+    public static void unregisterListener(Listener listener) {
+        if (LISTENERS.containsKey(listener)) {
+            LISTENERS.remove(listener);
+            if (wasBuilt) {
+                rebuild();
+            }
+        }
     }
 
-    protected final void removeCallback(@NotNull EventCallback<?> callback) {
-        callbacks.removeIf(cb -> cb.equals(callback)); // Even if rare, the callback could be registered multiple times
+    private static final List<Map<Class<?>, List<Map.Entry<Listener, Method>>>> EVENT_HANDLERS = new ArrayList<>(EventPriority.values().length);
+
+    private static void rebuild() {
+        wasBuilt = true;
+        LogManager.getRootLogger().info("Rebuilding event tree");
+        EVENT_HANDLERS.clear();
+        for (EventPriority prio : EventPriority.values()) {
+            EVENT_HANDLERS.add(prio.ordinal(), new HashMap<>());
+        }
+        LISTENERS.forEach((listener, handles) -> {
+            for (Method handle : handles) {
+                EventHandler info = handle.getDeclaredAnnotation(EventHandler.class);
+                Class<?> clazz = handle.getParameters()[0].getType();
+                while (Event.class.isAssignableFrom(clazz)) {
+                    List<Map.Entry<Listener, Method>> eventHandles = EVENT_HANDLERS.get(info.value().ordinal()).get(clazz);
+                    if (eventHandles == null) {
+                        eventHandles = new ArrayList<>();
+                    }
+                    eventHandles.add(new AbstractMap.SimpleImmutableEntry<>(listener, handle));
+                    EVENT_HANDLERS.get(info.value().ordinal()).put(clazz, eventHandles);
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        });
     }
 
-    protected final void process(@NotNull Event event) {
-        callbacks.forEach(callback -> callback.processEvent(event));
+    public static void handleEvent(@NotNull Event event) {
+        if (!wasBuilt) {
+            rebuild();
+        }
+        for (EventPriority prio : EventPriority.values()) {
+            List<Map.Entry<Listener, Method>> methods = EVENT_HANDLERS.get(prio.ordinal()).get(event.getClass());
+            if (methods == null) {
+                continue;
+            }
+            for (Map.Entry<Listener, Method> method : methods) {
+                try {
+                    method.getValue().invoke(method.getKey(), event);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
 }

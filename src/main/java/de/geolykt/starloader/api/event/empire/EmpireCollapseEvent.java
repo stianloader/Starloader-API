@@ -1,8 +1,10 @@
-package de.geolykt.starloader.api.event;
+package de.geolykt.starloader.api.event.empire;
 
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.event.Cancellable;
+import de.geolykt.starloader.api.event.Event;
 
 public class EmpireCollapseEvent extends Event implements Cancellable {
 

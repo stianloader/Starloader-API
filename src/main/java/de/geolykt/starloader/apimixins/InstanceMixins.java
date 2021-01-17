@@ -8,9 +8,9 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
-import de.geolykt.starloader.api.event.EmpireCollapseEvent;
-import de.geolykt.starloader.api.event.EmpireCollapseEvent.EmpireCollapseCause;
 import de.geolykt.starloader.api.event.EventManager;
+import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
+import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
 import snoddasmannen.galimulator.aa;
 import snoddasmannen.galimulator.ax;
 import snoddasmannen.galimulator.le;
