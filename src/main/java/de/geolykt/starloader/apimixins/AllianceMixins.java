@@ -16,6 +16,7 @@ import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.ax;
 
+// TODO report the issue where our "hack" is printed to the console, which isn't needed as it's the only way to do it.
 @Mixin(targets = "snoddasmannen.galimulator.f") // This will not compile if done traditionally, as it is also a package!
 public class AllianceMixins implements Alliance {
 

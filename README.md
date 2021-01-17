@@ -50,3 +50,59 @@ It should be addressed that the decompiled galimulator code IS NOT licensed
 under the Apache 2.0 license and in fact this repo is doing legally grey area
 stuff. Additionally the code is linking against code that doesn't have a known
 license, which means that it is more legal grey area actions! 
+
+## Event API example
+
+```java
+package de.geolykt.starloader.demo;
+
+import org.slf4j.Logger;
+
+import de.geolykt.starloader.api.event.EventHandler;
+import de.geolykt.starloader.api.event.EventPriority;
+import de.geolykt.starloader.api.event.Listener;
+import de.geolykt.starloader.api.event.alliance.AllianceJoinEvent;
+import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
+import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
+
+public class StarloaderDemoListener implements Listener {
+
+    private final Logger logger;
+
+    public StarloaderDemoListener(Logger log) {
+        logger = log;
+    }
+
+    @EventHandler(EventPriority.MEDIUM)
+    public void onEmpireCollapse(EmpireCollapseEvent event) {
+        if (!event.isCancelled()) {
+            logger.info("{} ceased to exist. They persisted for {} years.",
+                    event.getCollapsedEmpire().getEmpireName(),
+                    event.getCollapsedEmpire().getAge());
+        }
+    }
+
+    @EventHandler
+    public void onAllianceJoin(AllianceJoinEvent event) {
+        logger.info("{} has joined the alliance \"{}\".", 
+                event.getEmpire().getEmpireName(), 
+                event.getAlliance().getFullName());
+    }
+
+    @EventHandler
+    public void onAllianceQuit(AllianceLeaveEvent event) {
+        logger.info("{} has left the alliance \"{}\".", 
+                event.getEmpire().getEmpireName(), 
+                event.getAlliance().getAbbreviation());
+    }
+}
+```
+
+A of the event API was borrowed from Bukkit, so if you have worked with Bukkit
+before, the api will be pretty similat to you. The listener can then be
+registered via
+
+    EventManager.registerListener(new StarloaderDemoListener(logger));
+
+however it should be noted that you cannot register the same listener multiple
+times, although this should rearely be an issue for you.
