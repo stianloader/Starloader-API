@@ -81,6 +81,16 @@ public class Galimulator {
     }
 
     /**
+     * Obtains the version of galimulator the Starloader API was developed against.
+     * This sortof dictates what features are to be expected to be included within the API and was such can be used for
+     * cross-version applications.
+     * @return "4.8"
+     */
+    public static String getSourceVersion() {
+        return "4.8";
+    }
+
+    /**
      * Gets the currently registered Stars. Note that like many other methods in the API, 
      * this is NOT a clone of the backing collection, which means that any modifications done to the collections
      * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more

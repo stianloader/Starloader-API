@@ -10,12 +10,13 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.Metadatable;
 import snoddasmannen.galimulator.Religion;
 
 /**
  * Wrapper interface for Stars
  */
-public interface Star {
+public interface Star extends Metadatable {
 
     /**
      * Adds a star to the neighbour lists. Please note that you likely do not want to call this method yourself.

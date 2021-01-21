@@ -3,12 +3,13 @@ package de.geolykt.starloader.api.empire;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.Metadatable;
 import snoddasmannen.galimulator.GalColor;
 
 /**
  * Base interface for any empires that exist in the game, whether collapsed or not
  */
-public interface Empire extends Dateable {
+public interface Empire extends Dateable, Metadatable {
 
     /**
      * The age of an empire is counted in years and ceases to stop increasing once the empire has collapsed.

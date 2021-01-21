@@ -2,8 +2,11 @@ package de.geolykt.starloader.apimixins;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
@@ -28,7 +32,7 @@ import snoddasmannen.galimulator.actors.StateActor;
 @Mixin(snoddasmannen.galimulator.ax.class)
 public class EmpireMixins implements ActiveEmpire {
 
-    private transient static int lastTick = -1;
+    private static transient int lastTick = -1;
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -72,6 +76,8 @@ public class EmpireMixins implements ActiveEmpire {
     private String T; // motto
 
     private transient Field allianceField; // Hacks to circumvent compile errors
+
+    private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
 
     @Shadow
     public void a(Religion var0) { // setReligion
@@ -147,6 +153,11 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
+        return metadata.get(key);
+    }
+
+    @Override
     public String getMotto() {
         return T;
     }
@@ -176,6 +187,11 @@ public class EmpireMixins implements ActiveEmpire {
         return U != -1;
     }
 
+    @Override
+    public boolean hasKey(@NotNull NamespacedKey key) {
+        return metadata.containsKey(key);
+    }
+
     @Shadow
     public String O() { // getIdentifierName
         return "IDENTIFIER_NAME";
@@ -184,6 +200,15 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void removeActor(StateActor actor) {
         b(actor);
+    }
+
+    @Override
+    public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
+        if (value == null) {
+            metadata.remove(key);
+        } else {
+            metadata.put(key, value);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package de.geolykt.starloader.apimixins;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.badlogic.gdx.math.Vector2;
 
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import snoddasmannen.galimulator.Religion;
@@ -19,30 +21,15 @@ import snoddasmannen.galimulator.nd;
 @Mixin(nd.class)
 public class StarMixins implements Star {
 
-    private transient static Method addMethod; // Fixes an error with eclipse not being able to locate the .class files
+    private static transient Method addMethod; // Fixes an error with eclipse not being able to locate the .class files
 
-    private transient static Method removeMethod;
-
-    @Shadow
-    float i; // wealth
+    private static transient Method removeMethod;
 
     @Shadow
     public double a; // x
 
     @Shadow
     public double b; // y
-
-    @Shadow
-    private transient Vector2 H; // coordinate
-
-    @Shadow
-    int f; // uId
-
-    @Shadow
-    private Religion S; // majorityFaith
-
-    @Shadow
-    private Religion T; // minorityFaith
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -51,6 +38,23 @@ public class StarMixins implements Star {
     @SuppressWarnings("rawtypes")
     @Shadow
     public Vector e; // neighbourIds
+
+    @Shadow
+    int f; // uId
+
+    @Shadow
+    private transient Vector2 H; // coordinate
+
+    @Shadow
+    float i; // wealth
+
+    private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
+
+    @Shadow
+    private Religion S; // majorityFaith
+
+    @Shadow
+    private Religion T; // minorityFaith
 
     @Shadow
     public ax a() { // getEmpire
@@ -102,6 +106,11 @@ public class StarMixins implements Star {
     }
 
     @Override
+    public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
+        return metadata.get(key);
+    }
+
+    @Override
     public @Nullable Religion getMinorityFaith() {
         return T;
     }
@@ -134,16 +143,21 @@ public class StarMixins implements Star {
     public int getUniqueId() {
         return f;
     }
-
     @Override
     public float getWealth() {
         return i;
     }
 
     @Override
+    public boolean hasKey(@NotNull NamespacedKey key) {
+        return metadata.containsKey(key);
+    }
+
+    @Override
     public boolean hasNeighbour(@NotNull Star star) {
         return this.c.contains(star);
     }
+
     @Override
     public void moveRelative(float x, float y) {
         a += x;
@@ -188,6 +202,15 @@ public class StarMixins implements Star {
         S = religion;
         if (S == T) {
             T = null;
+        }
+    }
+
+    @Override
+    public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
+        if (value == null) {
+            metadata.remove(key);
+        } else {
+            metadata.put(key, value);
         }
     }
 

@@ -16,7 +16,7 @@ built and published to mavenLocal as well as the galimulator jar needs to be pre
 at the project root under `galimulator-desktop.jar`. To use the API within your 
 project you need to publish the jar via 
 
-    ./gradlew publicToMavenLocal
+    ./gradlew publishToMavenLocal
 
 
 ## Licensing and decompiled code
