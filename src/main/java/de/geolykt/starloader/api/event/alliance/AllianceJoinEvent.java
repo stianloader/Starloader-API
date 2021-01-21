@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.event.alliance;
 
+import org.jetbrains.annotations.NotNull;
+
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.Event;
@@ -13,7 +15,7 @@ public class AllianceJoinEvent extends Event {
     protected final Alliance alliance;
     protected final ActiveEmpire empire;
 
-    public AllianceJoinEvent(Alliance joinedAlliance, ActiveEmpire joiningEmpire) {
+    public AllianceJoinEvent(@NotNull Alliance joinedAlliance, @NotNull ActiveEmpire joiningEmpire) {
         alliance = joinedAlliance;
         empire = joiningEmpire;
     }
@@ -22,7 +24,7 @@ public class AllianceJoinEvent extends Event {
      * The Alliance the the empire joined
      * @return The {@link Alliance} that was joined by the empire
      */
-    public Alliance getAlliance() {
+    public @NotNull Alliance getAlliance() {
         return alliance;
     }
 
@@ -30,7 +32,7 @@ public class AllianceJoinEvent extends Event {
      * The Empire that joined the Alliance
      * @return The {@link ActiveEmpire} that joined the alliance
      */
-    public ActiveEmpire getEmpire() {
+    public @NotNull ActiveEmpire getEmpire() {
         return empire;
     }
 }

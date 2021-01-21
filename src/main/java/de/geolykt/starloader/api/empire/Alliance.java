@@ -2,6 +2,8 @@ package de.geolykt.starloader.api.empire;
 
 import java.util.ArrayList;
 
+import org.jetbrains.annotations.NotNull;
+
 import snoddasmannen.galimulator.GalColor;
 
 public interface Alliance extends Dateable {
@@ -11,25 +13,25 @@ public interface Alliance extends Dateable {
      *  for the change to propagate to the fullest. Caution is advised
      * @param empire The {@link ActiveEmpire} to add to the alliance
      */
-    public void addMember(ActiveEmpire empire);
+    public void addMember(@NotNull ActiveEmpire empire);
 
     /**
      * Returns a the abbreviation of the alliance. This is the string that users are more familiar with.
      * @return The abbreviation the alliance currently has
      */
-    public String getAbbreviation();
+    public @NotNull String getAbbreviation();
 
     /**
      * Obtains the Color of the Alliance used for UI.
      * @return The {@link GalColor} of the alliance
      */
-    public GalColor getColor();
+    public @NotNull GalColor getColor();
 
     /**
      * Obtains the full name of the Alliance.
      * @return The name that the alliance currently has
      */
-    public String getFullName();
+    public @NotNull String getFullName();
 
     /**
      * The {@link ActiveEmpire ActiveEmpires} that the alliance currently has as members.
@@ -39,19 +41,19 @@ public interface Alliance extends Dateable {
      * @see #addMember(ActiveEmpire)
      * @see #removeMember(ActiveEmpire)
      */
-    public ArrayList<ActiveEmpire> getMembers();
+    public @NotNull ArrayList<ActiveEmpire> getMembers();
 
     /**
      * Checks if the empire is within the Alliance
      * @param empire The empire to check
      * @return True if the empire is a member of the alliance, false otherwise
      */
-    public boolean hasEmpire(ActiveEmpire empire);
+    public boolean hasEmpire(@NotNull ActiveEmpire empire);
 
     /**
      * Removes the empire from the alliance, however some logic might be skipped that is required
      *  for the change to propagate to the fullest. Caution is advised
      * @param empire The {@link ActiveEmpire} to remove from the alliance
      */
-    public void removeMember(ActiveEmpire empire);
+    public void removeMember(@NotNull ActiveEmpire empire);
 }

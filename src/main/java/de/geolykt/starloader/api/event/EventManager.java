@@ -27,7 +27,7 @@ public final class EventManager {
      * Registers an event listener if it was not yet registered and rebuilds if needed.
      * @param listener The {@link Listener} to add to the pool of active listeners
      */
-    public static void registerListener(Listener listener) {
+    public static void registerListener(@NotNull Listener listener) {
         if (LISTENERS.containsKey(listener)) {
             return;
         }
@@ -56,7 +56,7 @@ public final class EventManager {
      * Removes the listener from the active listener pool and rebuilds if needed.
      * @param listener The {@link Listener} to remove
      */
-    public static void unregisterListener(Listener listener) {
+    public static void unregisterListener(@NotNull Listener listener) {
         if (LISTENERS.containsKey(listener)) {
             LISTENERS.remove(listener);
             if (wasBuilt) {

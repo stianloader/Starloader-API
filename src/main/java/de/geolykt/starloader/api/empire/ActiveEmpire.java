@@ -3,6 +3,9 @@ package de.geolykt.starloader.api.empire;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.cy;
 import snoddasmannen.galimulator.actors.Flagship;
@@ -17,7 +20,7 @@ public interface ActiveEmpire extends Empire {
      * Assigns a {@link StateActor} to the empire.
      * @param actor The StateActor to assign
      */
-    public void addActor(StateActor actor);
+    public void addActor(@NotNull StateActor actor);
 
     /**
      * Obtains the {@link Vector} of the {@link StateActor StateActors} that are currently assigned to the empire.
@@ -25,13 +28,13 @@ public interface ActiveEmpire extends Empire {
      * Use {@link #addActor(StateActor)} or {@link #removeActor(StateActor)} instead.
      * @return A {@link Vector} of the {@link StateActor StateActors} that are assigned to the empire.
      */
-    public Vector<StateActor> getActors();
+    public @NotNull Vector<StateActor> getActors();
 
     /**
      * Obtains the wrapper representation of the Alliance the empire currently is in.
      * @return The Alliance the empire currently is in, or null
      */
-    public Alliance getAlliance();
+    public @Nullable Alliance getAlliance();
 
     /**
      * Obtains the Flagship of the empire. In most cases it is null, except for player-owned empires.
@@ -39,27 +42,27 @@ public interface ActiveEmpire extends Empire {
      * not be used as a way to get if the Empire is currently owned by the player.
      * @return The {@link Flagship} owned by the Empire
      */
-    public Flagship getFlagship();
+    public @Nullable Flagship getFlagship();
 
     /**
      * Obtains the {@link cy fleets} that are assigned to the empire.
      * The list is backing the internal fleet list, which is why it should NOT be modified directly.
      * @return An {@link ArrayList} of {@link cy} that are assigned to the empire
      */
-    public ArrayList<cy> getFleets();
+    public @NotNull ArrayList<cy> getFleets();
 
     /**
      * Obtains the motto of the empire. 
      * This is purely something for the User and has no significant effect on the simulation
      * @return The motto of the empire
      */
-    public String getMotto();
+    public @NotNull String getMotto();
 
     /**
      * The religion of an empire. It may change after an empire has been founded so it should not be assumed to be a constant.
      * @return The religion that is the most common in the empire
      */
-    public Religion getReligion();
+    public @NotNull Religion getReligion();
 
     /**
      * Obtains the average wealth of all stars within the empire.
@@ -71,19 +74,20 @@ public interface ActiveEmpire extends Empire {
      * Unassign a {@link StateActor} from the empire
      * @param actor The StateActor to unassign
      */
-    public void removeActor(StateActor actor);
+    public void removeActor(@NotNull StateActor actor);
 
     /**
      * Sets the motto of the empire. The motto of an empire is purely for the user
      * and has no real effect on the simulation.
      * @param motto The new motto for the empire
      */
-    public void setMotto(String motto);
+    public void setMotto(@NotNull String motto);
 
     /**
      * Sets the new dominant religion of the empire. 
      * The religion of the stars may however stay unaltered, so some changes can backfire for the empire.
+     * Does not set the degeneration state as it would happen if the player would switch religion manually.
      * @param religion  The new religion to preach
      */
-    public void setReligion(Religion religion);
+    public void setReligion(@NotNull Religion religion);
 }

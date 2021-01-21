@@ -28,11 +28,11 @@ import snoddasmannen.galimulator.actors.StateActor;
 @Mixin(snoddasmannen.galimulator.ax.class)
 public class EmpireMixins implements ActiveEmpire {
 
-    private static int lastTick = -1;
+    private transient static int lastTick = -1;
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private Vector ab;
+    private Vector ab; // actors
 
     @Shadow
     public int c; // uniqueId
@@ -51,7 +51,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private ArrayList K; // ships
+    private ArrayList K; // fleets
 
     @Shadow
     private Flagship C; // flagship
@@ -71,7 +71,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private String T; // motto
 
-    private Field allianceField; // Hacks to circumvent compile errors
+    private transient Field allianceField; // Hacks to circumvent compile errors
 
     @Shadow
     public void a(Religion var0) { // setReligion

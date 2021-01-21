@@ -99,7 +99,7 @@ public class StarloaderDemoListener implements Listener {
 ```
 
 A of the event API was borrowed from Bukkit, so if you have worked with Bukkit
-before, the api will be pretty similat to you. The listener can then be
+before, the api will be pretty similar to you. The listener can then be
 registered via
 
     EventManager.registerListener(new StarloaderDemoListener(logger));

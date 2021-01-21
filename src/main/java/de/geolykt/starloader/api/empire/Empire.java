@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.empire;
 
+import org.jetbrains.annotations.NotNull;
+
 import de.geolykt.starloader.api.Galimulator;
 import snoddasmannen.galimulator.GalColor;
 
@@ -27,13 +29,13 @@ public interface Empire extends Dateable {
      * to a constant color, the color as such should not change without reason to not confuse the user.
      * @return The GalColor assigned to the empire
      */
-    public GalColor getColor();
+    public @NotNull GalColor getColor();
 
     /**
      * The name of the empire without any colors.
      * @return A String that contains the empire's name
      */
-    public String getEmpireName();
+    public @NotNull String getEmpireName();
 
     /**
      * Obtains the total star count of the empire. Should never be negative.

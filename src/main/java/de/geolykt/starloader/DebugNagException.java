@@ -1,5 +1,7 @@
 package de.geolykt.starloader;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  *  Pure debugging exception to debug the occurrence of unexpected calls of methods and why they happened.
  *  It's mainly used to get a fancy stacktrace.
@@ -12,7 +14,7 @@ public class DebugNagException extends RuntimeException {
         super();
     }
 
-    public DebugNagException(String message) {
+    public DebugNagException(@NotNull String message) {
         super(message);
     }
 
@@ -24,7 +26,7 @@ public class DebugNagException extends RuntimeException {
         }
     }
 
-    public static void nag(String message) {
+    public static void nag(@NotNull String message) {
         try {
             throw new DebugNagException(message);
         } catch (DebugNagException e) {
