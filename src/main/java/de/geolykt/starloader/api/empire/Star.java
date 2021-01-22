@@ -34,8 +34,14 @@ public interface Star extends Metadatable {
     public @NotNull ActiveEmpire getAssignedEmpire();
 
     /**
-     * Obtains the location where the star is located at
+     * Obtains the location where the star is located at.
+     * This returns the internal location vector,
+     * however beware that this is only half of the internal location representation,
+     * so after it is modified directly {@link #syncCoordinates()} should be invoked afterwards
+     * to clean up the difference.
+     *
      * @return A {@link Vector2} describing the position of the star
+     * @see #syncCoordinates()
      */
     public @NotNull Vector2 getCoordinates();
 
@@ -150,4 +156,15 @@ public interface Star extends Metadatable {
      * @param wealth The wealth of the star
      */
     public void setWealth(float wealth);
+
+    /**
+     * Synchronises the vector returned by {@link #getCoordinates()} to the internal x/y coordinates.
+     * If the vector returned by {@link #getCoordinates()} is modified, 
+     * then the internal x/y coordinates will not be altered and as such malfunctions may occur.
+     * Additionally after saving the Star the internal x/y coordinates will be used instead
+     * of the {@link #getCoordinates()} coordinates.
+     *
+     * @see #getCoordinates()
+     */
+    public void syncCoordinates();
 }

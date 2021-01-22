@@ -33,7 +33,7 @@ public class StarMixins implements Star {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    transient Vector c; // neighbour
+    transient Vector c; // neighbours
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -43,7 +43,7 @@ public class StarMixins implements Star {
     int f; // uId
 
     @Shadow
-    private transient Vector2 H; // coordinate
+    private transient Vector2 H; // coordinates
 
     @Shadow
     float i; // wealth
@@ -143,6 +143,7 @@ public class StarMixins implements Star {
     public int getUniqueId() {
         return f;
     }
+
     @Override
     public float getWealth() {
         return i;
@@ -226,5 +227,11 @@ public class StarMixins implements Star {
     @Override
     public void setWealth(float wealth) {
         i = wealth;
+    }
+
+    @Override
+    public void syncCoordinates() {
+        a = H.x;
+        b = H.y;
     }
 }
