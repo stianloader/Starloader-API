@@ -14,40 +14,38 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.alliance.AllianceJoinEvent;
 import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.ax;
 
-// TODO report the issue where our "hack" is printed to the console, which isn't needed as it's the only way to do it.
-@Mixin(targets = "snoddasmannen.galimulator.f") // This will not compile if done traditionally, as it is also a package!
+@Mixin(value = snoddasmannen.galimulator.Alliance.class)
 public class AllianceMixins implements Alliance {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private ArrayList c; // members
+    private ArrayList members;
 
     @Shadow
-    private String a; // fullName
+    private String name; // name
 
     @Shadow
-    private String b; // name
+    private String nameIdentifier; // fullName
 
     @Shadow
-    private int d; // foundationYear
+    private int startDate;
 
     @Shadow
-    public void a(ax var1) {} // addMember
+    public void a(snoddasmannen.galimulator.Empire var1) {} // addMember
 
     @Override
     public void addMember(ActiveEmpire empire) {
-        a((ax) empire);
+        a((snoddasmannen.galimulator.Empire) empire);
     }
 
     @Inject(method = "a", at = @At("HEAD"))
-    public void addMember(ax member, CallbackInfo info) {
+    public void addMember(snoddasmannen.galimulator.Empire member, CallbackInfo info) {
         EventManager.handleEvent(new AllianceJoinEvent((Alliance) this, (ActiveEmpire) member));
     }
 
     @Shadow
-    public void b(ax var1) {} // removeMember
+    public void b(snoddasmannen.galimulator.Empire var1) {} // removeMember
 
     @Shadow
     public GalColor c() { // getColor
@@ -55,13 +53,13 @@ public class AllianceMixins implements Alliance {
     }
 
     @Shadow
-    public boolean c(ax var1) { // hasMember
-        return c.contains(var1);
+    public boolean c(snoddasmannen.galimulator.Empire var1) { // hasMember
+        return members.contains(var1);
     }
 
     @Override
     public String getAbbreviation() {
-        return b;
+        return name;
     }
 
     @Override
@@ -71,32 +69,32 @@ public class AllianceMixins implements Alliance {
 
     @Override
     public int getFoundationYear() {
-        return d;
+        return startDate;
     }
 
     @Override
     public String getFullName() {
-        return a;
+        return nameIdentifier;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public ArrayList<ActiveEmpire> getMembers() {
-        return c;
+        return members;
     }
 
     @Override
     public boolean hasEmpire(ActiveEmpire empire) {
-        return c((ax) empire);
+        return c((snoddasmannen.galimulator.Empire) empire);
     }
 
     @Override
     public void removeMember(ActiveEmpire empire) {
-        b((ax) empire);
+        b((snoddasmannen.galimulator.Empire) empire);
     }
 
     @Inject(method = "b", at = @At("HEAD"))
-    public void removeMember(ax member, CallbackInfo info) {
+    public void removeMember(snoddasmannen.galimulator.Empire member, CallbackInfo info) {
         EventManager.handleEvent(new AllianceLeaveEvent((Alliance) this, (ActiveEmpire) member));
     }
 }

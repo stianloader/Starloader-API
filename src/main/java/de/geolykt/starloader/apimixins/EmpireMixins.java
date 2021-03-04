@@ -1,6 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
@@ -24,64 +23,63 @@ import de.geolykt.starloader.api.event.TickEvent;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
-import snoddasmannen.galimulator.ax;
-import snoddasmannen.galimulator.cy;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
-@Mixin(snoddasmannen.galimulator.ax.class)
+@Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
 
     private static transient int lastTick = -1;
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private Vector ab; // actors
+    private Vector agents; // actors
 
     @Shadow
-    public int c; // uniqueId
+    int birthMilliYear; // foundationYear
 
     @Shadow
-    private int U; // collapseYear
+    GalColor color; // color
 
     @Shadow
-    private int V; // starCount
+    private int deathYear; // collapseYear
 
     @Shadow
-    String d; // name
-
-    @Shadow
-    GalColor m; // color
+    private Flagship flagship; // flagship
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private ArrayList K; // fleets
+    private ArrayList fleets; // fleets
 
     @Shadow
-    private Flagship C; // flagship
+    private Government government;
 
     @Shadow
-    private Government F;
+    private transient snoddasmannen.galimulator.Alliance h; // alliance
 
     @Shadow
-    private Religion G;
+    private transient float i; // averageWealth
 
     @Shadow
-    int l; // foundationYear
-
-    @Shadow
-    private transient float I; // averageWealth
-
-    @Shadow
-    private String T; // motto
-
-    private transient Field allianceField; // Hacks to circumvent compile errors
+    public int id; // uniqueId
 
     private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
 
     @Shadow
+    private String motto; // motto
+
+    @Shadow
+    String name; // name
+
+    @Shadow
+    private Religion religion;
+
+    @Shadow
+    private int starCount; // starCount
+
+    @Shadow
     public void a(Religion var0) { // setReligion
-        G = var0;
+        religion = var0;
     }
 
     @Shadow
@@ -100,56 +98,43 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("unchecked")
     @Override
     public Vector<StateActor> getActors() {
-        return ab;
+        return agents;
     }
 
     @Override
     public Alliance getAlliance() {
-        // While technically it would be something like "(Alliance) ((ax)((Object)this)).k()", this won't compile, so reflection it is!
-        if (allianceField == null) {
-            try {
-                allianceField = ax.class.getField("E");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        try {
-            return (Alliance) allianceField.get(this);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return (Alliance) h;
     }
 
     @Override
     public int getCollapseYear() {
-        return U;
+        return deathYear;
     }
 
     @Override
     public GalColor getColor() {
-        return m;
+        return color;
     }
 
     @Override
     public String getEmpireName() {
-        return d;
+        return name;
     }
 
     @Override
     public Flagship getFlagship() {
-        return C;
+        return flagship;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public ArrayList<cy> getFleets() {
-        return K;
+    public ArrayList<snoddasmannen.galimulator.Fleet> getFleets() {
+        return fleets;
     }
 
     @Override
     public int getFoundationYear() {
-        return l;
+        return birthMilliYear;
     }
 
     @Override
@@ -159,32 +144,32 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public String getMotto() {
-        return T;
+        return motto;
     }
 
     @Override
     public Religion getReligion() {
-        return G;
+        return religion;
     }
 
     @Override
     public int getStarCount() {
-        return V;
+        return starCount;
     }
 
     @Override
     public int getUID() {
-        return c;
+        return id;
     }
 
     @Override
     public float getWealth() {
-        return I;
+        return i;
     }
 
     @Override
     public boolean hasCollapsed() {
-        return U != -1;
+        return getCollapseYear() != -1;
     }
 
     @Override
@@ -213,7 +198,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public void setMotto(String motto) {
-        T = motto;
+        this.motto = motto;
     }
 
     @Override

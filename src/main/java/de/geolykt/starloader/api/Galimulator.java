@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
-import snoddasmannen.galimulator.le;
+import snoddasmannen.galimulator.Space;
 
 /**
  * Class to redirect to instance-wide constants or other static methods/variables.
@@ -45,7 +45,7 @@ public class Galimulator {
      * @implNote The implementation of this method is very inefficient as it iterates over all known empires at worst
      */
     public static @Nullable ActiveEmpire getEmpirePerUID(int uid) {
-        return (ActiveEmpire) le.d(uid);
+        return (ActiveEmpire) Space.d(uid);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Galimulator {
      */
     @SuppressWarnings("unchecked")
     public static Vector<ActiveEmpire> getEmpires() {
-        return le.b;
+        return Space.b;
     }
 
     /**
@@ -67,7 +67,7 @@ public class Galimulator {
      * @return The in-game year.
      */
     public static int getGameYear() {
-        return le.C();
+        return Space.y;
     }
 
     /**
@@ -77,7 +77,7 @@ public class Galimulator {
      * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
      */
     public static @NotNull ActiveEmpire getNeutralEmpire() {
-        return (ActiveEmpire) le.w;
+        return (ActiveEmpire) Space.x;
     }
 
     /**
@@ -91,6 +91,16 @@ public class Galimulator {
     }
 
     /**
+     * Obtains the int code of the galimulator version; this int code is bumped for every beta release and is -1 for
+     * stable releases. Note that this int code isn't anything official and the sole authority over this code are the developers
+     * of the Starloader API.
+     * @return 2
+     */
+    public static int getReleaseCode() {
+        return 2;
+    }
+
+    /**
      * Gets the currently registered Stars. Note that like many other methods in the API, 
      * this is NOT a clone of the backing collection, which means that any modifications done to the collections
      * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more
@@ -99,6 +109,6 @@ public class Galimulator {
      */
     @SuppressWarnings("unchecked")
     public static Vector<Star> getStars() {
-        return le.a;
+        return Space.a;
     }
 }

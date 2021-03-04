@@ -6,8 +6,8 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import snoddasmannen.galimulator.Fleet;
 import snoddasmannen.galimulator.Religion;
-import snoddasmannen.galimulator.cy;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
@@ -45,11 +45,11 @@ public interface ActiveEmpire extends Empire {
     public @Nullable Flagship getFlagship();
 
     /**
-     * Obtains the {@link cy fleets} that are assigned to the empire.
+     * Obtains the {@link Fleet fleets} that are assigned to the empire.
      * The list is backing the internal fleet list, which is why it should NOT be modified directly.
-     * @return An {@link ArrayList} of {@link cy} that are assigned to the empire
+     * @return An {@link ArrayList} of {@link Fleet} that are assigned to the empire
      */
-    public @NotNull ArrayList<cy> getFleets();
+    public @NotNull ArrayList<Fleet> getFleets();
 
     /**
      * Obtains the motto of the empire. 

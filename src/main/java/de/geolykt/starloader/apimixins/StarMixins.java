@@ -1,6 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -15,73 +14,67 @@ import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import snoddasmannen.galimulator.Religion;
-import snoddasmannen.galimulator.ax;
-import snoddasmannen.galimulator.nd;
 
-@Mixin(nd.class)
+@Mixin(snoddasmannen.galimulator.Star.class)
 public class StarMixins implements Star {
 
-    private static transient Method addMethod; // Fixes an error with eclipse not being able to locate the .class files
-
-    private static transient Method removeMethod;
+    @SuppressWarnings("rawtypes")
+    @Shadow
+    transient Vector a; // neighbours
 
     @Shadow
-    public double a; // x
+    private Religion faith; // majorityFaith
 
     @Shadow
-    public double b; // y
+    int id; // uId
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    transient Vector c; // neighbours
-
-    @SuppressWarnings("rawtypes")
-    @Shadow
-    public Vector e; // neighbourIds
-
-    @Shadow
-    int f; // uId
-
-    @Shadow
-    private transient Vector2 H; // coordinates
-
-    @Shadow
-    float i; // wealth
+    public Vector intLanes; // neighbourIds
 
     private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
 
     @Shadow
-    private Religion S; // majorityFaith
+    private Religion minorityFaith; // minorityFaith
 
     @Shadow
-    private Religion T; // minorityFaith
+    private transient Vector2 q; // coordinates
 
     @Shadow
-    public ax a() { // getEmpire
+    float wealth; // wealth
+
+    @Shadow
+    public double x; // x
+
+    @Shadow
+    public double y; // y
+
+    @Shadow
+    public snoddasmannen.galimulator.Empire a() { // getEmpire
         return null;
     }
 
     @Shadow
-    public void a(ax var0) { // setEmpire
+    public void a(Religion var1) {} // setMajorityFaith
+
+    @Shadow
+    public void a(snoddasmannen.galimulator.Empire var0) { // setEmpire
         return;
     }
 
     @Shadow
-    public void a(nd var1) {} // removeNeighbour
-
-    @Shadow
-    public void a(Religion var1) {} // setMajorityFaith
+    public void a(snoddasmannen.galimulator.Star var1) {} // removeNeighbour
 
     @Override
     public void addNeighbour(@NotNull Star star) {
-        b((nd) star);
+        b((snoddasmannen.galimulator.Star) star);
     }
 
     @Shadow
-    public void b(nd var1) {} // addNeighbour
+    public void b(Religion var1) {} // setMinorityFaith
 
     @Shadow
-    public void b(Religion var1) {} // setMinorityFaith
+    public void b(snoddasmannen.galimulator.Star var1) {} // addNeighbour
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -102,7 +95,7 @@ public class StarMixins implements Star {
 
     @Override
     public @NotNull Religion getMajorityFaith() {
-        return S;
+        return faith;
     }
 
     @Override
@@ -112,7 +105,7 @@ public class StarMixins implements Star {
 
     @Override
     public @Nullable Religion getMinorityFaith() {
-        return T;
+        return minorityFaith;
     }
 
     @Override
@@ -124,13 +117,13 @@ public class StarMixins implements Star {
     @SuppressWarnings("unchecked")
     @Override
     public Vector<Integer> getNeighbourIDs() {
-        return e;
+        return intLanes;
     }
 
     @SuppressWarnings("unchecked") // stupid generic erasure. But let's be happy, without it there would be a compile error
     @Override
     public @NotNull Vector<Star> getNeighbours() {
-        return c;
+        return a;
     }
 
     @SuppressWarnings("unchecked")
@@ -141,12 +134,12 @@ public class StarMixins implements Star {
 
     @Override
     public int getUniqueId() {
-        return f;
+        return id;
     }
 
     @Override
     public float getWealth() {
-        return i;
+        return wealth;
     }
 
     @Override
@@ -156,43 +149,29 @@ public class StarMixins implements Star {
 
     @Override
     public boolean hasNeighbour(@NotNull Star star) {
-        return this.c.contains(star);
+        return this.a.contains(star);
     }
 
     @Override
     public void moveRelative(float x, float y) {
-        a += x;
-        b += y;
-        this.H = null;
+        this.x += x;
+        this.y += y;
+        this.q = null; // recalculate the vector
     }
 
     @Override
     public void removeNeighbour(@NotNull Star star) {
-        a((nd)star);
+        a((snoddasmannen.galimulator.Star)star);
     }
 
     @Override
     public void setAssignedEmpire(ActiveEmpire empire) {
-        if (empire instanceof ax) {
-            // This probably is the strangest workaround that I've done in this project
-            if (addMethod == null) {
-                try {
-                    addMethod = ax.class.getDeclaredMethod("a", nd.class, ax.class);
-                    removeMethod = ax.class.getDeclaredMethod("b", nd.class, ax.class);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                    System.exit(-1);
-                }
-            }
-            ax newEmp = (ax) empire;
-            ax oldEmp = (ax) getAssignedEmpire();
-            try {
-                addMethod.invoke(oldEmp, this, newEmp);
-                removeMethod.invoke(newEmp, this, oldEmp);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            a((ax) empire);
+        if (empire instanceof snoddasmannen.galimulator.Empire) {
+            snoddasmannen.galimulator.Empire newEmp = (snoddasmannen.galimulator.Empire) empire;
+            snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
+            oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
+            newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
+            a(newEmp);
         } else {
             throw new UnsupportedOperationException("Obfuscated empire expected.");
         }
@@ -200,9 +179,9 @@ public class StarMixins implements Star {
 
     @Override
     public void setMajorityFaith(@NotNull Religion religion) {
-        S = religion;
-        if (S == T) {
-            T = null;
+        faith = religion;
+        if (faith == minorityFaith) {
+            minorityFaith = null;
         }
     }
 
@@ -217,21 +196,21 @@ public class StarMixins implements Star {
 
     @Override
     public void setMinorityFaith(@Nullable Religion religion) {
-        if (religion == S) {
-            T = null;
+        if (religion == faith) {
+            minorityFaith = null;
         } else {
-            T = religion;
+            minorityFaith = religion;
         }
     }
 
     @Override
     public void setWealth(float wealth) {
-        i = wealth;
+        this.wealth = wealth;
     }
 
     @Override
     public void syncCoordinates() {
-        a = H.x;
-        b = H.y;
+        x = q.x;
+        y = q.y;
     }
 }
