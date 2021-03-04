@@ -13,8 +13,8 @@ that may arise (for example overwriting static methods) via our Event API.
 The project can be built via gradle. This can be easily done via `./gradlew build`
 on most systems, however the [Starloader](https://github.com/Geolykt/Starloader) project must be
 built and published to mavenLocal as well as the galimulator jar needs to be present
-at the project root under `galimulator-desktop.jar`. To use the API within your 
-project you need to publish the jar via 
+at the project root under `galimulator-desktop.jar`. To use the API within your
+project you need to publish the jar via
 
     ./gradlew publishToMavenLocal
 
@@ -22,7 +22,7 @@ project you need to publish the jar via
 ## Licensing and decompiled code
 
 Most of the code is licensed under the Apache 2.0 license, however especially in
-the mixin zone you may encounter decompiled and slightly altered code from 
+the mixin zone you may encounter decompiled and slightly altered code from
 Galimulator. I try to avoid these situations wherever possible, but sometimes
 this cannot be avoided for mixin reasons (the mixin library does not allow to
 inject into static methods). These snippets are marked by
@@ -34,13 +34,13 @@ followed by where exactly the code was pulled from. The snippets all end with a
     // Galimulator end
 
 comment.
-If any changes are performed that may change the signature of the method 
+If any changes are performed that may change the signature of the method
 (i.e. not putting a `sourceclass.` or similar in front) then the changes will be
-denotated by a 
+denotated by a
 
     // Starloader -  
 
-or 
+or
 
     // Starloader start -
 
@@ -49,7 +49,9 @@ encompassed multiple lines, then it will end via a `// Starloader end` comment.
 It should be addressed that the decompiled galimulator code IS NOT licensed
 under the Apache 2.0 license and in fact this repo is doing legally grey area
 stuff. Additionally the code is linking against code that doesn't have a known
-license, which means that it is more legal grey area actions! 
+license, which means that it is more legal grey area actions!  Although for
+latter I did get a not really legally valid permisson, so it's not much to
+worry about.
 
 ## Event API example
 
@@ -98,11 +100,14 @@ public class StarloaderDemoListener implements Listener {
 }
 ```
 
-A of the event API was borrowed from Bukkit, so if you have worked with Bukkit
-before, the api will be pretty similar to you. The listener can then be
-registered via
+The concept behind the event API was borrowed from Bukkit, so if you have worked
+with Bukkit before, the api will be pretty similar to you.
+The listener can then be registered via
 
     EventManager.registerListener(new StarloaderDemoListener(logger));
 
 however it should be noted that you cannot register the same listener multiple
-times, although this should rearely be an issue for you.
+times, although this should rearely be an issue for you. It should also be noted
+that the event API is very fragile at the moment and you should avoid
+registering or unregistering listeners an incredible amount of times as that
+can be very resource intensive.
