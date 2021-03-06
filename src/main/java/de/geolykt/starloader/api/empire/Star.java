@@ -26,6 +26,13 @@ public interface Star extends Metadatable {
     public void addNeighbour(@NotNull Star star);
 
     /**
+     * Clears the starlane cache, which will then be recalculated in the next iteration of the ticking cycle.
+     * Clearing the starlane cache has the benefit that it updates the position of the starlanes, which is helpful if the
+     * star is displaced.
+     */
+    public void clearStarlaneCache();
+
+    /**
      * Gets the empire that is said to have control over the star.
      * This may also be the neutral (unaffiliated) empire.
      * Also automatically invokes the methods that inform the empire about this change.

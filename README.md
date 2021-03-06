@@ -1,5 +1,14 @@
 # Starloader-API
 
+## IRC Chat
+
+We do have an IRC channel for anyone that is interested in modding the game in
+general, although the main purpose of the channel will be to discuss Starloader.
+Feel free to take a look at it at #galimulator-modding @ irc.esper.net
+I should note that I'm not active 24/7 on there, so if you appear to be the only
+one there, then it's because you are. If you live in europe, then you'll have the
+best chances of meeting me.
+
 ## Description
 
 The starloader API is the more usefull part of the Starloader project for anyone

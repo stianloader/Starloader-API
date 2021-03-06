@@ -63,7 +63,8 @@ public class Galimulator {
     /**
      * Get the year in-game. The year is rarely a negative number and should not get lower later in game
      *  unless a new galaxy is spun up. 1000 in-game years span an in-game millenia, which is the time format most
-     *  players are familiar with in the game.
+     *  players are familiar with in the game. However please note that this is not always calculate in years, sometimes
+     *  it is also in milliyears or other time formats.
      * @return The in-game year.
      */
     public static int getGameYear() {
@@ -81,6 +82,34 @@ public class Galimulator {
     }
 
     /**
+     * Obtains the empire the player is controlling.
+     * If there is no player or no empire in control of the player, then it returns null.
+     *
+     * @return The {@link ActiveEmpire} owned by the player, or null
+     */
+    public static @Nullable ActiveEmpire getPlayerEmpire() {
+        snoddasmannen.galimulator.Player plyr = Space.p();
+        if (plyr == null) { // I'm not sure if it can be nullable, but I want to be sure, after all I didn't write the implementation
+            return null;
+        } else {
+            return (@Nullable ActiveEmpire) plyr.a();
+        }
+    }
+
+    /**
+     * Obtains the int code of the galimulator version; this int code is bumped for every beta release and is -1 for
+     * stable releases.
+     * Note that this int code isn't anything official and the sole authority over this code are the developers
+     * of the Starloader API; additionally there might be cases where this int code is out of place, this is because there
+     * is no serious way of getting which release this is, other than looking a the hashcode or last modification date
+     * of the executable.
+     * @return 2
+     */
+    public static int getReleaseCode() {
+        return 2;
+    }
+
+    /**
      * Obtains the version of galimulator the Starloader API was developed against.
      * This sortof dictates what features are to be expected to be included within the API and was such can be used for
      * cross-version applications.
@@ -88,16 +117,6 @@ public class Galimulator {
      */
     public static String getSourceVersion() {
         return "4.8";
-    }
-
-    /**
-     * Obtains the int code of the galimulator version; this int code is bumped for every beta release and is -1 for
-     * stable releases. Note that this int code isn't anything official and the sole authority over this code are the developers
-     * of the Starloader API.
-     * @return 2
-     */
-    public static int getReleaseCode() {
-        return 2;
     }
 
     /**
@@ -110,5 +129,13 @@ public class Galimulator {
     @SuppressWarnings("unchecked")
     public static Vector<Star> getStars() {
         return Space.a;
+    }
+
+    /**
+     * Convenience method to calculate the voronoi graphs (the fancy section-outline around the stars) for all stars.
+     * This is helpful if a star got moved however it does not recalculate starlanes.
+     */
+    public static void recalculateVoronoiGraphs() {
+        Space.ao();
     }
 }

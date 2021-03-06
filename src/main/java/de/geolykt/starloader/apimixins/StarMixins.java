@@ -22,6 +22,10 @@ public class StarMixins implements Star {
     @Shadow
     transient Vector a; // neighbours
 
+    @SuppressWarnings("rawtypes")
+    @Shadow
+    transient HashMap b; // starlaneCache
+
     @Shadow
     private Religion faith; // majorityFaith
 
@@ -80,6 +84,11 @@ public class StarMixins implements Star {
     @Shadow
     public Vector c(int var1) { // getNeighboursRecursive
         return null;
+    }
+
+    @Override
+    public void clearStarlaneCache() {
+        this.b.clear();
     }
 
     @Override
