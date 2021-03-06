@@ -111,6 +111,6 @@ public class BasicDialogBuilder {
      * @return The dialog that was built via the operation.
      */
     public BasicDialog buildAndShow() {
-        return new BasicDialog(title, description, choices, listeners, duration, playSFX);
+        return new de.geolykt.starloader.impl.BasicDialog(title, description, choices, listeners, duration, playSFX);
     }
 }

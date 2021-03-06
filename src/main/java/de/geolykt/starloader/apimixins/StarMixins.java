@@ -142,7 +142,7 @@ public class StarMixins implements Star {
     }
 
     @Override
-    public int getUniqueId() {
+    public int getUID() {
         return id;
     }
 

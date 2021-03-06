@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.Metadatable;
 import snoddasmannen.galimulator.Fleet;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.actors.Flagship;
@@ -14,7 +15,7 @@ import snoddasmannen.galimulator.actors.StateActor;
 /**
  * Interface for any empire that is still in the game
  */
-public interface ActiveEmpire extends Empire {
+public interface ActiveEmpire extends Empire, Metadatable {
 
     /**
      * Assigns a {@link StateActor} to the empire.

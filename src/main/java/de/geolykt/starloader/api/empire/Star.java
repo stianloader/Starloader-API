@@ -10,13 +10,14 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.Metadatable;
 import snoddasmannen.galimulator.Religion;
 
 /**
  * Wrapper interface for Stars
  */
-public interface Star extends Metadatable {
+public interface Star extends Identifiable, Metadatable {
 
     /**
      * Adds a star to the neighbour lists. Please note that you likely do not want to call this method yourself.
@@ -96,16 +97,6 @@ public interface Star extends Metadatable {
      * @return A {@link Vector} of {@link Star Stars} that are within the given distance
      */
     public @NotNull Vector<Star> getNeighboursRecursive(int recurseDepth);
-
-    /**
-     * The unique identifier of the star should not change throughout it's lifecycle, 
-     * however nothing forbids it from actually doing that. 
-     * However it should not be done by any extension as this likely breaks something.
-     * Additionally nothing verifies it's uniqueness, however if it is not unique most lookup techniques will fail
-     * or return unexpected results.
-     * @return The unique identifier that represents the star
-     */
-    public int getUniqueId();
 
     /**
      * Obtains the wealth of the star.

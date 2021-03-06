@@ -3,13 +3,13 @@ package de.geolykt.starloader.api.empire;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.Metadatable;
+import de.geolykt.starloader.api.Identifiable;
 import snoddasmannen.galimulator.GalColor;
 
 /**
  * Base interface for any empires that exist in the game, whether collapsed or not
  */
-public interface Empire extends Dateable, Metadatable {
+public interface Empire extends Dateable, Identifiable {
 
     /**
      * The age of an empire is counted in years and ceases to stop increasing once the empire has collapsed.
@@ -44,12 +44,6 @@ public interface Empire extends Dateable, Metadatable {
      * @return The current total star count
      */
     public int getStarCount();
-
-    /**
-     * Obtains the unique (numeric) identifier of the empire. There should be no duplicates.
-     * @return The UID of the empire
-     */
-    public int getUID();
 
     /**
      * Empires are usually not in the collapse state, however sometimes this is true, albeit rare. 

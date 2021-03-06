@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import de.geolykt.starloader.api.gui.DialogCloseCause;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
-import snoddasmannen.galimulator.AudioManager$AudioSample;
 import snoddasmannen.galimulator.ui.bk;
 
 public class DialogCloseListenerWrapper implements bk {
