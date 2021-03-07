@@ -32,6 +32,7 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
             @NotNull ArrayList<BasicDialogCloseListener> listeners, int duration, boolean playSFX) {
         dialog = Space.a(title, description, choices, duration, null, true);
         dialog.a(new DialogCloseListenerWrapper(listeners, playSFX));
+        dialog.a(new WidgetActionListenerWrapper(this, listeners, new ArrayList<>()));
         // Luckily the close time is final, so we only have to get it once
         try {
             Field field = this.dialog.getClass().getField("d");

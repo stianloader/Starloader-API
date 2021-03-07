@@ -35,7 +35,7 @@ public class DialogCloseListenerWrapper implements bk {
             }
         }
         if (playSFX) {
-            AudioSampleWrapper.UI_BIG_SELECT.play();
+            AudioSampleWrapper.UI_SMALL_SELECT.play();
         }
     }
 

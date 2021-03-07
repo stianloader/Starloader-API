@@ -12,7 +12,7 @@ public enum DialogCloseCause {
     BUTTON_CLICK,
 
     /**
-     * Called when the User closed the Dialog willingly. not yet implemented.
+     * Called when the User closed the Dialog willingly.
      */
     MANUAL_CLOSE;
 }
