@@ -8,7 +8,10 @@ plugins {
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 repositories {
-    mavenLocal()
+    maven {
+        name 'geolykt'
+        url 'https://geolykt.de/maven'
+    }
     maven {
         name 'sponge'
         url 'https://repo.spongepowered.org/maven'
@@ -17,7 +20,7 @@ repositories {
 
 dependencies {
     compileOnly files("galimulator-desktop.jar") // Galimulator proper
-    api "de.geolykt:starloader:0.0.1-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
+    api "de.geolykt:starloader:1.0.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
 }
 
 publishing {
@@ -25,7 +28,7 @@ publishing {
         maven(MavenPublication) {
             groupId 'de.geolykt'
             artifactId 'starloader-api'
-            version '0.0.1-SNAPSHOT'
+            version '1.0.0-SNAPSHOT'
 
             from components.java
         }

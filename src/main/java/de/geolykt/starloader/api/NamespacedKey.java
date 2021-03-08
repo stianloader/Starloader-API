@@ -2,7 +2,7 @@ package de.geolykt.starloader.api;
 
 import org.jetbrains.annotations.NotNull;
 
-import net.minestom.server.extensions.Extension;
+import de.geolykt.starloader.mod.Extension;
 
 public class NamespacedKey {
 
@@ -25,5 +25,15 @@ public class NamespacedKey {
     @Override
     public String toString() {
         return namespaceString + ":" + keyString;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof NamespacedKey) {
+            return keyString.equals(((NamespacedKey) obj).keyString)
+                    && namespaceString.equals(((NamespacedKey) obj).namespaceString);
+        } else {
+            return false;
+        }
     }
 }
