@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
+import de.geolykt.starloader.api.gui.WidgetActionListener;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.bh;
 
@@ -24,15 +25,17 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
      * @param title The title of the dialog
      * @param description The description (content/body) of the dialog
      * @param choices The buttons of the dialog
-     * @param listeners The listeners that are applied to the dialog
+     * @param closeListeners The close listeners that are applied to the dialog
+     * @param actionListeners The action listeners that are applied to the dialog
      * @param duration The duration that the dialog should stay opened in seconds
      * @param playSFX True if the close sound should be used.
      */
     public BasicDialog(@NotNull String title, @NotNull String description, @Nullable List<String> choices,
-            @NotNull ArrayList<BasicDialogCloseListener> listeners, int duration, boolean playSFX) {
+            @NotNull ArrayList<BasicDialogCloseListener> closeListeners,
+            @NotNull ArrayList<WidgetActionListener> actionListeners, int duration, boolean playSFX) {
         dialog = Space.a(title, description, choices, duration, null, true);
-        dialog.a(new DialogCloseListenerWrapper(listeners, playSFX));
-        dialog.a(new WidgetActionListenerWrapper(this, listeners, new ArrayList<>()));
+        dialog.a(new DialogCloseListenerWrapper(closeListeners, playSFX));
+        dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));
         // Luckily the close time is final, so we only have to get it once
         try {
             Field field = this.dialog.getClass().getField("d");

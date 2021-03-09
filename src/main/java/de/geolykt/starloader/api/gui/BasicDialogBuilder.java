@@ -14,7 +14,8 @@ public class BasicDialogBuilder {
     private String title;
     private String description;
     private List<String> choices;
-    private ArrayList<BasicDialogCloseListener> listeners = new ArrayList<>();
+    private ArrayList<BasicDialogCloseListener> closeListeners = new ArrayList<>();
+    private ArrayList<WidgetActionListener> actionListeners = new ArrayList<>();
     private int duration = 0;
     private boolean playSFX = true;
 
@@ -67,12 +68,38 @@ public class BasicDialogBuilder {
     }
 
     /**
+     * @deprecated This method's name is ambiguous since there are now multiple types of listeners
+     *
      * Sets the close listeners for the Dialog. Any previous listeners are getting overridden
      * @param listeners The list of listeners to use
      * @return The instance of the builder
      */
+    @Deprecated(forRemoval = true, since = "1.1.0")
     public BasicDialogBuilder setListeners(@NotNull ArrayList<BasicDialogCloseListener> listeners) {
-        this.listeners = listeners;
+        this.closeListeners = listeners;
+        return this;
+    }
+
+    /**
+     * @deprecated This method's name is ambiguous since there are now multiple types of listeners
+     *
+     * Adds a close listener to the list of close listeners for the Dialog.
+     * @param closeListener The listener to add
+     * @return The instance of the builder
+     */
+    @Deprecated(forRemoval = true, since = "1.1.0")
+    public BasicDialogBuilder addListener(@NotNull BasicDialogCloseListener closeListener) {
+        closeListeners.add(closeListener);
+        return this;
+    }
+
+    /**
+     * Sets the close listeners for the Dialog. Any previous listeners are getting overridden
+     * @param listeners The list of listeners to use
+     * @return The instance of the builder
+     */
+    public BasicDialogBuilder setCloseListeners(@NotNull ArrayList<BasicDialogCloseListener> listeners) {
+        this.closeListeners = listeners;
         return this;
     }
 
@@ -81,8 +108,28 @@ public class BasicDialogBuilder {
      * @param closeListener The listener to add
      * @return The instance of the builder
      */
-    public BasicDialogBuilder addListener(@NotNull BasicDialogCloseListener closeListener) {
-        listeners.add(closeListener);
+    public BasicDialogBuilder addCloseListener(@NotNull BasicDialogCloseListener closeListener) {
+        closeListeners.add(closeListener);
+        return this;
+    }
+
+    /**
+     * Sets the widget actions listeners for the Dialog. Any previous listeners are getting overridden
+     * @param listeners The list of listeners to use
+     * @return The instance of the builder
+     */
+    public BasicDialogBuilder setActionListeners(@NotNull ArrayList<WidgetActionListener> listeners) {
+        this.actionListeners = listeners;
+        return this;
+    }
+
+    /**
+     * Adds a widget action listener to the list of close listeners for the Dialog.
+     * @param actionListener The listener to add
+     * @return The instance of the builder
+     */
+    public BasicDialogBuilder addActionListener(@NotNull WidgetActionListener actionListener) {
+        actionListeners.add(actionListener);
         return this;
     }
 
@@ -111,6 +158,6 @@ public class BasicDialogBuilder {
      * @return The dialog that was built via the operation.
      */
     public BasicDialog buildAndShow() {
-        return new de.geolykt.starloader.impl.BasicDialog(title, description, choices, listeners, duration, playSFX);
+        return new de.geolykt.starloader.impl.BasicDialog(title, description, choices, closeListeners, actionListeners, duration, playSFX);
     }
 }
