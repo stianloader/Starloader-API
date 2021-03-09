@@ -103,10 +103,10 @@ public class Galimulator {
      * of the Starloader API; additionally there might be cases where this int code is out of place, this is because there
      * is no serious way of getting which release this is, other than looking a the hashcode or last modification date
      * of the executable.
-     * @return 2
+     * @return -1
      */
     public static int getReleaseCode() {
-        return 2;
+        return -1;
     }
 
     /**

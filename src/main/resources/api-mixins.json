@@ -9,6 +9,7 @@
     "EmpireAnnalsMixins",
     "EmpireMixins",
     "InstanceMixins",
-    "StarMixins"
+    "StarMixins",
+    "DiploRequesMixins"
   ]
 }

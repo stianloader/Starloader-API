@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.Cancellable;
-import de.geolykt.starloader.api.event.Event;
 
-public class EmpireCollapseEvent extends Event implements Cancellable {
+public class EmpireCollapseEvent extends EmpireEvent implements Cancellable {
 
     public enum EmpireCollapseCause {
         /**
@@ -28,11 +27,10 @@ public class EmpireCollapseEvent extends Event implements Cancellable {
 
     private boolean cancelState = false;
     private EmpireCollapseCause cause;
-    private ActiveEmpire empire;
 
     public EmpireCollapseEvent(@NotNull ActiveEmpire collapsedEmpire, @NotNull EmpireCollapseCause collapseCause) {
+        super(collapsedEmpire);
         cause = collapseCause;
-        empire = collapsedEmpire;
     }
 
     @Override
@@ -45,8 +43,15 @@ public class EmpireCollapseEvent extends Event implements Cancellable {
         cancelState = cancelled;
     }
 
+    /**
+     * @deprecated The method was replaced with {@link #getTargetEmpire()}.
+     * Obtains the empire that collapsed.
+     *
+     * @return The collapsed empire
+     */
+    @Deprecated(forRemoval = true, since = "1.1.0")
     public @NotNull ActiveEmpire getCollapsedEmpire() {
-        return empire;
+        return getTargetEmpire();
     }
 
     public @NotNull EmpireCollapseCause getCause() {

@@ -14,14 +14,14 @@ import snoddasmannen.galimulator.ce;
 import snoddasmannen.galimulator.ez;
 
 /**
- * Mixin to intercept any calls to the static methods within the Galimulator (le) class
+ * Mixin to intercept any calls to the static methods within the Galimulator (Space) class
  * Since sponge's mixins do not support injecting into static methods, it will also perform optimisations to them,
  * if needed.
  */
 @Mixin(Space.class)
 public class InstanceMixins {
 
-    @Overwrite
+    @Overwrite // one cannot inject into static methods, which is why we have to overwrite
     public static void g(snoddasmannen.galimulator.Empire var0) {
         EmpireCollapseEvent e = new EmpireCollapseEvent((ActiveEmpire) var0,
                 var0.K() == 0 ? EmpireCollapseCause.NO_STARS : EmpireCollapseCause.UNKNOWN);
