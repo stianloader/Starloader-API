@@ -19,6 +19,7 @@ public class Galimulator {
 
     /**
      * Connect two stars with each other. The preferred way of connecting two stars.
+     *
      * @param starA the first Star to connect to the second star
      * @param starB the second Star to connect
      */
@@ -29,6 +30,7 @@ public class Galimulator {
 
     /**
      * Disconnect two stars with each other. The preferred way of disconnecting two stars.
+     *
      * @param starA the first Star to disconnect from the second star
      * @param starB the second Star to disconnect
      */
@@ -40,6 +42,7 @@ public class Galimulator {
     /**
      * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however there is no matching empire,
      *  the neutral empire is to be returned.
+     *
      * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
      * @return The {@link ActiveEmpire} bound to the unique ID
      * @implNote The implementation of this method is very inefficient as it iterates over all known empires at worst
@@ -53,6 +56,7 @@ public class Galimulator {
      * this is NOT a clone of the backing collection, which means that any modifications done to the collections
      * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more
      * performance friendly
+     *
      * @return A {@link Vector} of {@link ActiveEmpire empires} that are known
      */
     @SuppressWarnings("unchecked")
@@ -65,6 +69,7 @@ public class Galimulator {
      *  unless a new galaxy is spun up. 1000 in-game years span an in-game millenia, which is the time format most
      *  players are familiar with in the game. However please note that this is not always calculate in years, sometimes
      *  it is also in milliyears or other time formats.
+     *
      * @return The in-game year.
      */
     public static int getGameYear() {
@@ -75,6 +80,7 @@ public class Galimulator {
      * Convenience method to obtain the neutral empire. The neutral empire should NOT be ticked as it may create
      * serious side effects within the ticking mechanism. Additionally merging or destroying the empire might have serious
      * side effects, which is why that should be avoided.
+     *
      * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
      */
     public static @NotNull ActiveEmpire getNeutralEmpire() {
@@ -103,6 +109,7 @@ public class Galimulator {
      * of the Starloader API; additionally there might be cases where this int code is out of place, this is because there
      * is no serious way of getting which release this is, other than looking a the hashcode or last modification date
      * of the executable.
+     *
      * @return -1
      */
     public static int getReleaseCode() {
@@ -113,6 +120,7 @@ public class Galimulator {
      * Obtains the version of galimulator the Starloader API was developed against.
      * This sortof dictates what features are to be expected to be included within the API and was such can be used for
      * cross-version applications.
+     *
      * @return "4.8"
      */
     public static String getSourceVersion() {
@@ -124,6 +132,7 @@ public class Galimulator {
      * this is NOT a clone of the backing collection, which means that any modifications done to the collections
      * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more
      * performance friendly
+     *
      * @return A {@link Vector} of {@link Star stars} that are known
      */
     @SuppressWarnings("unchecked")
