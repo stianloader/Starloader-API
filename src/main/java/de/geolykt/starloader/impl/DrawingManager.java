@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.gui.DrawingImpl;
+import de.geolykt.starloader.api.gui.text.FormattedText;
+import de.geolykt.starloader.api.gui.text.TextFactory;
+import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.GalFX$FONT_TYPE;
@@ -20,6 +23,8 @@ import snoddasmannen.galimulator.dg;
 import snoddasmannen.galimulator.ft;
 
 public class DrawingManager implements DrawingImpl {
+
+    private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
 
     private Method bitmapMethod;
 
@@ -87,6 +92,16 @@ public class DrawingManager implements DrawingImpl {
     @Override
     public @NotNull SpriteBatch getMainDrawingBatch() {
         return GalFX.a;
+    }
+
+    @Override
+    public @NotNull TextFactory getTextFactory() {
+        return TEXT_FACTORY;
+    }
+
+    @Override
+    public void sendBulletin(@NotNull FormattedText text) {
+        Space.a(new FormattedBulletinWrapper(text));
     }
 
     @Override

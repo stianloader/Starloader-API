@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.gui.text.FormattedText;
+import de.geolykt.starloader.api.gui.text.TextFactory;
 import snoddasmannen.galimulator.GalColor;
 
 /**
@@ -64,6 +66,22 @@ public interface DrawingImpl {
      * @return The main drawing batch.
      */
     public @NotNull SpriteBatch getMainDrawingBatch();
+
+    /**
+     * Obtains the instance's {@link TextFactory}.
+     *
+     * @return The {@link TextFactory} bound to the implementation
+     */
+    public @NotNull TextFactory getTextFactory();
+
+    /**
+     * Sends a bulletin to the player which is visible in the bottom left in most cases.
+     * The message will be prefixed by the Space Oddity message; useful for making your own
+     * space oddities
+     *
+     * @param message The message to send
+     */
+    public void sendBulletin(@NotNull FormattedText text);
 
     /**
      * Sends a bulletin to the player which is visible in the bottom left in most cases.

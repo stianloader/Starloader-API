@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.gui.text.FormattedText;
+import de.geolykt.starloader.api.gui.text.TextFactory;
 import snoddasmannen.galimulator.GalColor;
 
 /**
@@ -16,6 +18,38 @@ import snoddasmannen.galimulator.GalColor;
 public final class Drawing {
 
     private static DrawingImpl implementation;
+
+    /**
+     * Draws text at the given location.
+     * The default color is used, which under normal circumstances that's white,
+     * however the exact color is dependent on the specification.
+     * Additionally the font shall be left unspecified. The text may not persist
+     * across frames.
+     *
+     * @param message The message to write
+     * @param x The X-location of the text
+     * @param y The Y-location of the text
+     * @return The width of the text that was just drawn
+     */
+    public static float drawText(@NotNull String message, float x, float y) {
+        return implementation.drawText(message, x, y);
+    }
+
+    /**
+     * Draws text at the given location.
+     * The specified color should be used.
+     * Additionally the font shall be left unspecified. The text may not persist
+     * across frames.
+     *
+     * @param message The message to write
+     * @param x The X-location of the text
+     * @param y The Y-location of the text
+     * @param color The color of the message
+     * @return The width of the text that was just drawn
+     */
+    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
+        return implementation.drawText(message, x, y, color);
+    }
 
     /**
      * Obtains the main drawing sprite batch. Operations performed on this batch will result
@@ -47,40 +81,13 @@ public final class Drawing {
         return implementation.getAvailiableFonts();
     }
 
-    public static void setImplementation(@NotNull DrawingImpl implementation) {
-        Drawing.implementation = implementation;
-    }
-
     /**
-     * Draws text at the given location.
-     * The default color is used, which under normal circumstances that's white,
-     * however the exact color is dependent on the specification.
-     * Additionally the font shall be left unspecified. The text may not persist
-     * across frames.
+     * Obtains the instance's {@link TextFactory}.
      *
-     * @param message The message to write
-     * @param x The X-location of the text
-     * @param y The Y-location of the text
-     * @return The width of the text that was just drawn
+     * @return The {@link TextFactory} bound to the implementation
      */
-    public float drawText(@NotNull String message, float x, float y) {
-        return implementation.drawText(message, x, y);
-    }
-
-    /**
-     * Draws text at the given location.
-     * The specified color should be used.
-     * Additionally the font shall be left unspecified. The text may not persist
-     * across frames.
-     *
-     * @param message The message to write
-     * @param x The X-location of the text
-     * @param y The Y-location of the text
-     * @param color The color of the message
-     * @return The width of the text that was just drawn
-     */
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
-        return implementation.drawText(message, x, y, color);
+    public static @NotNull TextFactory getTextFactory() {
+        return implementation.getTextFactory();
     }
 
     /**
@@ -88,8 +95,17 @@ public final class Drawing {
      *
      * @param message The message to send
      */
-    public void sendBulletin(@NotNull String message) {
+    public static void sendBulletin(@NotNull String message) {
         implementation.sendBulletin(message);
+    }
+
+    /**
+     * Sends a bulletin to the player which is visible in the bottom left in most cases.
+     * 
+     * @param text The formatted text to send as a bulletin
+     */
+    public static void sendBulltin(@NotNull FormattedText text) {
+        implementation.sendBulletin(text);
     }
 
     /**
@@ -99,7 +115,11 @@ public final class Drawing {
      *
      * @param message The message to send
      */
-    public void sendOddityBulletin(@NotNull String message) {
+    public static void sendOddityBulletin(@NotNull String message) {
         implementation.sendOddityBulletin(message);
+    }
+
+    public static void setImplementation(@NotNull DrawingImpl implementation) {
+        Drawing.implementation = implementation;
     }
 }
