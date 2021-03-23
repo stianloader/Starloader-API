@@ -98,4 +98,15 @@ public interface DrawingImpl {
      * @param message The message to send
      */
     public void sendOddityBulletin(@NotNull String message);
+
+    /**
+     * Creates a {@link TextInputBuilder} for obtaining String input from the User.
+     * The returned Builder should implicitly honour the native key input preference unless otherwise specified.
+     *
+     * @param title The title of the input dialog.
+     * @param text
+     * @param hint
+     * @return A new {@link TextInputBuilder} instance
+     */
+    public @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull  String text, @NotNull  String hint);
 }

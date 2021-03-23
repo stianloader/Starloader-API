@@ -4,7 +4,6 @@ plugins {
     id 'maven-publish'
 }
 
-// Right now we don't need Java 11 compatibillity, so we don't enforce it here
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
 
 repositories {

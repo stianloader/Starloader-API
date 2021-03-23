@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.gui.DrawingImpl;
+import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
@@ -112,5 +113,11 @@ public class DrawingManager implements DrawingImpl {
     @Override
     public void sendOddityBulletin(@NotNull String message) {
         Space.a(new dg(message));
+    }
+
+    @Override
+    public @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,
+            @NotNull String hint) {
+        return new StarloaderTextInputBuilder(title, text, hint);
     }
 }

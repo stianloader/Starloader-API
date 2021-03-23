@@ -1,6 +1,6 @@
 package de.geolykt.starloader.api.gui;
 
-public interface AutocloseableDialog {
+public interface AutocloseableDialog extends Closable {
 
     /**
      * Obtains the time at which the dialog will be closed automatically, or -1 if automatic closing is not done.
