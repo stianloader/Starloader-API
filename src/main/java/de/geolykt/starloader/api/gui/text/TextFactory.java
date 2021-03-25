@@ -45,6 +45,17 @@ public interface TextFactory {
     public @NotNull FormattedText asFormattedText(@NotNull String text, @NotNull GalColor color);
 
     /**
+     * Creates a {@link FormattedText} based on a String. The specified color is used.
+     *
+     * @param text The text to encode
+     * @param color The color of the text
+     * @return The text as a {@link FormattedText}
+     */
+    public default @NotNull FormattedText asFormattedText(@NotNull String text, @NotNull TextColor color) {
+        return this.asFormattedText(text, color.galColor);
+    }
+
+    /**
      * Creates a {@link FormattedTextComponent} based on a String. The default color is used.
      *
      * @param text The text to encode
@@ -60,6 +71,17 @@ public interface TextFactory {
      * @return The text as a {@link FormattedTextComponent}
      */
     public @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text, @NotNull GalColor color);
+
+    /**
+     * Creates a {@link FormattedTextComponent} based on a String. The specified color is used.
+     *
+     * @param text The text to encode
+     * @param color The color of the component
+     * @return The text as a {@link FormattedTextComponent}
+     */
+    public default @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text, @NotNull TextColor color) {
+        return this.asFormattedTextComponent(text, color.galColor);
+    }
 
     /**
      * Creates a new {@link ComponentBuilder} instance with the input string

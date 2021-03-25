@@ -18,6 +18,19 @@ public interface ComponentBuilder {
     public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity);
 
     /**
+     * Add a jitter sub-component to the component
+     * This is for example used in the Space oddity bulletin.
+     * The jitter there is 10.0D.
+     *
+     * @param color The color of the jitter
+     * @param intensity The intensity of the jitter
+     * @return The builder reference
+     */
+    public default @NotNull ComponentBuilder addJitter(@NotNull TextColor color, double intensity) {
+        return this.addJitter(color.galColor, intensity);
+    }
+
+    /**
      * Sets the text of the component
      *
      * @param text The text of the component
@@ -32,6 +45,16 @@ public interface ComponentBuilder {
      * @return The builder reference
      */
     public @NotNull ComponentBuilder setColor(@NotNull GalColor color);
+
+    /**
+     * Sets the color of the component
+     *
+     * @param text The color of the component
+     * @return The builder reference
+     */
+    public default @NotNull ComponentBuilder setColor(@NotNull TextColor color) {
+        return this.setColor(color.galColor);
+    }
 
     /**
      * Builds the component

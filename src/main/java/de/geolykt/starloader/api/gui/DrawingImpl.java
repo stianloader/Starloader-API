@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.gui.text.FormattedText;
+import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import snoddasmannen.galimulator.GalColor;
 
@@ -42,6 +43,21 @@ public interface DrawingImpl {
      * @return The width of the text that was just drawn
      */
     public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color);
+
+    /**
+     * Draws text at the given location.
+     * The specified color should be used.
+     * Additionally the font shall be left unspecified.
+     *
+     * @param message The message to write
+     * @param x The X-location of the text
+     * @param y The Y-location of the text
+     * @param color The color of the message
+     * @return The width of the text that was just drawn
+     */
+    public default float drawText(@NotNull String message, float x, float y, @NotNull TextColor color) {
+        return this.drawText(message, x, y, color.toGalimulatorColor());
+    }
 
     /**
      * Obtains the font types that are available in this implementation.
