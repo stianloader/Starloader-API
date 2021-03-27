@@ -2,7 +2,12 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'maven-publish'
+    id 'widener-plugin' version '0.0.1'
 }
+
+group 'de.geolykt'
+def archivesBaseName = 'starloader-api'
+version '1.1.0'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
 
@@ -15,11 +20,17 @@ repositories {
         name 'sponge'
         url 'https://repo.spongepowered.org/maven'
     }
+    mavenCentral()
+}
+
+widener {
+    accessWidener = "src/main/resources/starloader-api.accesswidener"
+    affectedFile = "galimulator-desktop.jar"
 }
 
 dependencies {
     compileOnly files("galimulator-desktop.jar") // Galimulator proper
-    api "de.geolykt:starloader:1.0.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
+    api "de.geolykt:starloader:1.1.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
 }
 
 publishing {
@@ -31,5 +42,45 @@ publishing {
 
             from components.java
         }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        plugin(MavenPublication) { publication ->
+            groupId project.group
+            artifactId project.archivesBaseName
+            version '1.1.0'
+
+            from components['java']
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+
+        // Does the same thing, but who cares?
+        snapshot(MavenPublication) { publication ->
+            groupId project.group
+            artifactId project.archivesBaseName
+            version '1.1.0-SNAPSHOT'
+
+            from components['java']
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        mavenLocal()
     }
 }

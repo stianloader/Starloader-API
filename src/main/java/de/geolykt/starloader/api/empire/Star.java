@@ -131,7 +131,6 @@ public interface Star extends Identifiable, Metadatable {
     /**
      * Sets the empire that is said to have control over the star
      * @param empire The {@link ActiveEmpire} controlling the star
-     * @throws OperationNotSupportedException If a non-obfuscated object was passed into this.
      */
     public void setAssignedEmpire(@NotNull ActiveEmpire empire);
 

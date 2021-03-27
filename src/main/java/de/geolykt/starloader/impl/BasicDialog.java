@@ -1,6 +1,5 @@
 package de.geolykt.starloader.impl;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import snoddasmannen.galimulator.ui.bh;
 public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
 
     protected final bh dialog;
-    protected final long closeTime;
 
     /**
      * Creates and displays a dialog
@@ -36,15 +34,6 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
         dialog = Space.a(title, description, choices, duration, null, true);
         dialog.a(new DialogCloseListenerWrapper(closeListeners, playSFX));
         dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));
-        // Luckily the close time is final, so we only have to get it once
-        try {
-            Field field = this.dialog.getClass().getField("d");
-            field.setAccessible(true);
-            closeTime = field.getLong(this.dialog);
-            field.setAccessible(false);
-        } catch (ReflectiveOperationException | SecurityException e) {
-            throw new RuntimeException("Something went wrong while performing the reflections for Audiosample wrapping", e);
-        }
     }
 
     /**
@@ -52,7 +41,7 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
      * The time is relative to the starting point of {@link System#currentTimeMillis()} and is in milliseconds.
      */
     public long getAutocloseTime() {
-        return closeTime;
+        return dialog.d;
     }
 
     @Override

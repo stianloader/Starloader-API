@@ -1,7 +1,5 @@
 package de.geolykt.starloader.api.resource;
 
-import java.lang.reflect.Field;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.audio.Sound;
@@ -37,15 +35,7 @@ public final class AudioSampleWrapper implements ResourceWrapper<Sound> { // TOD
     private AudioSampleWrapper(String loc, AudioManager$AudioSample sample) {
         this.location = loc;
         this.sample = sample;
-        // Get the sound object via reflection, because that's what life is.
-        try {
-            Field field = this.sample.getClass().getField("sound");
-            field.setAccessible(true);
-            sound = (Sound) field.get(this.sample);
-            field.setAccessible(false);
-        } catch (ReflectiveOperationException | SecurityException e) {
-            throw new RuntimeException("Something went wrong while performing the reflections for Audiosample wrapping", e);
-        }
+        this.sound = sample.sound;
     }
 
     @Override

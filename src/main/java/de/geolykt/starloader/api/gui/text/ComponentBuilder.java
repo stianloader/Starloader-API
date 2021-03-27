@@ -41,7 +41,7 @@ public interface ComponentBuilder {
     /**
      * Sets the color of the component
      *
-     * @param text The color of the component
+     * @param color The color of the component
      * @return The builder reference
      */
     public @NotNull ComponentBuilder setColor(@NotNull GalColor color);
@@ -49,7 +49,7 @@ public interface ComponentBuilder {
     /**
      * Sets the color of the component
      *
-     * @param text The color of the component
+     * @param color The color of the component
      * @return The builder reference
      */
     public default @NotNull ComponentBuilder setColor(@NotNull TextColor color) {

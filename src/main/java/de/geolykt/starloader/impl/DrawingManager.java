@@ -1,6 +1,5 @@
 package de.geolykt.starloader.impl;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -26,8 +25,6 @@ import snoddasmannen.galimulator.ft;
 public class DrawingManager implements DrawingImpl {
 
     private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
-
-    private Method bitmapMethod;
 
     @SuppressWarnings({ "unchecked", "rawtypes" }) // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
     private EnumMap fontBitmapCache = new EnumMap(GalFX$FONT_TYPE.class);
@@ -64,30 +61,11 @@ public class DrawingManager implements DrawingImpl {
             return null;
         }
         Object obj = fontBitmapCache.get(arg);
-        if (obj != null) {
-            return (BitmapFont) obj;
-        }
-        if (bitmapMethod == null) {
-            try {
-                bitmapMethod = GalFX.class.getDeclaredMethod("c", GalFX$FONT_TYPE.class);
-            } catch (NoSuchMethodException | SecurityException e) {
-                throw new RuntimeException("Fatal reflection error while obtaining the font bitmap.", e);
-            }
-        }
-        boolean setAccess = !bitmapMethod.canAccess(null);
-        if (setAccess) {
-            bitmapMethod.setAccessible(true);
-        }
-        try {
-            obj = bitmapMethod.invoke(null, arg);
-            if (setAccess) {
-                bitmapMethod.setAccessible(false); // Do not pollute the accessible flag
-            }
+        if (obj == null) {
+            obj = GalFX.c(arg);
             fontBitmapCache.put(arg, obj);
-            return (BitmapFont) obj;
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Fatal reflection error while obtaining the font bitmap.", e);
         }
+        return (BitmapFont) obj;
     }
 
     @Override

@@ -45,7 +45,7 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg
 
     /**
      * Initiates the wrapper with no further information. If the parent Widget is an automatically closing dialog, then
-     * {@link #WidgetActionListenerWrapper(AutoCloseable)} should be preferred as
+     * {@link #WidgetActionListenerWrapper(AutocloseableDialog)} should be preferred as
      * otherwise the {@link BasicDialogCloseListener} might get multiple automatic close notifications.
      */
     public WidgetActionListenerWrapper() {

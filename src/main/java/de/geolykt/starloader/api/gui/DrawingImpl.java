@@ -95,7 +95,7 @@ public interface DrawingImpl {
      * The message will be prefixed by the Space Oddity message; useful for making your own
      * space oddities
      *
-     * @param message The message to send
+     * @param text The text to send
      */
     public void sendBulletin(@NotNull FormattedText text);
 
@@ -120,8 +120,8 @@ public interface DrawingImpl {
      * The returned Builder should implicitly honour the native key input preference unless otherwise specified.
      *
      * @param title The title of the input dialog.
-     * @param text
-     * @param hint
+     * @param text Exact use unknown.
+     * @param hint Exact use unknown.
      * @return A new {@link TextInputBuilder} instance
      */
     public @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull  String text, @NotNull  String hint);

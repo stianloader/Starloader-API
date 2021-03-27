@@ -1,0 +1,11 @@
+accessWidener   v1     intermediary
+
+# Notice to maintainers: Please avoid removing these as they still persist and pollute the galimulator jar even after removal.
+
+# Methods
+accessible      method  snoddasmannen/galimulator/GalFX                     c      (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+
+# Fields
+accessible      field   snoddasmannen/galimulator/ui/bh                     d      J
+accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound  Lcom/badlogic/gdx/audio/Sound;
+accessible      field   snoddasmannen/galimulator/Space                     i      Ljava/util/Vector;
