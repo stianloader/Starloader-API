@@ -2,8 +2,6 @@ package de.geolykt.starloader.api.empire;
 
 import java.util.Vector;
 
-import javax.naming.OperationNotSupportedException;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.Metadatable;
+import de.geolykt.starloader.api.event.TickCallback;
 import snoddasmannen.galimulator.Religion;
 
 /**
@@ -27,11 +26,29 @@ public interface Star extends Identifiable, Metadatable {
     public void addNeighbour(@NotNull Star star);
 
     /**
+     * Adds a callback that only applies to this star.
+     * The callback will be called whenever the star is ticked.
+     *
+     * @param callback The callback to add
+     */
+    public void addTickCallback(TickCallback<Star> callback);
+
+    /**
      * Clears the starlane cache, which will then be recalculated in the next iteration of the ticking cycle.
      * Clearing the starlane cache has the benefit that it updates the position of the starlanes, which is helpful if the
      * star is displaced.
      */
     public void clearStarlaneCache();
+
+    /**
+     * Performs a takeover of the star by an {@link ActiveEmpire}.
+     * The takeover may be deadly and as such cause many deaths, however it might also get
+     * cancelled by an event listener.
+     *
+     * @param newOwner The {@link ActiveEmpire} that should be the new owner of the star
+     * @return False if nothing happened (for example due to cancellation)
+     */
+    public boolean doTakeover(@NotNull ActiveEmpire newOwner);
 
     /**
      * Gets the empire that is said to have control over the star.
@@ -130,6 +147,8 @@ public interface Star extends Identifiable, Metadatable {
 
     /**
      * Sets the empire that is said to have control over the star
+     * This method sets the ownership forcefully and will not trigger any events (yet).
+     *
      * @param empire The {@link ActiveEmpire} controlling the star
      */
     public void setAssignedEmpire(@NotNull ActiveEmpire empire);

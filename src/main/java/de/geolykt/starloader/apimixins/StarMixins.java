@@ -1,18 +1,26 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.event.EventManager;
+import de.geolykt.starloader.api.event.TickCallback;
+import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
 import snoddasmannen.galimulator.Religion;
 
 @Mixin(snoddasmannen.galimulator.Star.class)
@@ -44,6 +52,8 @@ public class StarMixins implements Star {
     @Shadow
     private transient Vector2 q; // coordinates
 
+    private transient final List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
+
     @Shadow
     float wealth; // wealth
 
@@ -74,8 +84,16 @@ public class StarMixins implements Star {
         b((snoddasmannen.galimulator.Star) star);
     }
 
+    @Override
+    public void addTickCallback(TickCallback<Star> callback) {
+        tickCallbacks.add(callback);
+    }
+
     @Shadow
     public void b(Religion var1) {} // setMinorityFaith
+
+    @Shadow
+    public void b(snoddasmannen.galimulator.Empire var0) {} // takeover
 
     @Shadow
     public void b(snoddasmannen.galimulator.Star var1) {} // addNeighbour
@@ -89,6 +107,16 @@ public class StarMixins implements Star {
     @Override
     public void clearStarlaneCache() {
         this.b.clear();
+    }
+
+    @Override
+    public boolean doTakeover(@NotNull ActiveEmpire newOwner) {
+        ActiveEmpire old = getAssignedEmpire();
+        if (old == newOwner) {
+            return false; // don't perform a takeover when there is no takeover to be performed
+        }
+        b((snoddasmannen.galimulator.Empire) newOwner);
+        return old != getAssignedEmpire();
     }
 
     @Override
@@ -221,5 +249,21 @@ public class StarMixins implements Star {
     public void syncCoordinates() {
         x = q.x;
         y = q.y;
+    }
+
+    @Inject(cancellable = true, method = "b", at = @At("HEAD"))
+    public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
+        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(), (ActiveEmpire) empire);
+        EventManager.handleEvent(event);
+        if (event.isCancelled()) {
+            info.cancel();
+        }
+    }
+
+    @Inject(method = "e", at = @At("HEAD"))
+    public void tick(CallbackInfo info) {
+        for (TickCallback<Star> callback : tickCallbacks) {
+            callback.tick(this);
+        }
     }
 }

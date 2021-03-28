@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.Metadatable;
+import de.geolykt.starloader.api.event.TickCallback;
 import snoddasmannen.galimulator.Fleet;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.actors.Flagship;
@@ -22,6 +23,14 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * @param actor The StateActor to assign
      */
     public void addActor(@NotNull StateActor actor);
+
+    /**
+     * Adds a callback that only applies to this empire.
+     * The callback will be called whenever the empire is ticked.
+     *
+     * @param callback The callback to add
+     */
+    public void addTickCallback(TickCallback<ActiveEmpire> callback);
 
     /**
      * Obtains the {@link Vector} of the {@link StateActor StateActors} that are currently assigned to the empire.

@@ -2,6 +2,7 @@ package de.geolykt.starloader.apimixins;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.event.EventManager;
+import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.event.TickEvent;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
@@ -77,6 +79,8 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private int starCount; // starCount
 
+    private transient final List<TickCallback<ActiveEmpire>> tickCallbacks = new ArrayList<>();
+
     @Shadow
     public void a(Religion var0) { // setReligion
         religion = var0;
@@ -89,6 +93,11 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void addActor(StateActor actor) {
         a(actor);
+    }
+
+    @Override
+    public void addTickCallback(TickCallback<ActiveEmpire> callback) {
+        tickCallbacks.add(callback);
     }
 
     @Shadow
@@ -216,6 +225,9 @@ public class EmpireMixins implements ActiveEmpire {
             } else {
                 DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!");
             }
+        }
+        for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
+            callback.tick(this);
         }
     }
 }
