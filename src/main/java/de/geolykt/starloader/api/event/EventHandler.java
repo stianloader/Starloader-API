@@ -18,6 +18,8 @@ public @interface EventHandler {
     /**
      * The priority of the event handler. It influences when the hander is called which makes it important for
      * inter-extension operabillity.
+     *
+     * @return The priority of the handler
      */
     EventPriority value() default EventPriority.MEDIUM;
 

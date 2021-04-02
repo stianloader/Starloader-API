@@ -18,9 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
-import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
-import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
 import snoddasmannen.galimulator.Religion;
 
 @Mixin(snoddasmannen.galimulator.Star.class)
@@ -251,14 +249,19 @@ public class StarMixins implements Star {
         y = q.y;
     }
 
-    @Inject(cancellable = true, method = "b", at = @At("HEAD"))
-    public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
-        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(), (ActiveEmpire) empire);
-        EventManager.handleEvent(event);
-        if (event.isCancelled()) {
-            info.cancel();
-        }
-    }
+/* FIXME Spongepowered's Mixins finds it very funny to not want to apply this mixin,
+         sadly I cannot do this otherwise (i. e. using @Overwrite instead of @Inject) since otherwise
+         I'd have a very angry snoddasmannen, and if I use some improper ASM hacks I'd have a very angry
+         userbase that is wondering why their classes load 10 times longer than they should be loading,
+         additionally I do not know the consequences of that action as improper ASM hacks do not stack well with Mixins.*/
+//    @Inject(method = "b", at = @At("HEAD"), cancellable = true)
+//    public void takeover(Empire empire, CallbackInfo info) {
+//        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(), (ActiveEmpire) empire);
+//        EventManager.handleEvent(event);
+//        if (event.isCancelled()) {
+//            info.cancel();
+//        }
+//    }
 
     @Inject(method = "e", at = @At("HEAD"))
     public void tick(CallbackInfo info) {

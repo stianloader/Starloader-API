@@ -26,7 +26,7 @@ public class NamespacedKey {
     public String toString() {
         return namespaceString + ":" + keyString;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof NamespacedKey) {

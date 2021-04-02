@@ -7,8 +7,11 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.Cancellable;
 
 /**
+ * @deprecated Not fired by the API due to issues with mixins, other implementations are welcome to use it though
+ *
  * Event fired when the ownership of a star changes.
  */
+@Deprecated(forRemoval = false)
 public class StarOwnershipTakeoverEvent extends StarEvent implements Cancellable {
 
     protected boolean cancelled = false;

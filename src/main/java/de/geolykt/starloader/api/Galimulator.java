@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.launcher.StarloaderLauncher;
 import snoddasmannen.galimulator.Space;
 
 /**
@@ -117,12 +118,15 @@ public class Galimulator {
     }
 
     /**
+     * @deprecated This version is hardcoded and might have some issues, use {@link StarloaderLauncher#galVersion} instead
+     *
      * Obtains the version of galimulator the Starloader API was developed against.
      * This sortof dictates what features are to be expected to be included within the API and was such can be used for
      * cross-version applications.
      *
      * @return "4.8"
      */
+    @Deprecated(forRemoval = false, since = "1.1.0")
     public static String getSourceVersion() {
         return "4.8";
     }
@@ -131,7 +135,7 @@ public class Galimulator {
      * Gets the currently registered Stars. Note that like many other methods in the API, 
      * this is NOT a clone of the backing collection, which means that any modifications done to the collections
      * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more
-     * performance friendly
+     * performance friendly.
      *
      * @return A {@link Vector} of {@link Star stars} that are known
      */
@@ -142,7 +146,8 @@ public class Galimulator {
 
     /**
      * Convenience method to calculate the voronoi graphs (the fancy section-outline around the stars) for all stars.
-     * This is helpful if a star got moved however it does not recalculate starlanes.
+     * This is helpful if a star got moved, however a call to this method does not recalculate starlanes, which is
+     * also needed alongside this method.
      */
     public static void recalculateVoronoiGraphs() {
         Space.ao();
