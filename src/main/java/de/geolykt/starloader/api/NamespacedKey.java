@@ -10,7 +10,11 @@ public class NamespacedKey {
     private final String keyString;
 
     public NamespacedKey(@NotNull Extension namespace, @NotNull String key) {
-        namespaceString = namespace.getDescription().getName();
+        this(namespace.getDescription().getName(), key);
+    }
+
+    protected NamespacedKey(@NotNull String namespace, @NotNull String key) {
+        namespaceString = namespace;
         keyString = key;
     }
 
@@ -35,5 +39,14 @@ public class NamespacedKey {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Obtains the key part of the namespaced key.
+     *
+     * @return The key of this key
+     */
+    public String getKey() {
+        return keyString;
     }
 }

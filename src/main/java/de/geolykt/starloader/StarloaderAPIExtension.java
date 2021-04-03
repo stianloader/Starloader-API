@@ -6,7 +6,7 @@ import de.geolykt.starloader.mod.Extension;
 
 public class StarloaderAPIExtension extends Extension {
     @Override
-    public void initialize() {
+    public void preInitialize() {
         Drawing.setImplementation(new DrawingManager());
     }
 }

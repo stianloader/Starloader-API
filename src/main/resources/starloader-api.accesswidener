@@ -1,6 +1,10 @@
-accessWidener   v1     intermediary
+accessWidener   v2     intermediary
 
 # Notice to maintainers: Please avoid removing these as they still persist and pollute the galimulator jar even after removal.
+
+# ---------------------------------------------------------
+# General Accessibllity modifiers (Runtime + Compile time)
+# ---------------------------------------------------------
 
 # Methods
 accessible      method  snoddasmannen/galimulator/GalFX                     c      (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
@@ -9,3 +13,15 @@ accessible      method  snoddasmannen/galimulator/GalFX                     c   
 accessible      field   snoddasmannen/galimulator/ui/bh                     d      J
 accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound  Lcom/badlogic/gdx/audio/Sound;
 accessible      field   snoddasmannen/galimulator/Space                     i      Ljava/util/Vector;
+
+# ---------------------------------------------------------
+# Compiler tricks (Compile time only)
+# ---------------------------------------------------------
+
+# Enums
+denumerised      class   snoddasmannen/galimulator/EmpireSpecial
+
+# Synthetics
+# Does not appear to work
+natural      field   snoddasmannen/galimulator/EmpireSpecial             r      [Lsnoddasmannen/galimulator/EmpireSpecial;
+accessible   field   snoddasmannen/galimulator/EmpireSpecial             r      [Lsnoddasmannen/galimulator/EmpireSpecial;

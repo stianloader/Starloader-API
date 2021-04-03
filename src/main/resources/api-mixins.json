@@ -9,6 +9,7 @@
     "ApplicationMixins",
     "EmpireAnnalsMixins",
     "EmpireMixins",
+    "EmpireSpecialMixins",
     "InstanceMixins",
     "StarMixins",
     "DiploRequestMixins"
