@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.registry.RegistryKeyed;
 import snoddasmannen.galimulator.EmpireSpecial;
 
 /**
@@ -36,22 +37,27 @@ public class Registries {
                 EmpireSpecial.p
         });
         Map<NamespacedKey, EmpireSpecial> keyedSpecials = empireSpecialRegistry.getKeyedValues();
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_MILITANT, EmpireSpecial.a);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_AGGRESSIVE, EmpireSpecial.b);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_DEFENSIVE, EmpireSpecial.c);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_SCIENTIFIC, EmpireSpecial.d);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_STABLE, EmpireSpecial.e);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_UNSTABLE, EmpireSpecial.f);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_EXPLOSIVE, EmpireSpecial.g);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_SLOW_STARTER, EmpireSpecial.h);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_DIPLOMATIC, EmpireSpecial.i);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_XENOPHOBIC, EmpireSpecial.j);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_FANATICAL, EmpireSpecial.k);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_RECLUSIVE, EmpireSpecial.l);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_HORDE, EmpireSpecial.m);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_CAPITALIST, EmpireSpecial.n);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_CULT, EmpireSpecial.o);
-        keyedSpecials.put(EmpireSpecialRegistry.GALIMULATOR_INDUSTRIAL, EmpireSpecial.p);
+        registerSpecial(keyedSpecials, EmpireSpecial.a, EmpireSpecialRegistry.GALIMULATOR_MILITANT);
+        registerSpecial(keyedSpecials, EmpireSpecial.b, EmpireSpecialRegistry.GALIMULATOR_AGGRESSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.c, EmpireSpecialRegistry.GALIMULATOR_DEFENSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.d, EmpireSpecialRegistry.GALIMULATOR_SCIENTIFIC);
+        registerSpecial(keyedSpecials, EmpireSpecial.e, EmpireSpecialRegistry.GALIMULATOR_STABLE);
+        registerSpecial(keyedSpecials, EmpireSpecial.f, EmpireSpecialRegistry.GALIMULATOR_UNSTABLE);
+        registerSpecial(keyedSpecials, EmpireSpecial.g, EmpireSpecialRegistry.GALIMULATOR_EXPLOSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.h, EmpireSpecialRegistry.GALIMULATOR_SLOW_STARTER);
+        registerSpecial(keyedSpecials, EmpireSpecial.i, EmpireSpecialRegistry.GALIMULATOR_DIPLOMATIC);
+        registerSpecial(keyedSpecials, EmpireSpecial.j, EmpireSpecialRegistry.GALIMULATOR_XENOPHOBIC);
+        registerSpecial(keyedSpecials, EmpireSpecial.k, EmpireSpecialRegistry.GALIMULATOR_FANATICAL);
+        registerSpecial(keyedSpecials, EmpireSpecial.l, EmpireSpecialRegistry.GALIMULATOR_RECLUSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.m, EmpireSpecialRegistry.GALIMULATOR_HORDE);
+        registerSpecial(keyedSpecials, EmpireSpecial.n, EmpireSpecialRegistry.GALIMULATOR_CAPITALIST);
+        registerSpecial(keyedSpecials, EmpireSpecial.o, EmpireSpecialRegistry.GALIMULATOR_CULT);
+        registerSpecial(keyedSpecials, EmpireSpecial.p, EmpireSpecialRegistry.GALIMULATOR_INDUSTRIAL);
         Registry.EMPIRE_SPECIALS = empireSpecialRegistry;
+    }
+
+    private static void registerSpecial(Map<NamespacedKey, EmpireSpecial> map, EmpireSpecial special, NamespacedKey key) {
+        ((RegistryKeyed)special).setRegistryKey(key);
+        map.put(key, special);
     }
 }

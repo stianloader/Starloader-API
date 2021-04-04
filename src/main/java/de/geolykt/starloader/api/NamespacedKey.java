@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.mod.Extension;
@@ -39,6 +41,11 @@ public class NamespacedKey {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespaceString, keyString);
     }
 
     /**

@@ -32,20 +32,16 @@ public abstract class Registry<T> {
     protected final Map<NamespacedKey, T> keyedValues = new HashMap<>();
 
     /**
-     * Internal map containing the key-value pairs of the registry for lookup.
+     * Internal map containing the enum's name of the registry for lookup.
+     * Used to "replace" {@link Enum#valueOf(Class, String)}
      */
     protected final Map<String, T> keyedValuesIntern = new HashMap<>();
-    protected T[] values;
 
     /**
-     * Registers the value to the given key; the implementation might be thread-safe, however exensions should always
-     * believe that multithreading can be dangerous and as such this method should never be called concurrently as otherwise
-     * some other things (such as the values array) might break.
-     *
-     * @param key The key of the entry to register
-     * @param value The value of the entry
+     * Internal values array which seeks to replace the synthetic values array produced by compilers for
+     * the values() call on enums.
      */
-    public abstract void register(@NotNull NamespacedKey key, @NotNull T value);
+    protected T[] values;
 
     /**
      * Obtains the registry value mapped to the given key, it may return null if it is not registered, however under
@@ -61,8 +57,9 @@ public abstract class Registry<T> {
     }
 
     /**
-     * @deprecated This is internal API not meant for internal use
-     * Internal API, DO NOT USE
+     * @deprecated This is internal API not meant for non-internal use.
+     * Internal API, DO NOT USE!
+     * This method seeks to replace {@link Enum#valueOf(Class, String)} to some degree.
      *
      * @param key The key of the entry
      * @return The value associated under the key
@@ -85,4 +82,14 @@ public abstract class Registry<T> {
         }
         return values.clone();
     }
+
+    /**
+     * Registers the value to the given key; the implementation might be thread-safe, however extensions should always
+     * believe that multithreading can be dangerous and as such this method should never be called concurrently as otherwise
+     * some other things (such as the values array) might break.
+     *
+     * @param key The key of the entry to register
+     * @param value The value of the entry
+     */
+    public abstract void register(@NotNull NamespacedKey key, @NotNull T value);
 }

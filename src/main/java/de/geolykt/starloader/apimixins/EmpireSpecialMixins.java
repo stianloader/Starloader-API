@@ -1,13 +1,17 @@
 package de.geolykt.starloader.apimixins;
 
 import java.util.HashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 
-import com.badlogic.gdx.math.MathUtils;
-
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.registry.RegistryKeyed;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
@@ -17,19 +21,13 @@ import snoddasmannen.galimulator.ui.fj;
 /**
  * Mixins into the empire special class, which makes it more registry-like.
  */
-
 @Mixin(value = EmpireSpecial.class, priority = 0)
-public class EmpireSpecialMixins {
+public class EmpireSpecialMixins implements RegistryKeyed {
 
     @Overwrite
-    public static EmpireSpecial[] values() {
-        return Registry.EMPIRE_SPECIALS.getValues();
-    }
-
-    @Overwrite
-    @SuppressWarnings("deprecation")
-    public static EmpireSpecial valueOf(String var0) {
-        return Registry.EMPIRE_SPECIALS.getIntern(var0);
+    public static EmpireSpecial f() {
+        EmpireSpecial[] var0 = Registry.EMPIRE_SPECIALS.getValues();
+        return var0[ThreadLocalRandom.current().nextInt(var0.length)];
     }
 
     @Overwrite
@@ -47,8 +45,29 @@ public class EmpireSpecialMixins {
     }
 
     @Overwrite
-    public static EmpireSpecial f() {
-        EmpireSpecial[] var0 = Registry.EMPIRE_SPECIALS.getValues();
-        return var0[MathUtils.random(var0.length - 1)];
+    @SuppressWarnings("deprecation")
+    public static EmpireSpecial valueOf(String var0) {
+        return Registry.EMPIRE_SPECIALS.getIntern(var0);
+    }
+
+    @Overwrite
+    public static EmpireSpecial[] values() {
+        return Registry.EMPIRE_SPECIALS.getValues();
+    }
+
+    @Unique
+    private NamespacedKey registryKey = null;
+
+    @Override
+    public @Nullable NamespacedKey getRegistryKey() {
+        return registryKey;
+    }
+
+    @Override
+    public void setRegistryKey(@NotNull NamespacedKey key) {
+        if (registryKey != null) {
+            throw new IllegalStateException("The registry key is already set!");
+        }
+        registryKey = key;
     }
 }

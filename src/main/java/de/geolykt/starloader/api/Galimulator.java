@@ -74,7 +74,7 @@ public class Galimulator {
      * @return The in-game year.
      */
     public static int getGameYear() {
-        return Space.y;
+        return Space.F();
     }
 
     /**

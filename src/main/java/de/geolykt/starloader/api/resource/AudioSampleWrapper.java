@@ -35,7 +35,7 @@ public final class AudioSampleWrapper implements ResourceWrapper<Sound> { // TOD
     private AudioSampleWrapper(String loc, AudioManager$AudioSample sample) {
         this.location = loc;
         this.sample = sample;
-        this.sound = sample.sound;
+        this.sound = sample.sound; // FIXME DOES NOT WORK!
     }
 
     @Override

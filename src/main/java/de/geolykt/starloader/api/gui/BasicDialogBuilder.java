@@ -22,6 +22,7 @@ public class BasicDialogBuilder {
     /**
      * Creates a DialogBuilder with the given title and description.
      * The description is often the main body of the dialog.
+     *
      * @param title The title of the dialog
      * @param description The description (main content) of the dialog
      */
@@ -34,6 +35,7 @@ public class BasicDialogBuilder {
      * The description is often the main body of the dialog.
      * The choices are the "Buttons" of the dialog box. If null,
      * it will contain only a single "OK" button.
+     *
      * @param title The title of the dialog
      * @param description The description (main content) of the dialog
      * @param choices The choices of responses the user has, also known as the buttons
@@ -47,6 +49,8 @@ public class BasicDialogBuilder {
     /**
      * Sets the duration of the dialog in seconds.
      * After the given amount of time the dialog will auto-close without picking an option.
+     * A value of 0 disables this.
+     *
      * @param duration The time after the dialog closes in seconds
      * @return The instance of the builder
      */
@@ -59,6 +63,7 @@ public class BasicDialogBuilder {
      * Sets the choices of responses the user has, they are displayed as buttons.
      * If the list is null, then "OK" is assumed as the only choice. Please note that the close button(s)
      * are existing regardless.
+     *
      * @param choices The text of the response buttons
      * @return The instance of the builder
      */
@@ -71,6 +76,7 @@ public class BasicDialogBuilder {
      * @deprecated This method's name is ambiguous since there are now multiple types of listeners
      *
      * Sets the close listeners for the Dialog. Any previous listeners are getting overridden
+     *
      * @param listeners The list of listeners to use
      * @return The instance of the builder
      */
@@ -84,6 +90,7 @@ public class BasicDialogBuilder {
      * @deprecated This method's name is ambiguous since there are now multiple types of listeners
      *
      * Adds a close listener to the list of close listeners for the Dialog.
+     *
      * @param closeListener The listener to add
      * @return The instance of the builder
      */
@@ -94,7 +101,8 @@ public class BasicDialogBuilder {
     }
 
     /**
-     * Sets the close listeners for the Dialog. Any previous listeners are getting overridden
+     * Sets the close listeners for the Dialog. Any previous listeners are getting overridden.
+     *
      * @param listeners The list of listeners to use
      * @return The instance of the builder
      */
@@ -105,6 +113,7 @@ public class BasicDialogBuilder {
 
     /**
      * Adds a close listener to the list of close listeners for the Dialog.
+     *
      * @param closeListener The listener to add
      * @return The instance of the builder
      */
@@ -114,7 +123,8 @@ public class BasicDialogBuilder {
     }
 
     /**
-     * Sets the widget actions listeners for the Dialog. Any previous listeners are getting overridden
+     * Sets the widget actions listeners for the Dialog. Any previous listeners are getting overridden.
+     *
      * @param listeners The list of listeners to use
      * @return The instance of the builder
      */
@@ -125,6 +135,7 @@ public class BasicDialogBuilder {
 
     /**
      * Adds a widget action listener to the list of close listeners for the Dialog.
+     *
      * @param actionListener The listener to add
      * @return The instance of the builder
      */
@@ -135,6 +146,7 @@ public class BasicDialogBuilder {
 
     /**
      * Enforces the behaviour of playing a sound to indicate that the selection has been made.
+     *
      * @return The instance of the builder
      */
     public BasicDialogBuilder playCloseSound() {
@@ -146,6 +158,7 @@ public class BasicDialogBuilder {
      * Suppresses the behaviour of playing a sound to indicate that the selection has been made.
      * Without any listeners this will result in there being no audio feedback when a selection has been made,
      * which can be confusing to the user.
+     *
      * @return The instance of the builder
      */
     public BasicDialogBuilder supressCloseSound() {
@@ -155,6 +168,7 @@ public class BasicDialogBuilder {
 
     /**
      * Builds the dialog with the data within the Builder and displays it.
+     *
      * @return The dialog that was built via the operation.
      */
     public BasicDialog buildAndShow() {
