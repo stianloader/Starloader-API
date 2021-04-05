@@ -20,8 +20,3 @@ accessible      field   snoddasmannen/galimulator/Space                     i   
 
 # Enums
 denumerised      class   snoddasmannen/galimulator/EmpireSpecial
-
-# Synthetics
-# Does not appear to work
-natural      field   snoddasmannen/galimulator/EmpireSpecial             r      [Lsnoddasmannen/galimulator/EmpireSpecial;
-accessible   field   snoddasmannen/galimulator/EmpireSpecial             r      [Lsnoddasmannen/galimulator/EmpireSpecial;

@@ -416,7 +416,8 @@ public class EmpireMixins implements ActiveEmpire {
         a(religion);
     }
 
-    @Inject(method = "b", at = @At(value = "HEAD"), cancellable = true)
+// FIXME Mixin tends to behave a bit strange with this one
+    @Inject(method = "b(I)V", at = @At(value = "HEAD"), cancellable = true)
     public void setTechlevel(final int techLevel, final CallbackInfo ci) {
         if (techLevel == getTechnologyLevel()) {
             return;
@@ -446,7 +447,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public boolean Y() { // is larger empire
+    public boolean Y() { // isNoteable
        return false; // I am not sure that this is actually the name of the method, but I have to assume
        // that based on what I currently know about this method
     }
