@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
+
 import snoddasmannen.galimulator.GalColor;
 
 public class StarloaderComponentBuilder implements ComponentBuilder {
@@ -48,5 +49,4 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
         }
         return new BaseFormattedTextComponent(main, components);
     }
-
 }

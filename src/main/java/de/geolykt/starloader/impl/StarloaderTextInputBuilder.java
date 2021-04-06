@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 
 import de.geolykt.starloader.api.gui.InputDialog;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
+
 import snoddasmannen.galimulator.Settings$EnumSettings;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.Widget$WIDGET_ALIGNMENT;
@@ -72,5 +73,4 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
         this.title = title;
         return this;
     }
-
 }

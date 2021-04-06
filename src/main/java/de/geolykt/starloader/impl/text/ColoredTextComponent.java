@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.TextComponent;
+
 import snoddasmannen.galimulator.GalColor;
 
 public class ColoredTextComponent implements TextComponent {
@@ -29,5 +30,4 @@ public class ColoredTextComponent implements TextComponent {
     public float renderText(float x, float y) {
         return Drawing.drawText(text, x, y, color);
     }
-
 }

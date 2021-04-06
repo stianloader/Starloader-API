@@ -3,8 +3,8 @@ package de.geolykt.starloader;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *  Pure debugging exception to debug the occurrence of unexpected calls of methods and why they happened.
- *  It's mainly used to get a fancy stacktrace.
+ * Pure debugging exception to debug the occurrence of unexpected calls of
+ * methods and why they happened. It's mainly used to get a fancy stacktrace.
  */
 public class DebugNagException extends RuntimeException {
 

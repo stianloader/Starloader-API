@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 public interface TextInputBuilder {
 
     /**
-     * Adds a single hook to the Dialog.
-     * This hook will be called after the Dialog is closed and user input is provided.
+     * Adds a single hook to the Dialog. This hook will be called after the Dialog
+     * is closed and user input is provided.
      *
      * @param hook The hook to add.
      * @return The builder instance, for chaining
@@ -23,8 +23,8 @@ public interface TextInputBuilder {
     public @NotNull TextInputBuilder addHook(@NotNull Consumer<String> hook);
 
     /**
-     * Adds a multiple hook to the Dialog.
-     * These hooks will be called after the Dialog is closed and user input is provided.
+     * Adds a multiple hook to the Dialog. These hooks will be called after the
+     * Dialog is closed and user input is provided.
      *
      * @param hooks The hooks to add.
      * @return The builder instance, for chaining
@@ -34,10 +34,10 @@ public interface TextInputBuilder {
     public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<String>> hooks);
 
     /**
-     * Builds the dialog.
-     * Note that due to how the Game is built, the return value will always be null if native keyboard input is enabled.
-     * This may get changed in the future, but that is the current implementation. However this does not mean that the hooks
-     * will not be called; they will be called either way.
+     * Builds the dialog. Note that due to how the Game is built, the return value
+     * will always be null if native keyboard input is enabled. This may get changed
+     * in the future, but that is the current implementation. However this does not
+     * mean that the hooks will not be called; they will be called either way.
      *
      * @return The {@link InputDialog} that was just built, if applicable
      */
@@ -66,5 +66,4 @@ public interface TextInputBuilder {
      * @return The builder instance, for chaining
      */
     public @NotNull TextInputBuilder setTitle(@NotNull String title);
-
 }

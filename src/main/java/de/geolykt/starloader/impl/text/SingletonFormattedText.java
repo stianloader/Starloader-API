@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
+
 import snoddasmannen.galimulator.GalColor;
 
 public class SingletonFormattedText implements FormattedText {
@@ -34,5 +35,4 @@ public class SingletonFormattedText implements FormattedText {
     public @NotNull String getText() {
         return component.getText();
     }
-
 }

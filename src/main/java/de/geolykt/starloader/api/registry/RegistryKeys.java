@@ -5,17 +5,19 @@ import org.jetbrains.annotations.NotNull;
 import de.geolykt.starloader.api.NamespacedKey;
 
 /**
- * Constant Class containing the guaranteed registry keys.
- * Please note that these aren't all registry keys available at runtime, as extensions may add further of them,
- * for more information on that topic, check the respective Registry for more information.
+ * Constant Class containing the guaranteed registry keys. Please note that
+ * these aren't all registry keys available at runtime, as extensions may add
+ * further of them, for more information on that topic, check the respective
+ * Registry for more information.
  */
 public final class RegistryKeys {
 
     /**
-     * Constructor that you should really not use since it would be pointless to use
+     * Constructor that you should really not use since it would be pointless to use.
      */
     private RegistryKeys() {
-        // Do not allow anyone to create instances of this class, you can never know the stupidity of the average developer
+        // Do not allow anyone to create instances of this class, you can never know the
+        // stupidity of the average developer
     }
 
     // Empire Specials
@@ -48,8 +50,9 @@ public final class RegistryKeys {
 }
 
 /**
- * Namespaced key using the galimulator namespace. Exclusively use for Registry keys that are provided by starloader.
- * Not that java would prevent you from using this either way
+ * Namespaced key using the galimulator namespace. Exclusively use for Registry
+ * keys that are provided by starloader. Not that java would prevent you from
+ * using this either way
  */
 final class GalimulatorResourceKey extends NamespacedKey {
 

@@ -6,9 +6,9 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 
 /**
- * Event that is fired whenever an Empire transcends into hyperbliss.
- * It is most often fired almost directly after an {@link TechnologyLevelSetEvent}, however extensions
- * might fire this event directly.
+ * Event that is fired whenever an Empire transcends into hyperbliss. It is most
+ * often fired almost directly after an {@link TechnologyLevelSetEvent}, however
+ * extensions might fire this event directly.
  */
 public class EmpireTranscendEvent extends EmpireStateChangeEvent {
 

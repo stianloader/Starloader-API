@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.InputDialog;
+
 import snoddasmannen.galimulator.ui.nt;
 import snoddasmannen.galimulator.ui.Widget$WIDGET_MESSAGE;
 

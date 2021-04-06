@@ -11,8 +11,10 @@ public interface BasicDialogCloseListener {
 
     /**
      * Called on close.
-     * @param cause The cause of the dialog closing
-     * @param buttonText The text of the button was clicked, can be null if it is not applicable
+     *
+     * @param cause      The cause of the dialog closing
+     * @param buttonText The text of the button was clicked, can be null if it is
+     *                   not applicable
      */
     public void onClose(@NotNull DialogCloseCause cause, @Nullable String buttonText);
 }

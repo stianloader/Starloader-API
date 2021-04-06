@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.empire.Empire;
+
 import snoddasmannen.galimulator.GalColor;
 
 @Mixin(snoddasmannen.galimulator.EmpireAnnals.class)
@@ -67,5 +68,4 @@ public class EmpireAnnalsMixins implements Empire {
     public boolean hasCollapsed() {
         return deathYear != -1;
     }
-
 }

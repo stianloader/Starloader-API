@@ -5,9 +5,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.geolykt.starloader.DebugNagException;
 
 /**
- * The tick event is thrown each time the simulation tick is run.
- * In practice it is run while the neutral empire is ticking, this is why the neutral (and in fact no other)
- * empire should be ticked manually while the event is running.
+ * The tick event is thrown each time the simulation tick is run. In practice it
+ * is run while the neutral empire is ticking, this is why the neutral (and in
+ * fact no other) empire should be ticked manually while the event is running.
  * It is however additionally expected that it is ONLY dispatched once per year.
  */
 public class TickEvent extends Event {

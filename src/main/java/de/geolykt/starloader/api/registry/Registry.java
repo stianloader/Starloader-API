@@ -8,15 +8,16 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.NamespacedKey;
+
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 
 /**
- * Registry of enum and/or enum-like objects.
- * This is added for extension harmony as multiple extensions cannot do these themselves without
- * breaking aspects of the functionality or creating agreements themselves. Since the StarloaderAPI
- * is already one of the first extensions to experiment with such aspects, the StarloaderAPI is taking
- * the authority in this.
+ * Registry of enum and/or enum-like objects. This is added for extension
+ * harmony as multiple extensions cannot do these themselves without breaking
+ * aspects of the functionality or creating agreements themselves. Since the
+ * StarloaderAPI is already one of the first extensions to experiment with such
+ * aspects, the StarloaderAPI is taking the authority in this.
  *
  * @param <T> The type the registry is holding
  */
@@ -38,22 +39,24 @@ public abstract class Registry<T> {
     protected final Map<NamespacedKey, T> keyedValues = new HashMap<>();
 
     /**
-     * Internal map containing the enum's name of the registry for lookup.
-     * Used to "replace" {@link Enum#valueOf(Class, String)}
+     * Internal map containing the enum's name of the registry for lookup. Used to
+     * "replace" {@link Enum#valueOf(Class, String)}
      */
     protected final Map<String, T> keyedValuesIntern = new HashMap<>();
 
     /**
-     * Internal values array which seeks to replace the synthetic values array produced by compilers for
-     * the values() call on enums.
+     * Internal values array which seeks to replace the synthetic values array
+     * produced by compilers for the values() call on enums.
      */
     protected T[] values;
 
     /**
-     * Obtains the registry value mapped to the given key, it may return null if it is not registered, however under
-     * normal circumstances it should not return null if it is registered, unless something else broke
-     * or the value got unmapped between the registration period and the time of calling
-     * (latter is not official API and as such extensions should not take account for this event)
+     * Obtains the registry value mapped to the given key. It may return null if it
+     * is not registered, however under normal circumstances it should not return
+     * null, unless something else broke or the value got
+     * unmapped between the registration period and the time of calling (latter is
+     * not official API and as such extensions should not take account for this
+     * event).
      *
      * @param key The key of the entry
      * @return The value associated under the key
@@ -63,9 +66,9 @@ public abstract class Registry<T> {
     }
 
     /**
-     * @deprecated This is internal API not meant for non-internal use.
-     * Internal API, DO NOT USE!
-     * This method seeks to replace {@link Enum#valueOf(Class, String)} to some degree.
+     * @deprecated This is internal API not meant for non-internal use. Internal
+     *             API, DO NOT USE! This method seeks to replace
+     *             {@link Enum#valueOf(Class, String)} to some degree.
      *
      * @param key The key of the entry
      * @return The value associated under the key
@@ -76,8 +79,8 @@ public abstract class Registry<T> {
     }
 
     /**
-     * Obtains the values registered in the registry.
-     * This operation will return a clone of the array, not the actual array in itself.
+     * Obtains the values registered in the registry. This operation will return a
+     * clone of the array, not the actual array in itself.
      *
      * @return The values registered
      */
@@ -90,13 +93,16 @@ public abstract class Registry<T> {
     }
 
     /**
-     * Registers the value to the given key; the implementation might be thread-safe, however extensions should always
-     * believe that multithreading can be dangerous and as such this method should never be called concurrently as otherwise
-     * some other things (such as the values array) might break.
-     * Note that {@link MetadatableRegistry} does not support this method, if the registry is one of these,
-     * {@link MetadatableRegistry#register(NamespacedKey, Object, de.geolykt.starloader.api.registry.MetadatableRegistry.MetadataEntry)} should be used instead.
+     * Registers the value to the given key; the implementation might be
+     * thread-safe, however extensions should always believe that multithreading can
+     * be dangerous and as such this method should never be called concurrently as
+     * otherwise some other things (such as the values array) might break. Note that
+     * {@link MetadatableRegistry} does not support this method, if the registry is
+     * one of these,
+     * {@link MetadatableRegistry#register(NamespacedKey, Object, de.geolykt.starloader.api.registry.MetadatableRegistry.MetadataEntry)}
+     * should be used instead.
      *
-     * @param key The key of the entry to register
+     * @param key   The key of the entry to register
      * @param value The value of the entry
      */
     public abstract void register(@NotNull NamespacedKey key, @NotNull T value);

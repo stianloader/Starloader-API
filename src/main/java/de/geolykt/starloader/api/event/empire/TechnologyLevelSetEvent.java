@@ -6,7 +6,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.Cancellable;
 
 /**
- * Event that is fired whenever the technology level of an empire is altered
+ * Event that is fired whenever the technology level of an empire is altered.
  */
 public class TechnologyLevelSetEvent extends EmpireEvent implements Cancellable {
 
@@ -17,14 +17,15 @@ public class TechnologyLevelSetEvent extends EmpireEvent implements Cancellable 
     protected boolean cancelled = false;
 
     /**
-     * The proposed new technology level of the empire
+     * The proposed new technology level of the empire.
      */
     protected int level;
 
     /**
-     * Constructor. Mind that the level is capped between 1 and 999 in the base vanilla game.
+     * Constructor. Mind that the level is capped between 1 and 999 in the base
+     * vanilla game.
      *
-     * @param empire The affected empire
+     * @param empire   The affected empire
      * @param newLevel The new technology level of the empire
      */
     public TechnologyLevelSetEvent(@NotNull ActiveEmpire empire, int newLevel) {
@@ -33,7 +34,8 @@ public class TechnologyLevelSetEvent extends EmpireEvent implements Cancellable 
     }
 
     /**
-     * Obtains the proposed new technology level that will be assigned if the event is not cancelled.
+     * Obtains the proposed new technology level that will be assigned if the event
+     * is not cancelled.
      *
      * @return the new technology level
      */

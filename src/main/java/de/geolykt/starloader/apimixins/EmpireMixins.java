@@ -39,6 +39,7 @@ import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
+
 import snoddasmannen.galimulator.EmpireAchievement$EmpireAchievementType;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
@@ -111,7 +112,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private int techLevel; // technologyLevel
 
-    private transient final List<TickCallback<ActiveEmpire>> tickCallbacks = new ArrayList<>();
+    private final transient List<TickCallback<ActiveEmpire>> tickCallbacks = new ArrayList<>();
 
     @Shadow
     public void a(EmpireAchievement$EmpireAchievementType a) { // addAchievement
@@ -166,13 +167,10 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private void aX() { // Reset bonuses
         /*
-        this.specialsAttackBonus = null;
-        this.specialsDefenseBonus = null;
-        this.specialsTechBonus = null;
-        this.specialsIndustryBonus = null;
-        this.specialsStabilityBonus = null;
-        this.specialsPeacefulBonus = null;
-        */
+         * this.specialsAttackBonus = null; this.specialsDefenseBonus = null;
+         * this.specialsTechBonus = null; this.specialsIndustryBonus = null;
+         * this.specialsStabilityBonus = null; this.specialsPeacefulBonus = null;
+         */
     }
 
     @Overwrite
@@ -180,7 +178,8 @@ public class EmpireMixins implements ActiveEmpire {
         if (!this.specials.contains(empireSpecial)) {
             return;
         }
-        EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent(this, ((RegistryKeyed) empireSpecial).getRegistryKey());
+        EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent(this,
+                ((RegistryKeyed) empireSpecial).getRegistryKey());
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
             return;
@@ -198,7 +197,8 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("unchecked")
     public void c(final EmpireSpecial empireSpecial) { // addSpecial
         if (!this.specials.contains(empireSpecial)) {
-            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this, ((RegistryKeyed) empireSpecial).getRegistryKey());
+            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this,
+                    ((RegistryKeyed) empireSpecial).getRegistryKey());
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
                 return;
@@ -224,7 +224,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
 
         this.lastResearchedYear = Galimulator.getGameYear();
-        if (this.techLevel == (int)Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
+        if (this.techLevel == (int) Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", fr.a().a("transcending")).buildAndShow();
@@ -237,14 +237,15 @@ public class EmpireMixins implements ActiveEmpire {
 
         broadcastNews("Has degenerated, now tech level: " + getTechnologyLevel());
         if (this == Galimulator.getPlayerEmpire()) {
-            new BasicDialogBuilder("Technologicy lost", "You have degenerated to tech level: " + this.techLevel + ". You kindly ask your scientists to make back-ups next time.").buildAndShow();
+            new BasicDialogBuilder("Technologicy lost", "You have degenerated to tech level: " + this.techLevel
+                    + ". You kindly ask your scientists to make back-ups next time.").buildAndShow();
         }
         return true;
     }
 
     @Shadow
     public void e() { // No idea what this does
-//        this.g = null;
+    //    this.g = null;
     }
 
     @SuppressWarnings("unchecked")
@@ -358,7 +359,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
 
         this.lastResearchedYear = Galimulator.getGameYear();
-        if (this.techLevel == (int)Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
+        if (this.techLevel == (int) Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", fr.a().a("transcending")).buildAndShow();
@@ -372,7 +373,8 @@ public class EmpireMixins implements ActiveEmpire {
         broadcastNews("Has advanced, now tech level: " + getTechnologyLevel());
         this.a(EmpireAchievement$EmpireAchievementType.g);
         if (Galimulator.getPlayerEmpire() == this) {
-            new BasicDialogBuilder("Technological advance", "You have advanced to tech level: " + this.techLevel + "! This will give your armies and fleets a significant boost.").buildAndShow();
+            new BasicDialogBuilder("Technological advance", "You have advanced to tech level: " + this.techLevel
+                    + "! This will give your armies and fleets a significant boost.").buildAndShow();
         }
         return true;
     }
@@ -438,12 +440,14 @@ public class EmpireMixins implements ActiveEmpire {
     @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
         if (((Empire) this) == Galimulator.getNeutralEmpire()) {
-            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) { // Two layers of redundancy should be enough
+            // Two layers of redundancy should be enough
+            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) {
                 EventManager.handleEvent(new TickEvent());
                 TickEvent.releaseLock();
                 lastTick = Galimulator.getGameYear();
             } else {
-                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick! This usually indicates a broken neutral empire");
+                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
+                        + "This usually indicates a broken neutral empire");
             }
         }
         for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
@@ -453,8 +457,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Shadow
     public boolean Y() { // isNoteable
-       return false; // I am not sure that this is actually the name of the method, but I have to assume
-       // that based on what I currently know about this method
+        return false;
     }
 
     @Overwrite
@@ -464,7 +467,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public @NotNull NamespacedKey getState() {
-        return ((RegistryKeyed)(Object)state).getRegistryKey();
+        return ((RegistryKeyed) (Object) state).getRegistryKey();
     }
 
     @Override
@@ -478,7 +481,8 @@ public class EmpireMixins implements ActiveEmpire {
         }
         EmpireStateMetadataEntry stateMeta = Registry.EMPIRE_STATES.getMetadataEntry(stateKey);
         if (stateMeta == null) {
-            throw new IllegalStateException("Unable to find empire state metadata entry, possible registry corruption.");
+            throw new IllegalStateException(
+                    "Unable to find empire state metadata entry, possible registry corruption.");
         }
         if (!force) {
             EmpireStateChangeEvent event = null;
@@ -506,10 +510,11 @@ public class EmpireMixins implements ActiveEmpire {
         if (stateMeta.isWarmongering()) {
             this.as(); // Diplomatic relations are reset as the empires will go to war
             if (stateKey == RegistryKeys.GALIMULATOR_ALL_WILL_BE_ASHES) {
-                // AWBA does not believe in development, and as such development is reset within it
+                // AWBA does not believe in development, and as such development is reset within
+                // it
                 for (Star star : Galimulator.getStars()) {
                     if (star.getAssignedEmpire() == this) {
-                        ((snoddasmannen.galimulator.Star)star).d(0); // resets the development within the empire
+                        ((snoddasmannen.galimulator.Star) star).d(0); // resets the development within the empire
                     }
                 }
             } else if (stateKey == RegistryKeys.GALIMULATOR_CRUSADING && getEmpireName().contains("Spain")) {
@@ -523,14 +528,16 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     /**
-     * Broadcasts the news in the galactic bulletin board, provided the empire is known enough.
+     * Broadcasts the news in the galactic bulletin board, provided the empire is
+     * known enough.
      *
      * @param news The news to broadcast
      */
     private void broadcastNews(String news) {
         if (this.Y()) {
             GalColor c = getColor();
-            news = String.format("[%02X%02X%02X]%s[]: %s", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName(), news);
+            news = String.format("[%02X%02X%02X]%s[]: %s", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255,
+                    getEmpireName(), news);
             Drawing.sendBulletin(Drawing.getTextFactory().asDefaultFormattedText(news));
         }
     }
@@ -553,6 +560,6 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Overwrite
     public void a(final EmpireState state) { // setState
-        setState(((RegistryKeyed)(Object)state).getRegistryKey(), false);
+        setState(((RegistryKeyed) (Object) state).getRegistryKey(), false);
     }
 }

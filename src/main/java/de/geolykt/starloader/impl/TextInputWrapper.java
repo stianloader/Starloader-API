@@ -31,5 +31,4 @@ public class TextInputWrapper implements TextInputListener {
     public void input(String arg0) {
         hooks.forEach(hook -> hook.accept(arg0));
     }
-
 }

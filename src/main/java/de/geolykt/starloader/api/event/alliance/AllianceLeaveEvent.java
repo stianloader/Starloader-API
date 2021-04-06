@@ -7,8 +7,8 @@ import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.Event;
 
 /**
- * Called when an empire leaves an alliance. 
- * Due to the nature of how the event is caught it is not yet cancellable, but might get that status in the future.
+ * Called when an empire leaves an alliance. Due to the nature of how the event
+ * is caught it is not yet cancellable, but might get that status in the future.
  */
 public class AllianceLeaveEvent extends Event {
 
@@ -21,7 +21,8 @@ public class AllianceLeaveEvent extends Event {
     }
 
     /**
-     * The Alliance the the empire left
+     * The Alliance the the empire left.
+     *
      * @return The {@link Alliance} that was left by the empire
      */
     public @NotNull Alliance getAlliance() {
@@ -29,7 +30,8 @@ public class AllianceLeaveEvent extends Event {
     }
 
     /**
-     * The Empire that left the Alliance
+     * The Empire that left the Alliance.
+     *
      * @return The {@link ActiveEmpire} that left the alliance
      */
     public @NotNull ActiveEmpire getEmpire() {

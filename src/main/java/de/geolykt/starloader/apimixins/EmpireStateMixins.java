@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Unique;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
+
 import snoddasmannen.galimulator.EmpireState;
 
 @Mixin(value = EmpireState.class, priority = 0)

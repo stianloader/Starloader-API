@@ -9,19 +9,22 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.launcher.StarloaderLauncher;
+
 import snoddasmannen.galimulator.Space;
 
 /**
- * Class to redirect to instance-wide constants or other static methods/variables.
- * This should be used to reduce the amount of calls to obfuscated methods, which will improve the
- *  sanity of anyone that is working on updating an extension.
+ * Class to redirect to instance-wide constants or other static
+ * methods/variables. This should be used to reduce the amount of calls to
+ * obfuscated methods, which will improve the sanity of anyone that is working
+ * on updating an extension.
  */
 public final class Galimulator {
 
     /**
      * Constructor that should not be called.
      */
-    private Galimulator() {}
+    private Galimulator() {
+    }
 
     /**
      * Connect two stars with each other. The preferred way of connecting two stars.
@@ -35,7 +38,8 @@ public final class Galimulator {
     }
 
     /**
-     * Disconnect two stars with each other. The preferred way of disconnecting two stars.
+     * Disconnect two stars with each other. The preferred way of disconnecting two
+     * stars.
      *
      * @param starA the first Star to disconnect from the second star
      * @param starB the second Star to disconnect
@@ -46,9 +50,10 @@ public final class Galimulator {
     }
 
     /**
-     * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however there is no matching empire,
-     *  the neutral empire is to be returned.
-     *  Default implementation notice: The implementation of this method is very inefficient as it iterates over all known empires at worst
+     * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however
+     * there is no matching empire, the neutral empire is to be returned. Default
+     * implementation notice: The implementation of this method is very inefficient
+     * as it iterates over all known empires at worst
      *
      * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
      * @return The {@link ActiveEmpire} bound to the unique ID
@@ -58,10 +63,11 @@ public final class Galimulator {
     }
 
     /**
-     * Gets the currently registered active empires. Note that like many other methods in the API, 
-     * this is NOT a clone of the backing collection, which means that any modifications done to the collections
-     * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more
-     * performance friendly
+     * Gets the currently registered active empires. Note that like many other
+     * methods in the API, this is NOT a clone of the backing collection, which
+     * means that any modifications done to the collections will happen in game.
+     * This behaviour is intended as it can be useful in many situations as well as
+     * being more performance friendly
      *
      * @return A {@link Vector} of {@link ActiveEmpire empires} that are known
      */
@@ -71,10 +77,11 @@ public final class Galimulator {
     }
 
     /**
-     * Get the year in-game. The year is rarely a negative number and should not get lower later in game
-     *  unless a new galaxy is spun up. 1000 in-game years span an in-game millenia, which is the time format most
-     *  players are familiar with in the game. However please note that this is not always calculate in years, sometimes
-     *  it is also in milliyears or other time formats.
+     * Get the year in-game. The year is rarely a negative number and should not get
+     * lower later in game unless a new galaxy is spun up. 1000 in-game years span
+     * an in-game millenia, which is the time format most players are familiar with
+     * in the game. However please note that this is not always calculate in years,
+     * sometimes it is also in milliyears or other time formats.
      *
      * @return The in-game year.
      */
@@ -83,8 +90,9 @@ public final class Galimulator {
     }
 
     /**
-     * Convenience method to obtain the neutral empire. The neutral empire should NOT be ticked as it may create
-     * serious side effects within the ticking mechanism. Additionally merging or destroying the empire might have serious
+     * Convenience method to obtain the neutral empire. The neutral empire should
+     * NOT be ticked as it may create serious side effects within the ticking
+     * mechanism. Additionally merging or destroying the empire might have serious
      * side effects, which is why that should be avoided.
      *
      * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
@@ -94,14 +102,15 @@ public final class Galimulator {
     }
 
     /**
-     * Obtains the empire the player is controlling.
-     * If there is no player or no empire in control of the player, then it returns null.
+     * Obtains the empire the player is controlling. If there is no player or no
+     * empire in control of the player, then it returns null.
      *
      * @return The {@link ActiveEmpire} owned by the player, or null
      */
     public static @Nullable ActiveEmpire getPlayerEmpire() {
         snoddasmannen.galimulator.Player plyr = Space.p();
-        if (plyr == null) { // I'm not sure if it can be nullable, but I want to be sure, after all I didn't write the implementation
+        if (plyr == null) {
+            // It likely can never be null, but better be sorry than to crash
             return null;
         } else {
             return (@Nullable ActiveEmpire) plyr.a();
@@ -109,12 +118,13 @@ public final class Galimulator {
     }
 
     /**
-     * Obtains the int code of the galimulator version; this int code is bumped for every beta release and is -1 for
-     * stable releases.
-     * Note that this int code isn't anything official and the sole authority over this code are the developers
-     * of the Starloader API; additionally there might be cases where this int code is out of place, this is because there
-     * is no serious way of getting which release this is, other than looking a the hashcode or last modification date
-     * of the executable.
+     * Obtains the int code of the galimulator version; this int code is bumped for
+     * every beta release and is -1 for stable releases. Note that this int code
+     * isn't anything official and the sole authority over this code are the
+     * developers of the Starloader API; additionally there might be cases where
+     * this int code is out of place, this is because there is no serious way of
+     * getting which release this is, other than looking a the hashcode or last
+     * modification date of the executable.
      *
      * @return -1
      */
@@ -123,11 +133,17 @@ public final class Galimulator {
     }
 
     /**
-     * @deprecated This version is hardcoded and might have some issues, use {@link StarloaderLauncher#galVersion} instead
+     * @deprecated This version is hardcoded and might have some issues, use
+     *             {@link StarloaderLauncher#galVersion} instead
      *
-     * Obtains the version of galimulator the Starloader API was developed against.
-     * This sortof dictates what features are to be expected to be included within the API and was such can be used for
-     * cross-version applications.
+     * Obtains the version of galimulator the Starloader API was
+     * developed against. This sortof dictates what features are to be
+     * expected to be included within the API and was such can be used
+     * for cross-version applications.
+     * Alternatively it could be parsed from the "version" file in the data
+     * directory, which is also an excellent way of knowing that this version
+     * is supported or not given that the data directory is very important
+     * to the runtime of the game.
      *
      * @return "4.8"
      */
@@ -137,9 +153,10 @@ public final class Galimulator {
     }
 
     /**
-     * Gets the currently registered Stars. Note that like many other methods in the API, 
-     * this is NOT a clone of the backing collection, which means that any modifications done to the collections
-     * will happen in game. This behaviour is intended as it can be useful in many situations as well as being more
+     * Gets the currently registered Stars. Note that like many other methods in the
+     * API, this is NOT a clone of the backing collection, which means that any
+     * modifications done to the collections will happen in game. This behaviour is
+     * intended as it can be useful in many situations as well as being more
      * performance friendly.
      *
      * @return A {@link Vector} of {@link Star stars} that are known
@@ -150,9 +167,10 @@ public final class Galimulator {
     }
 
     /**
-     * Convenience method to calculate the voronoi graphs (the fancy section-outline around the stars) for all stars.
-     * This is helpful if a star got moved, however a call to this method does not recalculate starlanes, which is
-     * also needed alongside this method.
+     * Convenience method to calculate the voronoi graphs (the fancy section-outline
+     * around the stars) for all stars. This is helpful if a star got moved, however
+     * a call to this method does not recalculate starlanes, which is also needed
+     * alongside this method.
      */
     public static void recalculateVoronoiGraphs() {
         Space.ao();

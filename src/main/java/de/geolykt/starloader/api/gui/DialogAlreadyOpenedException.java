@@ -1,7 +1,7 @@
 package de.geolykt.starloader.api.gui;
 
 /**
- * Exception thrown when something attempts to modify an already opened Dialog
+ * Exception thrown when something attempts to modify an already opened Dialog.
  */
 public class DialogAlreadyOpenedException extends IllegalStateException {
 

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
+
 import snoddasmannen.galimulator.GalColor;
 
 public class SingletonTextComponent implements FormattedTextComponent {

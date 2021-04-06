@@ -35,5 +35,4 @@ public class BaseFormattedText implements FormattedText {
     public @NotNull String getText() {
         return text;
     }
-
 }

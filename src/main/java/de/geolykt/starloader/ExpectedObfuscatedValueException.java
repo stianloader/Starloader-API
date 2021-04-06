@@ -1,11 +1,12 @@
 package de.geolykt.starloader;
 
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+
 import snoddasmannen.galimulator.Empire;
 
 /**
- * Obfuscation thrown if a method expects an obfuscated value.
- * This is to visibly prevent the reimplementation of certain interfaces
+ * Obfuscation thrown if a method expects an obfuscated value. This is to
+ * visibly prevent the reimplementation of certain interfaces
  */
 public class ExpectedObfuscatedValueException extends IllegalArgumentException {
 

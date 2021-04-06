@@ -10,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 public interface FormattedText extends TextRenderable {
 
     /**
-     * Obtains all the {@link FormattedTextComponent Components} assigned to this Formatted Text.
+     * Obtains all the {@link FormattedTextComponent Components} assigned to this
+     * Formatted Text.
      *
      * @return The components assigned
      */
@@ -19,13 +20,14 @@ public interface FormattedText extends TextRenderable {
     /**
      * Obtains the formatted text as a plaintext string.
      *
-     * @return The text of the {@link FormattedTextComponent} as a plaintext representation.
+     * @return The text of the {@link FormattedTextComponent} as a plaintext
+     *         representation.
      */
     public @NotNull String getText();
 
     /**
-     * Renders the text on screen at the given coordinates.
-     * The view may get unprojected depending on the context
+     * Renders the text on screen at the given coordinates. The view may get
+     * unprojected depending on the context
      *
      * @param x The X-Coordinate of the rendering position
      * @param y The Y-Coordinate of the rendering position

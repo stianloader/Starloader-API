@@ -12,6 +12,7 @@ import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.DialogCloseCause;
 import de.geolykt.starloader.api.gui.WidgetAction;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
+
 import snoddasmannen.galimulator.ui.Widget$WIDGET_MESSAGE;
 
 public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg {
@@ -21,22 +22,28 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg
     private final AutocloseableDialog parent;
 
     /**
-     * Initiates the wrapper with the parent and listeners known. The listeners can be modified later however, provided
-     * the list implementation supports that.
-     * @param parent The parent that is closable automatically, a null value means that it will never be closed automatically.
-     * @param closeListeners The close listeners to have initially
+     * Initiates the wrapper with the parent and listeners known. The listeners can
+     * be modified later however, provided the list implementation supports that.
+     *
+     * @param parent          The parent that is closable automatically, a null
+     *                        value means that it will never be closed
+     *                        automatically.
+     * @param closeListeners  The close listeners to have initially
      * @param actionListeners The widget action listeners to have initially
      */
     WidgetActionListenerWrapper(@Nullable AutocloseableDialog parent,
-            @NotNull List<BasicDialogCloseListener> closeListeners, @NotNull List<WidgetActionListener> actionListeners) {
+            @NotNull List<BasicDialogCloseListener> closeListeners,
+            @NotNull List<WidgetActionListener> actionListeners) {
         this.parent = parent;
         this.closeListeners = closeListeners;
         this.actionListeners = actionListeners;
     }
 
     /**
-     * Initiates the wrapper with a parent that is closable automatically. If that parameter is null it should behave the
-     * same way as {@link #WidgetActionListenerWrapper()}
+     * Initiates the wrapper with a parent that is closable automatically. If that
+     * parameter is null it should behave the same way as
+     * {@link #WidgetActionListenerWrapper()}
+     *
      * @param parent The parent dialog
      */
     public WidgetActionListenerWrapper(@Nullable AutocloseableDialog parent) {
@@ -44,9 +51,11 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg
     }
 
     /**
-     * Initiates the wrapper with no further information. If the parent Widget is an automatically closing dialog, then
-     * {@link #WidgetActionListenerWrapper(AutocloseableDialog)} should be preferred as
-     * otherwise the {@link BasicDialogCloseListener} might get multiple automatic close notifications.
+     * Initiates the wrapper with no further information. If the parent Widget is an
+     * automatically closing dialog, then
+     * {@link #WidgetActionListenerWrapper(AutocloseableDialog)} should be preferred
+     * as otherwise the {@link BasicDialogCloseListener} might get multiple
+     * automatic close notifications.
      */
     public WidgetActionListenerWrapper() {
         this(null, new ArrayList<>(), new ArrayList<>());
@@ -55,7 +64,8 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg
     @Override
     public void a(Widget$WIDGET_MESSAGE var1) {
         if (var1 == Widget$WIDGET_MESSAGE.a) {
-            // Check if it was closed automatically due to timeout, if it was, then ignore this request
+            // Check if it was closed automatically due to timeout, if it was, then ignore
+            // this request
             if (parent == null) {
                 notifyClose(DialogCloseCause.MANUAL_CLOSE);
             } else {
@@ -91,5 +101,4 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg
     public void addListener(@NotNull WidgetActionListener listener) {
         actionListeners.add(listener);
     }
-
 }

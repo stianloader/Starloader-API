@@ -21,6 +21,7 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
+
 import snoddasmannen.galimulator.Religion;
 
 @Mixin(snoddasmannen.galimulator.Star.class)
@@ -52,7 +53,7 @@ public class StarMixins implements Star {
     @Shadow
     private transient Vector2 q; // coordinates
 
-    private transient final List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
+    private final transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
     @Shadow
     float wealth; // wealth
@@ -69,7 +70,8 @@ public class StarMixins implements Star {
     }
 
     @Shadow
-    public void a(Religion var1) {} // setMajorityFaith
+    public void a(Religion var1) {
+    } // setMajorityFaith
 
     @Shadow
     public void a(snoddasmannen.galimulator.Empire var0) { // setEmpire
@@ -77,7 +79,8 @@ public class StarMixins implements Star {
     }
 
     @Shadow
-    public void a(snoddasmannen.galimulator.Star var1) {} // removeNeighbour
+    public void a(snoddasmannen.galimulator.Star var1) {
+    } // removeNeighbour
 
     @Override
     public void addNeighbour(@NotNull Star star) {
@@ -90,13 +93,16 @@ public class StarMixins implements Star {
     }
 
     @Shadow
-    public void b(Religion var1) {} // setMinorityFaith
+    public void b(Religion var1) {
+    } // setMinorityFaith
 
     @Shadow
-    public void b(snoddasmannen.galimulator.Empire var0) {} // takeover
+    public void b(snoddasmannen.galimulator.Empire var0) {
+    } // takeover
 
     @Shadow
-    public void b(snoddasmannen.galimulator.Star var1) {} // addNeighbour
+    public void b(snoddasmannen.galimulator.Star var1) {
+    } // addNeighbour
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -157,7 +163,7 @@ public class StarMixins implements Star {
         return intLanes;
     }
 
-    @SuppressWarnings("unchecked") // stupid generic erasure. But let's be happy, without it there would be a compile error
+    @SuppressWarnings("unchecked")
     @Override
     public @NotNull Vector<Star> getNeighbours() {
         return a;
@@ -198,7 +204,7 @@ public class StarMixins implements Star {
 
     @Override
     public void removeNeighbour(@NotNull Star star) {
-        a((snoddasmannen.galimulator.Star)star);
+        a((snoddasmannen.galimulator.Star) star);
     }
 
     @Override
@@ -253,7 +259,8 @@ public class StarMixins implements Star {
 
     @Inject(method = "b(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
     public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
-        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(), (ActiveEmpire) empire);
+        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(),
+                (ActiveEmpire) empire);
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
             info.cancel();

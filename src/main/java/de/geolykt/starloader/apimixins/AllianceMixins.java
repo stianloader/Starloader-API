@@ -13,6 +13,7 @@ import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.alliance.AllianceJoinEvent;
 import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
+
 import snoddasmannen.galimulator.GalColor;
 
 @Mixin(value = snoddasmannen.galimulator.Alliance.class)
@@ -32,7 +33,8 @@ public class AllianceMixins implements Alliance {
     private int startDate;
 
     @Shadow
-    public void a(snoddasmannen.galimulator.Empire var1) {} // addMember
+    public void a(snoddasmannen.galimulator.Empire var1) {
+    } // addMember
 
     @Override
     public void addMember(ActiveEmpire empire) {
@@ -45,7 +47,8 @@ public class AllianceMixins implements Alliance {
     }
 
     @Shadow
-    public void b(snoddasmannen.galimulator.Empire var1) {} // removeMember
+    public void b(snoddasmannen.galimulator.Empire var1) {
+    } // removeMember
 
     @Shadow
     public GalColor c() { // getColor

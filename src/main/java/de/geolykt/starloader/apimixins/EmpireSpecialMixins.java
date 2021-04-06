@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
+
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
@@ -38,8 +39,9 @@ public class EmpireSpecialMixins implements RegistryKeyed {
         int var1 = var0.length;
 
         for (int var2 = 0; var2 < var1; ++var2) {
-                EmpireSpecial var3 = var0[var2];
-                maps.put(var3, new fj("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX$FONT_TYPE.a, GalColor.WHITE, var3.j(), 0));
+            EmpireSpecial var3 = var0[var2];
+            maps.put(var3,
+                    new fj("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX$FONT_TYPE.a, GalColor.WHITE, var3.j(), 0));
         }
         EmpireSpecial.q = maps;
     }

@@ -15,6 +15,7 @@ import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
+
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.GalFX$FONT_TYPE;
@@ -26,7 +27,8 @@ public class DrawingManager implements DrawingImpl {
 
     private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
 
-    @SuppressWarnings({ "unchecked", "rawtypes" }) // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
+    // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private EnumMap fontBitmapCache = new EnumMap(GalFX$FONT_TYPE.class);
 
     private Collection<String> fonts;

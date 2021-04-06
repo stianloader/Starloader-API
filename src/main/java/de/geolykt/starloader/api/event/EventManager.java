@@ -17,14 +17,17 @@ import de.geolykt.starloader.DebugNagException;
 // I'm open to a refractor for both efficiency and convenience
 public final class EventManager {
 
-    private EventManager() {} // The class should not be constructed
+    private EventManager() {
+    } // The class should not be constructed
 
     private static final Map<Listener, List<Method>> LISTENERS = new HashMap<>();
 
     private static boolean wasBuilt = false;
 
     /**
-     * Registers an event listener if it was not yet registered and rebuilds if needed.
+     * Registers an event listener if it was not yet registered and rebuilds if
+     * needed.
+     *
      * @param listener The {@link Listener} to add to the pool of active listeners
      */
     public static void registerListener(@NotNull Listener listener) {
@@ -54,6 +57,7 @@ public final class EventManager {
 
     /**
      * Removes the listener from the active listener pool and rebuilds if needed.
+     *
      * @param listener The {@link Listener} to remove
      */
     public static void unregisterListener(@NotNull Listener listener) {
@@ -65,7 +69,8 @@ public final class EventManager {
         }
     }
 
-    private static final List<Map<Class<?>, List<Map.Entry<Listener, Method>>>> EVENT_HANDLERS = new ArrayList<>(EventPriority.values().length);
+    private static final List<Map<Class<?>, List<Map.Entry<Listener, Method>>>> EVENT_HANDLERS = new ArrayList<>(
+            EventPriority.values().length);
 
     private static void rebuild() {
         wasBuilt = true;
@@ -79,7 +84,8 @@ public final class EventManager {
                 EventHandler info = handle.getDeclaredAnnotation(EventHandler.class);
                 Class<?> clazz = handle.getParameters()[0].getType();
                 while (Event.class.isAssignableFrom(clazz)) {
-                    List<Map.Entry<Listener, Method>> eventHandles = EVENT_HANDLERS.get(info.value().ordinal()).get(clazz);
+                    List<Map.Entry<Listener, Method>> eventHandles = EVENT_HANDLERS.get(info.value().ordinal())
+                            .get(clazz);
                     if (eventHandles == null) {
                         eventHandles = new ArrayList<>();
                     }
@@ -109,5 +115,4 @@ public final class EventManager {
             }
         }
     }
-
 }

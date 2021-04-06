@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.DiplomacyRequestEvent;
 import de.geolykt.starloader.api.player.DiplomacyRequest;
+
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.diplomacy.PlayerRequest;
 

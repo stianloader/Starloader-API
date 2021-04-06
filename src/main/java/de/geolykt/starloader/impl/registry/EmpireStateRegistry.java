@@ -6,10 +6,12 @@ import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.MetadatableRegistry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
+
 import snoddasmannen.galimulator.EmpireState;
 
 /**
- * Registry implementation for the Empire States. Due to how empire states behave, they need to include metadata
+ * Registry implementation for the Empire States. Due to how empire states
+ * behave, they need to include metadata
  */
 public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, EmpireStateMetadataEntry> {
 
@@ -21,7 +23,8 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
     }
 
     @Override
-    public void register(@NotNull NamespacedKey key, @NotNull EmpireState value, @NotNull EmpireStateMetadataEntry metadata) {
+    public void register(@NotNull NamespacedKey key, @NotNull EmpireState value,
+            @NotNull EmpireStateMetadataEntry metadata) {
         if (super.keyedValues.containsKey(key)) {
             throw new IllegalStateException("The key is already asociated!");
         }
@@ -32,7 +35,7 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
         if (value.ordinal() != values.length) {
             throw new IllegalStateException("The ordinal of the registering enum does not match the registration order!");
         }
-        ((RegistryKeyed)(Object)value).setRegistryKey(key);
+        ((RegistryKeyed) (Object) value).setRegistryKey(key);
         EmpireState[] temp = new EmpireState[values.length + 1];
         System.arraycopy(values, 0, temp, 0, values.length);
         temp[values.length] = value;
@@ -43,11 +46,11 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
     }
 
     /**
-     * Performs a bulk operation, however this operation removes every single entry that was already there initially,
-     * so this method should only be called once.
+     * Performs a bulk operation, however this operation removes every single entry
+     * that was already there initially, so this method should only be called once.
      *
-     * @param keys The keys to register
-     * @param values The values to register
+     * @param keys     The keys to register
+     * @param values   The values to register
      * @param metadata The metadata of the corresponding keys to register
      */
     protected void registerAll(NamespacedKey[] keys, EmpireState[] values, EmpireStateMetadataEntry[] metadata) {
@@ -64,7 +67,7 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
         metadataEntries.clear();
         this.values = values;
         for (int i = 0; i < values.length; i++) {
-            ((RegistryKeyed) (Object)this.values[i]).setRegistryKey(keys[i]);
+            ((RegistryKeyed) (Object) this.values[i]).setRegistryKey(keys[i]);
             keyedValues.put(keys[i], values[i]);
             keyedValuesIntern.put(values[i].toString(), values[i]);
             metadataEntries.put(keys[i], metadata[i]);

@@ -18,11 +18,12 @@ public class StarOwnershipTakeoverEvent extends StarEvent implements Cancellable
     /**
      * Constructor.
      *
-     * @param target The star that is the subject of the action
+     * @param target    The star that is the subject of the action
      * @param oldEmpire The old owner of the star
      * @param newEmpire The new owner of the star
      */
-    public StarOwnershipTakeoverEvent(@NotNull Star target, @NotNull ActiveEmpire oldEmpire, @NotNull ActiveEmpire newEmpire) {
+    public StarOwnershipTakeoverEvent(@NotNull Star target, @NotNull ActiveEmpire oldEmpire,
+            @NotNull ActiveEmpire newEmpire) {
         super(target);
         oldOwner = oldEmpire;
         newOwner = newEmpire;
@@ -30,14 +31,16 @@ public class StarOwnershipTakeoverEvent extends StarEvent implements Cancellable
 
     /**
      * Obtains the new owner.
-     * @return The {@link ActiveEmpire} that should own the star after the event was processed
+     *
+     * @return The {@link ActiveEmpire} that should own the star after the event was
+     *         processed
      */
     public @NotNull ActiveEmpire getNewEmpire() {
         return newOwner;
     }
 
     /**
-     * Obtains the old owner
+     * Obtains the old owner.
      *
      * @return The {@link ActiveEmpire} that currently owns the star
      */
@@ -56,9 +59,10 @@ public class StarOwnershipTakeoverEvent extends StarEvent implements Cancellable
     }
 
     /**
-     * Sets the future owner of the star
+     * Sets the future owner of the star.
      *
-     * @param newEmpire The {@link ActiveEmpire} that should own the star after the event was processed
+     * @param newEmpire The {@link ActiveEmpire} that should own the star after the
+     *                  event was processed
      */
     public void setNewEmpire(@NotNull ActiveEmpire newEmpire) {
         newOwner = newEmpire;

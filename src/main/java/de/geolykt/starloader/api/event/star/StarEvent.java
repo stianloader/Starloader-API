@@ -6,7 +6,7 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.Event;
 
 /**
- * Event fired when something is done to a star
+ * Event fired when something is done to a star.
  */
 public abstract class StarEvent extends Event {
 
@@ -22,7 +22,7 @@ public abstract class StarEvent extends Event {
     }
 
     /**
-     * Obtains the star where the event took place
+     * Obtains the star where the event took place.
      *
      * @return The target Star
      */
@@ -31,7 +31,7 @@ public abstract class StarEvent extends Event {
     }
 
     /**
-     * Sets where the event took place
+     * Sets where the event took place.
      *
      * @param target the {@link Star} where the event took place.
      */

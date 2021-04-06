@@ -7,22 +7,20 @@ import snoddasmannen.galimulator.GalColor;
 public interface ComponentBuilder {
 
     /**
-     * Add a jitter sub-component to the component
-     * This is for example used in the Space oddity bulletin.
-     * The jitter there is 10.0D.
+     * Add a jitter sub-component to the component This is for example used in the
+     * Space oddity bulletin. The jitter there is 10.0D.
      *
-     * @param color The color of the jitter
+     * @param color     The color of the jitter
      * @param intensity The intensity of the jitter
      * @return The builder reference
      */
     public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity);
 
     /**
-     * Add a jitter sub-component to the component
-     * This is for example used in the Space oddity bulletin.
-     * The jitter there is 10.0D.
+     * Add a jitter sub-component to the component This is for example used in the
+     * Space oddity bulletin. The jitter there is 10.0D.
      *
-     * @param color The color of the jitter
+     * @param color     The color of the jitter
      * @param intensity The intensity of the jitter
      * @return The builder reference
      */
@@ -31,7 +29,7 @@ public interface ComponentBuilder {
     }
 
     /**
-     * Sets the text of the component
+     * Sets the text of the component.
      *
      * @param text The text of the component
      * @return The builder reference
@@ -39,7 +37,7 @@ public interface ComponentBuilder {
     public @NotNull ComponentBuilder setText(@NotNull String text);
 
     /**
-     * Sets the color of the component
+     * Sets the color of the component.
      *
      * @param color The color of the component
      * @return The builder reference
@@ -47,7 +45,7 @@ public interface ComponentBuilder {
     public @NotNull ComponentBuilder setColor(@NotNull GalColor color);
 
     /**
-     * Sets the color of the component
+     * Sets the color of the component.
      *
      * @param color The color of the component
      * @return The builder reference
@@ -57,7 +55,7 @@ public interface ComponentBuilder {
     }
 
     /**
-     * Builds the component
+     * Builds the component.
      *
      * @return The built component
      */

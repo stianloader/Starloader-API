@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.impl.registry.Registries;
+
 import snoddasmannen.galimulator.by;
 
 @Mixin(by.class)

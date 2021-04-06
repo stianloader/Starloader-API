@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
+
 import snoddasmannen.galimulator.GalColor;
 
 /**
@@ -21,15 +22,14 @@ public final class Drawing {
     private static DrawingImpl implementation;
 
     /**
-     * Draws text at the given location.
-     * The default color is used, which under normal circumstances that's white,
-     * however the exact color is dependent on the specification.
-     * Additionally the font shall be left unspecified. The text may not persist
-     * across frames.
+     * Draws text at the given location. The default color is used, which under
+     * normal circumstances that's white, however the exact color is dependent on
+     * the specification. Additionally the font shall be left unspecified. The text
+     * may not persist across frames.
      *
      * @param message The message to write
-     * @param x The X-location of the text
-     * @param y The Y-location of the text
+     * @param x       The X-location of the text
+     * @param y       The Y-location of the text
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y) {
@@ -37,15 +37,14 @@ public final class Drawing {
     }
 
     /**
-     * Draws text at the given location.
-     * The specified color should be used.
+     * Draws text at the given location. The specified color should be used.
      * Additionally the font shall be left unspecified. The text may not persist
      * across frames.
      *
      * @param message The message to write
-     * @param x The X-location of the text
-     * @param y The Y-location of the text
-     * @param color The color of the message
+     * @param x       The X-location of the text
+     * @param y       The Y-location of the text
+     * @param color   The color of the message
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
@@ -53,15 +52,14 @@ public final class Drawing {
     }
 
     /**
-     * Draws text at the given location.
-     * The specified color should be used.
+     * Draws text at the given location. The specified color should be used.
      * Additionally the font shall be left unspecified. The text may not persist
      * across frames.
      *
      * @param message The message to write
-     * @param x The X-location of the text
-     * @param y The Y-location of the text
-     * @param color The color of the message
+     * @param x       The X-location of the text
+     * @param y       The Y-location of the text
+     * @param color   The color of the message
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull TextColor color) {
@@ -69,8 +67,8 @@ public final class Drawing {
     }
 
     /**
-     * Obtains the main drawing sprite batch. Operations performed on this batch will result
-     * in them getting displayed on the user interface.
+     * Obtains the main drawing sprite batch. Operations performed on this batch
+     * will result in them getting displayed on the user interface.
      *
      * @return The main drawing batch.
      */
@@ -79,8 +77,8 @@ public final class Drawing {
     }
 
     /**
-     * Obtains the {@link BitmapFont} associated with the font name.
-     * May return null if the font name is not known or registered.
+     * Obtains the {@link BitmapFont} associated with the font name. May return null
+     * if the font name is not known or registered.
      *
      * @param font The font name from which the BitmapFont belong to
      * @return The {@link BitmapFont} associated under that name
@@ -108,7 +106,8 @@ public final class Drawing {
     }
 
     /**
-     * Sends a bulletin to the player which is visible in the bottom left in most cases.
+     * Sends a bulletin to the player which is visible in the bottom left in most
+     * cases.
      *
      * @param message The message to send
      */
@@ -117,8 +116,9 @@ public final class Drawing {
     }
 
     /**
-     * Sends a bulletin to the player which is visible in the bottom left in most cases.
-     * 
+     * Sends a bulletin to the player which is visible in the bottom left in most
+     * cases.
+     *
      * @param text The formatted text to send as a bulletin
      */
     public static void sendBulletin(@NotNull FormattedText text) {
@@ -126,9 +126,9 @@ public final class Drawing {
     }
 
     /**
-     * Sends a bulletin to the player which is visible in the bottom left in most cases.
-     * The message will be prefixed by the Space Oddity message; useful for making your own
-     * space oddities
+     * Sends a bulletin to the player which is visible in the bottom left in most
+     * cases. The message will be prefixed by the Space Oddity message; useful for
+     * making your own space oddities
      *
      * @param message The message to send
      */
@@ -142,14 +142,16 @@ public final class Drawing {
 
     /**
      * Creates a {@link TextInputBuilder} for obtaining String input from the User.
-     * The returned Builder should implicitly honour the native key input preference unless otherwise specified.
+     * The returned Builder should implicitly honour the native key input preference
+     * unless otherwise specified.
      *
      * @param title The title of the input dialog.
      * @param text
      * @param hint
      * @return A new {@link TextInputBuilder} instance
      */
-    public static @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull  String text, @NotNull  String hint) {
+    public static @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,
+            @NotNull String hint) {
         return implementation.textInputBuilder(title, text, hint);
     }
 }
