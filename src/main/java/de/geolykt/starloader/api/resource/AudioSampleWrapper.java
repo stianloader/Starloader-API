@@ -4,38 +4,52 @@ import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.audio.Sound;
 
-import snoddasmannen.galimulator.AudioManager$AudioSample;
+/**
+ * Wrapper for sounds. They can be used to enrich the user experience, however this does not meant that the game is limited to
+ * this selection of sounds, as extensions can implement their own sounds. Due to the relative simplicity of such actions,
+ * the Starloader API does not (yet) provide a harmony or registry API for this and extensions need to work out their own
+ * systems to do these actions.
+ */
+public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
 
-public final class AudioSampleWrapper implements ResourceWrapper<Sound> { // TODO maybe we can use the AudioSample directly, but how would an IDE react to this?
+    public static AudioSampleWrapper ACTOR_ORDERED = null;
 
+    public static AudioSampleWrapper ACTOR_SELECTED = null;
+
+    public static AudioSampleWrapper ALARM = null;
+    public static AudioSampleWrapper BAD_MINI = null;
+    public static AudioSampleWrapper BIG_LASER = null;
+    public static AudioSampleWrapper BIGBOOM_1 = null;
+    public static AudioSampleWrapper BIGBOOM_2 = null;
+    public static AudioSampleWrapper CLONE = null;
+    public static AudioSampleWrapper GOOD_MINI = null;
+    public static AudioSampleWrapper HEALRAY = null;
+    public static AudioSampleWrapper HIT_1 = null;
+    public static AudioSampleWrapper HIT_2 = null;
+    public static AudioSampleWrapper HIT_3 = null;
+    public static AudioSampleWrapper MISSILE = null;
+    public static AudioSampleWrapper SMALL_LASER = null;
+    public static AudioSampleWrapper UI_BIG_SELECT = null;
+    public static AudioSampleWrapper UI_ERROR = null;
+    public static AudioSampleWrapper UI_SMALL_SELECT = null;
+    /**
+     * The location of the resource within the respective data folder.
+     */
     private final String location;
-    private final AudioManager$AudioSample sample;
+    /**
+     * The sound resource that should be used
+     */
     private final Sound sound;
 
-    // This is madness
-    public static final AudioSampleWrapper ACTOR_SELECTED = new AudioSampleWrapper("uismallselect.wav", AudioManager$AudioSample.a);
-    public static final AudioSampleWrapper ACTOR_ORDERED = new AudioSampleWrapper("actoraction.wav", AudioManager$AudioSample.b);
-    public static final AudioSampleWrapper GOOD_MINI = new AudioSampleWrapper("goodmini.wav", AudioManager$AudioSample.c);
-    public static final AudioSampleWrapper BAD_MINI = new AudioSampleWrapper("badmini.wav", AudioManager$AudioSample.d);
-    public static final AudioSampleWrapper UI_SMALL_SELECT = new AudioSampleWrapper("uismallselect.wav", AudioManager$AudioSample.e);
-    public static final AudioSampleWrapper UI_BIG_SELECT = new AudioSampleWrapper("uiselect.wav", AudioManager$AudioSample.f);
-    public static final AudioSampleWrapper UI_ERROR = new AudioSampleWrapper("error.wav", AudioManager$AudioSample.g);
-    public static final AudioSampleWrapper BIG_LASER = new AudioSampleWrapper("biglaser.wav", AudioManager$AudioSample.h);
-    public static final AudioSampleWrapper SMALL_LASER = new AudioSampleWrapper("biglaser.wav", AudioManager$AudioSample.i);
-    public static final AudioSampleWrapper HIT_1 = new AudioSampleWrapper("smallhit1.wav", AudioManager$AudioSample.j);
-    public static final AudioSampleWrapper HIT_2 = new AudioSampleWrapper("smallhit2.wav", AudioManager$AudioSample.k);
-    public static final AudioSampleWrapper HIT_3 = new AudioSampleWrapper("smallhit3.wav", AudioManager$AudioSample.l);
-    public static final AudioSampleWrapper ALARM = new AudioSampleWrapper("alarm.wav", AudioManager$AudioSample.m);
-    public static final AudioSampleWrapper BIGBOOM_1 = new AudioSampleWrapper("bigboom1.wav", AudioManager$AudioSample.n);
-    public static final AudioSampleWrapper BIGBOOM_2 = new AudioSampleWrapper("bigboom2.wav", AudioManager$AudioSample.o);
-    public static final AudioSampleWrapper HEALRAY = new AudioSampleWrapper("healray.wav", AudioManager$AudioSample.p);
-    public static final AudioSampleWrapper CLONE = new AudioSampleWrapper("clone.wav", AudioManager$AudioSample.q);
-    public static final AudioSampleWrapper MISSILE = new AudioSampleWrapper("missile.wav", AudioManager$AudioSample.r);
-
-    private AudioSampleWrapper(String loc, AudioManager$AudioSample sample) {
+    /**
+     * Constructor.
+     *
+     * @param loc The location of the resource, should be formatted like a file name
+     * @param sample The sound sample of the instance
+     */
+    protected AudioSampleWrapper(String loc, Sound sample) {
         this.location = loc;
-        this.sample = sample;
-        this.sound = sample.sound; // FIXME DOES NOT WORK!
+        this.sound = sample;
     }
 
     @Override
@@ -48,11 +62,15 @@ public final class AudioSampleWrapper implements ResourceWrapper<Sound> { // TOD
         return sound;
     }
 
-    public void play() {
-        sample.a();
-    }
+    /**
+     * Plays the sample.
+     */
+    public abstract void play();
 
-    public void play(float volume) {
-        sample.a(volume);
-    }
+    /**
+     * Plays the sample at a strictly defined volume. Note that 1.0 is not always the default, however it often is.
+     *
+     * @param volume The volume of the sound, should range between 0.0 and 1.0
+     */
+    public abstract void play(float volume);
 }

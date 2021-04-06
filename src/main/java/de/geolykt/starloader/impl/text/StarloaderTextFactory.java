@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import snoddasmannen.galimulator.GalColor;
+import snoddasmannen.galimulator.GalFX$FONT_TYPE;
 
 public class StarloaderTextFactory implements TextFactory {
 
@@ -47,4 +48,8 @@ public class StarloaderTextFactory implements TextFactory {
         return new StarloaderComponentBuilder(text);
     }
 
+    @Override
+    public @NotNull FormattedText asDefaultFormattedText(@NotNull String text) {
+        return new SingletonFormattedText(new SingletonTextComponent(new ColoredFontspecificTextComponent(text, GalColor.WHITE, GalFX$FONT_TYPE.c)));
+    }
 }

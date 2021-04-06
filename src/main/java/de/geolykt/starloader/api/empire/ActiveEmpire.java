@@ -37,9 +37,10 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * was cancelled.
      *
      * @param empireSpecial The registry key of the special.
+     * @param force Whether to suppress the events that are fired otherwise
      * @return Whether the special was really removed.
      */
-    public boolean addSpecial(@NotNull NamespacedKey empireSpecial);
+    public boolean addSpecial(@NotNull NamespacedKey empireSpecial, boolean force);
 
     /**
      * Adds a callback that only applies to this empire.
@@ -55,11 +56,13 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * Depending on the parameters the player can be notified about the event and the event may be included in the
      * bulletin ticker. This method does not allow to go lower that 1 for a good cause,
      * as this produces other severe issues like divide by 0.
+     * Even if the events are suppressed a transcend event will be fired if the threshold for that has been reached.
      *
      * @param notify False if the action should happen silently, true if it is done in a more natural manner
+     * @param force Whether to suppress the events that are fired otherwise
      * @return False if the event got cancelled or if the technology level is at 1
      */
-    public boolean decreaseTechnologyLevel(boolean notify);
+    public boolean decreaseTechnologyLevel(boolean notify, boolean force);
 
     /**
      * Obtains the {@link Vector} of the {@link StateActor StateActors} that are currently assigned to the empire.
@@ -153,11 +156,13 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * have been cancelled or not.
      * Depending on the parameters the player can be notified about the event and the event may be included in the
      * bulletin ticker.
+     * Even if the events are suppressed a transcend event will be fired if the threshold for that has been reached.
      *
      * @param notify False if the action should happen silently, true if it is done in a more natural manner
+     * @param force Whether to suppress the events that are fired otherwise
      * @return False if the event got cancelled
      */
-    public boolean increaseTechnologyLevel(boolean notify);
+    public boolean increaseTechnologyLevel(boolean notify, boolean force);
 
     /**
      * Unassign a {@link StateActor} from the empire
@@ -174,9 +179,10 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * was cancelled.
      *
      * @param empireSpecial The registry key of the special.
+     * @param force Whether to suppress the events that are fired otherwise
      * @return Whether the special was really removed.
      */
-    public boolean removeSpecial(@NotNull NamespacedKey empireSpecial);
+    public boolean removeSpecial(@NotNull NamespacedKey empireSpecial, boolean force);
 
     /**
      * Sets the motto of the empire. The motto of an empire is purely for the user

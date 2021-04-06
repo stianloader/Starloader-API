@@ -29,11 +29,25 @@ public interface TextFactory {
 
     /**
      * Creates a {@link FormattedText} based on a String. The default color is used.
+     * It uses the small font size, where as {@link #asDefaultFormattedText(String)} uses the "default" monotype font.
+     * The reason for this interesting naming decision is that normal bulletins make use of the small monotype font,
+     * where as some of the empire-specific bulletins make use of the "default" one.
      *
      * @param text The text to encode
      * @return The text as a {@link FormattedText}
      */
     public @NotNull FormattedText asFormattedText(@NotNull String text);
+
+    /**
+     * Creates a {@link FormattedText} based on a String. The default color is used.
+     * It uses the default font size, where as {@link #asFormattedText(String)} uses the small monotype font.
+     * The reason for this interesting naming decision is that normal bulletins make use of the small monotype font,
+     * where as some of the empire-specific bulletins make use of the "default" one.
+     *
+     * @param text The text to encode
+     * @return The text as a {@link FormattedText}
+     */
+    public @NotNull FormattedText asDefaultFormattedText(@NotNull String text);
 
     /**
      * Creates a {@link FormattedText} based on a String. The specified color is used.

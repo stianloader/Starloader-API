@@ -90,9 +90,6 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private int lastResearchedYear;
 
-    @Shadow
-    public int lastStateChange;
-
     private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
 
     @Shadow
@@ -112,9 +109,6 @@ public class EmpireMixins implements ActiveEmpire {
     private int starCount; // starCount
 
     @Shadow
-    private EmpireState state;
-
-    @Shadow
     private int techLevel; // technologyLevel
 
     private transient final List<TickCallback<ActiveEmpire>> tickCallbacks = new ArrayList<>();
@@ -122,11 +116,6 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     public void a(EmpireAchievement$EmpireAchievementType a) { // addAchievement
         return;
-    }
-
-    @Overwrite
-    public void a(final EmpireState state) { // setState
-        setState(((RegistryKeyed)(Object)state).getRegistryKey(), false);
     }
 
     @Shadow
@@ -140,7 +129,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Overwrite
     public void aa() { // Degenerate
-        decreaseTechnologyLevel(true);
+        decreaseTechnologyLevel(true, false);
     }
 
     @Override
@@ -150,7 +139,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean addSpecial(@NotNull NamespacedKey empireSpecial) {
+    public boolean addSpecial(@NotNull NamespacedKey empireSpecial, boolean force) {
         EmpireSpecial special = Registry.EMPIRE_SPECIALS.get(empireSpecial);
         if (special == null) {
             throw new IllegalArgumentException("No special is registered under the given key!");
@@ -158,10 +147,12 @@ public class EmpireMixins implements ActiveEmpire {
         if (hasSpecial(empireSpecial)) {
             return false;
         } else {
-            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this, empireSpecial);
-            EventManager.handleEvent(event);
-            if (event.isCancelled()) {
-                return false;
+            if (!force) {
+                EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this, empireSpecial);
+                EventManager.handleEvent(event);
+                if (event.isCancelled()) {
+                    return false;
+                }
             }
             return specials.add(special);
         }
@@ -170,16 +161,6 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void addTickCallback(TickCallback<ActiveEmpire> callback) {
         tickCallbacks.add(callback);
-    }
-
-    @Shadow
-    public void as() { // voidTreaties
-        return;
-    }
-
-    @Shadow
-    public void av() { // danceForJoy
-        return;
     }
 
     @Shadow
@@ -213,18 +194,6 @@ public class EmpireMixins implements ActiveEmpire {
     public void b(StateActor var0) { // removeActor
     }
 
-    /**
-     * Broadcasts the news in the galactic bulletin board, provided the empire is known enough.
-     *
-     * @param news The news to broadcast
-     */
-    private void broadcastNews(String news) {
-        if (this.Y()) {
-            // TODO use MONOTYPE_DEFAULT instead of MONOTYPE_SMALL (implementation detail)
-            Drawing.sendBulltin(Drawing.getTextFactory().asFormattedText(getColoredName() + ": " + news));
-        }
-    }
-
     @Overwrite
     @SuppressWarnings("unchecked")
     public void c(final EmpireSpecial empireSpecial) { // addSpecial
@@ -241,15 +210,17 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public boolean decreaseTechnologyLevel(boolean notify) {
+    public boolean decreaseTechnologyLevel(boolean notify, boolean force) {
         if (getTechnologyLevel() <= 1) {
             return false;
         }
 
-        TechnologyLevelDecreaseEvent event = new TechnologyLevelDecreaseEvent(this);
-        EventManager.handleEvent(event);
-        if (event.isCancelled()) {
-            return false;
+        if (!force) {
+            TechnologyLevelDecreaseEvent event = new TechnologyLevelDecreaseEvent(this);
+            EventManager.handleEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
         }
 
         this.lastResearchedYear = Galimulator.getGameYear();
@@ -339,11 +310,6 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public @NotNull NamespacedKey getState() {
-        return ((RegistryKeyed)(Object)state).getRegistryKey();
-    }
-
-    @Override
     public int getTechnologyLevel() {
         return techLevel;
     }
@@ -378,15 +344,17 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public boolean increaseTechnologyLevel(boolean notify) {
+    public boolean increaseTechnologyLevel(boolean notify, boolean force) {
         if (techLevel >= 999) { // implementation is capped there
             return false;
         }
 
-        TechnologyLevelIncreaseEvent event = new TechnologyLevelIncreaseEvent(this);
-        EventManager.handleEvent(event);
-        if (event.isCancelled()) {
-            return false;
+        if (!force) {
+            TechnologyLevelIncreaseEvent event = new TechnologyLevelIncreaseEvent(this);
+            EventManager.handleEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
         }
 
         this.lastResearchedYear = Galimulator.getGameYear();
@@ -420,15 +388,17 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public boolean removeSpecial(@NotNull NamespacedKey empireSpecial) {
+    public boolean removeSpecial(@NotNull NamespacedKey empireSpecial, boolean force) {
         EmpireSpecial special = Registry.EMPIRE_SPECIALS.get(empireSpecial);
         if (special == null) {
             throw new IllegalArgumentException("No special is registered under the given key!");
         }
-        EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent(this, empireSpecial);
-        EventManager.handleEvent(event);
-        if (event.isCancelled()) {
-            return false;
+        if (!force) {
+            EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent(this, empireSpecial);
+            EventManager.handleEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
         }
         return specials.remove(special);
     }
@@ -450,6 +420,51 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void setReligion(Religion religion) {
         a(religion);
+    }
+
+    @Inject(method = "b(I)V", at = @At(value = "HEAD"), cancellable = true)
+    public void setTechlevel(final int techLevel, final CallbackInfo ci) {
+        if (techLevel == getTechnologyLevel()) {
+            return;
+        }
+        TechnologyLevelSetEvent event = new TechnologyLevelSetEvent(this, techLevel);
+        EventManager.handleEvent(event);
+        if (event.isCancelled()) {
+            ci.cancel();
+            return;
+        }
+    }
+
+    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
+    public void tick(CallbackInfo info) {
+        if (((Empire) this) == Galimulator.getNeutralEmpire()) {
+            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) { // Two layers of redundancy should be enough
+                EventManager.handleEvent(new TickEvent());
+                TickEvent.releaseLock();
+                lastTick = Galimulator.getGameYear();
+            } else {
+                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick! This usually indicates a broken neutral empire");
+            }
+        }
+        for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
+            callback.tick(this);
+        }
+    }
+
+    @Shadow
+    public boolean Y() { // isNoteable
+       return false; // I am not sure that this is actually the name of the method, but I have to assume
+       // that based on what I currently know about this method
+    }
+
+    @Overwrite
+    public void Z() { // advance
+        increaseTechnologyLevel(true, false);
+    }
+
+    @Override
+    public @NotNull NamespacedKey getState() {
+        return ((RegistryKeyed)(Object)state).getRegistryKey();
     }
 
     @Override
@@ -507,43 +522,37 @@ public class EmpireMixins implements ActiveEmpire {
         return true;
     }
 
-    @Inject(method = "b(I)V", at = @At(value = "HEAD"), cancellable = true)
-    public void setTechlevel(final int techLevel, final CallbackInfo ci) {
-        if (techLevel == getTechnologyLevel()) {
-            return;
-        }
-        TechnologyLevelSetEvent event = new TechnologyLevelSetEvent(this, techLevel);
-        EventManager.handleEvent(event);
-        if (event.isCancelled()) {
-            ci.cancel();
-            return;
-        }
-    }
-
-    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
-    public void tick(CallbackInfo info) {
-        if (((Empire) this) == Galimulator.getNeutralEmpire()) {
-            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) { // Two layers of redundancy should be enough
-                EventManager.handleEvent(new TickEvent());
-                TickEvent.releaseLock();
-                lastTick = Galimulator.getGameYear();
-            } else {
-                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick! This usually indicates a broken neutral empire");
-            }
-        }
-        for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
-            callback.tick(this);
+    /**
+     * Broadcasts the news in the galactic bulletin board, provided the empire is known enough.
+     *
+     * @param news The news to broadcast
+     */
+    private void broadcastNews(String news) {
+        if (this.Y()) {
+            GalColor c = getColor();
+            news = String.format("[%02X%02X%02X]%s[]: %s", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName(), news);
+            Drawing.sendBulletin(Drawing.getTextFactory().asDefaultFormattedText(news));
         }
     }
 
     @Shadow
-    public boolean Y() { // isNoteable
-       return false; // I am not sure that this is actually the name of the method, but I have to assume
-       // that based on what I currently know about this method
+    private EmpireState state;
+
+    @Shadow
+    public int lastStateChange;
+
+    @Shadow
+    public void as() { // voidTreaties
+        return;
+    }
+
+    @Shadow
+    public void av() { // danceForJoy
+        return;
     }
 
     @Overwrite
-    public void Z() { // advance
-        increaseTechnologyLevel(true);
+    public void a(final EmpireState state) { // setState
+        setState(((RegistryKeyed)(Object)state).getRegistryKey(), false);
     }
 }
