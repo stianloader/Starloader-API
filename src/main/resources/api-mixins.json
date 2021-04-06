@@ -10,6 +10,7 @@
     "EmpireAnnalsMixins",
     "EmpireMixins",
     "EmpireSpecialMixins",
+    "EmpireStateMixins",
     "InstanceMixins",
     "StarMixins",
     "DiploRequestMixins"

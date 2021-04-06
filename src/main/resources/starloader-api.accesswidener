@@ -20,3 +20,4 @@ accessible      field   snoddasmannen/galimulator/Space                     i   
 
 # Enums
 denumerised      class   snoddasmannen/galimulator/EmpireSpecial
+denumerised      class   snoddasmannen/galimulator/EmpireState

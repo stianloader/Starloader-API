@@ -16,7 +16,12 @@ import snoddasmannen.galimulator.Space;
  * This should be used to reduce the amount of calls to obfuscated methods, which will improve the
  *  sanity of anyone that is working on updating an extension.
  */
-public class Galimulator {
+public final class Galimulator {
+
+    /**
+     * Constructor that should not be called.
+     */
+    private Galimulator() {}
 
     /**
      * Connect two stars with each other. The preferred way of connecting two stars.

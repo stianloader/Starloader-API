@@ -9,9 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.NamespacedKey;
 import snoddasmannen.galimulator.EmpireSpecial;
+import snoddasmannen.galimulator.EmpireState;
 
 /**
- * Registry of enum and/or enum-like objects.s
+ * Registry of enum and/or enum-like objects.
  * This is added for extension harmony as multiple extensions cannot do these themselves without
  * breaking aspects of the functionality or creating agreements themselves. Since the StarloaderAPI
  * is already one of the first extensions to experiment with such aspects, the StarloaderAPI is taking
@@ -25,6 +26,11 @@ public abstract class Registry<T> {
      * The empire specials registry.
      */
     public static Registry<EmpireSpecial> EMPIRE_SPECIALS;
+
+    /**
+     * The empire state registry.
+     */
+    public static MetadatableRegistry<EmpireState, EmpireStateMetadataEntry> EMPIRE_STATES;
 
     /**
      * Internal map containing the key-value pairs of the registry for lookup.
@@ -87,6 +93,8 @@ public abstract class Registry<T> {
      * Registers the value to the given key; the implementation might be thread-safe, however extensions should always
      * believe that multithreading can be dangerous and as such this method should never be called concurrently as otherwise
      * some other things (such as the values array) might break.
+     * Note that {@link MetadatableRegistry} does not support this method, if the registry is one of these,
+     * {@link MetadatableRegistry#register(NamespacedKey, Object, de.geolykt.starloader.api.registry.MetadatableRegistry.MetadataEntry)} should be used instead.
      *
      * @param key The key of the entry to register
      * @param value The value of the entry

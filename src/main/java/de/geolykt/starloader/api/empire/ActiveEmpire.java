@@ -117,6 +117,14 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public @NotNull Religion getReligion();
 
     /**
+     * Obtains the registry key of the current state of the empire.
+     * To obtain the actual empire state object, it has to be passed into it's respective registry first.
+     *
+     * @return A {@link NamespacedKey} representing the current state of the empire.
+     */
+    public @NotNull NamespacedKey getState();
+
+    /**
      * Obtains the technology level of the empire. It shouldn't be below 1 as math have some issues there and this
      * event does not occur naturally.
      *
@@ -186,4 +194,14 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * @param religion The new religion to preach
      */
     public void setReligion(@NotNull Religion religion);
+
+    /**
+     * Sets the state of the empire via a registry key that corresponds to the future state of the empire.
+     * Note that the key should be valid and for invalid keys an exception will quickly be thrown.
+     *
+     * @param state A {@link NamespacedKey} representing the future state of the empire.
+     * @param force If true no events will be called and the action is more likely to happen
+     * @return Whether the state was changed
+     */
+    public boolean setState(@NotNull NamespacedKey state, boolean force);
 }

@@ -12,23 +12,6 @@ import snoddasmannen.galimulator.EmpireSpecial;
 
 public class EmpireSpecialRegistry extends Registry<EmpireSpecial> {
 
-    public static final NamespacedKey GALIMULATOR_AGGRESSIVE = new GalimulatorResourceKey("SPECIAL_AGGRESSIVE");
-    public static final NamespacedKey GALIMULATOR_CAPITALIST = new GalimulatorResourceKey("SPECIAL_CAPITALIST");
-    public static final NamespacedKey GALIMULATOR_CULT = new GalimulatorResourceKey("SPECIAL_CULT");
-    public static final NamespacedKey GALIMULATOR_DEFENSIVE = new GalimulatorResourceKey("SPECIAL_DEFENSIVE");
-    public static final NamespacedKey GALIMULATOR_DIPLOMATIC = new GalimulatorResourceKey("SPECIAL_DIPLOMATIC");
-    public static final NamespacedKey GALIMULATOR_EXPLOSIVE = new GalimulatorResourceKey("SPECIAL_EXPLOSIVE");
-    public static final NamespacedKey GALIMULATOR_FANATICAL = new GalimulatorResourceKey("SPECIAL_FANATICAL");
-    public static final NamespacedKey GALIMULATOR_HORDE = new GalimulatorResourceKey("SPECIAL_HORDE");
-    public static final NamespacedKey GALIMULATOR_INDUSTRIAL = new GalimulatorResourceKey("SPECIAL_INDUSTRIAL");
-    public static final NamespacedKey GALIMULATOR_MILITANT = new GalimulatorResourceKey("SPECIAL_MILITANT");
-    public static final NamespacedKey GALIMULATOR_RECLUSIVE = new GalimulatorResourceKey("SPECIAL_RECLUSIVE");
-    public static final NamespacedKey GALIMULATOR_SCIENTIFIC = new GalimulatorResourceKey("SPECIAL_SCIENTIFIC");
-    public static final NamespacedKey GALIMULATOR_SLOW_STARTER = new GalimulatorResourceKey("SPECIAL_SLOW_STARTER");
-    public static final NamespacedKey GALIMULATOR_STABLE = new GalimulatorResourceKey("SPECIAL_STABLE");
-    public static final NamespacedKey GALIMULATOR_UNSTABLE = new GalimulatorResourceKey("SPECIAL_UNSTABLE");
-    public static final NamespacedKey GALIMULATOR_XENOPHOBIC = new GalimulatorResourceKey("SPECIAL_XENOPHOBIC");
-
     /**
      * Obtains the keyed values map. Internal implementation specific API.
      *
@@ -47,7 +30,7 @@ public class EmpireSpecialRegistry extends Registry<EmpireSpecial> {
             throw new IllegalStateException("The enum name has already been registered! (consider using a different internal name for the enum)");
         }
         if (value.ordinal() != values.length) {
-            throw new IllegalStateException("The ordinal of the registering enum does not match the registering order!");
+            throw new IllegalStateException("The ordinal of the registering enum does not match the registration order!");
         }
         ((RegistryKeyed)value).setRegistryKey(key);
         EmpireSpecial[] temp = new EmpireSpecial[values.length + 1];

@@ -112,7 +112,7 @@ public final class Drawing {
      *
      * @param message The message to send
      */
-    public static void sendBulletin(@NotNull String message) {
+    public static void sendBulletin(@NotNull String message) { // FIXME typo
         implementation.sendBulletin(message);
     }
 
