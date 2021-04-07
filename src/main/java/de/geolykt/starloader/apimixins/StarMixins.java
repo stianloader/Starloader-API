@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.math.Vector2;
 
+import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
@@ -121,7 +122,7 @@ public class StarMixins implements Star {
         if (old == newOwner) {
             return false; // don't perform a takeover when there is no takeover to be performed
         }
-        b((snoddasmannen.galimulator.Empire) newOwner);
+        b(ExpectedObfuscatedValueException.requireEmpire(newOwner));
         return old != getAssignedEmpire();
     }
 
@@ -209,15 +210,11 @@ public class StarMixins implements Star {
 
     @Override
     public void setAssignedEmpire(ActiveEmpire empire) {
-        if (empire instanceof snoddasmannen.galimulator.Empire) {
-            snoddasmannen.galimulator.Empire newEmp = (snoddasmannen.galimulator.Empire) empire;
-            snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
-            oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
-            newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
-            a(newEmp);
-        } else {
-            throw new UnsupportedOperationException("Obfuscated empire expected.");
-        }
+        snoddasmannen.galimulator.Empire newEmp = ExpectedObfuscatedValueException.requireEmpire(empire);
+        snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
+        oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
+        newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
+        a(newEmp);
     }
 
     @Override

@@ -3,7 +3,7 @@ package de.geolykt.starloader.api.player;
 import snoddasmannen.galimulator.diplomacy.PlayerRequest;
 
 /**
- * @deprecated This will be phased out by a proper registry API
+ * @deprecated This will be phased out in favour of a proper registry API
  *
  * Wrapper container class for diplomatic requests.
  */

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
 
@@ -97,6 +98,11 @@ public final class EventManager {
         });
     }
 
+    /**
+     * Fires an event by passing it to all registered listeners.
+     *
+     * @param event The {@link Event} to pass
+     */
     public static void handleEvent(@NotNull Event event) {
         if (!wasBuilt) {
             rebuild();
@@ -114,5 +120,37 @@ public final class EventManager {
                 }
             }
         }
+    }
+
+    /**
+     * Fires an event by passing it to all registered listeners.
+     * Unlike {@link #handleEvent(Event)}, this will method will stop
+     * on encountering an exception or error and will return it.
+     *
+     * @param event The {@link Event} to pass
+     * @return The caught throwable
+     */
+    public static @Nullable Throwable handleEventExcept(Event event) {
+        if (!wasBuilt) {
+            try {
+                rebuild();
+            } catch (Throwable t) {
+                return t;
+            }
+        }
+        for (EventPriority prio : EventPriority.values()) {
+            List<Map.Entry<Listener, Method>> methods = EVENT_HANDLERS.get(prio.ordinal()).get(event.getClass());
+            if (methods == null) {
+                continue;
+            }
+            for (Map.Entry<Listener, Method> method : methods) {
+                try {
+                    method.getValue().invoke(method.getKey(), event);
+                } catch (Throwable t) {
+                    return t;
+                }
+            }
+        }
+        return null;
     }
 }

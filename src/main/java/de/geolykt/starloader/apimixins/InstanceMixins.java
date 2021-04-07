@@ -57,8 +57,7 @@ public class InstanceMixins {
         if (var4 != null) {
             int var6 = Space.F() - ((EmpireAnnals) var4).g();
             if (var6 > 10000) {
-                Space.a(new ce((EmpireAnnals) var4,
-                        ".. And thus ends our bloodline after " + var6 / 1000 + Space.q().getTimeNoun()));
+                Space.a(new ce((EmpireAnnals) var4, ".. And thus ends our bloodline after " + var6 / 1000 + Space.q().getTimeNoun()));
             }
         }
         // Galimulator end

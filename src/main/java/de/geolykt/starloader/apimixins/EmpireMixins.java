@@ -481,8 +481,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
         EmpireStateMetadataEntry stateMeta = Registry.EMPIRE_STATES.getMetadataEntry(stateKey);
         if (stateMeta == null) {
-            throw new IllegalStateException(
-                    "Unable to find empire state metadata entry, possible registry corruption.");
+            throw new IllegalStateException("Unable to find empire state metadata entry, possible registry corruption.");
         }
         if (!force) {
             EmpireStateChangeEvent event = null;

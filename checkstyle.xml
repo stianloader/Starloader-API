@@ -95,6 +95,10 @@ The checkstyle configuration of the Starloader project
     <module name="InterfaceMemberImpliedModifier">
       <property name="violateImpliedAbstractMethod" value="false"/>
     </module>
+    <module name="RegexpSinglelineJava">
+      <property name="format" value="  [&quot;']"/>
+      <property name="message" value="Multiple whitespaces before literal string"/>
+    </module>
   </module>
   <module name="NewlineAtEndOfFile"/>
   <module name="RegexpSingleline">
