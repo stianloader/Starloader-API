@@ -5,9 +5,13 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
+import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratingEvent;
+import de.geolykt.starloader.api.event.lifecycle.GalaxyLoadingEvent;
+import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 
 import snoddasmannen.galimulator.EmpireAnnals;
 import snoddasmannen.galimulator.Space;
@@ -61,5 +65,31 @@ public class InstanceMixins {
             }
         }
         // Galimulator end
+    }
+
+    @Overwrite
+    public static void h(final String j) {
+        // this method is called to show the progress of things happening to the user
+        // however we can exploit this behaviour to create events without having to overwrite large static methods
+        // one day we will have a custom ASM injector for that, but that is something for later.
+        Event evt = null;
+        switch (j) {
+        case "Generating galaxy":
+            evt = new GalaxyGeneratingEvent();
+            break;
+        case "Loading galaxy: Reading file":
+        case "Loading galaxy": // The XStream and non-X-Stream messages differ here
+            evt = new GalaxyLoadingEvent();
+            break;
+        default:
+            if (j.startsWith("Saving galaxy: ")) {
+                evt = new GalaxySavingEvent(j.split(" ", 3)[2]);
+            }
+            break;
+        }
+        if (evt != null) {
+            EventManager.handleEvent(evt);
+        }
+        Space.J = j;
     }
 }

@@ -7,7 +7,7 @@ import snoddasmannen.galimulator.diplomacy.PlayerRequest;
  *
  * Wrapper container class for diplomatic requests.
  */
-@Deprecated(forRemoval = true, since = "1.1.1")
+@Deprecated(forRemoval = true, since = "1.2.0")
 public final class DiplomacyRequests {
 
     public static final DiplomacyRequest SAY_HI = (DiplomacyRequest) PlayerRequest.a;

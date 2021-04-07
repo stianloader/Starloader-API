@@ -110,7 +110,8 @@ public final class Galimulator {
     public static @Nullable ActiveEmpire getPlayerEmpire() {
         snoddasmannen.galimulator.Player plyr = Space.p();
         if (plyr == null) {
-            // It likely can never be null, but better be sorry than to crash
+            // It likely can never be null, however before the map is generated,
+            // this might return null.
             return null;
         } else {
             return (@Nullable ActiveEmpire) plyr.a();
