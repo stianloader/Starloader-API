@@ -7,7 +7,7 @@ plugins {
 
 group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
-version '1.1.0'
+version '1.2.0'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
 
@@ -33,18 +33,6 @@ dependencies {
     api "de.geolykt:starloader:1.1.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'de.geolykt'
-            artifactId 'starloader-api'
-            version '1.1.0-SNAPSHOT'
-
-            from components.java
-        }
-    }
-}
-
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -60,7 +48,7 @@ publishing {
         plugin(MavenPublication) { publication ->
             groupId project.group
             artifactId project.archivesBaseName
-            version '1.1.0'
+            version '1.2.0'
 
             from components['java']
 
@@ -72,7 +60,7 @@ publishing {
         snapshot(MavenPublication) { publication ->
             groupId project.group
             artifactId project.archivesBaseName
-            version '1.1.0-SNAPSHOT'
+            version '1.2.0-SNAPSHOT'
 
             from components['java']
 
