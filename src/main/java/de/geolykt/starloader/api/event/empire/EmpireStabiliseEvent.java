@@ -6,7 +6,7 @@ import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 
 /**
- * Event that is fired whenever an Empire changes into a stanle state from a
+ * Event that is fired whenever an Empire changes into a stable state from a
  * less stable state, like if the empire changed from the RIOTING or
  * DEGENERATING state.
  */

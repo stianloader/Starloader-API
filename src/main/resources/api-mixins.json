@@ -7,12 +7,14 @@
   "mixins": [
     "AllianceMixins",
     "ApplicationMixins",
+    "DiploRequestMixins",
+    "DisruptMissileMixins",
     "EmpireAnnalsMixins",
     "EmpireMixins",
     "EmpireSpecialMixins",
     "EmpireStateMixins",
     "InstanceMixins",
-    "StarMixins",
-    "DiploRequestMixins"
+    "MissileMixins",
+    "StarMixins"
   ]
 }

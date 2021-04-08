@@ -9,8 +9,8 @@ import de.geolykt.starloader.api.player.DiplomacyRequest;
 /**
  * Called when
  * {@link DiplomacyRequest#doValidatedly(de.geolykt.starloader.api.empire.ActiveEmpire)}
- * is called. It is not called when it is force-called. And is called before the
- * action has been performed.
+ * is called. It is not called when it is force-called but is called before the
+ * action has been performed in a non-forcefull manner.
  */
 public class DiplomacyRequestEvent extends EmpireEvent {
 
