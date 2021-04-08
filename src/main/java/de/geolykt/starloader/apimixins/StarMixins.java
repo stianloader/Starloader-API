@@ -25,6 +25,7 @@ import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
 
 import snoddasmannen.galimulator.Religion;
 
+@SuppressWarnings("unused")
 @Mixin(snoddasmannen.galimulator.Star.class)
 public class StarMixins implements Star {
 
@@ -264,6 +265,11 @@ public class StarMixins implements Star {
         }
     }
 
+    /**
+     * Mixin injector. Do not call directly.
+     *
+     * @param info Callback info required for injection, not used inside the method.
+     */
     @Inject(method = "e", at = @At("HEAD"))
     public void tick(CallbackInfo info) {
         for (TickCallback<Star> callback : tickCallbacks) {

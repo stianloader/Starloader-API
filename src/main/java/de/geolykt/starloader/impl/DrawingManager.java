@@ -58,8 +58,10 @@ public class DrawingManager implements DrawingImpl {
     @SuppressWarnings("unchecked")
     @Override
     public @Nullable BitmapFont getFontBitmap(String font) {
-        GalFX$FONT_TYPE arg = GalFX$FONT_TYPE.valueOf(font);
-        if (arg == null) {
+        GalFX$FONT_TYPE arg;
+        try {
+            arg = GalFX$FONT_TYPE.valueOf(font);
+        } catch (IllegalArgumentException e) {
             return null;
         }
         Object obj = fontBitmapCache.get(arg);

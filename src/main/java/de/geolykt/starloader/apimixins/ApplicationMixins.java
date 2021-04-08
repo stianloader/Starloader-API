@@ -16,6 +16,9 @@ import snoddasmannen.galimulator.by;
 @Mixin(by.class)
 public class ApplicationMixins {
 
+    /**
+     * @param ci The callback info. Required for injection but ignored within the method.
+     */
     @Inject(method = "create", at = @At("HEAD"))
     public void start(CallbackInfo ci) {
         Registries.init();
@@ -35,6 +38,9 @@ public class ApplicationMixins {
         var1.printStackTrace();
     }
 
+    /**
+     * @param ci The callback info. Required for injection but ignored within the method.
+     */
     @Inject(method = "create", at = @At("TAIL"))
     public void startComplete(CallbackInfo ci) {
         try {

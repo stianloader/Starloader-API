@@ -28,7 +28,7 @@ public class MissileMixins {
 
     @Inject(method = "hitActor", at = @At("HEAD"), cancellable = true)
     public void hitActor(Actor actor, CallbackInfo ci) {
-        MissileHitActorEvent evt = new MissileHitActorEvent((Missile) (Object) this, (Actor) actor);
+        MissileHitActorEvent evt = new MissileHitActorEvent((Missile) (Object) this, actor);
         EventManager.handleEvent(evt);
         if (evt.isCancelled()) {
             ci.cancel();

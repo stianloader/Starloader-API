@@ -71,7 +71,6 @@ public final class Galimulator {
      *
      * @return A {@link Vector} of {@link ActiveEmpire empires} that are known
      */
-    @SuppressWarnings("unchecked")
     public static Vector<ActiveEmpire> getEmpires() {
         return Space.b;
     }
@@ -113,9 +112,8 @@ public final class Galimulator {
             // It likely can never be null, however before the map is generated,
             // this might return null.
             return null;
-        } else {
-            return (@Nullable ActiveEmpire) plyr.a();
         }
+        return (@Nullable ActiveEmpire) plyr.a();
     }
 
     /**
@@ -162,7 +160,6 @@ public final class Galimulator {
      *
      * @return A {@link Vector} of {@link Star stars} that are known
      */
-    @SuppressWarnings("unchecked")
     public static Vector<Star> getStars() {
         return Space.a;
     }

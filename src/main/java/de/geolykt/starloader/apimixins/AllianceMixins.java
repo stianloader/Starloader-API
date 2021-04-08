@@ -16,6 +16,7 @@ import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
 
 import snoddasmannen.galimulator.GalColor;
 
+@SuppressWarnings("unused")
 @Mixin(value = snoddasmannen.galimulator.Alliance.class)
 public class AllianceMixins implements Alliance {
 
@@ -34,6 +35,7 @@ public class AllianceMixins implements Alliance {
 
     @Shadow
     public void a(snoddasmannen.galimulator.Empire var1) {
+        var1.a((snoddasmannen.galimulator.Alliance) (Object) this);
     } // addMember
 
     @Override

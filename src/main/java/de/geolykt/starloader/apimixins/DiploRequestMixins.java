@@ -23,12 +23,12 @@ public class DiploRequestMixins implements DiplomacyRequest {
 
     @Shadow
     public boolean a(final Empire empire) {
-        return false;
+        return empire.ae();
     }
 
     @Shadow
     public String b(final Empire empire) {
-        return "";
+        return empire.toString();
     }
 
     @Overwrite

@@ -43,17 +43,15 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @Nullable InputDialog build() {
         if (Settings$EnumSettings.F.b() == Boolean.TRUE) {
             Gdx.input.getTextInput(new TextInputWrapper(hooks), title, text, hint);
             return null;
-        } else {
-            StarloaderInputDialog dialog = new StarloaderInputDialog(title, new TextInputWrapper(hooks), text, hint);
-            Space.i.add(new ph(null, 0, 0, true, Widget$WIDGET_ALIGNMENT.d));
-            return dialog;
         }
+        StarloaderInputDialog dialog = new StarloaderInputDialog(title, new TextInputWrapper(hooks), text, hint);
+        Space.i.add(new ph(null, 0, 0, true, Widget$WIDGET_ALIGNMENT.d));
+        return dialog;
     }
 
     @Override

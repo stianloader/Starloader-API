@@ -59,9 +59,8 @@ public class EmpireAnnalsMixins implements Empire {
     public int getStarCount() {
         if (deathYear != -1) {
             return 0;
-        } else {
-            return Galimulator.getEmpirePerUID(getUID()).getStarCount();
         }
+        return Galimulator.getEmpirePerUID(getUID()).getStarCount();
     }
 
     @Override

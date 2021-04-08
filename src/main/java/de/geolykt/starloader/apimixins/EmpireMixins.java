@@ -19,7 +19,6 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
-import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
@@ -51,6 +50,7 @@ import snoddasmannen.galimulator.fr;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
+@SuppressWarnings("unused")
 @Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
 
@@ -147,16 +147,15 @@ public class EmpireMixins implements ActiveEmpire {
         }
         if (hasSpecial(empireSpecial)) {
             return false;
-        } else {
-            if (!force) {
-                EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this, empireSpecial);
-                EventManager.handleEvent(event);
-                if (event.isCancelled()) {
-                    return false;
-                }
-            }
-            return specials.add(special);
         }
+        if (!force) {
+            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this, empireSpecial);
+            EventManager.handleEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
+        }
+        return specials.add(special);
     }
 
     @Override
@@ -439,7 +438,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
-        if (((Empire) this) == Galimulator.getNeutralEmpire()) {
+        if (this == Galimulator.getNeutralEmpire()) {
             // Two layers of redundancy should be enough
             if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) {
                 EventManager.handleEvent(new TickEvent());
