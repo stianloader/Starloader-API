@@ -6,13 +6,15 @@ import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.Locateable;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Dateable;
+import de.geolykt.starloader.api.resource.ColorTextured;
 
 /**
  * Base actor specification.
  * This interface is solely a "workaround" for Actor-specific API not being usable without the galimulator
  * jar being within the compiler classpath.
+ * It might also be useful for any projects that try to implement a Galimulator clone (please don't do it, you would be insane otherwise)
  */
-public interface ActorSpec extends Identifiable, Dateable, Locateable {
+public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorTextured {
 
     /**
      * Adds a certain amount of experience points to the actor.
@@ -33,6 +35,15 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable {
      * @return The experience levels the actor has.
      */
     public int getExperienceLevel();
+
+    /**
+     * Obtains the maximum velocity of the actor.
+     * Note that some actor types do not support this operation, in this case
+     * {@link Float#NaN} should be returned.
+     *
+     * @return The maximum velocity this actor can go.
+     */
+    public float getMaximumVelocity();
 
     /**
      * Obtains the name of the actor.
@@ -58,6 +69,15 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable {
     public default int getSpawnedYear() {
         return getFoundationYear();
     }
+
+    /**
+     * Obtains the current velocity of the actor.
+     * If for some reason or another this is not applicable to the actor, then
+     * 0.0 needs to be returned.
+     *
+     * @return The current speed of the actor.
+     */
+    public float getVelocity();
 
     /**
      * Obtains the experience points of the given actor.
@@ -97,6 +117,17 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable {
      * @return The threat state of the actor.
      */
     public boolean isThreat();
+
+    /**
+     * Sets the velocity of the actor. If the action is not supported by the actor then
+     * <code>false</code> has to be returned. The implementation should allow values that
+     * are over {@link #getMaximumVelocity()}, however it doesn't need to guarantee that this
+     * velocity is kept.
+     *
+     * @param velocity The new velocity of the actor.
+     * @return Whether the new value was accepted
+     */
+    public boolean setVelocity(float velocity);
 
     /**
      * Sets the amount of experience points the actor has.

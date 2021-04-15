@@ -23,9 +23,20 @@ public class ActorMixins implements ActorSpec {
     @Shadow
     private int id;
 
+    @Shadow
+    public String textureName;
+
+    @Shadow
+    public String uncoloredTextureName;
+
     @Override
     @Shadow // Already implemented, no need to override
     public void addXP(int amount) {
+    }
+
+    @Override
+    public @NotNull String getColorlessTextureName() {
+        return uncoloredTextureName;
     }
 
     @Override
@@ -41,6 +52,11 @@ public class ActorMixins implements ActorSpec {
     @Shadow
     public int getLevel() {
         return -1;
+    }
+
+    @Override
+    public float getMaximumVelocity() {
+        return Float.NaN;
     }
 
     @Override
@@ -60,8 +76,18 @@ public class ActorMixins implements ActorSpec {
     }
 
     @Override
+    public @NotNull String getTextureName() {
+        return textureName;
+    }
+
+    @Override
     public int getUID() {
         return id;
+    }
+
+    @Override
+    public float getVelocity() {
+        return 0;
     }
 
     @Override
@@ -112,6 +138,21 @@ public class ActorMixins implements ActorSpec {
 
     @Shadow
     public boolean isUntouchable() {
+        return false;
+    }
+
+    @Override
+    public void setColorlessTextureName(@NotNull String texture) {
+        uncoloredTextureName = texture;
+    }
+
+    @Override
+    public void setTextureName(@NotNull String texture) {
+        textureName = texture;
+    }
+
+    @Override
+    public boolean setVelocity(float velocity) {
         return false;
     }
 

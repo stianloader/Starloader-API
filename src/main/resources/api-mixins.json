@@ -8,14 +8,22 @@
     "ActorMixins",
     "AllianceMixins",
     "ApplicationMixins",
+    "BattleshipMixins",
+    "DestroyerMixins",
     "DiploRequestMixins",
     "DisruptMissileMixins",
+    "DropshipMixins",
     "EmpireAnnalsMixins",
     "EmpireMixins",
     "EmpireSpecialMixins",
     "EmpireStateMixins",
+    "FighterMixins",
+    "GunstationMixins",
+    "HealshipMixins",
     "InstanceMixins",
     "MissileMixins",
-    "StarMixins"
+    "RaiderMixins",
+    "StarMixins",
+    "StateActorMixins"
   ]
 }
