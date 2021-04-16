@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api.event.actor;
 
+import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.event.Event;
 
 import snoddasmannen.galimulator.actors.Actor;
@@ -9,7 +10,7 @@ import snoddasmannen.galimulator.actors.Actor;
  *
  * @param <T> The Actor type of the main Actor.
  */
-public abstract class ActorEvent<T extends Actor> extends Event {
+public abstract class ActorEvent<T extends ActorSpec> extends Event {
 
     /**
      * The main actor that participates in the event.

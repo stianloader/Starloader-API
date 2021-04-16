@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
@@ -91,6 +92,9 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private int lastResearchedYear;
 
+    @Shadow
+    public int lastStateChange;
+
     private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
 
     @Shadow
@@ -110,6 +114,9 @@ public class EmpireMixins implements ActiveEmpire {
     private int starCount; // starCount
 
     @Shadow
+    private EmpireState state;
+
+    @Shadow
     private int techLevel; // technologyLevel
 
     private final transient List<TickCallback<ActiveEmpire>> tickCallbacks = new ArrayList<>();
@@ -117,6 +124,11 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     public void a(EmpireAchievement$EmpireAchievementType a) { // addAchievement
         return;
+    }
+
+    @Overwrite
+    public void a(final EmpireState state) { // setState
+        setState(((RegistryKeyed) (Object) state).getRegistryKey(), false);
     }
 
     @Shadow
@@ -131,6 +143,15 @@ public class EmpireMixins implements ActiveEmpire {
     @Overwrite
     public void aa() { // Degenerate
         decreaseTechnologyLevel(true, false);
+    }
+
+    @Override
+    public void addActor(@NotNull ActorSpec actor) {
+        if (actor instanceof StateActor) {
+            a((StateActor) actor);
+        } else {
+            throw new UnsupportedOperationException("Currently can only assign State Actors to empires.");
+        }
     }
 
     @Override
@@ -164,6 +185,16 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
+    public void as() { // voidTreaties
+        return;
+    }
+
+    @Shadow
+    public void av() { // danceForJoy
+        return;
+    }
+
+    @Shadow
     private void aX() { // Reset bonuses
         /*
          * this.specialsAttackBonus = null; this.specialsDefenseBonus = null;
@@ -190,6 +221,21 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Shadow
     public void b(StateActor var0) { // removeActor
+    }
+
+    /**
+     * Broadcasts the news in the galactic bulletin board, provided the empire is
+     * known enough.
+     *
+     * @param news The news to broadcast
+     */
+    private void broadcastNews(String news) {
+        if (this.Y()) {
+            GalColor c = getColor();
+            news = String.format("[%02X%02X%02X]%s[]: %s", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255,
+                    getEmpireName(), news);
+            Drawing.sendBulletin(Drawing.getTextFactory().asDefaultFormattedText(news));
+        }
     }
 
     @Overwrite
@@ -304,9 +350,20 @@ public class EmpireMixins implements ActiveEmpire {
         return religion;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Vector<ActorSpec> getSLActors() {
+        return agents;
+    }
+
     @Override
     public int getStarCount() {
         return starCount;
+    }
+
+    @Override
+    public @NotNull NamespacedKey getState() {
+        return ((RegistryKeyed) (Object) state).getRegistryKey();
     }
 
     @Override
@@ -384,6 +441,15 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public void removeActor(@NotNull ActorSpec actor) {
+        if (actor instanceof StateActor) {
+            b((StateActor) actor);
+        } else {
+            return; // The actor cannot be assigned to the agents list, which we can skip this removal.
+        }
+    }
+
+    @Override
     public void removeActor(StateActor actor) {
         b(actor);
     }
@@ -421,52 +487,6 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void setReligion(Religion religion) {
         a(religion);
-    }
-
-    @Inject(method = "b(I)V", at = @At(value = "HEAD"), cancellable = true)
-    public void setTechlevel(final int techLevel, final CallbackInfo ci) {
-        if (techLevel == getTechnologyLevel()) {
-            return;
-        }
-        TechnologyLevelSetEvent event = new TechnologyLevelSetEvent(this, techLevel);
-        EventManager.handleEvent(event);
-        if (event.isCancelled()) {
-            ci.cancel();
-            return;
-        }
-    }
-
-    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
-    public void tick(CallbackInfo info) {
-        if (this == Galimulator.getNeutralEmpire()) {
-            // Two layers of redundancy should be enough
-            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) {
-                EventManager.handleEvent(new TickEvent());
-                TickEvent.releaseLock();
-                lastTick = Galimulator.getGameYear();
-            } else {
-                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
-                        + "This usually indicates a broken neutral empire");
-            }
-        }
-        for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
-            callback.tick(this);
-        }
-    }
-
-    @Shadow
-    public boolean Y() { // isNoteable
-        return false;
-    }
-
-    @Overwrite
-    public void Z() { // advance
-        increaseTechnologyLevel(true, false);
-    }
-
-    @Override
-    public @NotNull NamespacedKey getState() {
-        return ((RegistryKeyed) (Object) state).getRegistryKey();
     }
 
     @Override
@@ -525,39 +545,44 @@ public class EmpireMixins implements ActiveEmpire {
         return true;
     }
 
-    /**
-     * Broadcasts the news in the galactic bulletin board, provided the empire is
-     * known enough.
-     *
-     * @param news The news to broadcast
-     */
-    private void broadcastNews(String news) {
-        if (this.Y()) {
-            GalColor c = getColor();
-            news = String.format("[%02X%02X%02X]%s[]: %s", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255,
-                    getEmpireName(), news);
-            Drawing.sendBulletin(Drawing.getTextFactory().asDefaultFormattedText(news));
+    @Inject(method = "b(I)V", at = @At(value = "HEAD"), cancellable = true)
+    public void setTechlevel(final int techLevel, final CallbackInfo ci) {
+        if (techLevel == getTechnologyLevel()) {
+            return;
+        }
+        TechnologyLevelSetEvent event = new TechnologyLevelSetEvent(this, techLevel);
+        EventManager.handleEvent(event);
+        if (event.isCancelled()) {
+            ci.cancel();
+            return;
+        }
+    }
+
+    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
+    public void tick(CallbackInfo info) {
+        if (this == Galimulator.getNeutralEmpire()) {
+            // Two layers of redundancy should be enough
+            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) {
+                EventManager.handleEvent(new TickEvent());
+                TickEvent.releaseLock();
+                lastTick = Galimulator.getGameYear();
+            } else {
+                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
+                        + "This usually indicates a broken neutral empire");
+            }
+        }
+        for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
+            callback.tick(this);
         }
     }
 
     @Shadow
-    private EmpireState state;
-
-    @Shadow
-    public int lastStateChange;
-
-    @Shadow
-    public void as() { // voidTreaties
-        return;
-    }
-
-    @Shadow
-    public void av() { // danceForJoy
-        return;
+    public boolean Y() { // isNoteable
+        return false;
     }
 
     @Overwrite
-    public void a(final EmpireState state) { // setState
-        setState(((RegistryKeyed) (Object) state).getRegistryKey(), false);
+    public void Z() { // advance
+        increaseTechnologyLevel(true, false);
     }
 }

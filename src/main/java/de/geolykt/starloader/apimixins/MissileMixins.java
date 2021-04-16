@@ -32,7 +32,7 @@ public class MissileMixins extends ActorMixins implements MissileSpec {
 
     @Inject(method = "hitStar", at = @At("HEAD"), cancellable = true)
     public void hitStar(snoddasmannen.galimulator.Star star, CallbackInfo ci) {
-        MissileHitStarEvent evt = new MissileHitStarEvent((Missile) (Object) this, (Star) star);
+        MissileHitStarEvent evt = new MissileHitStarEvent(this, (Star) star);
         EventManager.handleEvent(evt);
         if (evt.isCancelled()) {
             ci.cancel();
@@ -42,7 +42,7 @@ public class MissileMixins extends ActorMixins implements MissileSpec {
 
     @Inject(method = "hitActor", at = @At("HEAD"), cancellable = true)
     public void hitActor(Actor actor, CallbackInfo ci) {
-        MissileHitActorEvent evt = new MissileHitActorEvent((Missile) (Object) this, actor);
+        MissileHitActorEvent evt = new MissileHitActorEvent(this, actor);
         EventManager.handleEvent(evt);
         if (evt.isCancelled()) {
             ci.cancel();

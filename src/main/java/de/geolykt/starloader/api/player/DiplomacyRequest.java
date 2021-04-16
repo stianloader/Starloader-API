@@ -6,7 +6,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 public interface DiplomacyRequest {
 
     /**
-     * Performs {@link #performAction(ActiveEmpire)} but checks if the request ist
+     * Performs {@link #performAction(ActiveEmpire)} but checks if the request is
      * valid given the context first.
      *
      * @param target The target empire that the action is targeted towards

@@ -1,14 +1,14 @@
 package de.geolykt.starloader.api.event.actor;
 
+import de.geolykt.starloader.api.actor.spacecrafts.MissileSpec;
 import de.geolykt.starloader.api.event.Cancellable;
 
 import snoddasmannen.galimulator.actors.Actor;
-import snoddasmannen.galimulator.actors.Missile;
 
 /**
  * Fired when a Missile-type actor hits another Actor.
  */
-public class MissileHitActorEvent extends ActorEvent<Missile> implements Cancellable {
+public class MissileHitActorEvent extends ActorEvent<MissileSpec> implements Cancellable {
 
     /**
      * The cancellation status of the event. It should not be modified directly and
@@ -27,7 +27,7 @@ public class MissileHitActorEvent extends ActorEvent<Missile> implements Cancell
      * @param missile The missile that hit the star.
      * @param actor   The actor that got hit.
      */
-    public MissileHitActorEvent(Missile missile, Actor actor) {
+    public MissileHitActorEvent(MissileSpec missile, Actor actor) {
         super(missile);
         this.target = actor;
     }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.event.TickCallback;
 
 import snoddasmannen.galimulator.Fleet;
@@ -22,10 +23,20 @@ import snoddasmannen.galimulator.actors.StateActor;
 public interface ActiveEmpire extends Empire, Metadatable {
 
     /**
+     * Assigns an {@link ActorSpec Actor} to the empire.
+     *
+     * @param actor The actor to assign
+     */
+    public void addActor(@NotNull ActorSpec actor);
+
+    /**
+     * @deprecated The direct use of Galimulator Actor API is bound for removal
+     *
      * Assigns a {@link StateActor} to the empire.
      *
      * @param actor The StateActor to assign
      */
+    @Deprecated
     public void addActor(@NotNull StateActor actor);
 
     /**
@@ -67,6 +78,8 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public boolean decreaseTechnologyLevel(boolean notify, boolean force);
 
     /**
+     * @deprecated The direct use of Galimulator Actor API is bound for removal
+     *
      * Obtains the {@link Vector} of the {@link StateActor StateActors} that are
      * currently assigned to the empire. The list is backing the internal actor
      * list, which is why it should NOT be modified. Use
@@ -75,6 +88,7 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * @return A {@link Vector} of the {@link StateActor StateActors} that are
      *         assigned to the empire.
      */
+    @Deprecated
     public @NotNull Vector<StateActor> getActors();
 
     /**
@@ -133,6 +147,17 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public @NotNull Religion getReligion();
 
     /**
+     * Obtains the {@link Vector} of the {@link ActorSpec Actors} that are
+     * currently assigned to the empire. The list is backing the internal actor
+     * list, which is why it should NOT be modified directly. Use
+     * {@link #addActor(ActorSpec)} or {@link #removeActor(ActorSpec)} instead.
+     *
+     * @return A {@link Vector} of the {@link ActorSpec Actors} that are
+     *         assigned to the empire.
+     */
+    public @NotNull Vector<ActorSpec> getSLActors();
+
+    /**
      * Obtains the registry key of the current state of the empire. To obtain the
      * actual empire state object, it has to be passed into it's respective registry
      * first.
@@ -181,10 +206,20 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public boolean increaseTechnologyLevel(boolean notify, boolean force);
 
     /**
+     * Unassign a {@link ActorSpec} from the empire.
+     *
+     * @param actor The ActorSpec to unassign
+     */
+    public void removeActor(@NotNull ActorSpec actor);
+
+    /**
+     * @deprecated The direct use of Galimulator Actor API is not recommended and bound for removal.
+     *
      * Unassign a {@link StateActor} from the empire.
      *
      * @param actor The StateActor to unassign
      */
+    @Deprecated(since = "1.3", forRemoval = true)
     public void removeActor(@NotNull StateActor actor);
 
     /**
