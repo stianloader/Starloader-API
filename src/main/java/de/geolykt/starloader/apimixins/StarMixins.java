@@ -276,4 +276,14 @@ public class StarMixins implements Star {
             callback.tick(this);
         }
     }
+
+    @Override
+    public float getX() {
+        return getCoordinates().x;
+    }
+
+    @Override
+    public float getY() {
+        return getCoordinates().y;
+    }
 }

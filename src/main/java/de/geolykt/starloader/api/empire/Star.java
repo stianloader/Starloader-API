@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
+import de.geolykt.starloader.api.Locateable;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.event.TickCallback;
 
@@ -19,7 +20,7 @@ import snoddasmannen.galimulator.Religion;
  * extensions and are solely to be implemented by the starloader API
  * implementation.
  */
-public interface Star extends Identifiable, Metadatable {
+public interface Star extends Identifiable, Metadatable, Locateable {
 
     /**
      * Adds a star to the neighbour lists. Please note that you likely do not want

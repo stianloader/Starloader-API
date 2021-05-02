@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.ActorSpec;
-import de.geolykt.starloader.api.actor.Spacecraft;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 
 import snoddasmannen.galimulator.Empire;
