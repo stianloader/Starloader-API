@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.Spacecraft;
+import de.geolykt.starloader.api.empire.Star;
 
 /**
  * Base missile specification.
@@ -28,4 +29,18 @@ public interface MissileSpec extends Spacecraft {
     public default boolean isSandboxBuildable() {
         return false;
     }
+
+    /**
+     * Called whenever the Missile hits an actor, at which point it dissolves.
+     *
+     * @param actor The actor that got hit by the missile.
+     */
+    public void onHitActor(ActorSpec actor);
+
+    /**
+     * Called whenever the Missile hits a star, at which point it dissolves.
+     *
+     * @param star The star that got hit by the missile.
+     */
+    public void onHitStar(Star star);
 }

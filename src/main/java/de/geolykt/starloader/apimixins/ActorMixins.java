@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.impl.Pseudo;
 
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.Item;
@@ -91,6 +92,8 @@ public class ActorMixins implements ActorSpec {
     }
 
     @Override
+    @Pseudo
+    // FIXME Mixin does not allow for @Shadow, I guess that this is likely a bug and should be reported to the library!
     public float getX() {
         return ((Item) (Object) this).getX();
     }
@@ -112,6 +115,7 @@ public class ActorMixins implements ActorSpec {
     }
 
     @Override
+    @Pseudo
     public float getY() {
         return ((Item) (Object) this).getY();
     }

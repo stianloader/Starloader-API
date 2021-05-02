@@ -3,7 +3,9 @@
  * can still be used without having to rely on the galimulator jar.
  * Note that unlike other API interfaces like {@link de.geolykt.starloader.api.empire.ActiveEmpire} or
  * {@link de.geolykt.starloader.api.empire.Star}.
- * they are not fully guaranteed to be extended by either galimulator or starloader and extension
- * may choose to extend themselves. (at their own cost).
+ * They are not fully guaranteed to be extended by either galimulator or starloader and extension
+ * may choose to extend themselves (at their own cost).
+ * If Extensions choose to do so, they should consider the use of the
+ * {@link de.geolykt.starloader.api.actor.wrapped.ActorWrapper} class.
  */
 package de.geolykt.starloader.api.actor;
