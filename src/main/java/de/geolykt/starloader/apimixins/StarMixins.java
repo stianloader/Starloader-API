@@ -279,11 +279,11 @@ public class StarMixins implements Star {
 
     @Override
     public float getX() {
-        return getCoordinates().x;
+        return (float) x;
     }
 
     @Override
     public float getY() {
-        return getCoordinates().y;
+        return (float) y;
     }
 }
