@@ -3,8 +3,10 @@ package de.geolykt.starloader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.impl.DrawingManager;
+import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.mod.Extension;
 
 /**
@@ -18,6 +20,10 @@ public class StarloaderAPIExtension extends Extension {
     @Override
     public void preInitialize() {
         lggr = this.getLogger();
+    }
+
+    static {
         Drawing.setImplementation(new DrawingManager());
+        Galimulator.setImplementation(new GalimulatorImplementation());
     }
 }
