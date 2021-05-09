@@ -16,7 +16,7 @@ import de.geolykt.starloader.api.empire.Star;
  * methods/variables. This should be used to reduce the amount of calls to
  * obfuscated methods, which will improve the sanity of anyone that is working
  * on updating an extension.
- *
+ * <br/>
  * It also contains miscellaneous methods that do not really fall under a category.
  */
 public final class Galimulator {
@@ -25,7 +25,7 @@ public final class Galimulator {
      * Interface that contains the methods used by Starloader's {@link Galimulator} class.
      * This is needed in order to abstract out certain concepts and give the possibility
      * of implementing the Starloader API on non-galimulator games or with nonstandard mappings.
-     *
+     * <br/>
      * This class should not be implemented by anything but the API Implementation.
      */
     public static interface GameImplementation {
@@ -65,7 +65,7 @@ public final class Galimulator {
          * means that any modifications done to the collections will happen in game.
          * This behaviour is intended as it can be useful in many situations as well as
          * being more performance friendly
-         *
+         * <br/>
          * Right now a Vector is required by the Galimulator class due to poor foresight.
          * This will be resolved in the 2.0.0 release
          *
@@ -83,6 +83,13 @@ public final class Galimulator {
          * @return The in-game year.
          */
         public int getGameYear();
+
+        /**
+         * Obtains the currently active map.
+         *
+         * @return The currently active map
+         */
+        public @NotNull Map getMap();
 
         /**
          * Convenience method to obtain the neutral empire. The neutral empire should
@@ -108,7 +115,7 @@ public final class Galimulator {
          * modifications done to the collections will happen in game. This behaviour is
          * intended as it can be useful in many situations as well as being more
          * performance friendly.
-         *
+         * <br/>
          * Right now a Vector is required by the Galimulator class due to poor foresight.
          * This will be resolved in the 2.0.0 release
          *
@@ -301,5 +308,14 @@ public final class Galimulator {
      * Constructor that should not be called.
      */
     private Galimulator() {
+    }
+
+    /**
+     * Obtains the currently active map.
+     *
+     * @return The currently active map
+     */
+    public static @NotNull Map getMap() {
+        return impl.getMap();
     }
 }

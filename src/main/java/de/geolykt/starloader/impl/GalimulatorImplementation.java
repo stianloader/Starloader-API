@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.Galimulator.GameImplementation;
+import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 
@@ -38,6 +39,11 @@ public class GalimulatorImplementation implements GameImplementation {
     @Override
     public int getGameYear() {
         return Space.F();
+    }
+
+    @Override
+    public @NotNull Map getMap() {
+        return (Map) Space.q();
     }
 
     @Override

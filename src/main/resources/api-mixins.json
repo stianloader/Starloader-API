@@ -21,6 +21,7 @@
     "GunstationMixins",
     "HealshipMixins",
     "InstanceMixins",
+    "MapDataMixins",
     "MissileMixins",
     "RaiderMixins",
     "StarMixins",
