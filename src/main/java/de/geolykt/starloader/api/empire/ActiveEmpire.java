@@ -100,6 +100,20 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public @Nullable Alliance getAlliance();
 
     /**
+     * Obtains the X coordinate of the capital star assigned to this empire.
+     *
+     * @return The X coordinate of the capital
+     */
+    public float getCapitalX();
+
+    /**
+     * Obtains the Y coordinate of the capital star assigned to this empire.
+     *
+     * @return The Y coordinate of the capital
+     */
+    public float getCapitalY();
+
+    /**
      * Obtains the name of the empire with color. The format of the colored string
      * is [123456]text[]
      *
@@ -219,7 +233,7 @@ public interface ActiveEmpire extends Empire, Metadatable {
      *
      * @param actor The StateActor to unassign
      */
-    @Deprecated(since = "1.3", forRemoval = true)
+    @Deprecated(since = "1.2", forRemoval = true)
     public void removeActor(@NotNull StateActor actor);
 
     /**

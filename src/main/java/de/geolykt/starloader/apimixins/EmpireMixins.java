@@ -305,6 +305,16 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public float getCapitalX() {
+        return ((snoddasmannen.galimulator.Empire) (Object) this).getCoordinates().x;
+    }
+
+    @Override
+    public float getCapitalY() {
+        return ((snoddasmannen.galimulator.Empire) (Object) this).getCoordinates().y;
+    }
+
+    @Override
     public int getCollapseYear() {
         return deathYear;
     }
