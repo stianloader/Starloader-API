@@ -115,7 +115,8 @@ public interface ActiveEmpire extends Empire, Metadatable {
 
     /**
      * Obtains the name of the empire with color. The format of the colored string
-     * is [123456]text[]
+     * is [123456]text[] where as 123456 is a 48 bit integer encoded in hexadecimal.
+     * This integer represents the rgb values of the color.
      *
      * @return A formatted string the is the colored name of the empire
      */

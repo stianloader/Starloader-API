@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.gui.Keybind;
 
 /**
  * Class to redirect to instance-wide constants or other static
@@ -130,6 +131,15 @@ public final class Galimulator {
          * alongside this method in some cases.
          */
         public void recalculateVoronoiGraphs();
+
+        /**
+         * Registers the given keybind to the list of active keybinds.
+         * The keybind keycode and character will only be requested once and cannot
+         * be changed dynamically.
+         *
+         * @param bind The keybind to register.
+         */
+        public void registerKeybind(@NotNull Keybind bind);
     }
 
     private static GameImplementation impl;
@@ -209,6 +219,15 @@ public final class Galimulator {
             throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
         }
         return impl;
+    }
+
+    /**
+     * Obtains the currently active map.
+     *
+     * @return The currently active map
+     */
+    public static @NotNull Map getMap() {
+        return impl.getMap();
     }
 
     /**
@@ -311,11 +330,13 @@ public final class Galimulator {
     }
 
     /**
-     * Obtains the currently active map.
+     * Registers the given keybind to the list of active keybinds.
+     * The keybind keycode and character will only be requested once and cannot
+     * be changed dynamically.
      *
-     * @return The currently active map
+     * @param bind The keybind to register.
      */
-    public static @NotNull Map getMap() {
-        return impl.getMap();
+    public void registerKeybind(@NotNull Keybind bind) {
+        impl.registerKeybind(bind);
     }
 }

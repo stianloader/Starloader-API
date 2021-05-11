@@ -7,13 +7,14 @@ accessWidener   v2     intermediary
 # ---------------------------------------------------------
 
 # Methods
-accessible      method  snoddasmannen/galimulator/GalFX                     c       (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
-accessible      method  snoddasmannen/galimulator/actors/Actor              getAge  ()I
+accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+accessible      method  snoddasmannen/galimulator/actors/Actor              getAge     ()I
 
 # Fields
-accessible      field   snoddasmannen/galimulator/ui/bh                     d       J
-accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound   Lcom/badlogic/gdx/audio/Sound;
-accessible      field   snoddasmannen/galimulator/Space                     i       Ljava/util/Vector;
+accessible      field   com/example/Main                                    shortcuts  Ljava/util/List;
+accessible      field   snoddasmannen/galimulator/ui/bh                     d          J
+accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound      Lcom/badlogic/gdx/audio/Sound;
+accessible      field   snoddasmannen/galimulator/Space                     i          Ljava/util/Vector;
 
 # ---------------------------------------------------------
 # Compiler tricks (Compile time only)

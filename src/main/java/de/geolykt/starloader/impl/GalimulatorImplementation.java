@@ -1,14 +1,18 @@
 package de.geolykt.starloader.impl;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.example.Main;
 
 import de.geolykt.starloader.api.Galimulator.GameImplementation;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.gui.Keybind;
 
 import snoddasmannen.galimulator.Space;
 
@@ -70,5 +74,15 @@ public class GalimulatorImplementation implements GameImplementation {
     @Override
     public void recalculateVoronoiGraphs() {
         Space.ao();
+    }
+
+    @Override
+    public void registerKeybind(@NotNull Keybind bind) {
+        Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
+        if (bind.getCharacter() == '\0') {
+            Main.shortcuts.add(new SLKeybind(bind, bind.getCharacter()));
+        } else {
+            Main.shortcuts.add(new SLKeybind(bind, bind.getKeycodeDescription(), bind.getKeycode()));
+        }
     }
 }
