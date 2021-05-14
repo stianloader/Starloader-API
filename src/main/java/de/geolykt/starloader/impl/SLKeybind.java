@@ -21,7 +21,7 @@ public class SLKeybind extends dw {
     }
 
     public SLKeybind(@NotNull Keybind keybind, @NotNull String keyexp, int keycode) {
-        super(keybind.getDescription(), Objects.requireNonNull(keyexp), keycode);
+        super(keybind.getDescription(), Objects.requireNonNull(keyexp, "The key explaination is missing!"), keycode);
         if (keycode < 1) {
             throw new IllegalStateException("Parameter \"keycode\" does not have the expected value. (Wrong contructor called)");
         }

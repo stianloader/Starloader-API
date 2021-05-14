@@ -3,6 +3,12 @@ package de.geolykt.starloader.api.gui;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Abstract wrapper interface for Keybinds.
+ * Unlike many other interfaces within the API,
+ * this interface can be freely extended by any extension
+ * without too many issues.
+ */
 public interface Keybind {
 
     /**
@@ -10,6 +16,10 @@ public interface Keybind {
      * In case this is not applicable, '\0' should be used.
      * The game will only accept a keycode or character, though
      * it will prefer the character option over the keycode one.
+     * The implementation is very picky on which character it uses,
+     * so if this method returns 'A', then the keybind is only valid
+     * if the shift key is active, this might be unintended behaviour
+     * for some, so if your keybind does not work, double check this.
      *
      * @return The character that can trigger the keybind
      */

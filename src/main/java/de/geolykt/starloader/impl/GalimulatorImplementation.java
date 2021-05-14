@@ -60,7 +60,7 @@ public class GalimulatorImplementation implements GameImplementation {
         snoddasmannen.galimulator.Player plyr = Space.p();
         if (plyr == null) {
             // It likely can never be null, however before the map is generated,
-            // this might return null.
+            // this might return null, so we are going to make sure just in case.
             return null;
         }
         return (ActiveEmpire) plyr.a();
@@ -79,7 +79,7 @@ public class GalimulatorImplementation implements GameImplementation {
     @Override
     public void registerKeybind(@NotNull Keybind bind) {
         Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
-        if (bind.getCharacter() == '\0') {
+        if (bind.getCharacter() != '\0') {
             Main.shortcuts.add(new SLKeybind(bind, bind.getCharacter()));
         } else {
             Main.shortcuts.add(new SLKeybind(bind, bind.getKeycodeDescription(), bind.getKeycode()));
