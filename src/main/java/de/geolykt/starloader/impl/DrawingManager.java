@@ -102,4 +102,9 @@ public class DrawingManager implements DrawingImpl {
             @NotNull String hint) {
         return new StarloaderTextInputBuilder(title, text, hint);
     }
+
+    @Override
+    public void toast(@NotNull String text) {
+        Space.k(text);
+    }
 }

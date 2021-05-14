@@ -109,20 +109,20 @@ public final class Drawing {
      * Sends a bulletin to the player which is visible in the bottom left in most
      * cases.
      *
-     * @param message The message to send
+     * @param text The formatted text to send as a bulletin
      */
-    public static void sendBulletin(@NotNull String message) {
-        implementation.sendBulletin(message);
+    public static void sendBulletin(@NotNull FormattedText text) {
+        implementation.sendBulletin(text);
     }
 
     /**
      * Sends a bulletin to the player which is visible in the bottom left in most
      * cases.
      *
-     * @param text The formatted text to send as a bulletin
+     * @param message The message to send
      */
-    public static void sendBulletin(@NotNull FormattedText text) {
-        implementation.sendBulletin(text);
+    public static void sendBulletin(@NotNull String message) {
+        implementation.sendBulletin(message);
     }
 
     /**
@@ -153,5 +153,15 @@ public final class Drawing {
     public static @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,
             @NotNull String hint) {
         return implementation.textInputBuilder(title, text, hint);
+    }
+
+    /**
+     * Displays a toast message to the user. In vanilla galimulator this is the orange box
+     * in the top left corner.
+     *
+     * @param text The text to display.
+     */
+    public static void toast(@NotNull String text) {
+        implementation.toast(text);
     }
 }

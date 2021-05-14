@@ -126,4 +126,12 @@ public interface DrawingImpl {
      */
     public @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,
             @NotNull String hint);
+
+    /**
+     * Displays a toast message to the user. In vanilla galimulator this is the orange box
+     * in the top left corner.
+     *
+     * @param text The text to display.
+     */
+    public void toast(@NotNull String text);
 }

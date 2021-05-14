@@ -314,6 +314,17 @@ public final class Galimulator {
     }
 
     /**
+     * Registers the given keybind to the list of active keybinds.
+     * The keybind keycode and character will only be requested once and cannot
+     * be changed dynamically.
+     *
+     * @param bind The keybind to register.
+     */
+    public static void registerKeybind(@NotNull Keybind bind) {
+        impl.registerKeybind(bind);
+    }
+
+    /**
      * Sets the {@link GameImplementation} directly.
      * It is unlikely that anyone would need to use this method except the API implementation itself.
      *
@@ -327,16 +338,5 @@ public final class Galimulator {
      * Constructor that should not be called.
      */
     private Galimulator() {
-    }
-
-    /**
-     * Registers the given keybind to the list of active keybinds.
-     * The keybind keycode and character will only be requested once and cannot
-     * be changed dynamically.
-     *
-     * @param bind The keybind to register.
-     */
-    public void registerKeybind(@NotNull Keybind bind) {
-        impl.registerKeybind(bind);
     }
 }
