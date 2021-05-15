@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api.empire;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +24,15 @@ public interface Alliance extends Dateable {
      * @return The abbreviation the alliance currently has
      */
     public @NotNull String getAbbreviation();
+
+    /**
+     * Obtains the Color of the Alliance used for UI as a color component used by Java AWT.
+     * This method can be preferable over {@link #getColor()} as latter is only present within Galimulator proper
+     * while this component is provided by the JVM
+     *
+     * @return The {@link Color} of the alliance
+     */
+    public @NotNull Color getAWTColor();
 
     /**
      * Obtains the Color of the Alliance used for UI.

@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.empire;
 
+import java.awt.Color;
+
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Galimulator;
@@ -22,6 +24,17 @@ public interface Empire extends Dateable, Identifiable {
     public default int getAge() {
         return (hasCollapsed() ? getCollapseYear() : Galimulator.getGameYear()) - getFoundationYear();
     }
+
+    /**
+     * The galimulator color is used for multiple interfaces as well as to paint the
+     * territory of an empire to a constant color, the color as such should not
+     * change without reason to not confuse the user.
+     * This method can be preferable over {@link #getColor()} as latter is only present within Galimulator proper
+     * while this component is provided by the JVM
+     *
+     * @return The AWT {@link Color} assigned to the empire
+     */
+    public @NotNull Color getAWTColor();
 
     /**
      * The year the empire collapsed, or -1 if the empire did not collapse.

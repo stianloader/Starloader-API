@@ -18,6 +18,7 @@
     "EmpireSpecialMixins",
     "EmpireStateMixins",
     "FighterMixins",
+    "GalColorMixins",
     "GunstationMixins",
     "HealshipMixins",
     "InstanceMixins",

@@ -1,7 +1,9 @@
 package de.geolykt.starloader.apimixins;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,6 +15,7 @@ import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.alliance.AllianceJoinEvent;
 import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
+import de.geolykt.starloader.impl.AWTColorAccesor;
 
 import snoddasmannen.galimulator.GalColor;
 
@@ -65,6 +68,11 @@ public class AllianceMixins implements Alliance {
     @Override
     public String getAbbreviation() {
         return name;
+    }
+
+    @Override
+    public @NotNull Color getAWTColor() {
+        return ((AWTColorAccesor) getColor()).asAWTColor();
     }
 
     @Override

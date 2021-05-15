@@ -1,5 +1,6 @@
 package de.geolykt.starloader.apimixins;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
+import de.geolykt.starloader.impl.AWTColorAccesor;
 
 import snoddasmannen.galimulator.EmpireAchievement$EmpireAchievementType;
 import snoddasmannen.galimulator.EmpireSpecial;
@@ -302,6 +304,11 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public Alliance getAlliance() {
         return (Alliance) h;
+    }
+
+    @Override
+    public @NotNull Color getAWTColor() {
+        return ((AWTColorAccesor) getColor()).asAWTColor();
     }
 
     @Override

@@ -1,11 +1,14 @@
 package de.geolykt.starloader.apimixins;
 
+import java.awt.Color;
+
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.empire.Empire;
+import de.geolykt.starloader.impl.AWTColorAccesor;
 
 import snoddasmannen.galimulator.GalColor;
 
@@ -13,13 +16,16 @@ import snoddasmannen.galimulator.GalColor;
 public class EmpireAnnalsMixins implements Empire {
 
     @Shadow
-    public int empireId;
-
-    @Shadow
     public int birthYear;
 
     @Shadow
+    public GalColor color;
+
+    @Shadow
     public int deathYear;
+
+    @Shadow
+    public int empireId;
 
     @Shadow
     public String name;
@@ -27,17 +33,9 @@ public class EmpireAnnalsMixins implements Empire {
     @Shadow
     public String nameIdentifier;
 
-    @Shadow
-    public GalColor color;
-
     @Override
-    public int getFoundationYear() {
-        return birthYear;
-    }
-
-    @Override
-    public int getUID() {
-        return empireId;
+    public @NotNull Color getAWTColor() {
+        return ((AWTColorAccesor) getColor()).asAWTColor();
     }
 
     @Override
@@ -56,11 +54,21 @@ public class EmpireAnnalsMixins implements Empire {
     }
 
     @Override
+    public int getFoundationYear() {
+        return birthYear;
+    }
+
+    @Override
     public int getStarCount() {
         if (deathYear != -1) {
             return 0;
         }
         return Galimulator.getEmpirePerUID(getUID()).getStarCount();
+    }
+
+    @Override
+    public int getUID() {
+        return empireId;
     }
 
     @Override

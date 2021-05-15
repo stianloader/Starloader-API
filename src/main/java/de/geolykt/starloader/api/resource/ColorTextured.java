@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
  * used with actors and their empire colouring.
  * The {@link #getTextureName()} and {@link #setTextureName(String)} implementations should yield the
  * color dependent textures.
+ * <br/>
+ *  My assumption of the function of the nocol textures
+ * is that they are supplementary textures that are independent of color and are rendered alongside
+ * the color-dependent textures.
  */
 public interface ColorTextured extends Textured {
 
