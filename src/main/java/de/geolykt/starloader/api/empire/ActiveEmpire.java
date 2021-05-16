@@ -95,12 +95,13 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * Obtains the wrapper representation of the Alliance the empire currently is
      * in.
      *
-     * @return The Alliance the empire currently is in, or null
+     * @return The Alliance the empire currently is in, or null if not applicable
      */
     public @Nullable Alliance getAlliance();
 
     /**
      * Obtains the X coordinate of the capital star assigned to this empire.
+     * This almost always points to a star that is owned by this empire
      *
      * @return The X coordinate of the capital
      */
@@ -108,6 +109,7 @@ public interface ActiveEmpire extends Empire, Metadatable {
 
     /**
      * Obtains the Y coordinate of the capital star assigned to this empire.
+     * This almost always points to a star that is owned by this empire
      *
      * @return The Y coordinate of the capital
      */

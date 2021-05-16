@@ -20,13 +20,21 @@ that may arise (for example overwriting static methods) via our Event API.
 ## Building
 
 The project can be built via gradle. This can be easily done via `./gradlew build`
-on most systems, however the [Starloader](https://github.com/Geolykt/Starloader) project must be
-built and published to mavenLocal as well as the galimulator jar needs to be present
-at the project root under `galimulator-desktop.jar`. To use the API within your
-project you need to publish the jar via
+on most systems. To use the API within your project you need to publish the jar via
 
     ./gradlew publishToMavenLocal
 
+or you can use the maven package `de.geolykt:starloader-api:CURRENT_VERSION_HERE`
+at `https://geolykt.de/maven`
+
+## Which version for what?
+
+- 3cffffb5bd0f208712deadd98e0efeb2fa38251e (N/A)  -> Galimulator 4.7
+- 08ef68c9883a076279bee8aa9e7e09937312852c (v1.2) -> Galimulator 4.8 + 4.8-beta.2
+
+## Existing Extensions making use of this API (that I know of)
+
+- [Datadriven-specials](https://github.com/Geolykt/Datadriven-specials)
 
 ## Licensing and decompiled code
 
@@ -115,7 +123,7 @@ The listener can then be registered via
 
     EventManager.registerListener(new StarloaderDemoListener(logger));
 
-however it should be noted that you cannot register the same listener multiple
+however it should be noted that you cannot register the same listener instance multiple
 times, although this should rearely be an issue for you. It should also be noted
 that the event API is very fragile at the moment and you should avoid
 registering or unregistering listeners an incredible amount of times as that
