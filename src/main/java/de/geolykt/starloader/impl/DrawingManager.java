@@ -20,8 +20,8 @@ import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.GalFX$FONT_TYPE;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.dg;
-import snoddasmannen.galimulator.ft;
+import snoddasmannen.galimulator.du;
+import snoddasmannen.galimulator.gh;
 
 public class DrawingManager implements DrawingImpl {
 
@@ -89,12 +89,12 @@ public class DrawingManager implements DrawingImpl {
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new ft(message));
+        Space.a(new gh(message));
     }
 
     @Override
     public void sendOddityBulletin(@NotNull String message) {
-        Space.a(new dg(message));
+        Space.a(new du(message));
     }
 
     @Override

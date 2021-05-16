@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.Keybind;
 
-import snoddasmannen.galimulator.dw;
+import snoddasmannen.galimulator.ek;
 
-public class SLKeybind extends dw {
+public class SLKeybind extends ek {
 
     private final Keybind bind;
 

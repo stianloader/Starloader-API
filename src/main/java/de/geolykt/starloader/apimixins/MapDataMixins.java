@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.Texture;
 import de.geolykt.starloader.api.Map;
 
 import snoddasmannen.galimulator.MapData;
-import snoddasmannen.galimulator.fp;
+import snoddasmannen.galimulator.gd;
 
 @Mixin(MapData.class)
 public class MapDataMixins implements Map {
@@ -29,7 +29,7 @@ public class MapDataMixins implements Map {
     private String backgroundImage;
 
     @Shadow
-    private fp generator;
+    private gd generator;
 
     @Override
     public @Nullable BufferedImage getAWTBackground() {
@@ -48,6 +48,7 @@ public class MapDataMixins implements Map {
             }
         }
         // Very overdone and cursed :/
+        // And does not even appear to work
         Texture t = getGDXBackground();
         if (t == null) {
             return null;

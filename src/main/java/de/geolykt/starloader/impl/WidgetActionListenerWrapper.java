@@ -15,7 +15,7 @@ import de.geolykt.starloader.api.gui.WidgetActionListener;
 
 import snoddasmannen.galimulator.ui.Widget$WIDGET_MESSAGE;
 
-public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hg {
+public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw {
 
     private final List<BasicDialogCloseListener> closeListeners;
     private final List<WidgetActionListener> actionListeners;

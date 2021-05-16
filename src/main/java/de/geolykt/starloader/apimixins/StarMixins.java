@@ -53,7 +53,7 @@ public class StarMixins implements Star {
     private Religion minorityFaith; // minorityFaith
 
     @Shadow
-    private transient Vector2 q; // coordinates
+    private transient Vector2 r; // coordinates
 
     private final transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
@@ -201,7 +201,7 @@ public class StarMixins implements Star {
     public void moveRelative(float x, float y) {
         this.x += x;
         this.y += y;
-        this.q = null; // recalculate the vector
+        this.r = null; // recalculate the vector
     }
 
     @Override
@@ -251,8 +251,8 @@ public class StarMixins implements Star {
 
     @Override
     public void syncCoordinates() {
-        x = q.x;
-        y = q.y;
+        x = r.x;
+        y = r.y;
     }
 
     @Inject(method = "b(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
@@ -270,7 +270,7 @@ public class StarMixins implements Star {
      *
      * @param info Callback info required for injection, not used inside the method.
      */
-    @Inject(method = "e", at = @At("HEAD"))
+    @Inject(method = "i()V", at = @At("HEAD"))
     public void tick(CallbackInfo info) {
         for (TickCallback<Star> callback : tickCallbacks) {
             callback.tick(this);

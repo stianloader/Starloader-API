@@ -42,12 +42,12 @@ public class GalimulatorImplementation implements GameImplementation {
 
     @Override
     public int getGameYear() {
-        return Space.F();
+        return Space.E();
     }
 
     @Override
     public @NotNull Map getMap() {
-        return (Map) Space.q();
+        return (Map) Space.p();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class GalimulatorImplementation implements GameImplementation {
 
     @Override
     public @Nullable ActiveEmpire getPlayerEmpire() {
-        snoddasmannen.galimulator.Player plyr = Space.p();
+        snoddasmannen.galimulator.Player plyr = Space.o();
         if (plyr == null) {
             // It likely can never be null, however before the map is generated,
             // this might return null, so we are going to make sure just in case.

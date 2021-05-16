@@ -49,7 +49,7 @@ import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Settings$EnumSettings;
-import snoddasmannen.galimulator.fr;
+import snoddasmannen.galimulator.gf;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
@@ -197,7 +197,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    private void aX() { // Reset bonuses
+    private void aY() { // Reset bonuses
         /*
          * this.specialsAttackBonus = null; this.specialsDefenseBonus = null;
          * this.specialsTechBonus = null; this.specialsIndustryBonus = null;
@@ -217,7 +217,7 @@ public class EmpireMixins implements ActiveEmpire {
             return;
         }
         this.specials.remove(empireSpecial);
-        this.aX();
+        this.aY();
         this.e();
     }
 
@@ -252,7 +252,7 @@ public class EmpireMixins implements ActiveEmpire {
             }
             this.specials.add(empireSpecial);
         }
-        this.aX();
+        this.aY();
         this.e();
     }
 
@@ -274,7 +274,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (this.techLevel == (int) Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", fr.a().a("transcending")).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", gf.a().a("transcending")).buildAndShow();
                 }
             }
         }
@@ -435,7 +435,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (this.techLevel == (int) Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", fr.a().a("transcending")).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", gf.a().a("transcending")).buildAndShow();
                 }
             }
         }
@@ -575,7 +575,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
     }
 
-    @Inject(method = "J", at = @At(value = "HEAD"), cancellable = false)
+    @Inject(method = "J()V", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
         if (this == Galimulator.getNeutralEmpire()) {
             // Two layers of redundancy should be enough

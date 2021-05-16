@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.DialogCloseCause;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
-import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 
-import snoddasmannen.galimulator.ui.bk;
+import snoddasmannen.galimulator.ui.bl;
 
-public class DialogCloseListenerWrapper implements bk {
+public class DialogCloseListenerWrapper implements bl {
 
     private final ArrayList<BasicDialogCloseListener> listeners;
     private boolean playSFX = true;

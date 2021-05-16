@@ -263,11 +263,11 @@ public final class Galimulator {
      * getting which release this is, other than looking a the hashcode or last
      * modification date of the executable.
      *
-     * @return -1
+     * @return 2
      */
     @Deprecated(forRemoval = true, since = "1.1.0")
     public static int getReleaseCode() {
-        return -1;
+        return 2;
     }
 
     /**
@@ -280,10 +280,10 @@ public final class Galimulator {
      * is supported or not given that the data directory is very important
      * to the runtime of the game.
      *
-     * @return "4.8"
+     * @return "4.9"
      */
     public static String getSourceVersion() {
-        return "4.8";
+        return "4.9";
     }
 
     /**

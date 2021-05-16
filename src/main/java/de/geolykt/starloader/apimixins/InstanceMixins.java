@@ -15,8 +15,8 @@ import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 
 import snoddasmannen.galimulator.EmpireAnnals;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.ce;
-import snoddasmannen.galimulator.ez;
+import snoddasmannen.galimulator.cj;
+import snoddasmannen.galimulator.fn;
 
 /**
  * Mixin to intercept any calls to the static methods within the Galimulator
@@ -27,7 +27,7 @@ import snoddasmannen.galimulator.ez;
 public class InstanceMixins {
 
     @Overwrite // one cannot inject into static methods, which is why we have to overwrite
-    public static void g(snoddasmannen.galimulator.Empire var0) {
+    public static void f(snoddasmannen.galimulator.Empire var0) {
         EmpireCollapseEvent e = new EmpireCollapseEvent((ActiveEmpire) var0,
                 var0.K() == 0 ? EmpireCollapseCause.NO_STARS : EmpireCollapseCause.UNKNOWN);
         if (e.getCause() == EmpireCollapseCause.UNKNOWN) {
@@ -37,16 +37,16 @@ public class InstanceMixins {
         if (e.isCancelled()) {
             return;
         }
-        // Galimulator start - imported from Space#g(Empire) of galimulator version 4.8,
-        // beta release of the 1st march.
+        // Galimulator start - imported from Space#f(Empire) of galimulator version 4.9,
+        // 2nd beta release of the 16th may.
         // This is proprietary code belonging to snoddasmannen
         for (Object var2_1 : Space.u) {
-            ((ez) var2_1).a(var0);
+            ((fn) var2_1).a(var0);
         }
 
         Space.b.remove(var0);
         if (var0.ah() > 2000) {
-            Space.a(new ce(var0, var0.ai()));
+            Space.a(new cj(var0, var0.ai()));
         }
 
         Object var4 = null;
@@ -59,9 +59,9 @@ public class InstanceMixins {
         }
 
         if (var4 != null) {
-            int var6 = Space.F() - ((EmpireAnnals) var4).g();
+            int var6 = Space.E() - ((EmpireAnnals) var4).g();
             if (var6 > 10000) {
-                Space.a(new ce((EmpireAnnals) var4, ".. And thus ends our bloodline after " + var6 / 1000 + Space.q().getTimeNoun()));
+                Space.a(new cj((EmpireAnnals) var4, ".. And thus ends our bloodline after " + var6 / 1000 + Space.p().getTimeNoun()));
             }
         }
         // Galimulator end
@@ -72,6 +72,7 @@ public class InstanceMixins {
         // this method is called to show the progress of things happening to the user
         // however we can exploit this behaviour to create events without having to overwrite large static methods
         // one day we will have a custom ASM injector for that, but that is something for later.
+        // Though I am confused on why the hell this method exists, it only performs a single, very easy to do operation
         Event evt = null;
         switch (j) {
         case "Generating galaxy":

@@ -17,7 +17,7 @@ import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.GalFX$FONT_TYPE;
-import snoddasmannen.galimulator.ui.fj;
+import snoddasmannen.galimulator.ui.fm;
 
 /**
  * Mixins into the empire special class, which makes it more registry-like.
@@ -34,14 +34,14 @@ public class EmpireSpecialMixins implements RegistryKeyed {
     @Overwrite
     private static void k() {
         // I do not even know if this is called, but better be safe than sorry
-        HashMap<EmpireSpecial, fj> maps = new HashMap<>();
+        HashMap<EmpireSpecial, fm> maps = new HashMap<>();
         EmpireSpecial[] var0 = Registry.EMPIRE_SPECIALS.getValues();
         int var1 = var0.length;
 
         for (int var2 = 0; var2 < var1; ++var2) {
             EmpireSpecial var3 = var0[var2];
             maps.put(var3,
-                    new fj("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX$FONT_TYPE.a, GalColor.WHITE, var3.j(), 0));
+                    new fm("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX$FONT_TYPE.a, GalColor.WHITE, var3.j(), 0));
         }
         EmpireSpecial.q = maps;
     }

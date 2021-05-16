@@ -10,14 +10,14 @@ import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
 
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.ui.bh;
+import snoddasmannen.galimulator.ui.bi;
 
 /**
  * A simple wrapper around the dialog, a graphical component of Galimulator.
  */
 public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
 
-    protected final bh dialog;
+    protected final bi dialog;
 
     /**
      * Creates and displays a dialog.

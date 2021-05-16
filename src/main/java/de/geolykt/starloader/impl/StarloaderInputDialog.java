@@ -1,18 +1,15 @@
 package de.geolykt.starloader.impl;
 
-import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.InputDialog;
 
-import snoddasmannen.galimulator.ui.nt;
 import snoddasmannen.galimulator.ui.Widget$WIDGET_MESSAGE;
+import snoddasmannen.galimulator.ui.on;
 
-public class StarloaderInputDialog extends nt implements InputDialog {
-
-    private static final Field MESSAGE;
+public class StarloaderInputDialog extends on implements InputDialog {
 
     protected final TextInputWrapper wrapper;
 
@@ -34,24 +31,7 @@ public class StarloaderInputDialog extends nt implements InputDialog {
 
     @Override
     public void confirm() {
-        boolean b = !MESSAGE.canAccess(null) && MESSAGE.trySetAccessible();
-        try {
-            wrapper.input(MESSAGE.get(null).toString());
-            if (b) {
-                MESSAGE.setAccessible(false);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Fatal error while performing reflections", e);
-        }
+        wrapper.input(c);
         b(Widget$WIDGET_MESSAGE.a);
-    }
-
-    static {
-        try {
-            MESSAGE = nt.class.getDeclaredField("c");
-        } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Fatal error while performing reflections", e);
-        }
     }
 }
