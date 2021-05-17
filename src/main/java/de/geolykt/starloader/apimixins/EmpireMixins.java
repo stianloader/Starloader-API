@@ -97,7 +97,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     public int lastStateChange;
 
-    private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
+    private transient HashMap<NamespacedKey, Object> metadata;
 
     @Shadow
     private String motto; // motto
@@ -121,7 +121,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private int techLevel; // technologyLevel
 
-    private final transient List<TickCallback<ActiveEmpire>> tickCallbacks = new ArrayList<>();
+    private transient List<TickCallback<ActiveEmpire>> tickCallbacks;
 
     @Shadow
     public void a(EmpireAchievement$EmpireAchievementType a) { // addAchievement
@@ -183,6 +183,9 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public void addTickCallback(TickCallback<ActiveEmpire> callback) {
+        if (tickCallbacks == null) {
+            tickCallbacks = new ArrayList<>();
+        }
         tickCallbacks.add(callback);
     }
 
@@ -354,6 +357,9 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         return metadata.get(key);
     }
 
@@ -405,6 +411,9 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public boolean hasKey(@NotNull NamespacedKey key) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         return metadata.containsKey(key);
     }
 
@@ -489,6 +498,9 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         if (value == null) {
             metadata.remove(key);
         } else {
@@ -587,6 +599,9 @@ public class EmpireMixins implements ActiveEmpire {
                 DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
                         + "This usually indicates a broken neutral empire");
             }
+        }
+        if (tickCallbacks == null) {
+            tickCallbacks = new ArrayList<>();
         }
         for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
             callback.tick(this);

@@ -47,7 +47,7 @@ public class StarMixins implements Star {
     @Shadow
     public Vector intLanes; // neighbourIds
 
-    private final transient HashMap<NamespacedKey, Object> metadata = new HashMap<>();
+    private transient HashMap<NamespacedKey, Object> metadata;
 
     @Shadow
     private Religion minorityFaith; // minorityFaith
@@ -55,7 +55,7 @@ public class StarMixins implements Star {
     @Shadow
     private transient Vector2 r; // coordinates
 
-    private final transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
+    private transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
     @Shadow
     float wealth; // wealth
@@ -91,6 +91,9 @@ public class StarMixins implements Star {
 
     @Override
     public void addTickCallback(TickCallback<Star> callback) {
+        if (tickCallbacks == null) {
+            tickCallbacks = new ArrayList<>();
+        }
         tickCallbacks.add(callback);
     }
 
@@ -145,6 +148,9 @@ public class StarMixins implements Star {
 
     @Override
     public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         return metadata.get(key);
     }
 
@@ -189,6 +195,9 @@ public class StarMixins implements Star {
 
     @Override
     public boolean hasKey(@NotNull NamespacedKey key) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         return metadata.containsKey(key);
     }
 
@@ -228,6 +237,9 @@ public class StarMixins implements Star {
 
     @Override
     public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         if (value == null) {
             metadata.remove(key);
         } else {
@@ -272,6 +284,9 @@ public class StarMixins implements Star {
      */
     @Inject(method = "i()V", at = @At("HEAD"))
     public void tick(CallbackInfo info) {
+        if (tickCallbacks == null) {
+            tickCallbacks = new ArrayList<>();
+        }
         for (TickCallback<Star> callback : tickCallbacks) {
             callback.tick(this);
         }
