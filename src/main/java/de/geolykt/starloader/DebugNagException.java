@@ -20,7 +20,7 @@ public class DebugNagException extends RuntimeException {
 
     public static void nag() {
         try {
-            throw new DebugNagException();
+            throw new DebugNagException("Nag! Whyever this got issued, it is not too much of an importance, however you may decide to report the occourence of this nag.");
         } catch (DebugNagException e) {
             e.printStackTrace();
         }

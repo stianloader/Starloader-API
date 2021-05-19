@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.GameConfiguration;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
@@ -48,12 +49,10 @@ import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
-import snoddasmannen.galimulator.Settings$EnumSettings;
 import snoddasmannen.galimulator.gf;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
-@SuppressWarnings("unused")
 @Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
 
@@ -123,6 +122,9 @@ public class EmpireMixins implements ActiveEmpire {
 
     private transient List<TickCallback<ActiveEmpire>> tickCallbacks;
 
+    /**
+     * @param a  dummy doc
+     */
     @Shadow
     public void a(EmpireAchievement$EmpireAchievementType a) { // addAchievement
         return;
@@ -138,6 +140,9 @@ public class EmpireMixins implements ActiveEmpire {
         religion = var0;
     }
 
+    /**
+     * @param var0  dummy doc
+     */
     @Shadow
     public void a(StateActor var0) { // addActor
     }
@@ -224,6 +229,9 @@ public class EmpireMixins implements ActiveEmpire {
         this.e();
     }
 
+    /**
+     * @param var0  dummy doc
+     */
     @Shadow
     public void b(StateActor var0) { // removeActor
     }
@@ -236,10 +244,7 @@ public class EmpireMixins implements ActiveEmpire {
      */
     private void broadcastNews(String news) {
         if (this.Y()) {
-            GalColor c = getColor();
-            news = String.format("[%02X%02X%02X]%s[]: %s", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255,
-                    getEmpireName(), news);
-            Drawing.sendBulletin(Drawing.getTextFactory().asDefaultFormattedText(news));
+            Drawing.sendBulletin(Drawing.getTextFactory().asFormattedText(news, getColor()));
         }
     }
 
@@ -273,8 +278,10 @@ public class EmpireMixins implements ActiveEmpire {
             }
         }
 
-        this.lastResearchedYear = Galimulator.getGameYear();
-        if (this.techLevel == (int) Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
+        techLevel--;
+        lastResearchedYear = Galimulator.getGameYear();
+        GameConfiguration config = Galimulator.getConfiguration();
+        if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", gf.a().a("transcending")).buildAndShow();
@@ -440,8 +447,10 @@ public class EmpireMixins implements ActiveEmpire {
             }
         }
 
-        this.lastResearchedYear = Galimulator.getGameYear();
-        if (this.techLevel == (int) Settings$EnumSettings.o.b() && Settings$EnumSettings.c.b() == Boolean.TRUE) {
+        techLevel++;
+        lastResearchedYear = Galimulator.getGameYear();
+        GameConfiguration config = Galimulator.getConfiguration();
+        if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", gf.a().a("transcending")).buildAndShow();
@@ -587,6 +596,11 @@ public class EmpireMixins implements ActiveEmpire {
         }
     }
 
+    /**
+     * Mixin callback. Cannot be called directly at runtime
+     *
+     * @param info Unused, but required by mixins
+     */
     @Inject(method = "J()V", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
         if (this == Galimulator.getNeutralEmpire()) {

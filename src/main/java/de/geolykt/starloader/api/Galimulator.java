@@ -142,6 +142,7 @@ public final class Galimulator {
         public void registerKeybind(@NotNull Keybind bind);
     }
 
+    private static GameConfiguration config;
     private static GameImplementation impl;
 
     /**
@@ -163,6 +164,18 @@ public final class Galimulator {
      */
     public static void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
         impl.disconnectStars(starA, starB);
+    }
+
+    /**
+     * Obtains the currently active {@link GameConfiguration} directly.
+     *
+     * @return The implementation of the configuration that is used right now
+     */
+    public static @NotNull GameConfiguration getConfiguration() {
+        if (config == null) {
+            throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
+        }
+        return config;
     }
 
     /**
@@ -322,6 +335,16 @@ public final class Galimulator {
      */
     public static void registerKeybind(@NotNull Keybind bind) {
         impl.registerKeybind(bind);
+    }
+
+    /**
+     * Sets the {@link GameConfiguration} directly.
+     * It is unlikely that anyone would need to use this method except the API implementation itself.
+     *
+     * @param config The implementation that should be used in the future
+     */
+    public static void setConfiguration(@NotNull GameConfiguration config) {
+        config = Objects.requireNonNull(config);
     }
 
     /**

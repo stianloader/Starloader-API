@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.impl.DrawingManager;
+import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.mod.Extension;
 
@@ -25,5 +26,6 @@ public class StarloaderAPIExtension extends Extension {
     static {
         Drawing.setImplementation(new DrawingManager());
         Galimulator.setImplementation(new GalimulatorImplementation());
+        Galimulator.setConfiguration(new GalimulatorConfiguration());
     }
 }

@@ -17,7 +17,9 @@ The checkstyle configuration of the Starloader project
   <property name="fileExtensions" value="java"/>
   <property name="tabWidth" value="4"/>
   <module name="TreeWalker">
-    <module name="AvoidStarImport"/>
+    <module name="AvoidStarImport">
+      <property name="allowStaticMemberImports" value="true"/>
+    </module>
     <module name="IllegalImport"/>
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>

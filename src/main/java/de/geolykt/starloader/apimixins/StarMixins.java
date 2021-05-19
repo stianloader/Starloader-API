@@ -194,6 +194,16 @@ public class StarMixins implements Star {
     }
 
     @Override
+    public float getX() {
+        return (float) x;
+    }
+
+    @Override
+    public float getY() {
+        return (float) y;
+    }
+
+    @Override
     public boolean hasKey(@NotNull NamespacedKey key) {
         if (metadata == null) {
             metadata = new HashMap<>();
@@ -290,15 +300,5 @@ public class StarMixins implements Star {
         for (TickCallback<Star> callback : tickCallbacks) {
             callback.tick(this);
         }
-    }
-
-    @Override
-    public float getX() {
-        return (float) x;
-    }
-
-    @Override
-    public float getY() {
-        return (float) y;
     }
 }
