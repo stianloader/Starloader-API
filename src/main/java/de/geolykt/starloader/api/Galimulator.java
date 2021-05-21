@@ -125,6 +125,12 @@ public final class Galimulator {
         public @NotNull List<@NotNull Star> getStars();
 
         /**
+         * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
+         * It will also not cause the loading screen to show up.
+         */
+        public void pauseGame();
+
+        /**
          * Convenience method to calculate the voronoi graphs (the fancy section-outline
          * around the stars) for all stars. This is helpful if a star got moved, however
          * a call to this method does not recalculate starlanes, which is also needed
@@ -140,6 +146,11 @@ public final class Galimulator {
          * @param bind The keybind to register.
          */
         public void registerKeybind(@NotNull Keybind bind);
+
+        /**
+         * Resumes the game. This method basically reverts {@link #pauseGame()}
+         */
+        public void resumeGame();
     }
 
     private static GameConfiguration config;
@@ -317,6 +328,16 @@ public final class Galimulator {
     }
 
     /**
+     * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
+     * It will also not cause the loading screen to show up.
+     *
+     * @see #resumeGame()
+     */
+    public static void pauseGame() {
+        impl.pauseGame();
+    }
+
+    /**
      * Convenience method to calculate the voronoi graphs (the fancy section-outline
      * around the stars) for all stars. This is helpful if a star got moved, however
      * a call to this method does not recalculate starlanes, which is also needed
@@ -338,13 +359,20 @@ public final class Galimulator {
     }
 
     /**
+     * Resumes the game. This method basically reverts {@link #pauseGame()}
+     */
+    public static void resumeGame() {
+        impl.resumeGame();
+    }
+
+    /**
      * Sets the {@link GameConfiguration} directly.
      * It is unlikely that anyone would need to use this method except the API implementation itself.
      *
      * @param config The implementation that should be used in the future
      */
     public static void setConfiguration(@NotNull GameConfiguration config) {
-        config = Objects.requireNonNull(config);
+        Galimulator.config = Objects.requireNonNull(config);
     }
 
     /**
@@ -358,8 +386,7 @@ public final class Galimulator {
     }
 
     /**
-     * Constructor that should not be called.
+     * Constructor that should not be called because there is no need to have an instance of this class.
      */
-    private Galimulator() {
-    }
+    private Galimulator() { }
 }

@@ -24,8 +24,8 @@ public class StarloaderAPIExtension extends Extension {
     }
 
     static {
-        Drawing.setImplementation(new DrawingManager());
         Galimulator.setImplementation(new GalimulatorImplementation());
         Galimulator.setConfiguration(new GalimulatorConfiguration());
+        Drawing.setImplementation(new DrawingManager());
     }
 }

@@ -244,7 +244,7 @@ public class EmpireMixins implements ActiveEmpire {
      */
     private void broadcastNews(String news) {
         if (this.Y()) {
-            Drawing.sendBulletin(Drawing.getTextFactory().asFormattedText(news, getColor()));
+            Drawing.sendBulletin(Drawing.getTextFactory().asFormattedText(getEmpireName() + " " + news, getColor()));
         }
     }
 

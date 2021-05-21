@@ -85,4 +85,14 @@ public class GalimulatorImplementation implements GameImplementation {
             Main.shortcuts.add(new SLKeybind(bind, bind.getKeycodeDescription(), bind.getKeycode()));
         }
     }
+
+    @Override
+    public void pauseGame() {
+        Space.c(true);
+    }
+
+    @Override
+    public void resumeGame() {
+        Space.c(false);
+    }
 }

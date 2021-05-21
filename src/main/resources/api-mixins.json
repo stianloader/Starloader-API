@@ -17,6 +17,7 @@
     "EmpireMixins",
     "EmpireSpecialMixins",
     "EmpireStateMixins",
+    "EmploymentAgencyMixins",
     "FighterMixins",
     "GalColorMixins",
     "GunstationMixins",
@@ -24,6 +25,7 @@
     "InstanceMixins",
     "MapDataMixins",
     "MissileMixins",
+    "PersonMixins",
     "RaiderMixins",
     "StarMixins",
     "StateActorMixins"
