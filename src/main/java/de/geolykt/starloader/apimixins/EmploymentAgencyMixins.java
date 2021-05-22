@@ -40,12 +40,12 @@ public class EmploymentAgencyMixins {
      * The description of the dialog that is created when the player's emperor died and the player is able to choose
      * a successor.
      */
-    private static @NotNull String emperorDeadSuccessorDesc = "Your dearest leader has passed on, oh no! It is time to select a new one from the list of top claimants to the throne.";
+    private static transient @NotNull String emperorDeadSuccessorDesc = "Your dearest leader has passed on, oh no! It is time to select a new one from the list of top claimants to the throne.";
 
     /**
      * The description of the dialog button that is created when the player's emperor died and the player is able to choose a successor.
      */
-    private static @NotNull String emperorDeadSuccessorKey = "OK, no problems, I'll find a good replacement";
+    private static transient @NotNull String emperorDeadSuccessorKey = "OK, no problems, I'll find a good replacement";
 
     @Shadow
     transient ExecutorService b;

@@ -41,7 +41,24 @@ public interface DrawingImpl {
      * @param color   The color of the message
      * @return The width of the text that was just drawn
      */
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color);
+    public default float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
+        return this.drawText(message, x, y, color, Drawing.TextSize.SMALL);
+    }
+
+    /**
+     * Draws text at the given location. The specified color should be used.
+     * Additionally the font shall be inferred by the given font size,
+     * however no further guarantees are made.
+     * The text may not persist across frames.
+     *
+     * @param message The message to write
+     * @param x       The X-location of the text
+     * @param y       The Y-location of the text
+     * @param color   The color of the message
+     * @param size    The font size.
+     * @return The width of the text that was just drawn
+     */
+    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size);
 
     /**
      * Draws text at the given location. The specified color should be used.

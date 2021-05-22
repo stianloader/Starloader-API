@@ -37,6 +37,8 @@ import de.geolykt.starloader.api.event.empire.TechnologyLevelIncreaseEvent;
 import de.geolykt.starloader.api.event.empire.TechnologyLevelSetEvent;
 import de.geolykt.starloader.api.gui.BasicDialogBuilder;
 import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.Drawing.TextSize;
+import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
@@ -244,7 +246,10 @@ public class EmpireMixins implements ActiveEmpire {
      */
     private void broadcastNews(String news) {
         if (this.Y()) {
-            Drawing.sendBulletin(Drawing.getTextFactory().asFormattedText(getEmpireName() + " " + news, getColor()));
+            TextFactory factory = Drawing.getTextFactory();
+            var name = factory.componentBuilder(getEmpireName()).setColor(getColor()).setSize(TextSize.MEDIUM).build();
+            var newsComp = factory.componentBuilder(": " + news).setSize(TextSize.MEDIUM).build();
+            Drawing.sendBulletin(factory.aggregateComponents(name, newsComp));
         }
     }
 

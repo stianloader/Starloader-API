@@ -4,6 +4,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.gui.Drawing;
+
 import snoddasmannen.galimulator.GalColor;
 
 public class JitterTextComponent extends ColoredTextComponent {
@@ -11,7 +13,11 @@ public class JitterTextComponent extends ColoredTextComponent {
     protected final float intensity;
 
     public JitterTextComponent(@NotNull String text, @NotNull GalColor color, double intensity) {
-        super(text, color);
+        this(text, color, intensity, Drawing.TextSize.SMALL);
+    }
+
+    public JitterTextComponent(@NotNull String text, @NotNull GalColor color, double intensity, Drawing.TextSize size) {
+        super(text, color, size);
         this.intensity = (float) intensity;
     }
 

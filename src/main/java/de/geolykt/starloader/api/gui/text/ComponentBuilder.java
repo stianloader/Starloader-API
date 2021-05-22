@@ -2,6 +2,9 @@ package de.geolykt.starloader.api.gui.text;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.Drawing.TextSize;
+
 import snoddasmannen.galimulator.GalColor;
 
 public interface ComponentBuilder {
@@ -29,12 +32,11 @@ public interface ComponentBuilder {
     }
 
     /**
-     * Sets the text of the component.
+     * Builds the component.
      *
-     * @param text The text of the component
-     * @return The builder reference
+     * @return The built component
      */
-    public @NotNull ComponentBuilder setText(@NotNull String text);
+    public @NotNull FormattedTextComponent build();
 
     /**
      * Sets the color of the component.
@@ -55,9 +57,19 @@ public interface ComponentBuilder {
     }
 
     /**
-     * Builds the component.
+     * Sets the size of this component.
+     * {@link TextSize#SMALL} is default, but it can be altered if you need something else.
      *
-     * @return The built component
+     * @param size The new {@link TextSize} to use.
+     * @return The current builder instance
      */
-    public @NotNull FormattedTextComponent build();
+    public @NotNull ComponentBuilder setSize(@NotNull Drawing.TextSize size);
+
+    /**
+     * Sets the text of the component.
+     *
+     * @param text The text of the component
+     * @return The builder reference
+     */
+    public @NotNull ComponentBuilder setText(@NotNull String text);
 }

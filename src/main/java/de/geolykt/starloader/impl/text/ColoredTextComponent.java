@@ -10,15 +10,21 @@ import snoddasmannen.galimulator.GalColor;
 public class ColoredTextComponent implements TextComponent {
 
     protected final GalColor color;
+    protected final Drawing.TextSize size;
     protected final String text;
 
     public ColoredTextComponent(@NotNull String s) {
-        this(s, GalColor.WHITE);
+        this(s, GalColor.WHITE, Drawing.TextSize.SMALL);
     }
 
     public ColoredTextComponent(@NotNull String s, @NotNull GalColor color) {
+        this(s, color, Drawing.TextSize.SMALL);
+    }
+
+    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color, Drawing.TextSize size) {
         this.text = s;
         this.color = color;
+        this.size = size;
     }
 
     @Override
@@ -28,6 +34,6 @@ public class ColoredTextComponent implements TextComponent {
 
     @Override
     public float renderText(float x, float y) {
-        return Drawing.drawText(text, x, y, color);
+        return Drawing.drawText(text, x, y, color, size);
     }
 }

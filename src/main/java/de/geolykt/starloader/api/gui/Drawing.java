@@ -19,6 +19,29 @@ import snoddasmannen.galimulator.GalColor;
  */
 public final class Drawing {
 
+    /**
+     * An enum that represents the Font sizes that can be used for operations.
+     */
+    public static enum TextSize {
+
+        /**
+         * The larger font variant.
+         */
+        LARGE,
+
+        /**
+         * The medium size for text components.
+         * This is for example used in Bulletins.
+         */
+        MEDIUM,
+
+        /**
+         * The smaller variant of the text components.
+         * This is default for drawing operations unless it was explicitly changed.
+         */
+        SMALL;
+    }
+
     private static DrawingImpl implementation;
 
     /**
@@ -49,6 +72,23 @@ public final class Drawing {
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
         return implementation.drawText(message, x, y, color);
+    }
+
+    /**
+     * Draws text at the given location. The specified color should be used.
+     * Additionally the font shall be inferred by the given font size,
+     * however no further guarantees are made.
+     * The text may not persist across frames.
+     *
+     * @param message The message to write
+     * @param x       The X-location of the text
+     * @param y       The Y-location of the text
+     * @param color   The color of the message
+     * @param size    The font size.
+     * @return The width of the text that was just drawn
+     */
+    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.TextSize size) {
+        return implementation.drawText(message, x, y, color, size);
     }
 
     /**

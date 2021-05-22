@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
@@ -41,6 +42,20 @@ public class DrawingManager implements DrawingImpl {
     @Override
     public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
         return GalFX.a(x, y, message, color);
+    }
+
+    @Override
+    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color,
+            @NotNull Drawing.TextSize size) {
+        switch (size) {
+        case LARGE:
+            return GalFX.a(x, y, message, color, GalFX$FONT_TYPE.b);
+        case MEDIUM:
+            return GalFX.a(x, y, message, color, GalFX$FONT_TYPE.c);
+        case SMALL:
+        default:
+            return GalFX.a(x, y, message, color, GalFX$FONT_TYPE.a);
+        }
     }
 
     @Override
