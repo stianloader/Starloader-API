@@ -24,6 +24,7 @@ import de.geolykt.starloader.api.event.people.PlayerEmperorDeathEvent;
 import de.geolykt.starloader.api.gui.BasicDialogBuilder;
 import de.geolykt.starloader.impl.EmperorOption;
 
+import snoddasmannen.galimulator.Claim;
 import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.Job;
 import snoddasmannen.galimulator.Job$JobType;
@@ -68,7 +69,7 @@ public class EmploymentAgencyMixins {
         if (job.f() == Job$JobType.a) {
             if (Galimulator.getPlayerEmpire() == job.g().getJobEmpire()) {
                 // Player empire
-                potentialCandidates.removeIf(person -> person.a(job) <= 0);
+                potentialCandidates.removeIf(person -> person.a(job) <= 0 || Claim.b(person, job) == null);
                 if (!potentialCandidates.isEmpty()) {
                     List<DynastyMember> candidates = new ArrayList<>(potentialCandidates.size());
                     for (Person o : potentialCandidates) {
@@ -96,7 +97,9 @@ public class EmploymentAgencyMixins {
                                 options.add(new EmperorOption((EmploymentAgency) (Object) this, person, job, firstEntry));
                                 firstEntry = false;
                             }
-                            Space.a(options, FlowLayout$FlowDirection.a, null);
+                            if (!firstEntry) {
+                                Space.a(options, FlowLayout$FlowDirection.a, null);
+                            }
                         }
                     });
                     dialogBuilder.buildAndShow();
