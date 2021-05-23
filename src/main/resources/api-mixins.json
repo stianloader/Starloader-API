@@ -27,6 +27,7 @@
     "MissileMixins",
     "PersonMixins",
     "RaiderMixins",
+    "SettingsscreenMixins",
     "StarMixins",
     "StateActorMixins"
   ]

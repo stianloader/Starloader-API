@@ -1,7 +1,8 @@
 package de.geolykt.starloader.api.gui.modconf;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +34,11 @@ public interface ConfigurationSection {
      * @param defaultValue  The default value set for the option
      * @param min           The minimum value acceptable for the option (inclusive)
      * @param max           The maximum value acceptable for the option (inclusive)
+     * @param recommended   The recommended values that are shown to the user.
      * @return The newly registered option
      */
-    public @NotNull FloatOption addFloatOption(@NotNull String name, float currentValue, float defaultValue, float min, float max);
+    public @NotNull FloatOption addFloatOption(@NotNull String name, float currentValue, float defaultValue,
+            float min, float max, @NotNull Collection<@NotNull Float> recommended);
 
     /**
      * Creates and registers an integer-value option with the given parameters.
@@ -47,9 +50,11 @@ public interface ConfigurationSection {
      * @param defaultValue  The default value set for the option
      * @param min           The minimum value acceptable for the option (inclusive)
      * @param max           The maximum value acceptable for the option (inclusive)
+     * @param recommended   The recommended values that are shown to the user.
      * @return The newly registered option
      */
-    public @NotNull IntegerOption addIntegerOption(@NotNull String name, int currentValue, int defaultValue, int min, int max);
+    public @NotNull IntegerOption addIntegerOption(@NotNull String name, int currentValue, int defaultValue,
+            int min, int max, @NotNull Collection<@NotNull Integer> recommended);
 
     /**
      * Creates and registers an option which holds a String with the given parameters.
@@ -59,14 +64,16 @@ public interface ConfigurationSection {
      * @param name          The user-friendly name returned by {@link ConfigurationOption#getName()}
      * @param currentValue  The currently active value set for the option
      * @param defaultValue  The default value set for the option
+     * @param recommended   The recommended values that are shown to the user.
      * @return The newly registered option
      */
-    public @NotNull StringOption addStringOption(@NotNull String name, @NotNull String currentValue, @NotNull String defaultValue);
+    public @NotNull StringOption addStringOption(@NotNull String name, @NotNull String currentValue,
+            @NotNull String defaultValue, @NotNull Collection<@NotNull String> recommended);
 
     /**
      * Creates and registers an option which holds a String with the given parameters.
-     * Other than {@link #addStringOption(String, String, String)} the return value does not accept arbitrary strings
-     * and must pass the given test.
+     * Other than {@link #addStringOption(String, String, String, Collection)} the return value does not
+     * accept arbitrary strings and must pass the given test.
      * The name of the configuration option may be duplicated with another config option,
      * independent of section and type, however this is not encouraged as this may confuse a few people.
      *
@@ -74,10 +81,11 @@ public interface ConfigurationSection {
      * @param currentValue  The currently active value set for the option
      * @param defaultValue  The default value set for the option
      * @param test          The test that the potential values must pass when the option value is changed.
+     * @param recommended   The recommended values that are shown to the user.
      * @return The newly registered option
      */
     public @NotNull StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
-            @NotNull String defaultValue, @NotNull Function<String, Boolean> test);
+            @NotNull String defaultValue, @NotNull Predicate<String> test, @NotNull Collection<@NotNull String> recommended);
 
     /**
      * Obtains the child options that are assigned to this section.

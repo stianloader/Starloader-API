@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.gui.modconf;
 
+import java.util.Collection;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,4 +27,11 @@ public interface NumberOption<T extends Number> extends ConfigurationOption<T> {
      * @return The minimum value
      */
     public @NotNull T getMinimum();
+
+    /**
+     * Obtains the recommended values that the user can set.
+     *
+     * @return The recommended values.
+     */
+    public @NotNull Collection<@NotNull T> getRecommendedValues();
 }

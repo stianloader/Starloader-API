@@ -22,12 +22,14 @@ public class StarloaderAPIExtension extends Extension {
     @Override
     public void preInitialize() {
         lggr = this.getLogger();
+        // We had to move this to preinit as some AWs are bork in SLL 2.0.0 and below, however
+        // some of these versions are still supported by the current SLAPI version
+        ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());
     }
 
     static {
         Galimulator.setImplementation(new GalimulatorImplementation());
         Galimulator.setConfiguration(new GalimulatorConfiguration());
         Drawing.setImplementation(new DrawingManager());
-        ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());
     }
 }

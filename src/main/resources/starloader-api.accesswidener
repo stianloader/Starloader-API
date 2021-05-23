@@ -8,8 +8,13 @@ accessWidener   v2     intermediary
 # ---------------------------------------------------------
 
 # Methods
-accessible    method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
-accessible    method  snoddasmannen/galimulator/be                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+accessible      method  snoddasmannen/galimulator/be                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+extendable      method  snoddasmannen/galimulator/ho                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
+accessible      method  snoddasmannen/galimulator/hj                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;ZLjava/lang/String;Lsnoddasmannen/galimulator/ht;)V
+accessible      method  snoddasmannen/galimulator/ht                        <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
+accessible      method  snoddasmannen/galimulator/hk                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/ht;)V
+accessible      method  snoddasmannen/galimulator/hl                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/ht;)V
 
 # Fields
 accessible      field   com/example/Main                                    shortcuts  Ljava/util/List;
@@ -21,3 +26,7 @@ accessible      field   snoddasmannen/galimulator/Space                     i   
 # Classes
 accessible      class   snoddasmannen/galimulator/be
 accessible      class   snoddasmannen/galimulator/bf
+accessible      class   snoddasmannen/galimulator/ho
+accessible      class   snoddasmannen/galimulator/hj
+accessible      class   snoddasmannen/galimulator/hk
+accessible      class   snoddasmannen/galimulator/hl

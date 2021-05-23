@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
+import de.geolykt.starloader.api.gui.modconf.ModConf;
+import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 import de.geolykt.starloader.impl.registry.Registries;
 
 import snoddasmannen.galimulator.cd;
@@ -47,6 +49,10 @@ public class ApplicationMixins {
             Throwable t = EventManager.handleEventExcept(new ApplicationStartedEvent());
             if (t != null) {
                 throw t;
+            }
+            ModConfSpec mconfSpec = ModConf.getImplementation();
+            if (mconfSpec instanceof de.geolykt.starloader.impl.ModConf) {
+                ((de.geolykt.starloader.impl.ModConf) mconfSpec).finishRegistration();
             }
         } catch (Throwable e) {
             e.printStackTrace();

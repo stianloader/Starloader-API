@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationSection;
@@ -16,6 +18,7 @@ import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
+import de.geolykt.starloader.impl.gui.ModConfScreen;
 import de.geolykt.starloader.impl.util.PseudoImmutableArrayList;
 
 /**
@@ -139,6 +142,7 @@ public class ModConf implements ModConfSpec {
 
         @Override
         public @NotNull BooleanOption addBooleanOption(@NotNull String name, boolean currentValue, boolean defaultValue) {
+            checkState();
             BooleanOption opt = new SLBooleanOption(name, this, currentValue, defaultValue);
             children.unsafeAdd(opt);
             return opt;
@@ -146,32 +150,37 @@ public class ModConf implements ModConfSpec {
 
         @Override
         public @NotNull FloatOption addFloatOption(@NotNull String name, float currentValue, float defaultValue,
-                float min, float max) {
-            FloatOption opt = new SLFLoatOption(name, this, currentValue, defaultValue, min, max);
+                float min, float max, @NotNull Collection<@NotNull Float> recommended) {
+            checkState();
+            FloatOption opt = new SLFLoatOption(name, this, currentValue, defaultValue, min, max, recommended);
             children.unsafeAdd(opt);
             return opt;
         }
 
         @Override
         public @NotNull IntegerOption addIntegerOption(@NotNull String name, int currentValue, int defaultValue,
-                int min, int max) {
-            IntegerOption opt = new SLIntOption(name, this, currentValue, defaultValue, min, max);
+                int min, int max, @NotNull Collection<@NotNull Integer> recommended) {
+            checkState();
+            IntegerOption opt = new SLIntOption(name, this, currentValue, defaultValue, min, max, recommended);
             children.unsafeAdd(opt);
             return opt;
         }
 
         @Override
         public @NotNull StringOption addStringOption(@NotNull String name, @NotNull String currentValue,
-                @NotNull String defaultValue) {
-            StringOption opt = new SLStringOption(name, this, currentValue, defaultValue);
+                @NotNull String defaultValue, @NotNull Collection<@NotNull String> recommended) {
+            checkState();
+            StringOption opt = new SLStringOption(name, this, currentValue, defaultValue, recommended);
             children.unsafeAdd(opt);
             return opt;
         }
 
         @Override
         public @NotNull StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
-                @NotNull String defaultValue, @NotNull Function<String, Boolean> test) {
-            StrictStringOption opt = new SLStrictStringOption(name, this, currentValue, defaultValue, test);
+                @NotNull String defaultValue, @NotNull Predicate<String> test,
+                @NotNull Collection<@NotNull String> recommended) {
+            checkState();
+            StrictStringOption opt = new SLStrictStringOption(name, this, currentValue, defaultValue, test, recommended);
             children.unsafeAdd(opt);
             return opt;
         }
@@ -206,18 +215,25 @@ public class ModConf implements ModConfSpec {
 
         protected float max;
         protected float min;
+
+        /**
+         * The recommended values shown to the user when the user decides to change the value.
+         */
+        protected Collection<@NotNull Float> recommended;
+
         /**
          * The currently valid value.
          */
         protected float value;
 
         protected SLFLoatOption(@NotNull String name, @NotNull ConfigurationSection cfgSect, float current,
-                float defaultVal, float min, float max) {
+                float defaultVal, float min, float max, @NotNull Collection<@NotNull Float> recommended) {
             super(name, cfgSect);
             this.value = current;
             this.defaultVal = defaultVal;
             this.min = min;
             this.max = max;
+            this.recommended = recommended;
         }
 
         /**
@@ -242,6 +258,11 @@ public class ModConf implements ModConfSpec {
         @Override
         public @NotNull Float getMinimum() {
             return min;
+        }
+
+        @Override
+        public @NotNull Collection<@NotNull Float> getRecommendedValues() {
+            return recommended;
         }
 
         /**
@@ -279,17 +300,23 @@ public class ModConf implements ModConfSpec {
         protected int max;
         protected int min;
         /**
+         * The recommended values shown to the user when the user decides to change the value.
+         */
+        protected Collection<@NotNull Integer> recommended;
+
+        /**
          * The currently valid value.
          */
         protected int value;
 
         protected SLIntOption(@NotNull String name, @NotNull ConfigurationSection cfgSect, int current, int defaultVal,
-                int min, int max) {
+                int min, int max, @NotNull Collection<@NotNull Integer> recommended) {
             super(name, cfgSect);
             this.value = current;
             this.defaultVal = defaultVal;
             this.min = min;
             this.max = max;
+            this.recommended = recommended;
         }
 
         /**
@@ -314,6 +341,11 @@ public class ModConf implements ModConfSpec {
         @Override
         public @NotNull Integer getMinimum() {
             return min;
+        }
+
+        @Override
+        public @NotNull Collection<@NotNull Integer> getRecommendedValues() {
+            return recommended;
         }
 
         /**
@@ -348,12 +380,12 @@ public class ModConf implements ModConfSpec {
         /**
          * The function that is used to compute {@link #isValid(String)}.
          */
-        protected final Function<String, Boolean> valitityTest;
+        protected final Predicate<@NotNull String> valitityTest;
 
         protected SLStrictStringOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
                 @NotNull String currentVal, @NotNull String defaultVal,
-                @NotNull Function<String, Boolean> valitityTest) {
-            super(name, cfgSect, currentVal, defaultVal);
+                @NotNull Predicate<@NotNull String> valitityTest, @NotNull Collection<@NotNull String> recommended) {
+            super(name, cfgSect, currentVal, defaultVal, recommended);
             this.valitityTest = valitityTest;
         }
 
@@ -362,7 +394,7 @@ public class ModConf implements ModConfSpec {
          */
         @Override
         public boolean isValid(String value) {
-            return valitityTest.apply(value);
+            return valitityTest.test(value);
         }
 
         /**
@@ -395,11 +427,17 @@ public class ModConf implements ModConfSpec {
          */
         protected final String defaultVal;
 
+        /**
+         * The recommended values shown to the user when the user decides to change the value.
+         */
+        protected Collection<@NotNull String> recommended;
+
         protected SLStringOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
-                @NotNull String currentVal, @NotNull String defaultVal) {
+                @NotNull String currentVal, @NotNull String defaultVal, @NotNull Collection<@NotNull String> recommended) {
             super(name, cfgSect);
             this.currentVal = currentVal;
             this.defaultVal = defaultVal;
+            this.recommended = recommended;
         }
 
         /**
@@ -418,6 +456,11 @@ public class ModConf implements ModConfSpec {
             return defaultVal;
         }
 
+        @Override
+        public @NotNull Collection<@NotNull String> getRecommendedValues() {
+            return recommended;
+        }
+
         /**
          * {@inheritDoc}
          */
@@ -426,6 +469,18 @@ public class ModConf implements ModConfSpec {
             currentVal = value;
         }
     }
+
+    /**
+     * Utility method that throws an exception if the application has already started.
+     * Does not do anything else outside of that.
+     */
+    protected static final void checkState() {
+        if (ApplicationStartedEvent.hasStarted()) {
+            throw new IllegalStateException("Application has already started! Adding Sections or individual options not allowed.");
+        }
+    }
+
+    protected final ModConfScreen screen = new ModConfScreen(this);
 
     /**
      * The name of the currently registered sections. Used for easy state
@@ -446,9 +501,22 @@ public class ModConf implements ModConfSpec {
         if (!sectionNames.add(name)) {
             throw new IllegalStateException("A section was already registered with the same name.");
         }
+        checkState();
         SLConfigSection sect = new SLConfigSection(name);
         sections.unsafeAdd(sect);
         return sect;
+    }
+
+    /**
+     * Called after the {@link ApplicationStartedEvent} to fully initialise the GUI components of the
+     * system.
+     */
+    public void finishRegistration() {
+        //
+    }
+
+    public ModConfScreen getScreen() {
+        return screen;
     }
 
     /**

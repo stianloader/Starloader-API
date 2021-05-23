@@ -48,6 +48,15 @@ public final class ModConf {
     }
 
     /**
+     * Obtains the implementation of the static methods within this class.
+     *
+     * @return The implementation that is currently in use
+     */
+    public static @NotNull ModConfSpec getImplementation() {
+        return ModConf.impl;
+    }
+
+    /**
      * Obtains the sections that are currently registered.
      * The return value should be immutable and add/remove operations should not be called
      * directly on to it.

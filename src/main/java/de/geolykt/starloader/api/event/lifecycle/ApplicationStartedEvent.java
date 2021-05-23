@@ -13,5 +13,27 @@ import de.geolykt.starloader.api.event.Event;
  * based on) should be present.
  */
 public class ApplicationStartedEvent extends Event {
-    // Dummy event, no data is provided (yet)
+
+    /**
+     * Whether the constructor has been called at least once already.
+     */
+    protected static boolean started = false;
+
+    /**
+     * Constructor. Only sets the started flag.
+     * This constructor should only be invoked by the API implementation and not by any extensions due to this.
+     */
+    public ApplicationStartedEvent() {
+        started = true;
+    }
+
+    /**
+     * Returns whether the application has started. More specifically it will check whether the constructor
+     * of this event has been invoked yet.
+     *
+     * @return The started flag
+     */
+    public static boolean hasStarted() {
+        return started;
+    }
 }
