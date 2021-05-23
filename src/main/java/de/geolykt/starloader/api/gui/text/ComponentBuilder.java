@@ -17,7 +17,9 @@ public interface ComponentBuilder {
      * @param intensity The intensity of the jitter
      * @return The builder reference
      */
-    public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity);
+    public default @NotNull ComponentBuilder addColoredJitter(@NotNull TextColor color, double intensity) {
+        return this.addJitter(color.galColor, intensity);
+    }
 
     /**
      * Add a jitter sub-component to the component This is for example used in the
@@ -27,6 +29,19 @@ public interface ComponentBuilder {
      * @param intensity The intensity of the jitter
      * @return The builder reference
      */
+    public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity);
+
+    /**
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
+     *
+     * Add a jitter sub-component to the component This is for example used in the
+     * Space oddity bulletin. The jitter there is 10.0D.
+     *
+     * @param color     The color of the jitter
+     * @param intensity The intensity of the jitter
+     * @return The builder reference
+     */
+    @Deprecated(forRemoval = true)
     public default @NotNull ComponentBuilder addJitter(@NotNull TextColor color, double intensity) {
         return this.addJitter(color.galColor, intensity);
     }
@@ -47,11 +62,14 @@ public interface ComponentBuilder {
     public @NotNull ComponentBuilder setColor(@NotNull GalColor color);
 
     /**
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
+     *
      * Sets the color of the component.
      *
      * @param color The color of the component
      * @return The builder reference
      */
+    @Deprecated(forRemoval = true)
     public default @NotNull ComponentBuilder setColor(@NotNull TextColor color) {
         return this.setColor(color.galColor);
     }
@@ -72,4 +90,14 @@ public interface ComponentBuilder {
      * @return The builder reference
      */
     public @NotNull ComponentBuilder setText(@NotNull String text);
+
+    /**
+     * Sets the {@link TextColor} of the component.
+     *
+     * @param color The color of the component
+     * @return The builder reference
+     */
+    public default @NotNull ComponentBuilder setTextColor(@NotNull TextColor color) {
+        return this.setColor(color.galColor);
+    }
 }

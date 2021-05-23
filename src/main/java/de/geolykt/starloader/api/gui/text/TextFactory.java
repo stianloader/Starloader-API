@@ -18,7 +18,7 @@ public interface TextFactory {
      * @param components The components to aggregate
      * @return The resulting {@link FormattedText}
      */
-    public @NotNull FormattedText aggregateComponents(FormattedTextComponent... components);
+    public @NotNull FormattedText aggregate(List<FormattedTextComponent> components);
 
     /**
      * Aggregates a bunch of {@link FormattedTextComponent} into a
@@ -27,19 +27,34 @@ public interface TextFactory {
      * @param components The components to aggregate
      * @return The resulting {@link FormattedText}
      */
-    public @NotNull FormattedText aggregate(List<FormattedTextComponent> components);
+    public @NotNull FormattedText aggregateComponents(FormattedTextComponent... components);
 
     /**
-     * Creates a {@link FormattedText} based on a String. The default color is used.
-     * It uses the small font size, where as {@link #asDefaultFormattedText(String)}
-     * uses the "default" monotype font. The reason for this interesting naming
-     * decision is that normal bulletins make use of the small monotype font, where
-     * as some of the empire-specific bulletins make use of the "default" one.
+     * Creates a {@link FormattedText} based on a String. The specified color is
+     * used.
+     * This method only exists to allow linking without the galimulator jar.
      *
-     * @param text The text to encode
+     * @param text  The text to encode
+     * @param color The color of the text
      * @return The text as a {@link FormattedText}
      */
-    public @NotNull FormattedText asFormattedText(@NotNull String text);
+    public default @NotNull FormattedText asColoredFormattedText(@NotNull String text, @NotNull TextColor color) {
+        return this.asFormattedText(text, color.galColor);
+    }
+
+    /**
+     * Creates a {@link FormattedTextComponent} based on a String. The specified
+     * color is used.
+     * This method only exists to allow linking without the galimulator jar.
+     *
+     * @param text  The text to encode
+     * @param color The color of the component
+     * @return The text as a {@link FormattedTextComponent}
+     */
+    public default @NotNull FormattedTextComponent asColoredFormattedTextComponent(@NotNull String text,
+            @NotNull TextColor color) {
+        return this.asFormattedTextComponent(text, color.galColor);
+    }
 
     /**
      * Creates a {@link FormattedText} based on a String. The default color is used.
@@ -54,6 +69,18 @@ public interface TextFactory {
     public @NotNull FormattedText asDefaultFormattedText(@NotNull String text);
 
     /**
+     * Creates a {@link FormattedText} based on a String. The default color is used.
+     * It uses the small font size, where as {@link #asDefaultFormattedText(String)}
+     * uses the "default" monotype font. The reason for this interesting naming
+     * decision is that normal bulletins make use of the small monotype font, where
+     * as some of the empire-specific bulletins make use of the "default" one.
+     *
+     * @param text The text to encode
+     * @return The text as a {@link FormattedText}
+     */
+    public @NotNull FormattedText asFormattedText(@NotNull String text);
+
+    /**
      * Creates a {@link FormattedText} based on a String. The specified color is
      * used.
      *
@@ -64,6 +91,8 @@ public interface TextFactory {
     public @NotNull FormattedText asFormattedText(@NotNull String text, @NotNull GalColor color);
 
     /**
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
+     *
      * Creates a {@link FormattedText} based on a String. The specified color is
      * used.
      *
@@ -71,6 +100,7 @@ public interface TextFactory {
      * @param color The color of the text
      * @return The text as a {@link FormattedText}
      */
+    @Deprecated(forRemoval = true)
     public default @NotNull FormattedText asFormattedText(@NotNull String text, @NotNull TextColor color) {
         return this.asFormattedText(text, color.galColor);
     }
@@ -95,6 +125,8 @@ public interface TextFactory {
     public @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text, @NotNull GalColor color);
 
     /**
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
+     *
      * Creates a {@link FormattedTextComponent} based on a String. The specified
      * color is used.
      *
@@ -102,6 +134,7 @@ public interface TextFactory {
      * @param color The color of the component
      * @return The text as a {@link FormattedTextComponent}
      */
+    @Deprecated(forRemoval = true)
     public default @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text,
             @NotNull TextColor color) {
         return this.asFormattedTextComponent(text, color.galColor);
