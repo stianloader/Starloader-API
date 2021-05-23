@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
+import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 import de.geolykt.starloader.impl.registry.Registries;
@@ -50,13 +51,21 @@ public class ApplicationMixins {
             if (t != null) {
                 throw t;
             }
-            ModConfSpec mconfSpec = ModConf.getImplementation();
-            if (mconfSpec instanceof de.geolykt.starloader.impl.ModConf) {
-                ((de.geolykt.starloader.impl.ModConf) mconfSpec).finishRegistration();
-            }
         } catch (Throwable e) {
             e.printStackTrace();
             a(e);
         }
+        ModConfSpec mconfSpec = ModConf.getImplementation();
+        if (mconfSpec instanceof de.geolykt.starloader.impl.ModConf) {
+            ((de.geolykt.starloader.impl.ModConf) mconfSpec).finishRegistration();
+        }
+    }
+
+    /**
+     * @param ci The callback info. Required for injection but ignored within the method.
+     */
+    @Inject(method = "dispose", at = @At("HEAD"))
+    public void stop(CallbackInfo ci) {
+        EventManager.handleEvent(new ApplicationStopEvent());
     }
 }
