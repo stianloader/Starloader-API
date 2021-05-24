@@ -35,7 +35,14 @@ public class ModConf implements ModConfSpec {
      */
     public abstract static class SLBaseOption<T> implements ConfigurationOption<T> {
 
+        /**
+         * The section that this option currently resides in.
+         */
         protected final ConfigurationSection cfgSect;
+
+        /**
+         * The name of the option. Should be user-friendly but not all too long.
+         */
         protected final String name;
 
         /**
@@ -140,6 +147,9 @@ public class ModConf implements ModConfSpec {
             this.name = name;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull BooleanOption addBooleanOption(@NotNull String name, boolean currentValue, boolean defaultValue) {
             checkState();
@@ -148,6 +158,9 @@ public class ModConf implements ModConfSpec {
             return opt;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull FloatOption addFloatOption(@NotNull String name, float currentValue, float defaultValue,
                 float min, float max, @NotNull Collection<@NotNull Float> recommended) {
@@ -157,6 +170,9 @@ public class ModConf implements ModConfSpec {
             return opt;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull IntegerOption addIntegerOption(@NotNull String name, int currentValue, int defaultValue,
                 int min, int max, @NotNull Collection<@NotNull Integer> recommended) {
@@ -166,6 +182,17 @@ public class ModConf implements ModConfSpec {
             return opt;
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void addOption(@NotNull ConfigurationOption<?> option) {
+            children.add(option);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull StringOption addStringOption(@NotNull String name, @NotNull String currentValue,
                 @NotNull String defaultValue, @NotNull Collection<@NotNull String> recommended) {
@@ -175,6 +202,9 @@ public class ModConf implements ModConfSpec {
             return opt;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public @NotNull StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
                 @NotNull String defaultValue, @NotNull Predicate<String> test,

@@ -35,6 +35,7 @@ at `https://geolykt.de/maven`
 ## Existing Extensions making use of this API (that I know of)
 
 - [Datadriven-specials](https://github.com/Geolykt/Datadriven-specials)
+- [Timelapser](https://github.com/Geolykt/Timelapser)
 
 ## Licensing and decompiled code
 

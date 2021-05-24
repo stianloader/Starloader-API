@@ -57,6 +57,14 @@ public interface ConfigurationSection {
             int min, int max, @NotNull Collection<@NotNull Integer> recommended);
 
     /**
+     * Registers a custom option to this section. This is useful if the developer has custom get/set logic
+     * or when the interface that is wanted is not implemented by the SLAPI (such as {@link IntegerChooseOption}.
+     *
+     * @param option The option to add
+     */
+    public void addOption(@NotNull ConfigurationOption<?> option);
+
+    /**
      * Creates and registers an option which holds a String with the given parameters.
      * The name of the configuration option may be duplicated with another config option,
      * independent of section and type, however this is not encouraged as this may confuse a few people.

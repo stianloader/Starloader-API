@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A configuration option that is backing a number, be it a floating-point number
  * or an integral number.
+ *<br/>
+ * This interface can be safely implemented by Extensions as the graphical components are relayed
+ * to other components.
  *
  * @param <T> The exact data type that is used by this configuration object
  */

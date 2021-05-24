@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A configuration option that is backing an integer and has a lower and upper
  * bound set.
+ *<br/>
+ * This interface can be safely implemented by Extensions as the graphical components are relayed
+ * to other components.
  */
 public interface IntegerOption extends NumberOption<Integer> {
 

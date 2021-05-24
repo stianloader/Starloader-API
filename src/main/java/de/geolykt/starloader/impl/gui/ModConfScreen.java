@@ -6,11 +6,14 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.geolykt.starloader.api.gui.Screen;
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationSection;
+import de.geolykt.starloader.api.gui.modconf.IntegerChooseOption;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 import de.geolykt.starloader.api.gui.modconf.NumberOption;
+import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
 
 import snoddasmannen.galimulator.GalColor;
@@ -19,11 +22,12 @@ import snoddasmannen.galimulator.hj;
 import snoddasmannen.galimulator.hk;
 import snoddasmannen.galimulator.hl;
 
-public class ModConfScreen implements ck {
+public class ModConfScreen implements ck, Screen {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(ModConfScreen.class);
 
     protected final ModConfSpec config;
+    protected boolean dirty = false;
 
     public ModConfScreen(ModConfSpec config) {
         this.config = config;
@@ -50,21 +54,26 @@ public class ModConfScreen implements ck {
                 } else if (option instanceof NumberOption<?>) {
 
                     @SuppressWarnings("unchecked")
-                    NumericSetting setting = new NumericSetting((NumberOption<Number>) option);
+                    NumericSetting setting = new NumericSetting(this, (NumberOption<Number>) option);
 
                     final Vector<Object> options = new Vector<>(((NumberOption<?>) option).getRecommendedValues());
-                    options.add("Custom");
+                    if (!(option instanceof IntegerChooseOption)) {
+                        options.add("Custom");
+                    }
                     alist.add(new hl(null, name, Integer.toString((int) setting.b()), options, cat, setting));
                 } else if (option instanceof StringOption) {
 
-                    StringSetting setting = new StringSetting((StringOption) option);
+                    StringSetting setting = new StringSetting(this, (StringOption) option);
 
                     final Vector<Object> options = new Vector<>(((StringOption) option).getRecommendedValues());
-                    options.add("Custom");
+                    if (!(option instanceof StringChooseOption)) {
+                        options.add("Custom");
+                    }
                     alist.add(new hk(null, name, (String) value, options, cat, setting));
                 }
             }
         }
+        dirty = false;
         return alist;
     }
 
@@ -85,6 +94,11 @@ public class ModConfScreen implements ck {
 
     @Override
     public boolean isValid() {
-        return true; // We can use this to force revalidation, this might be useful in the future to allow a dynamically changing screen.
+        return !dirty;
+    }
+
+    @Override
+    public void markDirty() {
+        dirty = true;
     }
 }

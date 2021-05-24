@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A configuration option that is backing a float and has a lower and upper
  * bound set.
+ *<br/>
+ * This interface can be safely implemented by Extensions as the graphical components are relayed
+ * to other components.
  */
 public interface FloatOption extends NumberOption<Float> {
 

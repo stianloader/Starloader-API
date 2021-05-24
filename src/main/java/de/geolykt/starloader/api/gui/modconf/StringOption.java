@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
  * A configuration option that is backing a String.
  * Compared to the {@link StrictStringOption} this allows for arbitrary strings
  * and are not verified for validity.
+ *<br/>
+ * This interface can be safely implemented by Extensions as the graphical components are relayed
+ * to other components.
  */
 public interface StringOption extends ConfigurationOption<String> {
 

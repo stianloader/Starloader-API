@@ -5,6 +5,9 @@ package de.geolykt.starloader.api.gui.modconf;
  * The value may not be arbitrary and must pass a test beforehand.
  * If an invalid String is inserted, then an {@link IllegalArgumentException} must
  * be thrown.
+ *<br/>
+ * This interface can be safely implemented by Extensions as the graphical components are relayed
+ * to other components.
  */
 public interface StrictStringOption extends StringOption {
 

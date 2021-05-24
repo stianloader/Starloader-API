@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Interface that represents a child entry of a {@link ConfigurationSection}.
+ *<br/>
+ * This interface can be safely implemented by Extensions as the graphical components are relayed
+ * to other components.
  *
  * @param <T> The data type that is used by this option
  */
