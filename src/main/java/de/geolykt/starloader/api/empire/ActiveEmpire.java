@@ -66,7 +66,7 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * beforehand and checks whether they have been cancelled or not. Depending on
      * the parameters the player can be notified about the event and the event may
      * be included in the bulletin ticker. This method does not allow to go lower
-     * that 1 for a good cause, as this produces other severe issues like divide by
+     * than 1 for a good cause, as this produces other severe issues like divide by
      * 0. Even if the events are suppressed a transcend event will be fired if the
      * threshold for that has been reached.
      *

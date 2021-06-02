@@ -31,7 +31,7 @@ public class ModConfScreen implements ck, Screen {
     }
 
     @Override
-    public void addChild(Object o) {
+    public void addChild(@NotNull ScreenComponent o) {
         throw new UnsupportedOperationException();
     }
 

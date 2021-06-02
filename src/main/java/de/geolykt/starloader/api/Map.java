@@ -24,8 +24,11 @@ public interface Map {
 
     /**
      * Obtains the filename that is used as the background.
-     * The actual file can be obtained by doing {@code new File("data/maps/", filename)}
+     * The actual file can be obtained by doing {@code new File("data/", filename)}
      * May be null if there is no background.
+     * Apparently the filename used to not prefix the now required "maps/" part,
+     * so for best compatibility both should be assumed to be right; however whether it is
+     * an ancient error or not remains to be seen.
      *
      * @return The filename of the background image
      */

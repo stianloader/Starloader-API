@@ -25,9 +25,9 @@ public interface Screen {
     /**
      * Adds a child component to this screen.
      *
-     * @param o
+     * @param child The child component to add
      */
-    public void addChild(Object o);
+    public void addChild(@NotNull ScreenComponent child);
 
     /**
      * Obtains the title of this screen.

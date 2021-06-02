@@ -37,7 +37,7 @@ public class MapDataMixins implements Map {
             if (awtImage != null) {
                 return awtImage;
             }
-            File f = new File("data/maps", backgroundImage);
+            File f = new File("data", backgroundImage);
             // TODO support SL 2.0 data directories
             if (f.exists()) {
                 try {
