@@ -1,6 +1,7 @@
 package de.geolykt.starloader.api.empire;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +37,18 @@ public interface ActiveEmpire extends Empire, Metadatable {
      *
      * @param actor The StateActor to assign
      */
-    @Deprecated
+    @Deprecated(since = "1.2", forRemoval = true)
     public void addActor(@NotNull StateActor actor);
+
+    /**
+     * Adds a ship capacity modifier to the empire.
+     * Due to current behaviour in the saving logic, it is not feasible to persistently store the modifiers,
+     * as such the modifiers get cleared whenever the map is reloaded. There are however efforts underway
+     * to create a new savegame protocol that has such issues cleared.
+     *
+     * @param modifier The modifier to add
+     */
+    public void addCapacityModifier(@NotNull ShipCapacityModifier modifier);
 
     /**
      * Adds a special to the empire. The implementation of the method should throw a
@@ -98,6 +109,22 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * @return The Alliance the empire currently is in, or null if not applicable
      */
     public @Nullable Alliance getAlliance();
+
+    /**
+     * Obtains the amount of ships this empire is allowed to build at maximum.
+     * The modded modifiers are <strong>not</strong> accounted for in this calculation.
+     *
+     * @return The amount of ships the empire is allowed to build, <strong>without</strong> modded modifiers
+     */
+    public double getBaseShipCapacity();
+
+    /**
+     * Obtains the currently present capacity modifiers.
+     * The returned list should be a shallow clone from the standard one, though the order should be kept.
+     *
+     * @return A list of currently present modifiers
+     */
+    public @NotNull List<ShipCapacityModifier> getCapcityModifiers();
 
     /**
      * Obtains the X coordinate of the capital star assigned to this empire.
@@ -162,6 +189,14 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * @return The religion that is the most common in the empire
      */
     public @NotNull Religion getReligion();
+
+    /**
+     * Obtains the amount of ships this empire is allowed to build at maximum.
+     * The modded modifiers are accounted for in this calculation.
+     *
+     * @return The amount of ships the empire is allowed to build, <strong>with</strong> modded modifiers
+     */
+    public double getShipCapacity();
 
     /**
      * Obtains the {@link Vector} of the {@link ActorSpec Actors} that are
@@ -230,6 +265,26 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public void removeActor(@NotNull ActorSpec actor);
 
     /**
+     * Unassign a {@link ActorSpec} from the empire.
+     * Workaround through javac binding issues.
+     *
+     * @param actor The ActorSpec to unassign
+     */
+    public default void removeSLActor(@NotNull ActorSpec actor) {
+        removeActor(actor);
+    }
+
+    /**
+     * Assigns an {@link ActorSpec Actor} to the empire.
+     * Workaround through javac binding issues.
+     *
+     * @param actor The actor to assign
+     */
+    public default void addSLActor(@NotNull ActorSpec actor) {
+        addActor(actor);
+    }
+
+    /**
      * @deprecated The direct use of Galimulator Actor API is not recommended and bound for removal.
      *
      * Unassign a {@link StateActor} from the empire.
@@ -238,6 +293,15 @@ public interface ActiveEmpire extends Empire, Metadatable {
      */
     @Deprecated(since = "1.2", forRemoval = true)
     public void removeActor(@NotNull StateActor actor);
+
+    /**
+     * Removes a previously added ship capacity modifier to the empire.
+     * If the operation fails due to no modifier being present, the the
+     * operation should fail silently.
+     *
+     * @param modifier The modifier to remove
+     */
+    public void removeCapacityModifier(@NotNull ShipCapacityModifier modifier);
 
     /**
      * Removes a special to the empire. The implementation of the method may throw a

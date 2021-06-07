@@ -2,8 +2,10 @@ package de.geolykt.starloader.apimixins;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
@@ -22,6 +25,8 @@ import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
+import de.geolykt.starloader.api.empire.ShipCapacityModifier;
+import de.geolykt.starloader.api.empire.ShipCapacityModifier.Type;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
@@ -67,11 +72,15 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     int birthMilliYear; // foundationYear
 
+    private transient ArrayList<ShipCapacityModifier> capModifiers;
+
     @Shadow
     GalColor color; // color
 
     @Shadow
     private int deathYear; // collapseYear
+
+    private transient boolean flagNoModdedShipCapacity;
 
     @Shadow
     private Flagship flagship; // flagship
@@ -168,6 +177,17 @@ public class EmpireMixins implements ActiveEmpire {
         a(actor);
     }
 
+    @Override
+    public void addCapacityModifier(@NotNull ShipCapacityModifier modifier) {
+        if (capModifiers == null) {
+            capModifiers = new ArrayList<>();
+            capModifiers.add(Objects.requireNonNull(modifier, "Tried to add null modifier!"));
+        } else {
+            capModifiers.add(Objects.requireNonNull(modifier, "Tried to add null modifier!"));
+            Collections.sort(capModifiers);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean addSpecial(@NotNull NamespacedKey empireSpecial, boolean force) {
@@ -196,9 +216,32 @@ public class EmpireMixins implements ActiveEmpire {
         tickCallbacks.add(callback);
     }
 
+    @Inject(method = "au", at = @At("TAIL"))
+    public void applyShipModifiers(CallbackInfoReturnable<Double> ci) {
+        if (flagNoModdedShipCapacity || capModifiers == null || capModifiers.isEmpty()) {
+            flagNoModdedShipCapacity = false;
+            return;
+        }
+        double val = ci.getReturnValueD();
+        for (ShipCapacityModifier mod : capModifiers) {
+            if (mod.getType() == Type.ADDITIVE) {
+                val += mod.getValue();
+            } else {
+                // Assume multiplicative
+                val *= mod.getValue();
+            }
+        }
+        ci.setReturnValue(val);
+    }
+
     @Shadow
     public void as() { // voidTreaties
         return;
+    }
+
+    @Shadow
+    public double au() { // getShipCapcaity
+        return 0.0;
     }
 
     @Shadow
@@ -327,6 +370,21 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public double getBaseShipCapacity() {
+        flagNoModdedShipCapacity = true;
+        return au();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull List<ShipCapacityModifier> getCapcityModifiers() {
+        if (capModifiers == null) {
+            return new ArrayList<>();
+        }
+        return (List<ShipCapacityModifier>) capModifiers.clone();
+    }
+
+    @Override
     public float getCapitalX() {
         return ((snoddasmannen.galimulator.Empire) (Object) this).getCoordinates().x;
     }
@@ -383,6 +441,11 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public Religion getReligion() {
         return religion;
+    }
+
+    @Override
+    public double getShipCapacity() {
+        return au();
     }
 
     @SuppressWarnings("unchecked")
@@ -492,6 +555,16 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void removeActor(StateActor actor) {
         b(actor);
+    }
+
+    @Override
+    public void removeCapacityModifier(@NotNull ShipCapacityModifier modifier) {
+        if (capModifiers == null) {
+            return; // nothing to remove
+        }
+        if (capModifiers.remove(Objects.requireNonNull(modifier, "Tried to remove null modifier!"))) {
+            Collections.sort(capModifiers);
+        }
     }
 
     @Override

@@ -34,6 +34,14 @@ public interface GameConfiguration {
     public boolean allowTranscendence();
 
     /**
+     * Obtains a modifier that is imposed on the ship count. This modifier does not immediately affect modded modifiers,
+     * though implementations are free to react on changes accordingly.
+     *
+     * @return The ship count modifier as an integer
+     */
+    public int getShipMultiplier();
+
+    /**
      * The technology level that triggers the transcendence status.
      * Effectively useless if {@link #allowTranscendence()} yields false
      *

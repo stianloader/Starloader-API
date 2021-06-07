@@ -27,6 +27,11 @@ public class GalimulatorConfiguration implements GameConfiguration {
     }
 
     @Override
+    public int getShipMultiplier() {
+        return (int) H.b();
+    }
+
+    @Override
     public int getTranscendceLevel() {
         return (int) q.b();
     }
