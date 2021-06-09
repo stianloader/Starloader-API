@@ -12,7 +12,7 @@ import snoddasmannen.galimulator.GalColor;
 public interface AWTColorAccesor {
 
     /**
-     * Converts the current instance to a {@link Color}. THis operation should be cached so
+     * Converts the current instance to a {@link Color}. This operation should be cached so
      * {@code asAWTColor() == asAWTColor()} yields {@code true}.
      * This operation needn't be equal to a cast.
      *
