@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.InputDialog;
 
-import snoddasmannen.galimulator.ui.Widget$WIDGET_MESSAGE;
+import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.on;
 
 public class StarloaderInputDialog extends on implements InputDialog {
@@ -26,12 +26,12 @@ public class StarloaderInputDialog extends on implements InputDialog {
     @Override
     public void close() {
         wrapper.canceled();
-        b(Widget$WIDGET_MESSAGE.a);
+        b(Widget.WIDGET_MESSAGE.WIDGET_CLOSED);
     }
 
     @Override
     public void confirm() {
         wrapper.input(c);
-        b(Widget$WIDGET_MESSAGE.a);
+        b(Widget.WIDGET_MESSAGE.WIDGET_CLOSED);
     }
 }

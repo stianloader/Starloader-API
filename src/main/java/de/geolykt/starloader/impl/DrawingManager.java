@@ -19,7 +19,6 @@ import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.GalFX$FONT_TYPE;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.du;
 import snoddasmannen.galimulator.gh;
@@ -30,7 +29,7 @@ public class DrawingManager implements DrawingImpl {
 
     // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private EnumMap fontBitmapCache = new EnumMap(GalFX$FONT_TYPE.class);
+    private EnumMap fontBitmapCache = new EnumMap(GalFX.FONT_TYPE.class);
 
     private Collection<String> fonts;
 
@@ -49,19 +48,19 @@ public class DrawingManager implements DrawingImpl {
             @NotNull Drawing.TextSize size) {
         switch (size) {
         case LARGE:
-            return GalFX.a(x, y, message, color, GalFX$FONT_TYPE.b);
+            return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG);
         case MEDIUM:
-            return GalFX.a(x, y, message, color, GalFX$FONT_TYPE.c);
+            return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_DEFAULT);
         case SMALL:
         default:
-            return GalFX.a(x, y, message, color, GalFX$FONT_TYPE.a);
+            return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL);
         }
     }
 
     @Override
     public @NotNull Collection<String> getAvailiableFonts() {
         if (fonts == null) {
-            Enum<?>[] galFxFonts = GalFX$FONT_TYPE.values();
+            Enum<?>[] galFxFonts = GalFX.FONT_TYPE.values();
             this.fonts = new ArrayList<>(galFxFonts.length);
             for (Enum<?> font : galFxFonts) {
                 fonts.add(font.name());
@@ -73,9 +72,9 @@ public class DrawingManager implements DrawingImpl {
     @SuppressWarnings("unchecked")
     @Override
     public @Nullable BitmapFont getFontBitmap(String font) {
-        GalFX$FONT_TYPE arg;
+        GalFX.FONT_TYPE arg;
         try {
-            arg = GalFX$FONT_TYPE.valueOf(font);
+            arg = GalFX.FONT_TYPE.valueOf(font);
         } catch (IllegalArgumentException e) {
             return null;
         }

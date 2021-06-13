@@ -11,7 +11,7 @@ import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
-import snoddasmannen.galimulator.AudioManager$AudioSample;
+import snoddasmannen.galimulator.AudioManager.AudioSample;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 
@@ -27,27 +27,30 @@ public class Registries {
         initAudio();
         EmpireSpecialRegistry empireSpecialRegistry = new EmpireSpecialRegistry();
         // Register values
-        empireSpecialRegistry.setValuesArray(new EmpireSpecial[] { EmpireSpecial.a, EmpireSpecial.b, EmpireSpecial.c,
-                EmpireSpecial.d, EmpireSpecial.e, EmpireSpecial.f, EmpireSpecial.g, EmpireSpecial.h, EmpireSpecial.i,
-                EmpireSpecial.j, EmpireSpecial.k, EmpireSpecial.l, EmpireSpecial.m, EmpireSpecial.n, EmpireSpecial.o,
-                EmpireSpecial.p });
+        empireSpecialRegistry.setValuesArray(new EmpireSpecial[] { EmpireSpecial.MILITANT,
+                EmpireSpecial.AGGRESSIVE, EmpireSpecial.DEFENSIVE,
+                EmpireSpecial.SCIENTIFIC, EmpireSpecial.STABLE, EmpireSpecial.UNSTABLE, EmpireSpecial.EXPLOSIVE,
+                EmpireSpecial.SLOW_STARTER, EmpireSpecial.DIPLOMATIC,
+                EmpireSpecial.XENOPHOBIC, EmpireSpecial.FANATICAL, EmpireSpecial.RECLUSIVE, EmpireSpecial.HORDE,
+                EmpireSpecial.CAPITALIST, EmpireSpecial.CULT,
+                EmpireSpecial.INDUSTRIAL });
         Map<NamespacedKey, EmpireSpecial> keyedSpecials = empireSpecialRegistry.getKeyedValues();
-        registerSpecial(keyedSpecials, EmpireSpecial.a, RegistryKeys.GALIMULATOR_MILITANT);
-        registerSpecial(keyedSpecials, EmpireSpecial.b, RegistryKeys.GALIMULATOR_AGGRESSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.c, RegistryKeys.GALIMULATOR_DEFENSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.d, RegistryKeys.GALIMULATOR_SCIENTIFIC);
-        registerSpecial(keyedSpecials, EmpireSpecial.e, RegistryKeys.GALIMULATOR_STABLE);
-        registerSpecial(keyedSpecials, EmpireSpecial.f, RegistryKeys.GALIMULATOR_UNSTABLE);
-        registerSpecial(keyedSpecials, EmpireSpecial.g, RegistryKeys.GALIMULATOR_EXPLOSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.h, RegistryKeys.GALIMULATOR_SLOW_STARTER);
-        registerSpecial(keyedSpecials, EmpireSpecial.i, RegistryKeys.GALIMULATOR_DIPLOMATIC);
-        registerSpecial(keyedSpecials, EmpireSpecial.j, RegistryKeys.GALIMULATOR_XENOPHOBIC);
-        registerSpecial(keyedSpecials, EmpireSpecial.k, RegistryKeys.GALIMULATOR_FANATICAL);
-        registerSpecial(keyedSpecials, EmpireSpecial.l, RegistryKeys.GALIMULATOR_RECLUSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.m, RegistryKeys.GALIMULATOR_HORDE);
-        registerSpecial(keyedSpecials, EmpireSpecial.n, RegistryKeys.GALIMULATOR_CAPITALIST);
-        registerSpecial(keyedSpecials, EmpireSpecial.o, RegistryKeys.GALIMULATOR_CULT);
-        registerSpecial(keyedSpecials, EmpireSpecial.p, RegistryKeys.GALIMULATOR_INDUSTRIAL);
+        registerSpecial(keyedSpecials, EmpireSpecial.MILITANT, RegistryKeys.GALIMULATOR_MILITANT);
+        registerSpecial(keyedSpecials, EmpireSpecial.AGGRESSIVE, RegistryKeys.GALIMULATOR_AGGRESSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.DEFENSIVE, RegistryKeys.GALIMULATOR_DEFENSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.SCIENTIFIC, RegistryKeys.GALIMULATOR_SCIENTIFIC);
+        registerSpecial(keyedSpecials, EmpireSpecial.STABLE, RegistryKeys.GALIMULATOR_STABLE);
+        registerSpecial(keyedSpecials, EmpireSpecial.UNSTABLE, RegistryKeys.GALIMULATOR_UNSTABLE);
+        registerSpecial(keyedSpecials, EmpireSpecial.EXPLOSIVE, RegistryKeys.GALIMULATOR_EXPLOSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.SLOW_STARTER, RegistryKeys.GALIMULATOR_SLOW_STARTER);
+        registerSpecial(keyedSpecials, EmpireSpecial.DIPLOMATIC, RegistryKeys.GALIMULATOR_DIPLOMATIC);
+        registerSpecial(keyedSpecials, EmpireSpecial.XENOPHOBIC, RegistryKeys.GALIMULATOR_XENOPHOBIC);
+        registerSpecial(keyedSpecials, EmpireSpecial.FANATICAL, RegistryKeys.GALIMULATOR_FANATICAL);
+        registerSpecial(keyedSpecials, EmpireSpecial.RECLUSIVE, RegistryKeys.GALIMULATOR_RECLUSIVE);
+        registerSpecial(keyedSpecials, EmpireSpecial.HORDE, RegistryKeys.GALIMULATOR_HORDE);
+        registerSpecial(keyedSpecials, EmpireSpecial.CAPITALIST, RegistryKeys.GALIMULATOR_CAPITALIST);
+        registerSpecial(keyedSpecials, EmpireSpecial.CULT, RegistryKeys.GALIMULATOR_CULT);
+        registerSpecial(keyedSpecials, EmpireSpecial.INDUSTRIAL, RegistryKeys.GALIMULATOR_INDUSTRIAL);
         Registry.EMPIRE_SPECIALS = empireSpecialRegistry;
         EmpireStateRegistry empireStateRegistry = new EmpireStateRegistry();
         empireStateRegistry.registerAll(
@@ -55,8 +58,9 @@ public class Registries {
                         RegistryKeys.GALIMULATOR_DEGENERATING, RegistryKeys.GALIMULATOR_TRANSCENDING,
                         RegistryKeys.GALIMULATOR_ALL_WILL_BE_ASHES, RegistryKeys.GALIMULATOR_RIOTING,
                         RegistryKeys.GALIMULATOR_CRUSADING, RegistryKeys.GALIMULATOR_BLOOD_PURGE },
-                new EmpireState[] { EmpireState.a, EmpireState.b, EmpireState.c, EmpireState.d, EmpireState.e,
-                        EmpireState.f, EmpireState.g, EmpireState.h },
+                new EmpireState[] { EmpireState.EXPANDING, EmpireState.FORTIFYING, EmpireState.DEGENERATING,
+                        EmpireState.TRANSCENDING, EmpireState.ALL_WILL_BE_ASHES,
+                        EmpireState.RIOTING, EmpireState.CRUSADING, EmpireState.BLOOD_PURGE },
                 new EmpireStateMetadataEntry[] { new EmpireStateMetadataEntry(true, false),
                         new EmpireStateMetadataEntry(true, false), new EmpireStateMetadataEntry(false, false),
                         new EmpireStateMetadataEntry(true, false), new EmpireStateMetadataEntry(false, true),
@@ -82,24 +86,24 @@ public class Registries {
      * Initialises the Audio wrapper layer.
      */
     private static void initAudio() {
-        AudioSampleWrapper.ACTOR_SELECTED = new StarloaderAudioSample("uismallselect.wav", AudioManager$AudioSample.a);
-        AudioSampleWrapper.ACTOR_ORDERED = new StarloaderAudioSample("uismallselect.wav", AudioManager$AudioSample.b);
-        AudioSampleWrapper.GOOD_MINI = new StarloaderAudioSample("goodmini.wav", AudioManager$AudioSample.c);
-        AudioSampleWrapper.BAD_MINI = new StarloaderAudioSample("badmini.wav", AudioManager$AudioSample.d);
-        AudioSampleWrapper.UI_SMALL_SELECT = new StarloaderAudioSample("uismallselect.wav", AudioManager$AudioSample.e);
-        AudioSampleWrapper.UI_BIG_SELECT = new StarloaderAudioSample("uiselect.wav", AudioManager$AudioSample.f);
-        AudioSampleWrapper.UI_ERROR = new StarloaderAudioSample("error.wav", AudioManager$AudioSample.g);
-        AudioSampleWrapper.BIG_LASER = new StarloaderAudioSample("biglaser.wav", AudioManager$AudioSample.h);
-        AudioSampleWrapper.SMALL_LASER = new StarloaderAudioSample("biglaser.wav", AudioManager$AudioSample.i);
-        AudioSampleWrapper.HIT_1 = new StarloaderAudioSample("smallhit1.wav", AudioManager$AudioSample.j);
-        AudioSampleWrapper.HIT_2 = new StarloaderAudioSample("smallhit2.wav", AudioManager$AudioSample.k);
-        AudioSampleWrapper.HIT_3 = new StarloaderAudioSample("smallhit3.wav", AudioManager$AudioSample.l);
-        AudioSampleWrapper.ALARM = new StarloaderAudioSample("alarm.wav", AudioManager$AudioSample.m);
-        AudioSampleWrapper.BIGBOOM_1 = new StarloaderAudioSample("bigboom1.wav", AudioManager$AudioSample.n);
-        AudioSampleWrapper.BIGBOOM_2 = new StarloaderAudioSample("bigboom2.wav", AudioManager$AudioSample.o);
-        AudioSampleWrapper.HEALRAY = new StarloaderAudioSample("healray.wav", AudioManager$AudioSample.p);
-        AudioSampleWrapper.CLONE = new StarloaderAudioSample("healray.wav", AudioManager$AudioSample.q);
-        AudioSampleWrapper.MISSILE = new StarloaderAudioSample("missile.wav", AudioManager$AudioSample.r);
+        AudioSampleWrapper.ACTOR_SELECTED = new StarloaderAudioSample("uismallselect.wav", AudioSample.ACTOR_SELECTED);
+        AudioSampleWrapper.ACTOR_ORDERED = new StarloaderAudioSample("uismallselect.wav", AudioSample.ACTOR_ORDERED);
+        AudioSampleWrapper.GOOD_MINI = new StarloaderAudioSample("goodmini.wav", AudioSample.GOOD_MINI);
+        AudioSampleWrapper.BAD_MINI = new StarloaderAudioSample("badmini.wav", AudioSample.BAD_MINI);
+        AudioSampleWrapper.UI_SMALL_SELECT = new StarloaderAudioSample("uismallselect.wav", AudioSample.UI_SMALL_SELECT);
+        AudioSampleWrapper.UI_BIG_SELECT = new StarloaderAudioSample("uiselect.wav", AudioSample.UI_BIG_SELECT);
+        AudioSampleWrapper.UI_ERROR = new StarloaderAudioSample("error.wav", AudioSample.UI_ERROR);
+        AudioSampleWrapper.BIG_LASER = new StarloaderAudioSample("biglaser.wav", AudioSample.BIG_LASER);
+        AudioSampleWrapper.SMALL_LASER = new StarloaderAudioSample("biglaser.wav", AudioSample.SMALL_LASER);
+        AudioSampleWrapper.HIT_1 = new StarloaderAudioSample("smallhit1.wav", AudioSample.HIT_1);
+        AudioSampleWrapper.HIT_2 = new StarloaderAudioSample("smallhit2.wav", AudioSample.HIT_2);
+        AudioSampleWrapper.HIT_3 = new StarloaderAudioSample("smallhit3.wav", AudioSample.HIT_3);
+        AudioSampleWrapper.ALARM = new StarloaderAudioSample("alarm.wav", AudioSample.ALARM);
+        AudioSampleWrapper.BIGBOOM_1 = new StarloaderAudioSample("bigboom1.wav", AudioSample.BIGBOOM_1);
+        AudioSampleWrapper.BIGBOOM_2 = new StarloaderAudioSample("bigboom2.wav", AudioSample.BIGBOOM_2);
+        AudioSampleWrapper.HEALRAY = new StarloaderAudioSample("healray.wav", AudioSample.HEALRAY);
+        AudioSampleWrapper.CLONE = new StarloaderAudioSample("healray.wav", AudioSample.CLONE);
+        AudioSampleWrapper.MISSILE = new StarloaderAudioSample("missile.wav", AudioSample.MISSILE);
     }
 }
 
@@ -108,9 +112,9 @@ public class Registries {
  */
 class StarloaderAudioSample extends AudioSampleWrapper {
 
-    private final AudioManager$AudioSample sample;
+    private final AudioSample sample;
 
-    protected StarloaderAudioSample(@NotNull String loc, @NotNull AudioManager$AudioSample sample) {
+    protected StarloaderAudioSample(@NotNull String loc, @NotNull AudioSample sample) {
         super(loc, sample.sound);
         this.sample = sample;
     }

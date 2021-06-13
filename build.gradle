@@ -2,8 +2,7 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'maven-publish'
-    id 'widener-plugin' version '1.0.0'
-    id 'methodremover' version '1.0.0'
+    id 'obftools' version '1.0.0'
 }
 
 group 'de.geolykt'
@@ -24,17 +23,15 @@ repositories {
     mavenCentral()
 }
 
-methodRemover {
+obfTools {
     annotation = "Lde/geolykt/starloader/impl/Pseudo;"
-}
-
-widener {
+    affectedJar = "./galimulator-desktop.jar"
     accessWidener = "src/main/resources/starloader-api.accesswidener"
-    affectedFile = "galimulator-desktop.jar"
 }
 
 dependencies {
-    compileOnly files("galimulator-desktop.jar") // Galimulator proper
+    //compileOnly files("galimulator-desktop.jar") // Galimulator proper
+    compileOnly files("build/obftools/intermediary.jar")
     api "de.geolykt:starloader:1.1.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
 }
 
@@ -49,7 +46,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 build {
-    dependsOn methodRemoval
+    dependsOn postprocess
 }
 
 publishing {

@@ -27,12 +27,12 @@ import de.geolykt.starloader.impl.EmperorOption;
 import snoddasmannen.galimulator.Claim;
 import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.Job;
-import snoddasmannen.galimulator.Job$JobType;
+import snoddasmannen.galimulator.Job.JobType;
 import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.be;
 import snoddasmannen.galimulator.bf;
-import snoddasmannen.galimulator.ui.FlowLayout$FlowDirection;
+import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
 
 @Mixin(EmploymentAgency.class)
 public class EmploymentAgencyMixins {
@@ -54,7 +54,7 @@ public class EmploymentAgencyMixins {
     @Overwrite
     private Person a(final Job job, final int n) {
         List<Person> potentialCandidates;
-        if (job.f() == Job$JobType.a && (job.g() == Galimulator.getNeutralEmpire() || job.l() != null)) {
+        if (job.f() == JobType.EMPEROR && (job.g() == Galimulator.getNeutralEmpire() || job.l() != null)) {
             potentialCandidates = job.n();
             if (potentialCandidates.isEmpty()) {
                 potentialCandidates = this.b(n);
@@ -66,7 +66,7 @@ public class EmploymentAgencyMixins {
             return null;
         }
         Person.f = 0;
-        if (job.f() == Job$JobType.a) {
+        if (job.f() == JobType.EMPEROR) {
             if (Galimulator.getPlayerEmpire() == job.g().getJobEmpire()) {
                 // Player empire
                 potentialCandidates.removeIf(person -> person.a(job) <= 0 || Claim.b(person, job) == null);
@@ -98,7 +98,7 @@ public class EmploymentAgencyMixins {
                                 firstEntry = false;
                             }
                             if (!firstEntry) {
-                                Space.a(options, FlowLayout$FlowDirection.a, null);
+                                Space.a(options, FlowDirection.VERTICAL, null);
                             }
                         }
                     });

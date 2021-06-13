@@ -13,7 +13,6 @@ import de.geolykt.starloader.api.empire.people.DynastyMember;
 
 import snoddasmannen.galimulator.Job;
 import snoddasmannen.galimulator.Person;
-import snoddasmannen.galimulator.Person$CVEntry;
 
 /**
  * Mixins targeting the Person class.
@@ -35,7 +34,7 @@ public class PersonMixins implements DynastyMember {
     private int childCount;
 
     @Shadow
-    private Vector<Person$CVEntry> cv;
+    private Vector<Person.CVEntry> cv;
 
     @Shadow
     private Job job;

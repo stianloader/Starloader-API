@@ -16,7 +16,6 @@ import de.geolykt.starloader.api.registry.RegistryKeyed;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.GalFX$FONT_TYPE;
 import snoddasmannen.galimulator.ui.fm;
 
 /**
@@ -41,7 +40,7 @@ public class EmpireSpecialMixins implements RegistryKeyed {
         for (int var2 = 0; var2 < var1; ++var2) {
             EmpireSpecial var3 = var0[var2];
             maps.put(var3,
-                    new fm("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX$FONT_TYPE.a, GalColor.WHITE, var3.j(), 0));
+                    new fm("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
         }
         EmpireSpecial.q = maps;
     }

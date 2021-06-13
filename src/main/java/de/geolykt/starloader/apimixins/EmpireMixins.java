@@ -50,7 +50,7 @@ import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.impl.AWTColorAccesor;
 
-import snoddasmannen.galimulator.EmpireAchievement$EmpireAchievementType;
+import snoddasmannen.galimulator.EmpireAchievement.EmpireAchievementType;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.GalColor;
@@ -137,7 +137,7 @@ public class EmpireMixins implements ActiveEmpire {
      * @param a  dummy doc
      */
     @Shadow
-    public void a(EmpireAchievement$EmpireAchievementType a) { // addAchievement
+    public void a(EmpireAchievementType a) { // addAchievement
         return;
     }
 
@@ -530,7 +530,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
 
         broadcastNews("Has advanced, now tech level: " + getTechnologyLevel());
-        this.a(EmpireAchievement$EmpireAchievementType.g);
+        this.a(EmpireAchievementType.RESEARCHED);
         if (Galimulator.getPlayerEmpire() == this) {
             new BasicDialogBuilder("Technological advance", "You have advanced to tech level: " + this.techLevel
                     + "! This will give your armies and fleets a significant boost.").buildAndShow();

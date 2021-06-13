@@ -14,9 +14,9 @@ import de.geolykt.starloader.api.gui.InputDialog;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
 
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.Settings$EnumSettings;
+import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.ui.Widget$WIDGET_ALIGNMENT;
+import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.qm;
 
 public class StarloaderTextInputBuilder implements TextInputBuilder {
@@ -46,13 +46,13 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
 
     @Override
     public @Nullable InputDialog build() {
-        if (Settings$EnumSettings.F.b() == Boolean.TRUE) {
+        if (Settings.EnumSettings.USE_NATIVE_KEYBOARD.b() == Boolean.TRUE) {
             Gdx.input.getTextInput(new TextInputWrapper(hooks), title, text, hint);
             return null;
         }
         // Based on the galactic preview and a few others, might require something better
         StarloaderInputDialog dialog = new StarloaderInputDialog(title, new TextInputWrapper(hooks), text, hint);
-        Space.i.add(new qm(dialog, GalFX.G() - dialog.c() - 120.0f, 0.0, true, Widget$WIDGET_ALIGNMENT.d));
+        Space.i.add(new qm(dialog, GalFX.G() - dialog.c() - 120.0f, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
         return dialog;
     }
 

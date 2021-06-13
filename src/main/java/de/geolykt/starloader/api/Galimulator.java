@@ -287,11 +287,11 @@ public final class Galimulator {
      * getting which release this is, other than looking a the hashcode or last
      * modification date of the executable.
      *
-     * @return 2
+     * @return 8
      */
     @Deprecated(forRemoval = true, since = "1.1.0")
     public static int getReleaseCode() {
-        return 2;
+        return 8;
     }
 
     /**

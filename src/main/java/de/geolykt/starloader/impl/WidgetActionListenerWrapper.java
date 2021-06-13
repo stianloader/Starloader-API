@@ -13,7 +13,7 @@ import de.geolykt.starloader.api.gui.DialogCloseCause;
 import de.geolykt.starloader.api.gui.WidgetAction;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
 
-import snoddasmannen.galimulator.ui.Widget$WIDGET_MESSAGE;
+import snoddasmannen.galimulator.ui.Widget;
 
 public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw {
 
@@ -62,8 +62,8 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw
     }
 
     @Override
-    public void a(Widget$WIDGET_MESSAGE var1) {
-        if (var1 == Widget$WIDGET_MESSAGE.a) {
+    public void a(Widget.WIDGET_MESSAGE var1) {
+        if (var1 == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
             // Check if it was closed automatically due to timeout, if it was, then ignore
             // this request
             if (parent == null) {
@@ -81,7 +81,7 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw
             if (var1 == null) {
                 DebugNagException.nag("Null widget message!");
             }
-            WidgetAction action = var1 == Widget$WIDGET_MESSAGE.b ? WidgetAction.RESIZE : WidgetAction.REDRAW;
+            WidgetAction action = var1 == Widget.WIDGET_MESSAGE.WIDGET_RESIZED ? WidgetAction.RESIZE : WidgetAction.REDRAW;
             for (WidgetActionListener listener : actionListeners) {
                 listener.onAction(action);
             }
