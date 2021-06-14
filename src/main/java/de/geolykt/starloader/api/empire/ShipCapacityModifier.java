@@ -14,7 +14,7 @@ import de.geolykt.starloader.api.gui.Keybind;
  *<br/><br/>
  * Note: this interface has a natural ordering that may be inconsistent with equals.
  */
-public interface ShipCapacityModifier extends Comparable<ShipCapacityModifier> {
+public interface ShipCapacityModifier {
 
     /**
      * The type of the modifier, or more specifically how {@link ShipCapacityModifier#getValue()} should be treated.
@@ -23,25 +23,14 @@ public interface ShipCapacityModifier extends Comparable<ShipCapacityModifier> {
         /**
          * The modifier acts as a semi-constant modifier. It can also diminish the value.
          */
-        ADDITIVE,
+        ADD,
 
         /**
          * The modifier acts as a multiplier. It can also diminish the value if {@link ShipCapacityModifier#getValue()}
          * is sub-1. It shouldn't be below 0 though as that results in unexpected shit, though it is allowed if you need
          * it for whatever reason
-         *<br/><br/>
-         * Note: the effect is stacking due to a flaw in the API
          */
-        MULTIPLICATIVE;
-    }
-
-    /**
-     * Note: this interface has a natural ordering that may be inconsistent with equals.
-     * {@inheritDoc}
-     */
-    @Override
-    public default int compareTo(ShipCapacityModifier o) {
-        return getPriority() - o.getPriority();
+        MULTIPLY;
     }
 
     /**
@@ -51,18 +40,6 @@ public interface ShipCapacityModifier extends Comparable<ShipCapacityModifier> {
      * @return The full description, if required
      */
     public @Nullable String getDescription();
-
-    /**
-     * The priority at which the modifier is applied.
-     * This priority is not often polled for caching purposes so changing it may have delayed effects.
-     * The higher the later it is applied.
-     * This method is used by {@link #compareTo(ShipCapacityModifier)}.
-     *
-     * @return The priority
-     */
-    public default int getPriority() {
-        return getType() == Type.ADDITIVE ? 0 : 100;
-    }
 
     /**
      * Obtains the title of the modifier, which should be a very brief description of the modifier.
@@ -87,4 +64,21 @@ public interface ShipCapacityModifier extends Comparable<ShipCapacityModifier> {
      * @return The value of the modifier
      */
     public double getValue();
+
+    /**
+     * Obtain whether the value returned by {@link #getValue()} should be multiplied by values of the {@link Type#MULTIPLY} type.
+     * If the current type is MULTIPLY, then the effect is stacking exponentially.
+     * The order of application is as follows:
+     * <ul>
+     * <li>1. isMultiplicative = false; getValue = ADD
+     * <li>2. isMultiplicative = false; getValue = MULTIPLY
+     * <li>3. isMultiplicative = true; getValue = MULTIPLY
+     * <li>4. isMultiplicative = true; getValue = ADD
+     * </ul>
+     *
+     * @return As above
+     */
+    public default boolean isMultiplicative() {
+        return getType() != Type.MULTIPLY;
+    }
 }

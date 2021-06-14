@@ -2,7 +2,6 @@ package de.geolykt.starloader.apimixins;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -181,11 +180,8 @@ public class EmpireMixins implements ActiveEmpire {
     public void addCapacityModifier(@NotNull ShipCapacityModifier modifier) {
         if (capModifiers == null) {
             capModifiers = new ArrayList<>();
-            capModifiers.add(Objects.requireNonNull(modifier, "Tried to add null modifier!"));
-        } else {
-            capModifiers.add(Objects.requireNonNull(modifier, "Tried to add null modifier!"));
-            Collections.sort(capModifiers);
         }
+        capModifiers.add(Objects.requireNonNull(modifier, "Tried to add null modifier!"));
     }
 
     @SuppressWarnings("unchecked")
@@ -222,16 +218,31 @@ public class EmpireMixins implements ActiveEmpire {
             flagNoModdedShipCapacity = false;
             return;
         }
-        double val = ci.getReturnValueD();
+        double baseVal = ci.getReturnValueD();
+        double multiplier = 1.0;
+        double add = 0.0;
+        double addMultiplied = 0.0;
+        double multiplierMultiplied = 1.0;
         for (ShipCapacityModifier mod : capModifiers) {
-            if (mod.getType() == Type.ADDITIVE) {
-                val += mod.getValue();
+            if (mod.isMultiplicative()) {
+                if (mod.getType() == Type.ADD) {
+                    addMultiplied += mod.getValue();
+                } else {
+                    multiplierMultiplied *= mod.getValue();
+                }
             } else {
-                // Assume multiplicative
-                val *= mod.getValue();
+                if (mod.getType() == Type.ADD) {
+                    add += mod.getValue();
+                } else {
+                    multiplier += mod.getValue() - 1;
+                }
             }
         }
-        ci.setReturnValue(val);
+        baseVal += addMultiplied;
+        baseVal *= multiplier;
+        baseVal *= multiplierMultiplied;
+        baseVal += add;
+        ci.setReturnValue(baseVal);
     }
 
     @Shadow
@@ -562,9 +573,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (capModifiers == null) {
             return; // nothing to remove
         }
-        if (capModifiers.remove(Objects.requireNonNull(modifier, "Tried to remove null modifier!"))) {
-            Collections.sort(capModifiers);
-        }
+        capModifiers.remove(Objects.requireNonNull(modifier, "Tried to remove null modifier!"));
     }
 
     @Override
