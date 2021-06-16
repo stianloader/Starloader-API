@@ -11,6 +11,7 @@ import de.geolykt.starloader.api.NamespacedKey;
 
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
+import snoddasmannen.galimulator.MapMode.MapModes;
 
 /**
  * Registry of enum and/or enum-like objects. This is added for extension
@@ -32,6 +33,11 @@ public abstract class Registry<T> {
      * The empire state registry.
      */
     public static MetadatableRegistry<EmpireState, EmpireStateMetadataEntry> EMPIRE_STATES;
+
+    /**
+     * Enum registry for map modes.
+     */
+    public static Registry<MapModes> MAP_MODES;
 
     /**
      * Internal map containing the key-value pairs of the registry for lookup.

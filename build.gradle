@@ -7,6 +7,7 @@ plugins {
 
 group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
+def gdxVersion = '1.9.13'
 version '1.3.0'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
@@ -33,6 +34,15 @@ dependencies {
     //compileOnly files("galimulator-desktop.jar") // Galimulator proper
     compileOnly files("build/obftools/intermediary.jar")
     api "de.geolykt:starloader:1.1.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
+
+    // All APIs that are already provided by galimulator (natives excluded)
+    // Note: these libraries are likely to be too updated as stuff like LWJGL 2 is still used internally.
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    api "xmlpull:xmlpull:1.1.3.4d_b4_min"
+    // https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream
+    api group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.16'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

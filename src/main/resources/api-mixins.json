@@ -24,6 +24,7 @@
     "HealshipMixins",
     "InstanceMixins",
     "MapDataMixins",
+    "MapModesMixins",
     "MissileMixins",
     "PersonMixins",
     "RaiderMixins",

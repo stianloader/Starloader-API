@@ -5,6 +5,8 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.event.EventManager;
+import de.geolykt.starloader.api.event.lifecycle.MapModeRegistrationEvent;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
@@ -14,6 +16,7 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 import snoddasmannen.galimulator.AudioManager.AudioSample;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
+import snoddasmannen.galimulator.MapMode.MapModes;
 
 /**
  * Base registry init class.
@@ -104,6 +107,19 @@ public class Registries {
         AudioSampleWrapper.HEALRAY = new StarloaderAudioSample("healray.wav", AudioSample.HEALRAY);
         AudioSampleWrapper.CLONE = new StarloaderAudioSample("healray.wav", AudioSample.CLONE);
         AudioSampleWrapper.MISSILE = new StarloaderAudioSample("missile.wav", AudioSample.MISSILE);
+    }
+
+    public static void initMapModes() {
+        MapModeRegistry mapModeRegistry = new MapModeRegistry();
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_DEFAULT_MAPMODE, MapModes.NORMAL);
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_WEALTH_MAPMODE, MapModes.WEALTH);
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_HEAT_MAPMODE, MapModes.HEAT);
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_RELIGION_MAPMODE, MapModes.RELIGION);
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_CULTURE_MAPMODE, MapModes.CULTURE);
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_ALLIANCES_MAPMODE, MapModes.ALLIANCES);
+        mapModeRegistry.register(RegistryKeys.GALIMULATOR_FACTIONS_MAPMODE, MapModes.FACTIONS);
+        Registry.MAP_MODES = mapModeRegistry;
+        EventManager.handleEvent(new MapModeRegistrationEvent());
     }
 }
 

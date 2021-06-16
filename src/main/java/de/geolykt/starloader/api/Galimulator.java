@@ -11,6 +11,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.Keybind;
+import de.geolykt.starloader.api.gui.MapMode;
 
 /**
  * Class to redirect to instance-wide constants or other static
@@ -47,6 +48,14 @@ public final class Galimulator {
          * @param starB the second Star to disconnect
          */
         public void disconnectStars(@NotNull Star starA, @NotNull Star starB);
+
+        /**
+         * Obtains the currently active map mode.
+         *
+         * @return The currently active map mode.
+         * @see #setActiveMapmode(MapMode)
+         */
+        public @NotNull MapMode getActiveMapmode();
 
         /**
          * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however
@@ -91,6 +100,22 @@ public final class Galimulator {
          * @return The currently active map
          */
         public @NotNull Map getMap();
+
+        /**
+         * Obtains the mapmode that was registered to this key. If there is no map mode that is registered to it,
+         * then null should be returned
+         *
+         * @return The map mode bound to the key, or null if none were found
+         */
+        public @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key);
+
+        /**
+         * Obtains all currently registered map modes.
+         * Map modes cannot be unregistered, so chances are those will also be valid in the future.
+         *
+         * @return All valid map modes
+         */
+        public @NotNull MapMode[] getMapModes();
 
         /**
          * Convenience method to obtain the neutral empire. The neutral empire should
@@ -151,6 +176,14 @@ public final class Galimulator {
          * Resumes the game. This method basically reverts {@link #pauseGame()}
          */
         public void resumeGame();
+
+        /**
+         * Changes the currently active map mode to a new value.
+         *
+         * @param mode The new active map mode.
+         * @see #getActiveMapmode()
+         */
+        public void setActiveMapmode(@NotNull MapMode mode);
     }
 
     private static GameConfiguration config;
@@ -389,4 +422,44 @@ public final class Galimulator {
      * Constructor that should not be called because there is no need to have an instance of this class.
      */
     private Galimulator() { }
+
+    /**
+     * Obtains the currently active map mode.
+     *
+     * @return The currently active map mode.
+     * @see #setActiveMapmode(MapMode)
+     */
+    public @NotNull MapMode getActiveMapmode() {
+        return impl.getActiveMapmode();
+    }
+
+    /**
+     * Obtains the mapmode that was registered to this key. If there is no map mode that is registered to it,
+     * then null should be returned
+     *
+     * @return The map mode bound to the key, or null if none were found
+     */
+    public @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key) {
+        return impl.getMapmodeByKey(Objects.requireNonNull(key, "Null registry key!"));
+    }
+
+    /**
+     * Obtains all currently registered map modes.
+     * Map modes cannot be unregistered, so chances are those will also be valid in the future.
+     *
+     * @return All valid map modes
+     */
+    public @NotNull MapMode[] getMapModes() {
+        return impl.getMapModes();
+    }
+
+    /**
+     * Changes the currently active map mode to a new value.
+     *
+     * @param mode The new active map mode.
+     * @see #getActiveMapmode()
+     */
+    public void setActiveMapmode(@NotNull MapMode mode) {
+        impl.setActiveMapmode(Objects.requireNonNull(mode, "The map mode cannot be set to a null value"));
+    }
 }

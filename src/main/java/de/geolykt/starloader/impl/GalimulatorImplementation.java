@@ -8,15 +8,43 @@ import org.jetbrains.annotations.Nullable;
 
 import com.example.Main;
 
+import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.Galimulator.GameImplementation;
 import de.geolykt.starloader.api.Map;
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.Keybind;
+import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.registry.Registry;
 
+import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Space;
 
 public class GalimulatorImplementation implements GameImplementation {
+
+    /**
+     * Converts a Galimulator map mode into a starloader API map mode.
+     * This is a clean cast and should never throw exception, except if there is an issue unrelated to this method.
+     *
+     * @param mode The map mode to convert
+     * @return The converted map mode
+     */
+    private static @NotNull MapMode toSLMode(@NotNull MapModes mode) {
+        return (MapMode) (Object) mode;
+    }
+
+    /**
+     * Converts a Galimulator map mode into a starloader API map mode.
+     * This is a clean cast and should never throw exception, except if there is an issue unrelated to this method.
+     * This is the nullable alternative to {@link #toSLMode(MapModes)} and only the annotations have changed.
+     *
+     * @param mode The map mode to convert
+     * @return The converted map mode
+     */
+    private static @Nullable MapMode toSLModeNullable(@Nullable MapModes mode) {
+        return (MapMode) (Object) mode;
+    }
 
     @Override
     public void connectStars(@NotNull Star starA, @NotNull Star starB) {
@@ -28,6 +56,11 @@ public class GalimulatorImplementation implements GameImplementation {
     public void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
         starA.removeNeighbour(starB);
         starB.removeNeighbour(starA);
+    }
+
+    @Override
+    public @NotNull MapMode getActiveMapmode() {
+        return toSLMode(snoddasmannen.galimulator.MapMode.b());
     }
 
     @Override
@@ -48,6 +81,16 @@ public class GalimulatorImplementation implements GameImplementation {
     @Override
     public @NotNull Map getMap() {
         return (Map) Space.p();
+    }
+
+    @Override
+    public @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key) {
+        return toSLModeNullable(Registry.MAP_MODES.get(key));
+    }
+
+    @Override
+    public @NotNull MapMode[] getMapModes() {
+        return (MapMode[]) (Object[]) Registry.MAP_MODES.getValues();
     }
 
     @Override
@@ -72,6 +115,11 @@ public class GalimulatorImplementation implements GameImplementation {
     }
 
     @Override
+    public void pauseGame() {
+        Space.c(true);
+    }
+
+    @Override
     public void recalculateVoronoiGraphs() {
         Space.ao();
     }
@@ -87,12 +135,12 @@ public class GalimulatorImplementation implements GameImplementation {
     }
 
     @Override
-    public void pauseGame() {
-        Space.c(true);
+    public void resumeGame() {
+        Space.c(false);
     }
 
     @Override
-    public void resumeGame() {
-        Space.c(false);
+    public void setActiveMapmode(@NotNull MapMode mode) {
+        snoddasmannen.galimulator.MapMode.a(ExpectedObfuscatedValueException.requireMapMode(mode));
     }
 }

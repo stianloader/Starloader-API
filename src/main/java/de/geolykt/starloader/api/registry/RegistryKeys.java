@@ -47,6 +47,15 @@ public final class RegistryKeys {
     public static final NamespacedKey GALIMULATOR_FORTIFYING = new GalimulatorResourceKey("STATE_FORTIFYING");
     public static final NamespacedKey GALIMULATOR_RIOTING = new GalimulatorResourceKey("STATE_RIOTING");
     public static final NamespacedKey GALIMULATOR_TRANSCENDING = new GalimulatorResourceKey("STATE_TRANSCENDING");
+
+    // Map Modes
+    public static final NamespacedKey GALIMULATOR_ALLIANCES_MAPMODE = new GalimulatorResourceKey("MAPMODE_ALLIANCES");
+    public static final NamespacedKey GALIMULATOR_CULTURE_MAPMODE = new GalimulatorResourceKey("MAPMODE_CULTURE");
+    public static final NamespacedKey GALIMULATOR_DEFAULT_MAPMODE = new GalimulatorResourceKey("MAPMODE_DEFAULT");
+    public static final NamespacedKey GALIMULATOR_FACTIONS_MAPMODE = new GalimulatorResourceKey("MAPMODE_FACTIONS");
+    public static final NamespacedKey GALIMULATOR_HEAT_MAPMODE = new GalimulatorResourceKey("MAPMODE_HEAT");
+    public static final NamespacedKey GALIMULATOR_RELIGION_MAPMODE = new GalimulatorResourceKey("MAPMODE_RELIGIONS");
+    public static final NamespacedKey GALIMULATOR_WEALTH_MAPMODE = new GalimulatorResourceKey("MAPMODE_WEALTH");
 }
 
 /**
