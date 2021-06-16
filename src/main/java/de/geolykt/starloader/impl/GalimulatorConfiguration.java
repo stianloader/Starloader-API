@@ -23,7 +23,7 @@ public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     public boolean allowTranscendence() {
-        return (boolean) TRANSCEND_LEVEL.b();
+        return (boolean) ALLOW_TRANSCENDENCE.b();
     }
 
     @Override
