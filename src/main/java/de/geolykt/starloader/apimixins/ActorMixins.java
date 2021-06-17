@@ -1,9 +1,11 @@
 package de.geolykt.starloader.apimixins;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.impl.Pseudo;
@@ -25,10 +27,12 @@ public class ActorMixins implements ActorSpec {
     private int id;
 
     @Shadow
-    public String textureName;
+    @NotNull
+    public String textureName = "";
 
     @Shadow
-    public String uncoloredTextureName;
+    @Nullable
+    public String uncoloredTextureName = "";
 
     @Override
     @Shadow // Already implemented, no need to override
@@ -36,7 +40,7 @@ public class ActorMixins implements ActorSpec {
     }
 
     @Override
-    public @NotNull String getColorlessTextureName() {
+    public @Nullable String getColorlessTextureName() {
         return uncoloredTextureName;
     }
 
@@ -67,8 +71,9 @@ public class ActorMixins implements ActorSpec {
     }
 
     @Shadow
+    @NotNull
     public Empire getOwner() {
-        return null;
+        return (Empire) Galimulator.getNeutralEmpire();
     }
 
     @Override
@@ -146,7 +151,7 @@ public class ActorMixins implements ActorSpec {
     }
 
     @Override
-    public void setColorlessTextureName(@NotNull String texture) {
+    public void setColorlessTextureName(@Nullable String texture) {
         uncoloredTextureName = texture;
     }
 

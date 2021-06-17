@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
+
 /**
  * Main class for ModConf functionality.
  * The base implementation makes so that this integrates nicely with the vanilla system and does not cause any
@@ -53,7 +55,11 @@ public final class ModConf {
      * @return The implementation that is currently in use
      */
     public static @NotNull ModConfSpec getImplementation() {
-        return ModConf.impl;
+        ModConfSpec implementation = ModConf.impl;
+        if (implementation == null) {
+            throw new IllegalStateException("The implementation was not yet defined!");
+        }
+        return implementation;
     }
 
     /**
@@ -73,7 +79,7 @@ public final class ModConf {
      * @param impl The implementation to use.
      */
     public static void setImplementation(@NotNull ModConfSpec impl) {
-        ModConf.impl = Objects.requireNonNull(impl);
+        ModConf.impl = NullUtils.requireNotNull(impl, "Cannot set the modconf implementation to a null value");
     }
 
     /**

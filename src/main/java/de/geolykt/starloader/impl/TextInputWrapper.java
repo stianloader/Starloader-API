@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.badlogic.gdx.Input.TextInputListener;
 
 public class TextInputWrapper implements TextInputListener {
 
-    protected final List<Consumer<String>> hooks;
+    protected final List<Consumer<@Nullable String>> hooks;
 
-    public TextInputWrapper(List<Consumer<String>> hooks2) {
+    public TextInputWrapper(List<Consumer<@Nullable String>> hooks2) {
         hooks = hooks2;
     }
 
@@ -18,7 +20,7 @@ public class TextInputWrapper implements TextInputListener {
         hooks = new ArrayList<>();
     }
 
-    public void addHook(Consumer<String> hook) {
+    public void addHook(Consumer<@Nullable String> hook) {
         hooks.add(hook);
     }
 

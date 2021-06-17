@@ -17,7 +17,7 @@ public class EmpireSpecialAddEvent extends EmpireEvent implements Cancellable {
     /**
      * The registry key of the special that was added.
      */
-    protected final NamespacedKey special;
+    protected final @NotNull NamespacedKey special;
 
     /**
      * The cancellation status of the event. It should not be modified directly and

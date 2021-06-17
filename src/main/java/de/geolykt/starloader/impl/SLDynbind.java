@@ -1,9 +1,8 @@
 package de.geolykt.starloader.impl;
 
-import java.util.Objects;
-
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Dynbind;
 
 import snoddasmannen.galimulator.ek;
@@ -13,7 +12,7 @@ public class SLDynbind extends ek {
     private final Dynbind bind;
 
     public SLDynbind(@NotNull Dynbind keybind) {
-        super(Objects.requireNonNull(keybind, "Tried to register a null keybind").getDescription(), '\0');
+        super(NullUtils.requireNotNull(keybind, "Tried to register a null keybind").getDescription(), '\0');
         bind = keybind;
     }
 

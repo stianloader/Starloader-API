@@ -35,7 +35,7 @@ public class EmpireCollapseEvent extends EmpireEvent implements Cancellable {
     }
 
     private boolean cancelState = false;
-    protected EmpireCollapseCause cause;
+    protected @NotNull EmpireCollapseCause cause;
 
     /**
      * Constructor.

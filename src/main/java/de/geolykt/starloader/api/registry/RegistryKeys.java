@@ -21,41 +21,41 @@ public final class RegistryKeys {
     }
 
     // Empire Specials
-    public static final NamespacedKey GALIMULATOR_AGGRESSIVE = new GalimulatorResourceKey("SPECIAL_AGGRESSIVE");
-    public static final NamespacedKey GALIMULATOR_CAPITALIST = new GalimulatorResourceKey("SPECIAL_CAPITALIST");
-    public static final NamespacedKey GALIMULATOR_CULT = new GalimulatorResourceKey("SPECIAL_CULT");
-    public static final NamespacedKey GALIMULATOR_DEFENSIVE = new GalimulatorResourceKey("SPECIAL_DEFENSIVE");
-    public static final NamespacedKey GALIMULATOR_DIPLOMATIC = new GalimulatorResourceKey("SPECIAL_DIPLOMATIC");
-    public static final NamespacedKey GALIMULATOR_EXPLOSIVE = new GalimulatorResourceKey("SPECIAL_EXPLOSIVE");
-    public static final NamespacedKey GALIMULATOR_FANATICAL = new GalimulatorResourceKey("SPECIAL_FANATICAL");
-    public static final NamespacedKey GALIMULATOR_HORDE = new GalimulatorResourceKey("SPECIAL_HORDE");
-    public static final NamespacedKey GALIMULATOR_INDUSTRIAL = new GalimulatorResourceKey("SPECIAL_INDUSTRIAL");
-    public static final NamespacedKey GALIMULATOR_MILITANT = new GalimulatorResourceKey("SPECIAL_MILITANT");
-    public static final NamespacedKey GALIMULATOR_RECLUSIVE = new GalimulatorResourceKey("SPECIAL_RECLUSIVE");
-    public static final NamespacedKey GALIMULATOR_SCIENTIFIC = new GalimulatorResourceKey("SPECIAL_SCIENTIFIC");
-    public static final NamespacedKey GALIMULATOR_SLOW_STARTER = new GalimulatorResourceKey("SPECIAL_SLOW_STARTER");
-    public static final NamespacedKey GALIMULATOR_STABLE = new GalimulatorResourceKey("SPECIAL_STABLE");
-    public static final NamespacedKey GALIMULATOR_UNSTABLE = new GalimulatorResourceKey("SPECIAL_UNSTABLE");
-    public static final NamespacedKey GALIMULATOR_XENOPHOBIC = new GalimulatorResourceKey("SPECIAL_XENOPHOBIC");
+    public static final @NotNull NamespacedKey GALIMULATOR_AGGRESSIVE = new GalimulatorResourceKey("SPECIAL_AGGRESSIVE");
+    public static final @NotNull NamespacedKey GALIMULATOR_CAPITALIST = new GalimulatorResourceKey("SPECIAL_CAPITALIST");
+    public static final @NotNull NamespacedKey GALIMULATOR_CULT = new GalimulatorResourceKey("SPECIAL_CULT");
+    public static final @NotNull NamespacedKey GALIMULATOR_DEFENSIVE = new GalimulatorResourceKey("SPECIAL_DEFENSIVE");
+    public static final @NotNull NamespacedKey GALIMULATOR_DIPLOMATIC = new GalimulatorResourceKey("SPECIAL_DIPLOMATIC");
+    public static final @NotNull NamespacedKey GALIMULATOR_EXPLOSIVE = new GalimulatorResourceKey("SPECIAL_EXPLOSIVE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FANATICAL = new GalimulatorResourceKey("SPECIAL_FANATICAL");
+    public static final @NotNull NamespacedKey GALIMULATOR_HORDE = new GalimulatorResourceKey("SPECIAL_HORDE");
+    public static final @NotNull NamespacedKey GALIMULATOR_INDUSTRIAL = new GalimulatorResourceKey("SPECIAL_INDUSTRIAL");
+    public static final @NotNull NamespacedKey GALIMULATOR_MILITANT = new GalimulatorResourceKey("SPECIAL_MILITANT");
+    public static final @NotNull NamespacedKey GALIMULATOR_RECLUSIVE = new GalimulatorResourceKey("SPECIAL_RECLUSIVE");
+    public static final @NotNull NamespacedKey GALIMULATOR_SCIENTIFIC = new GalimulatorResourceKey("SPECIAL_SCIENTIFIC");
+    public static final @NotNull NamespacedKey GALIMULATOR_SLOW_STARTER = new GalimulatorResourceKey("SPECIAL_SLOW_STARTER");
+    public static final @NotNull NamespacedKey GALIMULATOR_STABLE = new GalimulatorResourceKey("SPECIAL_STABLE");
+    public static final @NotNull NamespacedKey GALIMULATOR_UNSTABLE = new GalimulatorResourceKey("SPECIAL_UNSTABLE");
+    public static final @NotNull NamespacedKey GALIMULATOR_XENOPHOBIC = new GalimulatorResourceKey("SPECIAL_XENOPHOBIC");
 
     // Empire States
-    public static final NamespacedKey GALIMULATOR_ALL_WILL_BE_ASHES = new GalimulatorResourceKey("STATE_ALL_WILL_BE_ASHES");
-    public static final NamespacedKey GALIMULATOR_BLOOD_PURGE = new GalimulatorResourceKey("STATE_BLOOD_PURGE");
-    public static final NamespacedKey GALIMULATOR_CRUSADING = new GalimulatorResourceKey("STATE_CRUSADING");
-    public static final NamespacedKey GALIMULATOR_DEGENERATING = new GalimulatorResourceKey("STATE_DEGENERATING");
-    public static final NamespacedKey GALIMULATOR_EXPANDING = new GalimulatorResourceKey("STATE_EXPANDING");
-    public static final NamespacedKey GALIMULATOR_FORTIFYING = new GalimulatorResourceKey("STATE_FORTIFYING");
-    public static final NamespacedKey GALIMULATOR_RIOTING = new GalimulatorResourceKey("STATE_RIOTING");
-    public static final NamespacedKey GALIMULATOR_TRANSCENDING = new GalimulatorResourceKey("STATE_TRANSCENDING");
+    public static final @NotNull NamespacedKey GALIMULATOR_ALL_WILL_BE_ASHES = new GalimulatorResourceKey("STATE_ALL_WILL_BE_ASHES");
+    public static final @NotNull NamespacedKey GALIMULATOR_BLOOD_PURGE = new GalimulatorResourceKey("STATE_BLOOD_PURGE");
+    public static final @NotNull NamespacedKey GALIMULATOR_CRUSADING = new GalimulatorResourceKey("STATE_CRUSADING");
+    public static final @NotNull NamespacedKey GALIMULATOR_DEGENERATING = new GalimulatorResourceKey("STATE_DEGENERATING");
+    public static final @NotNull NamespacedKey GALIMULATOR_EXPANDING = new GalimulatorResourceKey("STATE_EXPANDING");
+    public static final @NotNull NamespacedKey GALIMULATOR_FORTIFYING = new GalimulatorResourceKey("STATE_FORTIFYING");
+    public static final @NotNull NamespacedKey GALIMULATOR_RIOTING = new GalimulatorResourceKey("STATE_RIOTING");
+    public static final @NotNull NamespacedKey GALIMULATOR_TRANSCENDING = new GalimulatorResourceKey("STATE_TRANSCENDING");
 
     // Map Modes
-    public static final NamespacedKey GALIMULATOR_ALLIANCES_MAPMODE = new GalimulatorResourceKey("MAPMODE_ALLIANCES");
-    public static final NamespacedKey GALIMULATOR_CULTURE_MAPMODE = new GalimulatorResourceKey("MAPMODE_CULTURE");
-    public static final NamespacedKey GALIMULATOR_DEFAULT_MAPMODE = new GalimulatorResourceKey("MAPMODE_DEFAULT");
-    public static final NamespacedKey GALIMULATOR_FACTIONS_MAPMODE = new GalimulatorResourceKey("MAPMODE_FACTIONS");
-    public static final NamespacedKey GALIMULATOR_HEAT_MAPMODE = new GalimulatorResourceKey("MAPMODE_HEAT");
-    public static final NamespacedKey GALIMULATOR_RELIGION_MAPMODE = new GalimulatorResourceKey("MAPMODE_RELIGIONS");
-    public static final NamespacedKey GALIMULATOR_WEALTH_MAPMODE = new GalimulatorResourceKey("MAPMODE_WEALTH");
+    public static final @NotNull NamespacedKey GALIMULATOR_ALLIANCES_MAPMODE = new GalimulatorResourceKey("MAPMODE_ALLIANCES");
+    public static final @NotNull NamespacedKey GALIMULATOR_CULTURE_MAPMODE = new GalimulatorResourceKey("MAPMODE_CULTURE");
+    public static final @NotNull NamespacedKey GALIMULATOR_DEFAULT_MAPMODE = new GalimulatorResourceKey("MAPMODE_DEFAULT");
+    public static final @NotNull NamespacedKey GALIMULATOR_FACTIONS_MAPMODE = new GalimulatorResourceKey("MAPMODE_FACTIONS");
+    public static final @NotNull NamespacedKey GALIMULATOR_HEAT_MAPMODE = new GalimulatorResourceKey("MAPMODE_HEAT");
+    public static final @NotNull NamespacedKey GALIMULATOR_RELIGION_MAPMODE = new GalimulatorResourceKey("MAPMODE_RELIGIONS");
+    public static final @NotNull NamespacedKey GALIMULATOR_WEALTH_MAPMODE = new GalimulatorResourceKey("MAPMODE_WEALTH");
 }
 
 /**

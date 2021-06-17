@@ -18,7 +18,7 @@ public interface TextFactory {
      * @param components The components to aggregate
      * @return The resulting {@link FormattedText}
      */
-    public @NotNull FormattedText aggregate(List<FormattedTextComponent> components);
+    public @NotNull FormattedText aggregate(@NotNull List<@NotNull FormattedTextComponent> components);
 
     /**
      * Aggregates a bunch of {@link FormattedTextComponent} into a
@@ -27,7 +27,7 @@ public interface TextFactory {
      * @param components The components to aggregate
      * @return The resulting {@link FormattedText}
      */
-    public @NotNull FormattedText aggregateComponents(FormattedTextComponent... components);
+    public @NotNull FormattedText aggregateComponents(@NotNull FormattedTextComponent... components);
 
     /**
      * Creates a {@link FormattedText} based on a String. The specified color is

@@ -93,7 +93,7 @@ public interface ConfigurationSection {
      * @return The newly registered option
      */
     public @NotNull StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
-            @NotNull String defaultValue, @NotNull Predicate<String> test, @NotNull Collection<@NotNull String> recommended);
+            @NotNull String defaultValue, @NotNull Predicate<@NotNull String> test, @NotNull Collection<@NotNull String> recommended);
 
     /**
      * Obtains the child options that are assigned to this section.

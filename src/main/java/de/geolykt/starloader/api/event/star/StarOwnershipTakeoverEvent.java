@@ -12,8 +12,8 @@ import de.geolykt.starloader.api.event.Cancellable;
 public class StarOwnershipTakeoverEvent extends StarEvent implements Cancellable {
 
     protected boolean cancelled = false;
-    protected ActiveEmpire newOwner;
-    protected final ActiveEmpire oldOwner;
+    protected @NotNull ActiveEmpire newOwner;
+    protected final @NotNull ActiveEmpire oldOwner;
 
     /**
      * Constructor.

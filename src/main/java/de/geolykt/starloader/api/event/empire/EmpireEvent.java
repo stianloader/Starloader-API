@@ -7,7 +7,7 @@ import de.geolykt.starloader.api.event.Event;
 
 public abstract class EmpireEvent extends Event {
 
-    private final ActiveEmpire target;
+    private final @NotNull ActiveEmpire target;
 
     public EmpireEvent(@NotNull ActiveEmpire target) {
         this.target = target;

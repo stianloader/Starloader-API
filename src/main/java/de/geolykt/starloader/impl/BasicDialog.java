@@ -31,9 +31,9 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
      *                        seconds
      * @param playSFX         True if the close sound should be used.
      */
-    public BasicDialog(@NotNull String title, @NotNull String description, @Nullable List<String> choices,
-            @NotNull ArrayList<BasicDialogCloseListener> closeListeners,
-            @NotNull ArrayList<WidgetActionListener> actionListeners, int duration, boolean playSFX) {
+    public BasicDialog(@NotNull String title, @NotNull String description, @Nullable List<@NotNull String> choices,
+            @NotNull ArrayList<@NotNull BasicDialogCloseListener> closeListeners,
+            @NotNull ArrayList<@NotNull WidgetActionListener> actionListeners, int duration, boolean playSFX) {
         dialog = Space.a(title, description, choices, duration, null, true);
         dialog.a(new DialogCloseListenerWrapper(closeListeners, playSFX));
         dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));

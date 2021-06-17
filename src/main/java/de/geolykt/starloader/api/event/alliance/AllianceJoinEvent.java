@@ -12,8 +12,8 @@ import de.geolykt.starloader.api.event.Event;
  */
 public class AllianceJoinEvent extends Event {
 
-    protected final Alliance alliance;
-    protected final ActiveEmpire empire;
+    protected final @NotNull Alliance alliance;
+    protected final @NotNull ActiveEmpire empire;
 
     public AllianceJoinEvent(@NotNull Alliance joinedAlliance, @NotNull ActiveEmpire joiningEmpire) {
         alliance = joinedAlliance;

@@ -48,6 +48,9 @@ public class EmpireSpecialMixins implements RegistryKeyed {
     @Overwrite
     @SuppressWarnings("deprecation")
     public static EmpireSpecial valueOf(String var0) {
+        if (var0 == null) {
+            return null;
+        }
         return Registry.EMPIRE_SPECIALS.getIntern(var0);
     }
 
@@ -57,11 +60,16 @@ public class EmpireSpecialMixins implements RegistryKeyed {
     }
 
     @Unique
+    @Nullable
     private NamespacedKey registryKey = null;
 
     @Override
-    public @Nullable NamespacedKey getRegistryKey() {
-        return registryKey;
+    public @NotNull NamespacedKey getRegistryKey() {
+        NamespacedKey key = registryKey;
+        if (key == null) {
+            throw new IllegalStateException("Registry key not yet defined");
+        }
+        return key;
     }
 
     @Override

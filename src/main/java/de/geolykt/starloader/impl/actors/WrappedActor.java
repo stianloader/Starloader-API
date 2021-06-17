@@ -1,6 +1,7 @@
 package de.geolykt.starloader.impl.actors;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
@@ -9,21 +10,21 @@ import de.geolykt.starloader.api.actor.wrapped.WrappingConfiguration;
 public class WrappedActor<T extends ActorSpec> extends SLActor implements WrappingActor<T> {
 
     private static final long serialVersionUID = 5188823282975107166L;
-    protected WrappingConfiguration config;
-    protected T delegate;
+    protected @NotNull WrappingConfiguration config;
+    protected @NotNull T delegate;
 
-    public WrappedActor(T delegate, WrappingConfiguration config) {
+    public WrappedActor(@NotNull T delegate, @NotNull WrappingConfiguration config) {
         this.delegate = delegate;
         this.config = config;
     }
 
     @Override
-    public T getWrappedSpec() {
+    public @NotNull T getWrappedSpec() {
         return delegate;
     }
 
     @Override
-    public @NotNull String getColorlessTextureName() {
+    public @Nullable String getColorlessTextureName() {
         if (config.inheritTexture()) {
             return delegate.getColorlessTextureName();
         }
@@ -39,11 +40,15 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         if (config.inheritName()) {
             return delegate.getName();
         }
-        return super.getName();
+        String name = super.getName();
+        if (name == null) {
+            throw new NullPointerException("The name was null!");
+        }
+        return name;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     }
 
     @Override
-    public void setColorlessTextureName(@NotNull String texture) {
+    public void setColorlessTextureName(@Nullable String texture) {
         if (config.inheritTexture()) {
             delegate.setColorlessTextureName(texture);
             try {

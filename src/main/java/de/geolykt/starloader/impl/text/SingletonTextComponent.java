@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
@@ -12,7 +13,7 @@ import snoddasmannen.galimulator.GalColor;
 
 public class SingletonTextComponent implements FormattedTextComponent {
 
-    private final TextComponent component;
+    private final @NotNull TextComponent component;
 
     public SingletonTextComponent(@NotNull String s) {
         this(new ColoredTextComponent(s));
@@ -27,8 +28,8 @@ public class SingletonTextComponent implements FormattedTextComponent {
     }
 
     @Override
-    public @NotNull List<TextComponent> getComponents() {
-        return Arrays.asList(component);
+    public @NotNull List<@NotNull TextComponent> getComponents() {
+        return NullUtils.requireNotNull(Arrays.asList(component));
     }
 
     @Override

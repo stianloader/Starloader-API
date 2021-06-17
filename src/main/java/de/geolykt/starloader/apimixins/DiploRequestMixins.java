@@ -33,6 +33,9 @@ public class DiploRequestMixins implements DiplomacyRequest {
 
     @Overwrite
     public String c(final Empire empire) {
+        if (empire == null) {
+            return "What a strange question.";
+        }
         DiplomacyRequestEvent event = new DiplomacyRequestEvent((ActiveEmpire) empire, this);
         EventManager.handleEvent(event);
         if (event.getResponse() != null) {

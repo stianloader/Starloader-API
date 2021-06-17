@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
+import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 
 import snoddasmannen.galimulator.GalColor;
@@ -15,12 +17,12 @@ import snoddasmannen.galimulator.GalFX;
 public class StarloaderTextFactory implements TextFactory {
 
     @Override
-    public @NotNull FormattedText aggregate(List<FormattedTextComponent> components) {
+    public @NotNull FormattedText aggregate(@NotNull List<@NotNull FormattedTextComponent> components) {
         return new BaseFormattedText(components);
     }
 
     @Override
-    public @NotNull FormattedText aggregateComponents(FormattedTextComponent... components) {
+    public @NotNull FormattedText aggregateComponents(@NotNull FormattedTextComponent... components) {
         return new BaseFormattedText(components);
     }
 
@@ -52,6 +54,7 @@ public class StarloaderTextFactory implements TextFactory {
     @Override
     public @NotNull FormattedText asDefaultFormattedText(@NotNull String text) {
         return new SingletonFormattedText(new SingletonTextComponent(
-                new ColoredFontspecificTextComponent(text, GalColor.WHITE, GalFX.FONT_TYPE.MONOTYPE_DEFAULT)));
+                new ColoredFontspecificTextComponent(text, TextColor.WHITE.toGalimulatorColor(),
+                        NullUtils.requireNotNull(GalFX.FONT_TYPE.MONOTYPE_DEFAULT))));
     }
 }

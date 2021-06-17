@@ -21,7 +21,7 @@ public final class EventManager {
     private EventManager() {
     } // The class should not be constructed
 
-    private static final Map<Listener, List<Method>> LISTENERS = new HashMap<>();
+    private static final Map<Listener, List<@NotNull Method>> LISTENERS = new HashMap<>();
 
     private static boolean wasBuilt = false;
 
@@ -35,7 +35,7 @@ public final class EventManager {
         if (LISTENERS.containsKey(listener)) {
             return;
         }
-        List<Method> handlers = new ArrayList<>();
+        List<@NotNull Method> handlers = new ArrayList<>();
         Method[] methods = listener.getClass().getDeclaredMethods();
         for (Method method : methods) {
             if (method.isAnnotationPresent(EventHandler.class)) {
@@ -82,6 +82,7 @@ public final class EventManager {
         }
         LISTENERS.forEach((listener, handles) -> {
             for (Method handle : handles) {
+                @SuppressWarnings("null")
                 EventHandler info = handle.getDeclaredAnnotation(EventHandler.class);
                 Class<?> clazz = handle.getParameters()[0].getType();
                 while (Event.class.isAssignableFrom(clazz)) {

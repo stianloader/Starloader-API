@@ -11,11 +11,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BasicDialogBuilder {
 
-    private String title;
-    private String description;
-    private List<String> choices;
-    private ArrayList<BasicDialogCloseListener> closeListeners = new ArrayList<>();
-    private ArrayList<WidgetActionListener> actionListeners = new ArrayList<>();
+    private @NotNull String title;
+    private @NotNull String description;
+    private @Nullable List<@NotNull String> choices;
+    private @NotNull ArrayList<@NotNull BasicDialogCloseListener> closeListeners = new ArrayList<>();
+    private @NotNull ArrayList<@NotNull WidgetActionListener> actionListeners = new ArrayList<>();
     private int duration = 0;
     private boolean playSFX = true;
 
@@ -41,7 +41,7 @@ public class BasicDialogBuilder {
      * @param choices     The choices of responses the user has, also known as the
      *                    buttons
      */
-    public BasicDialogBuilder(@NotNull String title, @NotNull String description, @Nullable List<String> choices) {
+    public BasicDialogBuilder(@NotNull String title, @NotNull String description, @Nullable List<@NotNull String> choices) {
         this.title = title;
         this.description = description;
         this.choices = choices;
@@ -68,7 +68,7 @@ public class BasicDialogBuilder {
      * @param choices The text of the response buttons
      * @return The instance of the builder
      */
-    public BasicDialogBuilder setChoices(@Nullable List<String> choices) {
+    public BasicDialogBuilder setChoices(@Nullable List<@NotNull String> choices) {
         this.choices = choices;
         return this;
     }
@@ -84,7 +84,7 @@ public class BasicDialogBuilder {
      * @return The instance of the builder
      */
     @Deprecated(forRemoval = true, since = "1.1.0")
-    public BasicDialogBuilder setListeners(@NotNull ArrayList<BasicDialogCloseListener> listeners) {
+    public BasicDialogBuilder setListeners(@NotNull ArrayList<@NotNull BasicDialogCloseListener> listeners) {
         this.closeListeners = listeners;
         return this;
     }
@@ -112,7 +112,7 @@ public class BasicDialogBuilder {
      * @param listeners The list of listeners to use
      * @return The instance of the builder
      */
-    public BasicDialogBuilder setCloseListeners(@NotNull ArrayList<BasicDialogCloseListener> listeners) {
+    public BasicDialogBuilder setCloseListeners(@NotNull ArrayList<@NotNull BasicDialogCloseListener> listeners) {
         this.closeListeners = listeners;
         return this;
     }
@@ -135,7 +135,7 @@ public class BasicDialogBuilder {
      * @param listeners The list of listeners to use
      * @return The instance of the builder
      */
-    public BasicDialogBuilder setActionListeners(@NotNull ArrayList<WidgetActionListener> listeners) {
+    public BasicDialogBuilder setActionListeners(@NotNull ArrayList<@NotNull WidgetActionListener> listeners) {
         this.actionListeners = listeners;
         return this;
     }

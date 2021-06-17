@@ -1,7 +1,6 @@
 package de.geolykt.starloader.apimixins;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,6 +17,9 @@ public class EmpireStateMixins implements RegistryKeyed {
     @Overwrite
     @SuppressWarnings("deprecation")
     public static EmpireState valueOf(String var0) {
+        if (var0 == null) {
+            return null;
+        }
         return Registry.EMPIRE_STATES.getIntern(var0);
     }
 
@@ -30,8 +32,12 @@ public class EmpireStateMixins implements RegistryKeyed {
     private NamespacedKey registryKey = null;
 
     @Override
-    public @Nullable NamespacedKey getRegistryKey() {
-        return registryKey;
+    public @NotNull NamespacedKey getRegistryKey() {
+        NamespacedKey key = registryKey;
+        if (key == null) {
+            throw new IllegalStateException("The registry key is not already set!");
+        }
+        return key;
     }
 
     @Override
@@ -42,3 +48,4 @@ public class EmpireStateMixins implements RegistryKeyed {
         registryKey = key;
     }
 }
+

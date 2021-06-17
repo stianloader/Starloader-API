@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.geolykt.starloader.api.Map;
+import de.geolykt.starloader.api.NullUtils;
 
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.gd;
@@ -86,7 +87,7 @@ public class MapDataMixins implements Map {
 
     @Override
     public @NotNull String getGeneratorName() {
-        return generator.name();
+        return NullUtils.requireNotNull(generator.name());
     }
 
     @Override

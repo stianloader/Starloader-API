@@ -58,6 +58,7 @@ public class GalimulatorImplementation implements GameImplementation {
         starB.removeNeighbour(starA);
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull MapMode getActiveMapmode() {
         return toSLMode(snoddasmannen.galimulator.MapMode.b());
@@ -68,6 +69,7 @@ public class GalimulatorImplementation implements GameImplementation {
         return (ActiveEmpire) Space.d(uid);
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull List<@NotNull ActiveEmpire> getEmpires() {
         return Space.b;
@@ -78,6 +80,7 @@ public class GalimulatorImplementation implements GameImplementation {
         return Space.E();
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull Map getMap() {
         return (Map) Space.p();
@@ -88,11 +91,13 @@ public class GalimulatorImplementation implements GameImplementation {
         return toSLModeNullable(Registry.MAP_MODES.get(key));
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull MapMode[] getMapModes() {
         return (MapMode[]) (Object[]) Registry.MAP_MODES.getValues();
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull ActiveEmpire getNeutralEmpire() {
         return (ActiveEmpire) Space.x;
@@ -109,6 +114,7 @@ public class GalimulatorImplementation implements GameImplementation {
         return (ActiveEmpire) plyr.a();
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull List<@NotNull Star> getStars() {
         return Space.a;
@@ -131,7 +137,11 @@ public class GalimulatorImplementation implements GameImplementation {
         if (bind.getCharacter() != '\0') {
             Main.shortcuts.add(new SLKeybind(bind, bind.getCharacter()));
         } else {
-            Main.shortcuts.add(new SLKeybind(bind, bind.getKeycodeDescription(), bind.getKeycode()));
+            String desc = bind.getKeycodeDescription();
+            if (desc == null) {
+                throw new IllegalArgumentException("The keycode description of the argument is null!");
+            }
+            Main.shortcuts.add(new SLKeybind(bind, desc, bind.getKeycode()));
         }
     }
 

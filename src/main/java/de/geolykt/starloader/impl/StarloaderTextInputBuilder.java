@@ -22,7 +22,7 @@ import snoddasmannen.galimulator.ui.qm;
 public class StarloaderTextInputBuilder implements TextInputBuilder {
 
     private String hint;
-    private final List<Consumer<String>> hooks = new ArrayList<>();
+    private final List<Consumer<@Nullable String>> hooks = new ArrayList<>();
     private String text;
     private String title;
 
@@ -33,13 +33,13 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     }
 
     @Override
-    public @NotNull TextInputBuilder addHook(@NotNull Consumer<String> hook) {
+    public @NotNull TextInputBuilder addHook(@NotNull Consumer<@Nullable String> hook) {
         hooks.add(hook);
         return this;
     }
 
     @Override
-    public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<String>> hooks) {
+    public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<@Nullable String>> hooks) {
         this.hooks.addAll(hooks);
         return this;
     }

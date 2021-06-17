@@ -10,7 +10,7 @@ import de.geolykt.starloader.api.event.Event;
  */
 public abstract class StarEvent extends Event {
 
-    private Star target;
+    private @NotNull Star target;
 
     /**
      * Constructor.

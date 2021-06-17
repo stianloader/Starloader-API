@@ -17,8 +17,8 @@ import snoddasmannen.galimulator.ui.Widget;
 
 public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw {
 
-    private final List<BasicDialogCloseListener> closeListeners;
-    private final List<WidgetActionListener> actionListeners;
+    private final List<@NotNull BasicDialogCloseListener> closeListeners;
+    private final List<@NotNull WidgetActionListener> actionListeners;
     private final AutocloseableDialog parent;
 
     /**
@@ -32,8 +32,8 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw
      * @param actionListeners The widget action listeners to have initially
      */
     WidgetActionListenerWrapper(@Nullable AutocloseableDialog parent,
-            @NotNull List<BasicDialogCloseListener> closeListeners,
-            @NotNull List<WidgetActionListener> actionListeners) {
+            @NotNull List<@NotNull BasicDialogCloseListener> closeListeners,
+            @NotNull List<@NotNull WidgetActionListener> actionListeners) {
         this.parent = parent;
         this.closeListeners = closeListeners;
         this.actionListeners = actionListeners;
@@ -88,7 +88,7 @@ public class WidgetActionListenerWrapper implements snoddasmannen.galimulator.hw
         }
     }
 
-    private void notifyClose(DialogCloseCause cause) {
+    private void notifyClose(@NotNull DialogCloseCause cause) {
         for (BasicDialogCloseListener listener : closeListeners) {
             listener.onClose(cause, null);
         }

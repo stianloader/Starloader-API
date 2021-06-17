@@ -12,8 +12,8 @@ import de.geolykt.starloader.api.event.Event;
  * Event that is fired whenever the Emperor of an empire has died and the succession needs to be assigned.
  */
 public class EmperorDeathEvent extends Event {
-    protected final ActiveEmpire affectedEmpire;
-    protected List<DynastyMember> successors;
+    protected final @NotNull ActiveEmpire affectedEmpire;
+    protected @NotNull List<@NotNull DynastyMember> successors;
 
     /**
      * Constructor.

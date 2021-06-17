@@ -1,10 +1,10 @@
 package de.geolykt.starloader.impl.gui;
 
-import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
@@ -16,18 +16,18 @@ import snoddasmannen.galimulator.hk;
 
 public class NamedStringChooserComponent extends hk implements ScreenComponent {
 
-    protected final Screen parent;
-    protected final StringOption option;
+    protected final @NotNull Screen parent;
+    protected final @NotNull StringOption option;
 
     public NamedStringChooserComponent(@NotNull Screen parent, @NotNull StringOption option) {
         // Irrelevant  / name / currentValue / options / category / Irrelevant
         super(null, option.getName(), option.get(), getOptions(option), option.getParent().getName(), null);
-        this.parent = Objects.requireNonNull(parent);
+        this.parent = NullUtils.requireNotNull(parent);
         this.option = option;
     }
 
-    protected static Vector<Object> getOptions(StringOption option) {
-        final Vector<Object> options = new Vector<>(option.getRecommendedValues());
+    protected static Vector<@NotNull Object> getOptions(StringOption option) {
+        final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
         if (!(option instanceof StrictStringOption)) {
             options.add("Custom");
         }
@@ -39,6 +39,9 @@ public class NamedStringChooserComponent extends hk implements ScreenComponent {
             var builder = Drawing.textInputBuilder("Change value of setting", option.get(), option.getName());
             if (option instanceof StrictStringOption) {
                 builder.addHook(text -> {
+                    if (text == null) {
+                        return; // cancelled
+                    }
                     if (((StrictStringOption) option).isValid(text)) {
                         option.set(text);
                         getParentScreen().markDirty();
@@ -48,6 +51,9 @@ public class NamedStringChooserComponent extends hk implements ScreenComponent {
                 });
             } else {
                 builder.addHook(text -> {
+                    if (text == null) {
+                        return; // cancelled
+                    }
                     option.set(text);
                     getParentScreen().markDirty();
                 });
@@ -55,7 +61,7 @@ public class NamedStringChooserComponent extends hk implements ScreenComponent {
             builder.build();
             return;
         }
-        option.set(o.toString());
+        option.set(NullUtils.requireNotNull(o.toString()));
     }
 
     @Override

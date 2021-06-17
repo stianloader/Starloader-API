@@ -25,7 +25,7 @@ import snoddasmannen.galimulator.gh;
 
 public class DrawingManager implements DrawingImpl {
 
-    private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
+    private static final @NotNull StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
 
     // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -59,14 +59,16 @@ public class DrawingManager implements DrawingImpl {
 
     @Override
     public @NotNull Collection<String> getAvailiableFonts() {
-        if (fonts == null) {
+        Collection<String> ret = fonts;
+        if (ret == null) {
             Enum<?>[] galFxFonts = GalFX.FONT_TYPE.values();
-            this.fonts = new ArrayList<>(galFxFonts.length);
+            ret = new ArrayList<>(galFxFonts.length);
             for (Enum<?> font : galFxFonts) {
-                fonts.add(font.name());
+                ret.add(font.name());
             }
+            fonts = ret;
         }
-        return fonts;
+        return ret;
     }
 
     @SuppressWarnings("unchecked")
@@ -86,6 +88,7 @@ public class DrawingManager implements DrawingImpl {
         return (BitmapFont) obj;
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull SpriteBatch getMainDrawingBatch() {
         return GalFX.a;

@@ -38,12 +38,12 @@ public class ModConf implements ModConfSpec {
         /**
          * The section that this option currently resides in.
          */
-        protected final ConfigurationSection cfgSect;
+        protected final @NotNull ConfigurationSection cfgSect;
 
         /**
          * The name of the option. Should be user-friendly but not all too long.
          */
-        protected final String name;
+        protected final @NotNull String name;
 
         /**
          * Constructor.
@@ -83,12 +83,12 @@ public class ModConf implements ModConfSpec {
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
          */
-        protected Boolean currentVal;
+        protected @NotNull Boolean currentVal;
 
         /**
          * The currently valid value.
          */
-        protected final Boolean defaultVal;
+        protected final @NotNull Boolean defaultVal;
 
         protected SLBooleanOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
                 @NotNull Boolean currentVal, @NotNull Boolean defaultVal) {
@@ -131,12 +131,12 @@ public class ModConf implements ModConfSpec {
         /**
          * The child options of this section.
          */
-        protected final PseudoImmutableArrayList<ConfigurationOption<?>> children = new PseudoImmutableArrayList<>(16);
+        protected final @NotNull PseudoImmutableArrayList<@NotNull ConfigurationOption<?>> children = new PseudoImmutableArrayList<>(16);
 
         /**
          * The user-friendly name of the section.
          */
-        protected final String name;
+        protected final @NotNull String name;
 
         /**
          * Constructor.
@@ -207,7 +207,7 @@ public class ModConf implements ModConfSpec {
          */
         @Override
         public @NotNull StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
-                @NotNull String defaultValue, @NotNull Predicate<String> test,
+                @NotNull String defaultValue, @NotNull Predicate<@NotNull String> test,
                 @NotNull Collection<@NotNull String> recommended) {
             checkState();
             StrictStringOption opt = new SLStrictStringOption(name, this, currentValue, defaultValue, test, recommended);
@@ -249,7 +249,7 @@ public class ModConf implements ModConfSpec {
         /**
          * The recommended values shown to the user when the user decides to change the value.
          */
-        protected Collection<@NotNull Float> recommended;
+        protected @NotNull Collection<@NotNull Float> recommended;
 
         /**
          * The currently valid value.
@@ -332,7 +332,7 @@ public class ModConf implements ModConfSpec {
         /**
          * The recommended values shown to the user when the user decides to change the value.
          */
-        protected Collection<@NotNull Integer> recommended;
+        protected @NotNull Collection<@NotNull Integer> recommended;
 
         /**
          * The currently valid value.
@@ -424,7 +424,7 @@ public class ModConf implements ModConfSpec {
          */
         @Override
         public boolean isValid(String value) {
-            return valitityTest.test(value);
+            return value != null && valitityTest.test(value);
         }
 
         /**
@@ -450,17 +450,17 @@ public class ModConf implements ModConfSpec {
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
          */
-        protected String currentVal;
+        protected @NotNull String currentVal;
 
         /**
          * The currently valid value.
          */
-        protected final String defaultVal;
+        protected final @NotNull String defaultVal;
 
         /**
          * The recommended values shown to the user when the user decides to change the value.
          */
-        protected Collection<@NotNull String> recommended;
+        protected @NotNull Collection<@NotNull String> recommended;
 
         protected SLStringOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
                 @NotNull String currentVal, @NotNull String defaultVal, @NotNull Collection<@NotNull String> recommended) {
@@ -521,7 +521,7 @@ public class ModConf implements ModConfSpec {
     /**
      * The currently registered sections.
      */
-    protected final PseudoImmutableArrayList<ConfigurationSection> sections = new PseudoImmutableArrayList<>(16);
+    protected final @NotNull PseudoImmutableArrayList<@NotNull ConfigurationSection> sections = new PseudoImmutableArrayList<>(16);
 
     /**
      * {@inheritDoc}

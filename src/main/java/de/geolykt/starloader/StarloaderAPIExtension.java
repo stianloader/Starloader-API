@@ -1,6 +1,5 @@
 package de.geolykt.starloader;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import de.geolykt.starloader.api.Galimulator;
@@ -19,7 +18,7 @@ import de.geolykt.starloader.mod.Extension;
  */
 public class StarloaderAPIExtension extends Extension {
 
-    public static @NotNull Logger lggr;
+    public static Logger lggr;
 
     @Override
     public void preInitialize() {

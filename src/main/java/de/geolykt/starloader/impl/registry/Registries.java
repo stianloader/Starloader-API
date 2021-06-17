@@ -5,6 +5,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.MapModeRegistrationEvent;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
@@ -30,7 +31,7 @@ public class Registries {
         initAudio();
         EmpireSpecialRegistry empireSpecialRegistry = new EmpireSpecialRegistry();
         // Register values
-        empireSpecialRegistry.setValuesArray(new EmpireSpecial[] { EmpireSpecial.MILITANT,
+        empireSpecialRegistry.setValuesArray(new @NotNull EmpireSpecial[] { EmpireSpecial.MILITANT,
                 EmpireSpecial.AGGRESSIVE, EmpireSpecial.DEFENSIVE,
                 EmpireSpecial.SCIENTIFIC, EmpireSpecial.STABLE, EmpireSpecial.UNSTABLE, EmpireSpecial.EXPLOSIVE,
                 EmpireSpecial.SLOW_STARTER, EmpireSpecial.DIPLOMATIC,
@@ -57,7 +58,7 @@ public class Registries {
         Registry.EMPIRE_SPECIALS = empireSpecialRegistry;
         EmpireStateRegistry empireStateRegistry = new EmpireStateRegistry();
         empireStateRegistry.registerAll(
-                new NamespacedKey[] { RegistryKeys.GALIMULATOR_EXPANDING, RegistryKeys.GALIMULATOR_FORTIFYING,
+                new @NotNull NamespacedKey[] { RegistryKeys.GALIMULATOR_EXPANDING, RegistryKeys.GALIMULATOR_FORTIFYING,
                         RegistryKeys.GALIMULATOR_DEGENERATING, RegistryKeys.GALIMULATOR_TRANSCENDING,
                         RegistryKeys.GALIMULATOR_ALL_WILL_BE_ASHES, RegistryKeys.GALIMULATOR_RIOTING,
                         RegistryKeys.GALIMULATOR_CRUSADING, RegistryKeys.GALIMULATOR_BLOOD_PURGE },
@@ -79,8 +80,9 @@ public class Registries {
      * @param special The value to register
      * @param key     The key to register the value under.
      */
-    private static void registerSpecial(Map<NamespacedKey, EmpireSpecial> map, EmpireSpecial special,
-            NamespacedKey key) {
+    // FIXME this method is strange at best
+    private static void registerSpecial(Map<NamespacedKey, EmpireSpecial> map, @NotNull EmpireSpecial special,
+            @NotNull NamespacedKey key) {
         ((RegistryKeyed) special).setRegistryKey(key);
         map.put(key, special);
     }
@@ -128,10 +130,10 @@ public class Registries {
  */
 class StarloaderAudioSample extends AudioSampleWrapper {
 
-    private final AudioSample sample;
+    private final @NotNull AudioSample sample;
 
     protected StarloaderAudioSample(@NotNull String loc, @NotNull AudioSample sample) {
-        super(loc, sample.sound);
+        super(loc, NullUtils.requireNotNull(sample.sound));
         this.sample = sample;
     }
 

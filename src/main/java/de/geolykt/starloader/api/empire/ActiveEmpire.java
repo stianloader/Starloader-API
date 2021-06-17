@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.event.TickCallback;
 
@@ -152,7 +153,7 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public default @NotNull String getColoredName() {
         GalColor c = getColor();
         // The * 255 is intended, as the range of `%02X` is 0 - 255 (both inclusive)
-        return String.format("[#%02X%02X%02X]%s[]", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName());
+        return NullUtils.format("[#%02X%02X%02X]%s[]", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName());
     }
 
     /**

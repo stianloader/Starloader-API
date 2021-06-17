@@ -16,29 +16,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
 
+import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.Religion;
 
 @SuppressWarnings("unused")
 @Mixin(snoddasmannen.galimulator.Star.class)
 public class StarMixins implements Star {
 
-    @SuppressWarnings("rawtypes")
     @Shadow
-    transient Vector a; // neighbours
+    transient @NotNull Vector<Star> a = new Vector<>(); // neighbours
 
     @SuppressWarnings("rawtypes")
     @Shadow
     transient HashMap b; // starlaneCache
 
     @Shadow
-    private Religion faith; // majorityFaith
+    @NotNull
+    private Religion faith = Religion.IMMERSION; // majorityFaith
 
     @Shadow
     int id; // uId
@@ -50,10 +53,12 @@ public class StarMixins implements Star {
     private transient HashMap<NamespacedKey, Object> metadata;
 
     @Shadow
+    @Nullable
     private Religion minorityFaith; // minorityFaith
 
     @Shadow
-    private transient Vector2 r; // coordinates
+    @Nullable
+    private transient Vector2 r = new Vector2(); // coordinates
 
     private transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
@@ -67,8 +72,9 @@ public class StarMixins implements Star {
     public double y; // y
 
     @Shadow
+    @NotNull
     public snoddasmannen.galimulator.Empire a() { // getEmpire
-        return null;
+        return (Empire) Galimulator.getNeutralEmpire();
     }
 
     @Shadow
@@ -109,10 +115,9 @@ public class StarMixins implements Star {
     public void b(snoddasmannen.galimulator.Star var1) {
     } // addNeighbour
 
-    @SuppressWarnings("rawtypes")
     @Shadow
-    public Vector c(int var1) { // getNeighboursRecursive
-        return null;
+    public @NotNull Vector<Star> c(int var1) { // getNeighboursRecursive
+        return new Vector<>();
     }
 
     @Override
@@ -131,14 +136,14 @@ public class StarMixins implements Star {
     }
 
     @Override
-    public ActiveEmpire getAssignedEmpire() {
-        return (ActiveEmpire) a();
+    public @NotNull ActiveEmpire getAssignedEmpire() {
+        return NullUtils.requireNotNull((ActiveEmpire) a());
     }
 
     @Override
     @Shadow
     public @NotNull Vector2 getCoordinates() { // thankfully this is already implemented by the base class
-        return null;
+        throw new UnsupportedOperationException("This should be created by the shadowed field!");
     }
 
     @Override
@@ -162,7 +167,7 @@ public class StarMixins implements Star {
     @Override
     @Shadow
     public String getName() { // this is also already implemented by the base class
-        return null;
+        return "";
     }
 
     @SuppressWarnings("unchecked")
@@ -171,13 +176,11 @@ public class StarMixins implements Star {
         return intLanes;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NotNull Vector<Star> getNeighbours() {
         return a;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NotNull Vector<Star> getNeighboursRecursive(int recurseDepth) {
         return c(recurseDepth);
@@ -273,14 +276,19 @@ public class StarMixins implements Star {
 
     @Override
     public void syncCoordinates() {
-        x = r.x;
-        y = r.y;
+        Vector2 vect = r;
+        if (vect == null) {
+            r = new Vector2((float) x, (float) y);
+            return;
+        }
+        x = vect.x;
+        y = vect.y;
     }
 
     @Inject(method = "b(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
     public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
         StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(),
-                (ActiveEmpire) empire);
+                NullUtils.requireNotNull((ActiveEmpire) empire));
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
             info.cancel();

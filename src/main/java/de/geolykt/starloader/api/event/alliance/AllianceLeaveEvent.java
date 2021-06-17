@@ -12,8 +12,8 @@ import de.geolykt.starloader.api.event.Event;
  */
 public class AllianceLeaveEvent extends Event {
 
-    protected final Alliance alliance;
-    protected final ActiveEmpire empire;
+    protected final @NotNull Alliance alliance;
+    protected final @NotNull ActiveEmpire empire;
 
     public AllianceLeaveEvent(@NotNull Alliance leftAlliance, @NotNull ActiveEmpire leavingEmpire) {
         alliance = leftAlliance;

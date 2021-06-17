@@ -10,10 +10,10 @@ import de.geolykt.starloader.impl.util.PseudoImmutableArrayList;
 
 public class BaseFormattedTextComponent implements FormattedTextComponent {
 
-    protected final PseudoImmutableArrayList<TextComponent> components;
-    protected final String text;
+    protected final @NotNull PseudoImmutableArrayList<@NotNull TextComponent> components;
+    protected final @NotNull String text;
 
-    public BaseFormattedTextComponent(TextComponent mainComponent, TextComponent... components) {
+    public BaseFormattedTextComponent(@NotNull TextComponent mainComponent, @NotNull TextComponent... components) {
         this.components = new PseudoImmutableArrayList<>(components.length + 1);
         for (TextComponent component : components) {
             this.components.unsafeAdd(component);
@@ -22,7 +22,7 @@ public class BaseFormattedTextComponent implements FormattedTextComponent {
         this.text = mainComponent.getText();
     }
 
-    public BaseFormattedTextComponent(TextComponent mainComponent, List<TextComponent> components) {
+    public BaseFormattedTextComponent(@NotNull TextComponent mainComponent, @NotNull List<@NotNull TextComponent> components) {
         this.components = new PseudoImmutableArrayList<>(components.size() + 1);
         this.components.unsafeAddAll(components);
         this.components.unsafeAdd(mainComponent);
@@ -30,7 +30,7 @@ public class BaseFormattedTextComponent implements FormattedTextComponent {
     }
 
     @Override
-    public @NotNull List<TextComponent> getComponents() {
+    public @NotNull List<@NotNull TextComponent> getComponents() {
         return components;
     }
 

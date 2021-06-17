@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.impl.AWTColorAccesor;
 
@@ -19,7 +20,8 @@ public class EmpireAnnalsMixins implements Empire {
     public int birthYear;
 
     @Shadow
-    public GalColor color;
+    @NotNull
+    public GalColor color = new GalColor(0f, 0f, 0f);
 
     @Shadow
     public int deathYear;
@@ -28,10 +30,12 @@ public class EmpireAnnalsMixins implements Empire {
     public int empireId;
 
     @Shadow
-    public String name;
+    @NotNull
+    public String name = "";
 
     @Shadow
-    public String nameIdentifier;
+    @NotNull
+    public String nameIdentifier = "";
 
     @Override
     public @NotNull Color getAWTColor() {
@@ -63,7 +67,11 @@ public class EmpireAnnalsMixins implements Empire {
         if (deathYear != -1) {
             return 0;
         }
-        return Galimulator.getEmpirePerUID(getUID()).getStarCount();
+        ActiveEmpire slempire = Galimulator.getEmpirePerUID(getUID());
+        if (slempire == null) {
+            throw new IllegalStateException("The empire no longer exists despite it should be existing");
+        }
+        return slempire.getStarCount();
     }
 
     @Override

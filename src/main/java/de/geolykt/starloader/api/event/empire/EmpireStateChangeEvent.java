@@ -14,7 +14,7 @@ public class EmpireStateChangeEvent extends EmpireEvent implements Cancellable {
     /**
      * The registry key of the proposed new state of the empire.
      */
-    protected final NamespacedKey state;
+    protected final @NotNull NamespacedKey state;
 
     /**
      * The cancellation status of the event. It should not be modified directly and

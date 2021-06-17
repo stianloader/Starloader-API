@@ -53,7 +53,7 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
      * @param values   The values to register
      * @param metadata The metadata of the corresponding keys to register
      */
-    protected void registerAll(NamespacedKey[] keys, EmpireState[] values, EmpireStateMetadataEntry[] metadata) {
+    protected void registerAll(@NotNull NamespacedKey[] keys, EmpireState[] values, EmpireStateMetadataEntry[] metadata) {
         if (keys.length != values.length || keys.length != metadata.length) {
             throw new IllegalArgumentException("Input arrays have different sizes!");
         }

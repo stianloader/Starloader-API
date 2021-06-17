@@ -1,11 +1,11 @@
 package de.geolykt.starloader.api.event.people;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 
 /**
@@ -20,6 +20,6 @@ public class PlayerEmperorDeathEvent extends EmperorDeathEvent {
      * @param successors A list of Dynasty members that may follow suit to the person that died.
      */
     public PlayerEmperorDeathEvent(@NotNull List<@NotNull DynastyMember> successors) {
-        super(successors, Objects.requireNonNull(Galimulator.getPlayerEmpire(), "The Player empire is not defined!"));
+        super(successors, NullUtils.requireNotNull(Galimulator.getPlayerEmpire(), "The Player empire is not defined!"));
     }
 }

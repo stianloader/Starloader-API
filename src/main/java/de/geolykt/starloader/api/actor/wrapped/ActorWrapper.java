@@ -40,7 +40,7 @@ public final class ActorWrapper {
          * @param config The configuration that impacts the newly created wrapper actor.
          * @return The wrapping actor
          */
-        public <T extends ActorSpec> WrappingActor<T> wrapActor(T spec, WrappingConfiguration config);
+        public <T extends ActorSpec> WrappingActor<T> wrapActor(@NotNull T spec, @NotNull WrappingConfiguration config);
 
         /**
          * Wraps a {@link MissileSpec} in a Galimulator-compatible Actor. The actor will not be spawned as-is and
@@ -100,7 +100,7 @@ public final class ActorWrapper {
      * @param config The configuration that impacts the newly created wrapper actor.
      * @return The wrapping actor
      */
-    public static <T extends ActorSpec> WrappingActor<T> wrapActor(T spec, WrappingConfiguration config) {
+    public static <T extends ActorSpec> WrappingActor<T> wrapActor(@NotNull T spec, @NotNull WrappingConfiguration config) {
         return implementation.wrapActor(spec, config);
     }
 

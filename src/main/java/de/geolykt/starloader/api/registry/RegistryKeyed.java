@@ -1,7 +1,6 @@
 package de.geolykt.starloader.api.registry;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.NamespacedKey;
 
@@ -26,7 +25,7 @@ public interface RegistryKeyed {
      *
      * @return The {@link NamespacedKey} that is assigned to this object
      */
-    public @Nullable NamespacedKey getRegistryKey();
+    public @NotNull NamespacedKey getRegistryKey();
 
     /**
      * Sets the {@link NamespacedKey} that is used within the respective registries

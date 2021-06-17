@@ -1,10 +1,10 @@
 package de.geolykt.starloader.impl.gui;
 
-import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerChooseOption;
@@ -18,18 +18,18 @@ import snoddasmannen.galimulator.hl;
 
 public class NamedIntegerChooserComponent extends hl implements ScreenComponent {
 
-    protected final Screen parent;
-    protected final NumberOption<? extends Number> option;
+    protected final @NotNull Screen parent;
+    protected final @NotNull NumberOption<? extends Number> option;
 
     public NamedIntegerChooserComponent(@NotNull Screen parent, @NotNull NumberOption<? extends Number> option) {
         // Irrelevant  / name / currentValue / options / category / Irrelevant
         super(null, option.getName(), option.get().toString(), getOptions(option), option.getParent().getName(), null);
-        this.parent = Objects.requireNonNull(parent);
+        this.parent = NullUtils.requireNotNull(parent);
         this.option = option;
     }
 
-    protected static Vector<Object> getOptions(NumberOption<?> option) {
-        final Vector<Object> options = new Vector<>(option.getRecommendedValues());
+    protected static Vector<@NotNull Object> getOptions(@NotNull NumberOption<?> option) {
+        final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
         if (!(option instanceof IntegerChooseOption)) {
             options.add("Custom");
         }
@@ -38,21 +38,21 @@ public class NamedIntegerChooserComponent extends hl implements ScreenComponent 
 
     public void a(final String o) {
         if ("Custom".equals(o)) {
-            var builder = Drawing.textInputBuilder("Change value of setting", option.get().toString(), option.getName());
+            var builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(option.get().toString()), option.getName());
             builder.addHook(text -> {
                 Double d;
                 try {
                     d = Double.valueOf(text);
                 } catch (NumberFormatException e) {
-                    Drawing.toast(String.format("%s is not a valid number.", text));
+                    Drawing.toast(NullUtils.format("%s is not a valid number.", text));
                     return;
                 }
                 if (d < option.getMinimum().doubleValue()) {
-                    Drawing.toast(String.format("%s is below the minimum value of %s", text, option.getMinimum().toString()));
+                    Drawing.toast(NullUtils.format("%s is below the minimum value of %s", text, option.getMinimum().toString()));
                     return;
                 }
                 if (d > option.getMaximum().doubleValue()) {
-                    Drawing.toast(String.format("%s is above the maximum value of %s", text, option.getMaximum().toString()));
+                    Drawing.toast(NullUtils.format("%s is above the maximum value of %s", text, option.getMaximum().toString()));
                     return;
                 }
                 NumberOption<?> rawOpt = option; // We have to trick the compiler in order to get this to compile.
@@ -80,7 +80,11 @@ public class NamedIntegerChooserComponent extends hl implements ScreenComponent 
             } else {
                 @SuppressWarnings("unchecked")
                 NumberOption<Number> rawr = (NumberOption<Number>) option;
-                rawr.set(Integer.decode(o));
+                Integer i = Integer.decode(o);
+                if (i == null) {
+                    throw new NullPointerException();
+                }
+                rawr.set(i);
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();

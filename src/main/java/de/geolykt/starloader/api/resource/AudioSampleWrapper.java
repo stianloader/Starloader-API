@@ -15,9 +15,7 @@ import com.badlogic.gdx.audio.Sound;
 public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
 
     public static AudioSampleWrapper ACTOR_ORDERED = null;
-
     public static AudioSampleWrapper ACTOR_SELECTED = null;
-
     public static AudioSampleWrapper ALARM = null;
     public static AudioSampleWrapper BAD_MINI = null;
     public static AudioSampleWrapper BIG_LASER = null;
@@ -38,12 +36,12 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
     /**
      * The location of the resource within the respective data folder.
      */
-    private final String location;
+    private final @NotNull String location;
 
     /**
      * The sound resource that should be used.
      */
-    private final Sound sound;
+    private final @NotNull Sound sound;
 
     /**
      * Constructor.
@@ -52,7 +50,7 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
      *               name
      * @param sample The sound sample of the instance
      */
-    protected AudioSampleWrapper(String loc, Sound sample) {
+    protected AudioSampleWrapper(@NotNull String loc, @NotNull Sound sample) {
         this.location = loc;
         this.sound = sample;
     }

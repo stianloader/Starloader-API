@@ -3,6 +3,7 @@ package de.geolykt.starloader.impl.actors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.spacecrafts.MissileSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
@@ -48,7 +49,7 @@ public abstract class SLMissile extends Missile implements MissileSpec {
     @Override
     public @NotNull ActiveEmpire getOwningempire() {
         // TODO Auto-generated method stub
-        return null;
+        return Galimulator.getNeutralEmpire();
     }
 
     @Pseudo
@@ -104,14 +105,14 @@ public abstract class SLMissile extends Missile implements MissileSpec {
 
     @Pseudo
     @Override
-    public @NotNull String getColorlessTextureName() {
+    public @Nullable String getColorlessTextureName() {
         // TODO Auto-generated method stub
-        return null;
+        return "";
     }
 
     @Pseudo
     @Override
-    public void setColorlessTextureName(@NotNull String texture) {
+    public void setColorlessTextureName(@Nullable String texture) {
         // TODO Auto-generated method stub
     }
 
@@ -119,7 +120,7 @@ public abstract class SLMissile extends Missile implements MissileSpec {
     @Override
     public @NotNull String getTextureName() {
         // TODO Auto-generated method stub
-        return null;
+        return "";
     }
 
     @Pseudo

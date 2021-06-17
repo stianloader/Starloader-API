@@ -5,29 +5,30 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 
 public class BaseFormattedText implements FormattedText {
 
-    private final List<FormattedTextComponent> components;
-    private final String text;
+    private final @NotNull List<@NotNull FormattedTextComponent> components;
+    private final @NotNull String text;
 
-    public BaseFormattedText(List<FormattedTextComponent> components) {
+    public BaseFormattedText(@NotNull List<@NotNull FormattedTextComponent> components) {
         this.components = components;
         StringBuilder textBuilder = new StringBuilder();
         for (FormattedTextComponent component : this.components) {
             textBuilder.append(component.getText());
         }
-        this.text = textBuilder.toString();
+        this.text = NullUtils.requireNotNull(textBuilder.toString());
     }
 
-    public BaseFormattedText(FormattedTextComponent... components2) {
-        this(Arrays.asList(components2));
+    public BaseFormattedText(@NotNull FormattedTextComponent... components2) {
+        this(NullUtils.requireNotNull(Arrays.asList(components2)));
     }
 
     @Override
-    public @NotNull List<FormattedTextComponent> getComponents() {
+    public @NotNull List<@NotNull FormattedTextComponent> getComponents() {
         return components;
     }
 

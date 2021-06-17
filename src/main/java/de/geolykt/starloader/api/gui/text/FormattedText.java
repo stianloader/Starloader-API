@@ -15,7 +15,7 @@ public interface FormattedText extends TextRenderable {
      *
      * @return The components assigned
      */
-    public @NotNull List<FormattedTextComponent> getComponents();
+    public @NotNull List<@NotNull FormattedTextComponent> getComponents();
 
     /**
      * Obtains the formatted text as a plaintext string.

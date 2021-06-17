@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.event.EventManager;
@@ -71,15 +72,21 @@ public class EmploymentAgencyMixins {
                 // Player empire
                 potentialCandidates.removeIf(person -> person.a(job) <= 0 || Claim.b(person, job) == null);
                 if (!potentialCandidates.isEmpty()) {
-                    List<DynastyMember> candidates = new ArrayList<>(potentialCandidates.size());
+                    List<@NotNull DynastyMember> candidates = new ArrayList<>(potentialCandidates.size());
                     for (Person o : potentialCandidates) {
+                        if (o == null) {
+                            continue;
+                        }
                         candidates.add((DynastyMember) o);
                     }
                     PlayerEmperorDeathEvent evt = new PlayerEmperorDeathEvent(candidates);
                     EventManager.handleEvent(evt);
-                    List<DynastyMember> finalSuggestions = evt.getSuccessors();
+                    List<@NotNull DynastyMember> finalSuggestions = evt.getSuccessors();
                     if (finalSuggestions.isEmpty()) {
                         for (Person o : potentialCandidates) {
+                            if (o == null) {
+                                continue;
+                            }
                             finalSuggestions.add((DynastyMember) o);
                         }
                     }
@@ -108,13 +115,16 @@ public class EmploymentAgencyMixins {
                 new BasicDialogBuilder("Emperor dead", "Bad news, the emperor kind of died! There weren't really any great options out there, so we just picked somebody off the street").buildAndShow();
             } else {
                 // Non-player empire
-                List<DynastyMember> candidates = new ArrayList<>(potentialCandidates.size());
+                List<@NotNull DynastyMember> candidates = new ArrayList<>(potentialCandidates.size());
                 for (Person o : potentialCandidates) {
+                    if (o == null) {
+                        continue;
+                    }
                     candidates.add((DynastyMember) o);
                 }
-                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, (ActiveEmpire) job.g());
+                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, NullUtils.requireNotNull((ActiveEmpire) job.g()));
                 EventManager.handleEvent(evt);
-                List<DynastyMember> finalSuggestions = evt.getSuccessors();
+                List<@NotNull DynastyMember> finalSuggestions = evt.getSuccessors();
                 if (finalSuggestions.size() == 1) {
                     return (Person) finalSuggestions.get(0);
                 }

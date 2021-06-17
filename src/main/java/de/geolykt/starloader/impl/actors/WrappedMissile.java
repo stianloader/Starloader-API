@@ -1,6 +1,7 @@
 package de.geolykt.starloader.impl.actors;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.spacecrafts.MissileSpec;
@@ -20,24 +21,24 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
 
     public WrappedMissile(float x, float y, float angle, float maxSpeed, StateActor shooter, Empire owner, int range,
             boolean targetStars, boolean targetActors, boolean matchTargetTech, float firepower,
-            T delegate, WrappingConfiguration config, boolean override) {
+            @NotNull T delegate, @NotNull WrappingConfiguration config, boolean override) {
         super(x, y, angle, maxSpeed, shooter, owner, range, targetStars, targetActors, matchTargetTech, firepower);
         this.delegate = delegate;
         this.config = config;
         this.override = override;
     }
 
-    protected WrappingConfiguration config;
+    protected @NotNull WrappingConfiguration config;
     protected boolean override;
-    protected T delegate;
+    protected @NotNull T delegate;
 
     @Override
-    public T getWrappedSpec() {
+    public @NotNull T getWrappedSpec() {
         return delegate;
     }
 
     @Override
-    public @NotNull String getColorlessTextureName() {
+    public @Nullable String getColorlessTextureName() {
         if (config.inheritTexture()) {
             return delegate.getColorlessTextureName();
         }
@@ -53,11 +54,15 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         if (config.inheritName()) {
             return delegate.getName();
         }
-        return super.getName();
+        String name = super.getName();
+        if (name == null) {
+            throw new NullPointerException("The name of the missile is somehow null!");
+        }
+        return name;
     }
 
     @Override
@@ -87,7 +92,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
-    public void setColorlessTextureName(@NotNull String texture) {
+    public void setColorlessTextureName(@Nullable String texture) {
         if (config.inheritTexture()) {
             delegate.setColorlessTextureName(texture);
             try {

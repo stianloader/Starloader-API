@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api.actor.spacecrafts;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.ActorSpec;
@@ -35,12 +36,12 @@ public interface MissileSpec extends Spacecraft {
      *
      * @param actor The actor that got hit by the missile.
      */
-    public void onHitActor(ActorSpec actor);
+    public void onHitActor(@NotNull ActorSpec actor);
 
     /**
      * Called whenever the Missile hits a star, at which point it dissolves.
      *
      * @param star The star that got hit by the missile.
      */
-    public void onHitStar(Star star);
+    public void onHitStar(@NotNull Star star);
 }

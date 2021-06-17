@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.player;
 
+import org.jetbrains.annotations.NotNull;
+
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 
@@ -12,7 +14,7 @@ public interface DiplomacyRequest {
      * @param target The target empire that the action is targeted towards
      * @return The response of the request
      */
-    public default String doValidatedly(ActiveEmpire target) {
+    public default String doValidatedly(@NotNull ActiveEmpire target) {
         ExpectedObfuscatedValueException.requireEmpire(target);
         return isValid(target) ? performAction(target) : "What a strange question.";
     }
@@ -30,7 +32,7 @@ public interface DiplomacyRequest {
      *
      * @param target The target empire that the action is targeted towards
      */
-    public boolean isValid(ActiveEmpire target);
+    public boolean isValid(@NotNull ActiveEmpire target);
 
     /**
      * Obtains the response that should be displayed if the action is taken. Note:
@@ -41,5 +43,5 @@ public interface DiplomacyRequest {
      * @param target The target empire that the action is targeted towards
      * @return The response of the request.
      */
-    public String performAction(ActiveEmpire target);
+    public String performAction(@NotNull ActiveEmpire target);
 }

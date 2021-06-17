@@ -20,7 +20,7 @@ public interface TextInputBuilder {
      * @see TextInputBuilder#addHooks(Collection)
      * @see InputDialog#addHook(Consumer)
      */
-    public @NotNull TextInputBuilder addHook(@NotNull Consumer<String> hook);
+    public @NotNull TextInputBuilder addHook(@NotNull Consumer<@Nullable String> hook);
 
     /**
      * Adds a multiple hook to the Dialog. These hooks will be called after the
@@ -31,7 +31,7 @@ public interface TextInputBuilder {
      * @see #addHook(Consumer)
      * @see InputDialog#addHook(Consumer)
      */
-    public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<String>> hooks);
+    public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<@Nullable String>> hooks);
 
     /**
      * Builds the dialog. Note that due to how the Game is built, the return value

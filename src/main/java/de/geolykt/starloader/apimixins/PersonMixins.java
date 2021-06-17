@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 
@@ -48,7 +49,7 @@ public class PersonMixins implements DynastyMember {
      * @return Basically the current instance type-casted to Person.
      */
     @Unique
-    private final Person asGalimulatorPerson() {
+    private final @NotNull Person asGalimulatorPerson() {
         return (Person) (Object) this;
     }
 
@@ -86,7 +87,7 @@ public class PersonMixins implements DynastyMember {
 
     @Override
     public @NotNull String getFullName() {
-        return asGalimulatorPerson().q();
+        return NullUtils.requireNotNull(asGalimulatorPerson().q());
     }
 
     @Override

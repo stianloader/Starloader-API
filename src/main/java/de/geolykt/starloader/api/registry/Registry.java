@@ -42,7 +42,7 @@ public abstract class Registry<T> {
     /**
      * Internal map containing the key-value pairs of the registry for lookup.
      */
-    protected final Map<NamespacedKey, T> keyedValues = new HashMap<>();
+    protected final @NotNull Map<NamespacedKey, T> keyedValues = new HashMap<>();
 
     /**
      * Internal map containing the enum's name of the registry for lookup. Used to
@@ -90,12 +90,14 @@ public abstract class Registry<T> {
      *
      * @return The values registered
      */
+    @SuppressWarnings("null")
     public @NotNull T[] getValues() {
-        if (values == null) {
+        T[] val = values;
+        if (val == null) {
             DebugNagException.nag("Galimulator is a bit strange, so here you get the full stacktrace");
             throw new IllegalStateException("Registry not initialised!");
         }
-        return values.clone();
+        return val.clone();
     }
 
     /**

@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.EventManager;
@@ -25,13 +26,13 @@ public class AllianceMixins implements Alliance {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private ArrayList members;
+    private @NotNull ArrayList members = new ArrayList<>();
 
     @Shadow
-    private String name; // name
+    private @NotNull String name = ""; // name
 
     @Shadow
-    private String nameIdentifier; // fullName
+    private @NotNull String nameIdentifier = ""; // fullName
 
     @Shadow
     private int startDate;
@@ -48,7 +49,7 @@ public class AllianceMixins implements Alliance {
 
     @Inject(method = "a", at = @At("HEAD"))
     public void addMember(snoddasmannen.galimulator.Empire member, CallbackInfo info) {
-        EventManager.handleEvent(new AllianceJoinEvent((Alliance) this, (ActiveEmpire) member));
+        EventManager.handleEvent(new AllianceJoinEvent((Alliance) this, (ActiveEmpire) NullUtils.requireNotNull(member)));
     }
 
     @Shadow
@@ -56,8 +57,8 @@ public class AllianceMixins implements Alliance {
     } // removeMember
 
     @Shadow
-    public GalColor c() { // getColor
-        return null;
+    public @NotNull GalColor c() { // getColor
+        return new GalColor(0f, 0f, 0f);
     }
 
     @Shadow
@@ -76,7 +77,7 @@ public class AllianceMixins implements Alliance {
     }
 
     @Override
-    public GalColor getColor() {
+    public @NotNull GalColor getColor() {
         return c();
     }
 
@@ -108,6 +109,6 @@ public class AllianceMixins implements Alliance {
 
     @Inject(method = "b", at = @At("HEAD"))
     public void removeMember(snoddasmannen.galimulator.Empire member, CallbackInfo info) {
-        EventManager.handleEvent(new AllianceLeaveEvent((Alliance) this, (ActiveEmpire) member));
+        EventManager.handleEvent(new AllianceLeaveEvent((Alliance) this, (ActiveEmpire) NullUtils.requireNotNull(member)));
     }
 }

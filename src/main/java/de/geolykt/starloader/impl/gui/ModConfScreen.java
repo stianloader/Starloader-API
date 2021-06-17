@@ -35,10 +35,14 @@ public class ModConfScreen implements ck, Screen {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked" })
     @Override
     public @NotNull List<@NotNull ScreenComponent> getChildren() {
-        return getItems();
+        List<@NotNull ScreenComponent> ret = getItems();
+        if (ret == null) {
+            throw new NullPointerException();
+        }
+        return ret;
     }
 
     @Override
@@ -56,7 +60,7 @@ public class ModConfScreen implements ck, Screen {
                 } else if (option instanceof NumberOption<?>) {
                     alist.add(new NamedIntegerChooserComponent(this, (NumberOption<?>) option));
                 } else if (option instanceof StringOption) {
-                    alist.add(new NamedStringChooserComponent(this, (@NotNull StringOption) option));
+                    alist.add(new NamedStringChooserComponent(this, (StringOption) option));
                 } else {
                     LOGGER.info("Unsupported option of class: " + option.getClass().getName());
                 }

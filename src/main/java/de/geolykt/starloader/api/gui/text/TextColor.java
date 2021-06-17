@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.gui.text;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.badlogic.gdx.graphics.Color;
 
 import snoddasmannen.galimulator.GalColor;
@@ -17,9 +19,12 @@ public enum TextColor {
     TRANSPARENT(GalColor.TRANSPARENT), VERY_OPAQUE(GalColor.VERY_OPAQUE), WHITE(GalColor.WHITE),
     YELLOW(GalColor.YELLOW);
 
-    protected final GalColor galColor;
+    protected final @NotNull GalColor galColor;
 
     private TextColor(GalColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Color is null!");
+        }
         galColor = color;
     }
 
@@ -51,12 +56,16 @@ public enum TextColor {
         return galColor.r;
     }
 
-    public GalColor toGalimulatorColor() {
+    public @NotNull GalColor toGalimulatorColor() {
         return galColor;
     }
 
-    public Color toGDXColor() {
-        return galColor.getGDXColor();
+    public @NotNull Color toGDXColor() {
+        Color gdxCol = galColor.getGDXColor();
+        if (gdxCol == null) {
+            throw new IllegalStateException("Somehow obtained null GDX color");
+        }
+        return gdxCol;
     }
 
     @Override

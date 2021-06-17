@@ -9,16 +9,17 @@ import org.jetbrains.annotations.NotNull;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
+import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
 import snoddasmannen.galimulator.GalColor;
 
 public class StarloaderComponentBuilder implements ComponentBuilder {
 
-    protected GalColor color = GalColor.WHITE;
-    protected List<Map.Entry<GalColor, Double>> jitter = new ArrayList<>(1);
-    protected Drawing.TextSize size = Drawing.TextSize.SMALL;
-    protected String text;
+    protected @NotNull GalColor color = TextColor.WHITE.toGalimulatorColor();
+    protected @NotNull List<Map.Entry<@NotNull GalColor, @NotNull Double>> jitter = new ArrayList<>(1);
+    protected @NotNull Drawing.TextSize size = Drawing.TextSize.SMALL;
+    protected @NotNull String text;
 
     public StarloaderComponentBuilder(@NotNull String text) {
         this.text = text;
@@ -33,8 +34,8 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
     @Override
     public @NotNull FormattedTextComponent build() {
         TextComponent main = new ColoredTextComponent(text, color, size);
-        ArrayList<TextComponent> components = new ArrayList<>(jitter.size());
-        for (Map.Entry<GalColor, Double> entry : jitter) {
+        ArrayList<@NotNull TextComponent> components = new ArrayList<>(jitter.size());
+        for (Map.Entry<@NotNull GalColor, @NotNull Double> entry : jitter) {
             components.add(new JitterTextComponent(text, entry.getKey(), entry.getValue(), size));
         }
         return new BaseFormattedTextComponent(main, components);

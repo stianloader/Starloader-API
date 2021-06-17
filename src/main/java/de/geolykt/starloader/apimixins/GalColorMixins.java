@@ -32,9 +32,11 @@ public class GalColorMixins implements AWTColorAccesor {
 
     @Override
     public @NotNull Color asAWTColor() {
-        if (awtColor == null) {
-            awtColor = new Color(r, g, b, a);
+        Color awtCol = awtColor;
+        if (awtCol == null) {
+            awtCol = new Color(r, g, b, a);
+            awtColor = awtCol;
         }
-        return awtColor;
+        return awtCol;
     }
 }

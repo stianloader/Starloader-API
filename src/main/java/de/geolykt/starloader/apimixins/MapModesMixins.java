@@ -36,6 +36,9 @@ public class MapModesMixins implements MapMode {
     @Overwrite
     @SuppressWarnings("deprecation")
     public static MapModes valueOf(String var0) {
+        if (var0 == null) {
+            return null;
+        }
         return Registry.MAP_MODES.getIntern(var0);
     }
 
@@ -45,6 +48,7 @@ public class MapModesMixins implements MapMode {
     }
 
     @Unique
+    @Nullable
     private NamespacedKey registryKey;
 
     @Shadow
@@ -52,12 +56,20 @@ public class MapModesMixins implements MapMode {
 
     @Override
     public @NotNull TextureRegion getIcon() {
-        return ((MapModes) (Object) this).icon;
+        TextureRegion tr = ((MapModes) (Object) this).icon;
+        if (tr == null) {
+            throw new IllegalStateException("Internal error");
+        }
+        return tr;
     }
 
     @Override
-    public @Nullable NamespacedKey getRegistryKey() {
-        return registryKey;
+    public @NotNull NamespacedKey getRegistryKey() {
+        NamespacedKey key = registryKey;
+        if (key == null) {
+            throw new IllegalStateException("Registry key not yet set.");
+        }
+        return key;
     }
 
     @Override
@@ -67,6 +79,9 @@ public class MapModesMixins implements MapMode {
 
     @Override
     public void setRegistryKey(@NotNull NamespacedKey key) {
+        if (registryKey != null) {
+            throw new IllegalStateException("Registry key already set!");
+        }
         registryKey = key;
     }
 }

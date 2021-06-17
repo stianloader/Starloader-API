@@ -1,5 +1,6 @@
 package de.geolykt.starloader.apimixins;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -77,7 +78,7 @@ public class MissileMixins extends ActorMixins implements MissileSpec {
     }
 
     @Override
-    public void onHitActor(ActorSpec actor) {
+    public void onHitActor(@NotNull ActorSpec actor) {
         if (actor instanceof Actor) {
             hitActor((Actor) actor);
         } else {
@@ -86,7 +87,7 @@ public class MissileMixins extends ActorMixins implements MissileSpec {
     }
 
     @Override
-    public void onHitStar(Star star) {
+    public void onHitStar(@NotNull Star star) {
         hitStar(ExpectedObfuscatedValueException.requireStar(star));
     }
 

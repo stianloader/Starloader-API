@@ -21,6 +21,7 @@ import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.GameConfiguration;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
@@ -66,7 +67,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private Vector agents; // actors
+    private @NotNull Vector agents = new Vector<>(); // actors
 
     @Shadow
     int birthMilliYear; // foundationYear
@@ -74,7 +75,7 @@ public class EmpireMixins implements ActiveEmpire {
     private transient ArrayList<ShipCapacityModifier> capModifiers;
 
     @Shadow
-    GalColor color; // color
+    @NotNull GalColor color = new GalColor(0f, 0f, 0f); // color
 
     @Shadow
     private int deathYear; // collapseYear
@@ -86,7 +87,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private ArrayList fleets; // fleets
+    private @NotNull ArrayList fleets = new ArrayList<>(); // fleets
 
     @Shadow
     private Government government;
@@ -109,13 +110,13 @@ public class EmpireMixins implements ActiveEmpire {
     private transient HashMap<NamespacedKey, Object> metadata;
 
     @Shadow
-    private String motto; // motto
+    private @NotNull String motto = ""; // motto
 
     @Shadow
-    String name; // name
+    @NotNull String name = ""; // name
 
     @Shadow
-    private Religion religion;
+    private @NotNull Religion religion = Religion.IMMERSION;
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -146,7 +147,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public void a(Religion var0) { // setReligion
+    public void a(@NotNull Religion var0) { // setReligion
         religion = var0;
     }
 
@@ -343,7 +344,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", gf.a().a("transcending")).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(gf.a().a("transcending"))).buildAndShow();
                 }
             }
         }
@@ -386,13 +387,12 @@ public class EmpireMixins implements ActiveEmpire {
         return au();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NotNull List<ShipCapacityModifier> getCapcityModifiers() {
         if (capModifiers == null) {
             return new ArrayList<>();
         }
-        return (List<ShipCapacityModifier>) capModifiers.clone();
+        return new ArrayList<>(capModifiers);
     }
 
     @Override
@@ -532,7 +532,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", gf.a().a("transcending")).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(gf.a().a("transcending"))).buildAndShow();
                 }
             }
         }
@@ -630,7 +630,11 @@ public class EmpireMixins implements ActiveEmpire {
         if (!force) {
             EmpireStateChangeEvent event = null;
             if (stateMeta.isStable()) {
-                if (!Registry.EMPIRE_STATES.getMetadataEntry(getState()).isStable()) {
+                EmpireStateMetadataEntry statemeta = Registry.EMPIRE_STATES.getMetadataEntry(getState());
+                if (statemeta == null) {
+                    throw new NullPointerException("Internal error occoured while obtaining the metadata entry of an empire state.");
+                }
+                if (!statemeta.isStable()) {
                     event = new EmpireStabiliseEvent(this, stateKey);
                 } else {
                     event = new EmpireStateChangeEvent(this, stateKey);

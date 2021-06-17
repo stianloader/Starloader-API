@@ -12,14 +12,14 @@ import snoddasmannen.galimulator.ui.bl;
 
 public class DialogCloseListenerWrapper implements bl {
 
-    private final ArrayList<BasicDialogCloseListener> listeners;
+    private final ArrayList<@NotNull BasicDialogCloseListener> listeners;
     private boolean playSFX = true;
 
     public DialogCloseListenerWrapper() {
         listeners = new ArrayList<>();
     }
 
-    public DialogCloseListenerWrapper(@NotNull ArrayList<BasicDialogCloseListener> listeners, boolean playCloseSound) {
+    public DialogCloseListenerWrapper(@NotNull ArrayList<@NotNull BasicDialogCloseListener> listeners, boolean playCloseSound) {
         this.listeners = listeners;
         playSFX = playCloseSound;
     }

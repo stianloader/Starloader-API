@@ -227,10 +227,11 @@ public final class Galimulator {
      * @return The implementation of the configuration that is used right now
      */
     public static @NotNull GameConfiguration getConfiguration() {
-        if (config == null) {
+        GameConfiguration conf = config;
+        if (conf == null) {
             throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
         }
-        return config;
+        return conf;
     }
 
     /**
@@ -256,6 +257,7 @@ public final class Galimulator {
      *
      * @return A {@link Vector} of {@link ActiveEmpire empires} that are known
      */
+    @SuppressWarnings("null")
     public static @NotNull Vector<@NotNull ActiveEmpire> getEmpires() {
         List<ActiveEmpire> result = impl.getEmpires();
         if (result instanceof Vector) {
@@ -283,10 +285,11 @@ public final class Galimulator {
      * @return The implementation of this class that is used right now
      */
     public static @NotNull GameImplementation getImplementation() {
-        if (impl == null) {
+        GameImplementation gameImpl = impl;
+        if (gameImpl == null) {
             throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
         }
-        return impl;
+        return gameImpl;
     }
 
     /**
@@ -363,10 +366,11 @@ public final class Galimulator {
      *
      * @return A {@link Vector} of {@link Star stars} that are known
      */
-    public static Vector<Star> getStars() { // TODO 2.0.0: use List instead of Vector
+    @SuppressWarnings("null")
+    public static @NotNull Vector<@NotNull Star> getStars() { // TODO 2.0.0: use List instead of Vector
         List<Star> result = impl.getStars();
         if (result instanceof Vector) {
-            return (Vector<Star>) result;
+            return (@NotNull Vector<@NotNull Star>) result;
         }
         return new Vector<>(result);
     }
@@ -430,7 +434,8 @@ public final class Galimulator {
      * @param config The implementation that should be used in the future
      */
     public static void setConfiguration(@NotNull GameConfiguration config) {
-        Galimulator.config = Objects.requireNonNull(config);
+        NullUtils.requireNotNull(config);
+        Galimulator.config = config;
     }
 
     /**
@@ -440,7 +445,8 @@ public final class Galimulator {
      * @param implementation The implementation that should be used in the future
      */
     public static void setImplementation(@NotNull GameImplementation implementation) {
-        impl = Objects.requireNonNull(implementation);
+        NullUtils.requireNotNull(implementation);
+        impl = implementation;
     }
 
     /**
