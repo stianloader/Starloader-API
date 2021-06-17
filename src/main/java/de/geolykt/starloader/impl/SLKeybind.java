@@ -8,6 +8,7 @@ import de.geolykt.starloader.api.gui.Keybind;
 
 import snoddasmannen.galimulator.ek;
 
+@Deprecated(forRemoval = true, since = "1.3.0")
 public class SLKeybind extends ek {
 
     private final Keybind bind;

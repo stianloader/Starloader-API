@@ -4,12 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.GameConfiguration;
-import de.geolykt.starloader.api.gui.Keybind;
 
 /**
  * A modifier that can be applied on an empire to modify the maximum amount of ships the empire can build.
  * Note that this modifier is not directly influenced by {@link GameConfiguration#getShipMultiplier()},
- * however it can be easily worked around as unlike the {@link Keybind} class the methods of the implementation
+ * however it can be easily worked around as unlike the {@link de.geolykt.starloader.api.gui.Keybind} class the methods of the implementation
  * are polled whenever needed instead of only once, so the implementation can act however it chooses here.
  *<br/><br/>
  * Note: this interface has a natural ordering that may be inconsistent with equals.

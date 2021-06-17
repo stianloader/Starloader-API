@@ -4,11 +4,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * @deprecated Replaced by the {@link Dynbind} class that is more powerfull than this one.
+ *
  * Abstract wrapper interface for Keybinds.
  * Unlike many other interfaces within the API,
  * this interface can be freely extended by any extension
  * without too many issues.
  */
+@Deprecated(forRemoval = true, since = "1.3.0")
 public interface Keybind {
 
     /**

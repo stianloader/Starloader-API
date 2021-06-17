@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
-import de.geolykt.starloader.api.gui.Keybind;
+import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 
 /**
@@ -164,13 +164,24 @@ public final class Galimulator {
         public void recalculateVoronoiGraphs();
 
         /**
+         * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
          * Registers the given keybind to the list of active keybinds.
          * The keybind keycode and character will only be requested once and cannot
          * be changed dynamically.
          *
          * @param bind The keybind to register.
          */
-        public void registerKeybind(@NotNull Keybind bind);
+        @Deprecated(forRemoval = true, since = "1.3.0")
+        public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind);
+
+        /**
+         * Registers the given keybind to the list of active keybinds.
+         * Unlike {@link #registerKeybind(de.geolykt.starloader.api.gui.Keybind)} this does actually change
+         * dynamically.
+         *
+         * @param bind The keybind to register.
+         */
+        public void registerKeybind(@NotNull Dynbind bind);
 
         /**
          * Resumes the game. This method basically reverts {@link #pauseGame()}
@@ -381,13 +392,27 @@ public final class Galimulator {
     }
 
     /**
+     * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
+     *
      * Registers the given keybind to the list of active keybinds.
      * The keybind keycode and character will only be requested once and cannot
      * be changed dynamically.
      *
      * @param bind The keybind to register.
      */
-    public static void registerKeybind(@NotNull Keybind bind) {
+    @Deprecated(forRemoval = true, since = "1.3.0")
+    public static void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind) {
+        impl.registerKeybind(bind);
+    }
+
+    /**
+     * Registers the given keybind to the list of active keybinds.
+     * Unlike {@link #registerKeybind(de.geolykt.starloader.api.gui.Keybind)} this does actually change
+     * dynamically.
+     *
+     * @param bind The keybind to register.
+     */
+    public static void registerKeybind(@NotNull Dynbind bind) {
         impl.registerKeybind(bind);
     }
 

@@ -1,0 +1,43 @@
+package de.geolykt.starloader.impl;
+
+import java.util.Objects;
+
+import org.jetbrains.annotations.NotNull;
+
+import de.geolykt.starloader.api.gui.Dynbind;
+
+import snoddasmannen.galimulator.ek;
+
+public class SLDynbind extends ek {
+
+    private final Dynbind bind;
+
+    public SLDynbind(@NotNull Dynbind keybind) {
+        super(Objects.requireNonNull(keybind, "Tried to register a null keybind").getDescription(), '\0');
+        bind = keybind;
+    }
+
+    @Override
+    public String getKeyString() {
+        return bind.getKeyDescription();
+    }
+
+    @Override
+    public void checkAndDoStuff(final char character) {
+        if (bind.isValidChar(character)) {
+            doStuff();
+        }
+    }
+
+    @Override
+    public void checkAndDoStuff(final int keycode) {
+        if (bind.isValidKeycode(keycode)) {
+            doStuff();
+        }
+    }
+
+    @Override
+    public void doStuff() {
+        bind.performAction();
+    }
+}

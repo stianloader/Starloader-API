@@ -14,7 +14,7 @@ import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
-import de.geolykt.starloader.api.gui.Keybind;
+import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.registry.Registry;
 
@@ -125,13 +125,20 @@ public class GalimulatorImplementation implements GameImplementation {
     }
 
     @Override
-    public void registerKeybind(@NotNull Keybind bind) {
+    @Deprecated(forRemoval = true, since = "1.3.0")
+    public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind) {
         Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
         if (bind.getCharacter() != '\0') {
             Main.shortcuts.add(new SLKeybind(bind, bind.getCharacter()));
         } else {
             Main.shortcuts.add(new SLKeybind(bind, bind.getKeycodeDescription(), bind.getKeycode()));
         }
+    }
+
+    @Override
+    public void registerKeybind(@NotNull Dynbind bind) {
+        Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
+        Main.shortcuts.add(new SLDynbind(bind));
     }
 
     @Override
