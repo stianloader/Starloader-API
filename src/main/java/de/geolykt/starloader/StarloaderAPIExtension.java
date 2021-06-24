@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.event.EventManager;
-import de.geolykt.starloader.api.event.lifecycle.SignalExtensionTerminationExtension;
+import de.geolykt.starloader.api.event.lifecycle.SignalExtensionTerminationEvent;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.impl.DrawingManager;
@@ -30,7 +30,7 @@ public class StarloaderAPIExtension extends Extension {
 
     @Override
     public void unload() {
-        EventManager.handleEvent(new SignalExtensionTerminationExtension(this));
+        EventManager.handleEvent(new SignalExtensionTerminationEvent(this));
         getLogger().info("SLAPI is going to bed. Let's conquer the stars tomorrow!");
     }
 

@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.gui;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface InputDialog extends Closable {
 
@@ -14,7 +15,7 @@ public interface InputDialog extends Closable {
      *
      * @param hook The Hook to attach
      */
-    public void addHook(@NotNull Consumer<String> hook);
+    public void addHook(@NotNull Consumer<@Nullable String> hook);
 
     /**
      * Closes the object from view. However unlike {@link #close()} this method does

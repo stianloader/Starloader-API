@@ -11,10 +11,10 @@ import de.geolykt.starloader.mod.Extension;
  * Due to how SLL Classloading works, the entirety of the SLAPI becomes unavailable after this event is
  * fired with a {@link StarloaderAPIExtension} as the targeted extension.
  */
-public class SignalExtensionTerminationExtension extends Event {
+public class SignalExtensionTerminationEvent extends Event {
     protected final Extension unloadingExtension;
 
-    public SignalExtensionTerminationExtension(Extension unloadingExtension) {
+    public SignalExtensionTerminationEvent(Extension unloadingExtension) {
         this.unloadingExtension = unloadingExtension;
     }
 

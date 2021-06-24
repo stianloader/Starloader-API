@@ -3,6 +3,7 @@ package de.geolykt.starloader.impl;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.gui.InputDialog;
 
@@ -19,7 +20,7 @@ public class StarloaderInputDialog extends on implements InputDialog {
     }
 
     @Override
-    public void addHook(@NotNull Consumer<String> hook) {
+    public void addHook(@NotNull Consumer<@Nullable String> hook) {
         this.wrapper.addHook(hook);
     }
 

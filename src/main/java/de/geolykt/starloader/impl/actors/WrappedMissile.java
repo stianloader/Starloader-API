@@ -3,6 +3,7 @@ package de.geolykt.starloader.impl.actors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.spacecrafts.MissileSpec;
 import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
@@ -58,11 +59,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
         if (config.inheritName()) {
             return delegate.getName();
         }
-        String name = super.getName();
-        if (name == null) {
-            throw new NullPointerException("The name of the missile is somehow null!");
-        }
-        return name;
+        return NullUtils.requireNotNull(super.getName());
     }
 
     @Override

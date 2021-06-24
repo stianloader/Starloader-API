@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @deprecated Planets are not stored in any meaningful matter as of know, obtaining them would be a pain.
+ * @deprecated Planets are not stored in any meaningful matter as of now; obtaining them would be a pain.
  * The full implementation of this interface will be delayed until the game changed in a way that this is possible.
  *
  * A planet that is part of a star system.
@@ -24,7 +24,7 @@ public interface Planet {
     /**
      * Obtains the name of the planet.
      * The game usually appends the ordinal (+1) of the planet to the name of the parent system
-     * to obtain the name of the planet. TODO can this also result in other names?
+     * to obtain the name of the planet.
      *
      * @return The name of the planet.
      */

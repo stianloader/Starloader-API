@@ -3,6 +3,7 @@ package de.geolykt.starloader.impl.actors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
 import de.geolykt.starloader.api.actor.wrapped.WrappingConfiguration;
@@ -44,10 +45,7 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
         if (config.inheritName()) {
             return delegate.getName();
         }
-        String name = super.getName();
-        if (name == null) {
-            throw new NullPointerException("The name was null!");
-        }
+        String name = NullUtils.requireNotNull(super.getName());
         return name;
     }
 
