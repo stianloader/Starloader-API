@@ -1,7 +1,5 @@
 package de.geolykt.starloader.impl.registry;
 
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NamespacedKey;
@@ -10,7 +8,6 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.MapModeRegistrationEvent;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
-import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
@@ -29,33 +26,24 @@ public class Registries {
      */
     public static void init() {
         initAudio();
-        EmpireSpecialRegistry empireSpecialRegistry = new EmpireSpecialRegistry();
-        // Register values
-        empireSpecialRegistry.setValuesArray(new @NotNull EmpireSpecial[] { EmpireSpecial.MILITANT,
-                EmpireSpecial.AGGRESSIVE, EmpireSpecial.DEFENSIVE,
-                EmpireSpecial.SCIENTIFIC, EmpireSpecial.STABLE, EmpireSpecial.UNSTABLE, EmpireSpecial.EXPLOSIVE,
-                EmpireSpecial.SLOW_STARTER, EmpireSpecial.DIPLOMATIC,
-                EmpireSpecial.XENOPHOBIC, EmpireSpecial.FANATICAL, EmpireSpecial.RECLUSIVE, EmpireSpecial.HORDE,
-                EmpireSpecial.CAPITALIST, EmpireSpecial.CULT,
-                EmpireSpecial.INDUSTRIAL });
-        Map<NamespacedKey, EmpireSpecial> keyedSpecials = empireSpecialRegistry.getKeyedValues();
-        registerSpecial(keyedSpecials, EmpireSpecial.MILITANT, RegistryKeys.GALIMULATOR_MILITANT);
-        registerSpecial(keyedSpecials, EmpireSpecial.AGGRESSIVE, RegistryKeys.GALIMULATOR_AGGRESSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.DEFENSIVE, RegistryKeys.GALIMULATOR_DEFENSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.SCIENTIFIC, RegistryKeys.GALIMULATOR_SCIENTIFIC);
-        registerSpecial(keyedSpecials, EmpireSpecial.STABLE, RegistryKeys.GALIMULATOR_STABLE);
-        registerSpecial(keyedSpecials, EmpireSpecial.UNSTABLE, RegistryKeys.GALIMULATOR_UNSTABLE);
-        registerSpecial(keyedSpecials, EmpireSpecial.EXPLOSIVE, RegistryKeys.GALIMULATOR_EXPLOSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.SLOW_STARTER, RegistryKeys.GALIMULATOR_SLOW_STARTER);
-        registerSpecial(keyedSpecials, EmpireSpecial.DIPLOMATIC, RegistryKeys.GALIMULATOR_DIPLOMATIC);
-        registerSpecial(keyedSpecials, EmpireSpecial.XENOPHOBIC, RegistryKeys.GALIMULATOR_XENOPHOBIC);
-        registerSpecial(keyedSpecials, EmpireSpecial.FANATICAL, RegistryKeys.GALIMULATOR_FANATICAL);
-        registerSpecial(keyedSpecials, EmpireSpecial.RECLUSIVE, RegistryKeys.GALIMULATOR_RECLUSIVE);
-        registerSpecial(keyedSpecials, EmpireSpecial.HORDE, RegistryKeys.GALIMULATOR_HORDE);
-        registerSpecial(keyedSpecials, EmpireSpecial.CAPITALIST, RegistryKeys.GALIMULATOR_CAPITALIST);
-        registerSpecial(keyedSpecials, EmpireSpecial.CULT, RegistryKeys.GALIMULATOR_CULT);
-        registerSpecial(keyedSpecials, EmpireSpecial.INDUSTRIAL, RegistryKeys.GALIMULATOR_INDUSTRIAL);
-        Registry.EMPIRE_SPECIALS = empireSpecialRegistry;
+        SimpleEnumRegistry<EmpireSpecial> specials = new SimpleEnumRegistry<EmpireSpecial>(EmpireSpecial.class);
+        specials.register(RegistryKeys.GALIMULATOR_MILITANT, EmpireSpecial.MILITANT);
+        specials.register(RegistryKeys.GALIMULATOR_AGGRESSIVE, EmpireSpecial.AGGRESSIVE);
+        specials.register(RegistryKeys.GALIMULATOR_DEFENSIVE, EmpireSpecial.DEFENSIVE);
+        specials.register(RegistryKeys.GALIMULATOR_SCIENTIFIC, EmpireSpecial.SCIENTIFIC);
+        specials.register(RegistryKeys.GALIMULATOR_STABLE, EmpireSpecial.STABLE);
+        specials.register(RegistryKeys.GALIMULATOR_UNSTABLE, EmpireSpecial.UNSTABLE);
+        specials.register(RegistryKeys.GALIMULATOR_EXPLOSIVE, EmpireSpecial.EXPLOSIVE);
+        specials.register(RegistryKeys.GALIMULATOR_SLOW_STARTER, EmpireSpecial.SLOW_STARTER);
+        specials.register(RegistryKeys.GALIMULATOR_DIPLOMATIC, EmpireSpecial.DIPLOMATIC);
+        specials.register(RegistryKeys.GALIMULATOR_XENOPHOBIC, EmpireSpecial.XENOPHOBIC);
+        specials.register(RegistryKeys.GALIMULATOR_FANATICAL, EmpireSpecial.FANATICAL);
+        specials.register(RegistryKeys.GALIMULATOR_RECLUSIVE, EmpireSpecial.RECLUSIVE);
+        specials.register(RegistryKeys.GALIMULATOR_HORDE, EmpireSpecial.HORDE);
+        specials.register(RegistryKeys.GALIMULATOR_CAPITALIST, EmpireSpecial.CAPITALIST);
+        specials.register(RegistryKeys.GALIMULATOR_CULT, EmpireSpecial.CULT);
+        specials.register(RegistryKeys.GALIMULATOR_INDUSTRIAL, EmpireSpecial.INDUSTRIAL);
+        Registry.EMPIRE_SPECIALS = specials;
         EmpireStateRegistry empireStateRegistry = new EmpireStateRegistry();
         empireStateRegistry.registerAll(
                 new @NotNull NamespacedKey[] { RegistryKeys.GALIMULATOR_EXPANDING, RegistryKeys.GALIMULATOR_FORTIFYING,
@@ -71,20 +59,6 @@ public class Registries {
                         new EmpireStateMetadataEntry(false, false), new EmpireStateMetadataEntry(false, true),
                         new EmpireStateMetadataEntry(false, true) });
         Registry.EMPIRE_STATES = empireStateRegistry;
-    }
-
-    /**
-     * Registers a special directly. Does not add it to the values array.
-     *
-     * @param map     The map to register it to
-     * @param special The value to register
-     * @param key     The key to register the value under.
-     */
-    // FIXME this method is strange at best
-    private static void registerSpecial(Map<NamespacedKey, EmpireSpecial> map, @NotNull EmpireSpecial special,
-            @NotNull NamespacedKey key) {
-        ((RegistryKeyed) special).setRegistryKey(key);
-        map.put(key, special);
     }
 
     /**
@@ -112,7 +86,7 @@ public class Registries {
     }
 
     public static void initMapModes() {
-        MapModeRegistry mapModeRegistry = new MapModeRegistry();
+        SimpleEnumRegistry<MapModes> mapModeRegistry = new SimpleEnumRegistry<MapModes>(MapModes.class);
         mapModeRegistry.register(RegistryKeys.GALIMULATOR_DEFAULT_MAPMODE, MapModes.NORMAL);
         mapModeRegistry.register(RegistryKeys.GALIMULATOR_WEALTH_MAPMODE, MapModes.WEALTH);
         mapModeRegistry.register(RegistryKeys.GALIMULATOR_HEAT_MAPMODE, MapModes.HEAT);
