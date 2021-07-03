@@ -8,10 +8,14 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
+import de.geolykt.starloader.impl.registry.Registries;
 
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
@@ -43,6 +47,17 @@ public class EmpireSpecialMixins implements RegistryKeyed {
                     new fm("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
         }
         EmpireSpecial.q = maps;
+    }
+
+    /**
+     * Method injector that is called on class initialisation.
+     * Used for the init process of the empire specials registry.
+     *
+     * @param ci Unused but required by Mixins
+     */
+    @Inject(at = @At("TAIL"), method = "<clinit>")
+    private static void onclinit(CallbackInfo ci) {
+        Registries.initEmpireSpecials();
     }
 
     @Overwrite

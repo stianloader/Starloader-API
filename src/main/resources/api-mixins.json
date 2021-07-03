@@ -8,6 +8,7 @@
     "ActorMixins",
     "AllianceMixins",
     "ApplicationMixins",
+    "AudioSampleMixins",
     "BattleshipMixins",
     "DestroyerMixins",
     "DiploRequestMixins",

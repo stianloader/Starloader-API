@@ -12,7 +12,6 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
-import de.geolykt.starloader.impl.registry.Registries;
 
 import snoddasmannen.galimulator.cd;
 
@@ -25,7 +24,6 @@ public class ApplicationMixins {
     @Inject(method = "create", at = @At("HEAD"))
     public void start(CallbackInfo ci) {
         try {
-            Registries.init();
             Throwable t = EventManager.handleEventExcept(new ApplicationStartEvent());
             if (t != null) {
                 throw t;

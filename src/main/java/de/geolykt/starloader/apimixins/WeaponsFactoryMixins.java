@@ -5,11 +5,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.impl.registry.Registries;
 
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
@@ -20,6 +24,17 @@ import snoddasmannen.galimulator.weapons.WeaponsFactory;
  */
 @Mixin(WeaponsFactory.class)
 public class WeaponsFactoryMixins implements WeaponType {
+
+    /**
+     * Method injector that is called on class initialisation.
+     * Used for the init process of the weapons type registry.
+     *
+     * @param ci Unused but required by Mixins
+     */
+    @Inject(at = @At("TAIL"), method = "<clinit>")
+    private static void onclinit(CallbackInfo ci) {
+        Registries.initWeaponsTypes();
+    }
 
     @Overwrite
     @SuppressWarnings("deprecation")
