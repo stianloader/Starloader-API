@@ -33,15 +33,14 @@ import snoddasmannen.galimulator.Religion;
 public class StarMixins implements Star {
 
     @Shadow
-    transient @NotNull Vector<Star> a = new Vector<>(); // neighbours
+    transient Vector<Star> a; // neighbours
 
     @SuppressWarnings("rawtypes")
     @Shadow
     transient HashMap b; // starlaneCache
 
     @Shadow
-    @NotNull
-    private Religion faith = Religion.IMMERSION; // majorityFaith
+    private Religion faith; // majorityFaith
 
     @Shadow
     int id; // uId
@@ -58,7 +57,7 @@ public class StarMixins implements Star {
 
     @Shadow
     @Nullable
-    private transient Vector2 r = new Vector2(); // coordinates
+    private transient Vector2 r; // coordinates
 
     private transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
@@ -146,6 +145,7 @@ public class StarMixins implements Star {
         throw new UnsupportedOperationException("This should be created by the shadowed field!");
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull Religion getMajorityFaith() {
         return faith;
@@ -176,6 +176,7 @@ public class StarMixins implements Star {
         return intLanes;
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull Vector<Star> getNeighbours() {
         return a;

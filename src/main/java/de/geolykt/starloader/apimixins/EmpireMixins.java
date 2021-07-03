@@ -67,7 +67,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private @NotNull Vector agents = new Vector<>(); // actors
+    private Vector agents; // actors - this is indeed the right name - i know, it is misleading
 
     @Shadow
     int birthMilliYear; // foundationYear
@@ -75,7 +75,7 @@ public class EmpireMixins implements ActiveEmpire {
     private transient ArrayList<ShipCapacityModifier> capModifiers;
 
     @Shadow
-    @NotNull GalColor color = new GalColor(0f, 0f, 0f); // color
+    GalColor color; // color
 
     @Shadow
     private int deathYear; // collapseYear
@@ -87,7 +87,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private @NotNull ArrayList fleets = new ArrayList<>(); // fleets
+    private ArrayList fleets; // fleets
 
     @Shadow
     private Government government;
@@ -110,13 +110,13 @@ public class EmpireMixins implements ActiveEmpire {
     private transient HashMap<NamespacedKey, Object> metadata;
 
     @Shadow
-    private @NotNull String motto = ""; // motto
+    private String motto; // motto
 
     @Shadow
-    @NotNull String name = ""; // name
+    String name; // name
 
     @Shadow
-    private @NotNull Religion religion = Religion.IMMERSION;
+    private Religion religion;
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -365,7 +365,7 @@ public class EmpireMixins implements ActiveEmpire {
     //    this.g = null;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Override
     public Vector<StateActor> getActors() {
         return agents;
@@ -410,11 +410,13 @@ public class EmpireMixins implements ActiveEmpire {
         return deathYear;
     }
 
+    @SuppressWarnings("null")
     @Override
     public GalColor getColor() {
         return color;
     }
 
+    @SuppressWarnings("null")
     @Override
     public String getEmpireName() {
         return name;
@@ -425,7 +427,7 @@ public class EmpireMixins implements ActiveEmpire {
         return flagship;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Override
     public ArrayList<snoddasmannen.galimulator.Fleet> getFleets() {
         return fleets;
@@ -444,11 +446,13 @@ public class EmpireMixins implements ActiveEmpire {
         return metadata.get(key);
     }
 
+    @SuppressWarnings("null")
     @Override
     public String getMotto() {
         return motto;
     }
 
+    @SuppressWarnings("null")
     @Override
     public Religion getReligion() {
         return religion;
@@ -459,7 +463,7 @@ public class EmpireMixins implements ActiveEmpire {
         return au();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Override
     public @NotNull Vector<ActorSpec> getSLActors() {
         return agents;

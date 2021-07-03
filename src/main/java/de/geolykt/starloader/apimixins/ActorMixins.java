@@ -27,12 +27,10 @@ public class ActorMixins implements ActorSpec {
     private int id;
 
     @Shadow
-    @NotNull
-    public String textureName = "";
+    public String textureName;
 
     @Shadow
-    @Nullable
-    public String uncoloredTextureName = "";
+    public String uncoloredTextureName;
 
     @Override
     @Shadow // Already implemented, no need to override
@@ -81,6 +79,7 @@ public class ActorMixins implements ActorSpec {
         return (ActiveEmpire) getOwner(); // Only state actors can be owned by non-neutral empires.
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull String getTextureName() {
         return textureName;

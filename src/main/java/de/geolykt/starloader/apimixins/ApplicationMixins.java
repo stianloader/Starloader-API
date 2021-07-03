@@ -42,6 +42,14 @@ public class ApplicationMixins {
     /**
      * @param ci The callback info. Required for injection but ignored within the method.
      */
+    @Inject(method = "a(Ljava/lang/Throwable;)V", at = @At("TAIL"))
+    private void onThrowable(Throwable t, CallbackInfo ci) {
+        t.printStackTrace();
+    }
+
+    /**
+     * @param ci The callback info. Required for injection but ignored within the method.
+     */
     @Inject(method = "create", at = @At("TAIL"))
     public void startComplete(CallbackInfo ci) {
         try {

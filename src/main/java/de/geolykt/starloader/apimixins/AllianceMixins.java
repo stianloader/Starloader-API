@@ -26,13 +26,13 @@ public class AllianceMixins implements Alliance {
 
     @SuppressWarnings("rawtypes")
     @Shadow
-    private @NotNull ArrayList members = new ArrayList<>();
+    private ArrayList members;
 
     @Shadow
-    private @NotNull String name = ""; // name
+    private String name; // name
 
     @Shadow
-    private @NotNull String nameIdentifier = ""; // fullName
+    private String nameIdentifier; // fullName
 
     @Shadow
     private int startDate;
@@ -66,8 +66,9 @@ public class AllianceMixins implements Alliance {
         return members.contains(var1);
     }
 
+    @SuppressWarnings("null")
     @Override
-    public String getAbbreviation() {
+    public @NotNull String getAbbreviation() {
         return name;
     }
 
@@ -86,13 +87,15 @@ public class AllianceMixins implements Alliance {
         return startDate;
     }
 
+    @SuppressWarnings("null")
     @Override
-    public String getFullName() {
+    public @NotNull String getFullName() {
         return nameIdentifier;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "null" })
     @Override
+    @NotNull
     public ArrayList<ActiveEmpire> getMembers() {
         return members;
     }

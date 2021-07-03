@@ -20,8 +20,7 @@ public class EmpireAnnalsMixins implements Empire {
     public int birthYear;
 
     @Shadow
-    @NotNull
-    public GalColor color = new GalColor(0f, 0f, 0f);
+    public GalColor color;
 
     @Shadow
     public int deathYear;
@@ -30,12 +29,10 @@ public class EmpireAnnalsMixins implements Empire {
     public int empireId;
 
     @Shadow
-    @NotNull
-    public String name = "";
+    public String name;
 
     @Shadow
-    @NotNull
-    public String nameIdentifier = "";
+    public String nameIdentifier;
 
     @Override
     public @NotNull Color getAWTColor() {
@@ -47,11 +44,13 @@ public class EmpireAnnalsMixins implements Empire {
         return deathYear;
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull GalColor getColor() {
         return color;
     }
 
+    @SuppressWarnings("null")
     @Override
     public @NotNull String getEmpireName() {
         return name;
