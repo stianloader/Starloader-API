@@ -1,10 +1,14 @@
 package de.geolykt.starloader.impl.actors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.actor.spacecrafts.MissileSpec;
 import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
 import de.geolykt.starloader.api.actor.wrapped.WrappingConfiguration;
@@ -20,6 +24,10 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
      */
     private static final long serialVersionUID = 2936173314981349098L;
 
+    protected @NotNull WrappingConfiguration config;
+
+    protected @NotNull T delegate;
+    protected boolean override;
     public WrappedMissile(float x, float y, float angle, float maxSpeed, StateActor shooter, Empire owner, int range,
             boolean targetStars, boolean targetActors, boolean matchTargetTech, float firepower,
             @NotNull T delegate, @NotNull WrappingConfiguration config, boolean override) {
@@ -29,13 +37,9 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
         this.override = override;
     }
 
-    protected @NotNull WrappingConfiguration config;
-    protected boolean override;
-    protected @NotNull T delegate;
-
     @Override
-    public @NotNull T getWrappedSpec() {
-        return delegate;
+    public ActorSpec cast() {
+        return this;
     }
 
     @Override
@@ -44,6 +48,11 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
             return delegate.getColorlessTextureName();
         }
         return super.getColorlessTextureName();
+    }
+
+    @Override
+    public WrappingConfiguration getConfiguration() {
+        return config;
     }
 
     @Override
@@ -71,6 +80,16 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
+    public @NotNull List<Weapon> getWeapons() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public @NotNull T getWrappedSpec() {
+        return delegate;
+    }
+
+    @Override
     public int getXPWorth() {
         if (config.inheritExperience()) {
             return delegate.getXPWorth();
@@ -84,8 +103,29 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
+    public boolean isParticle() {
+        return true;
+    }
+
+    @Override
     public boolean isThreat() {
         return delegate.isThreat();
+    }
+
+    @Override
+    public void onHitActor(ActorSpec actor) {
+        delegate.onHitActor(actor);
+        if (!override) {
+            super.onHitActor(actor);
+        }
+    }
+
+    @Override
+    public void onHitStar(Star star) {
+        delegate.onHitStar(star);
+        if (!override) {
+            super.onHitStar(star);
+        }
     }
 
     @Override
@@ -130,32 +170,6 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
             delegate.setXP(arg0);
         } else {
             super.setXP(arg0);
-        }
-    }
-
-    @Override
-    public WrappingConfiguration getConfiguration() {
-        return config;
-    }
-
-    @Override
-    public ActorSpec cast() {
-        return this;
-    }
-
-    @Override
-    public void onHitActor(ActorSpec actor) {
-        delegate.onHitActor(actor);
-        if (!override) {
-            super.onHitActor(actor);
-        }
-    }
-
-    @Override
-    public void onHitStar(Star star) {
-        delegate.onHitStar(star);
-        if (!override) {
-            super.onHitStar(star);
         }
     }
 }

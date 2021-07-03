@@ -77,4 +77,12 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
      * @param volume The volume of the sound, should range between 0.0 and 1.0
      */
     public abstract void play(float volume);
+
+    /**
+     * Plays the sample at a given position. This alters the volume depending on the distance of the posion and here.
+     *
+     * @param x The X-position of the sound
+     * @param y The Y-position of the sound
+     */
+    public abstract void play(float x, float y);
 }

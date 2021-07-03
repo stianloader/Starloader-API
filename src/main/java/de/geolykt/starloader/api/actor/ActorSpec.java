@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.actor;
 
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Identifiable;
@@ -80,6 +82,14 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
     public float getVelocity();
 
     /**
+     * Obtains the weapons that are currently used by this actor.
+     * Note: this is always a clone of the original data set.
+     *
+     * @return The weapons list
+     */
+    public @NotNull List<Weapon> getWeapons();
+
+    /**
      * Obtains the experience points of the given actor.
      *
      * @return The owned XP of the actor.
@@ -111,10 +121,22 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
     public boolean isInvulnerable();
 
     /**
+     * Checks whether the actor is a particle. If it is not a particle, then it can be assumed that it is a "StateActor",
+     * which allows the useage of this instance in a greater amount of areas. Such state actors can be owned by empires,
+     * where as particles cannot be owned by empires. It is an interesting design descision on the game's part and an even
+     * more interesting decision that SLAPI is actively hiding this from you only for you to be confused to why as something
+     * does not work as intended. Some things such as Missiles may also be particles
+     *
+     * @return False if the actor is a "StateActor"
+     */
+    public boolean isParticle();
+
+    /**
      * Obtains whether the actor is a threat to the wider interstellar community.
      * All Monster-type actors fall under this category.
      *
      * @return The threat state of the actor.
+     * @see #isParticle()
      */
     public boolean isThreat();
 

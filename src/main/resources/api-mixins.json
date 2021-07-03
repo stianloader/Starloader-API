@@ -32,6 +32,7 @@
     "SettingsscreenMixins",
     "StarMixins",
     "StateActorMixins",
+    "WeaponMixins",
     "WeaponsFactoryMixins"
   ]
 }

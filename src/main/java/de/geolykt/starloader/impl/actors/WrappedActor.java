@@ -1,10 +1,14 @@
 package de.geolykt.starloader.impl.actors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
 import de.geolykt.starloader.api.actor.wrapped.WrappingConfiguration;
 
@@ -20,8 +24,8 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     }
 
     @Override
-    public @NotNull T getWrappedSpec() {
-        return delegate;
+    public ActorSpec cast() {
+        return this;
     }
 
     @Override
@@ -30,6 +34,11 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
             return delegate.getColorlessTextureName();
         }
         return super.getColorlessTextureName();
+    }
+
+    @Override
+    public WrappingConfiguration getConfiguration() {
+        return config;
     }
 
     @Override
@@ -58,6 +67,16 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     }
 
     @Override
+    public @NotNull List<Weapon> getWeapons() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public @NotNull T getWrappedSpec() {
+        return delegate;
+    }
+
+    @Override
     public int getXPWorth() {
         if (config.inheritExperience()) {
             return delegate.getXPWorth();
@@ -68,6 +87,11 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     @Override
     public boolean isInvulnerable() {
         return delegate.isInvulnerable();
+    }
+
+    @Override
+    public boolean isParticle() {
+        return true;
     }
 
     @Override
@@ -118,15 +142,5 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
         } else {
             super.setXP(arg0);
         }
-    }
-
-    @Override
-    public WrappingConfiguration getConfiguration() {
-        return config;
-    }
-
-    @Override
-    public ActorSpec cast() {
-        return this;
     }
 }

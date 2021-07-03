@@ -1,6 +1,7 @@
 package de.geolykt.starloader.apimixins;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,8 +10,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.impl.registry.Registries;
@@ -48,11 +52,17 @@ public class WeaponsFactoryMixins implements WeaponType {
     }
 
     @Shadow
-    private @NotNull String name = "";
+    private String name;
 
     @Unique
     private NamespacedKey registryKey = null;
 
+    @Override
+    public @NotNull Weapon build(@NotNull ActorSpec actor, @Nullable Object arg) {
+        return NullUtils.requireNotNull((Weapon) ((WeaponsFactory) (Object) this).a(ExpectedObfuscatedValueException.requireNullableStateActor(actor), arg));
+    }
+
+    @SuppressWarnings("null")
     @Override
     public @NotNull String getName() {
         return name;

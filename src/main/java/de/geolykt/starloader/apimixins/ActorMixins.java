@@ -1,5 +1,8 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -7,12 +10,14 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.impl.Pseudo;
 
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.Item;
 import snoddasmannen.galimulator.actors.Actor;
+import snoddasmannen.galimulator.actors.StateActor;
 
 /**
  * Mixins targeting the galimulator Actor class.
@@ -95,6 +100,15 @@ public class ActorMixins implements ActorSpec {
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull List<Weapon> getWeapons() {
+        if (!isParticle()) {
+            return new ArrayList<>(((StateActor) (Object) this).weapons);
+        }
+        return new ArrayList<>();
+    }
+
     @Override
     @Pseudo
     // FIXME Mixin does not allow for @Shadow, I guess that this is likely a bug and should be reported to the library!
@@ -137,6 +151,12 @@ public class ActorMixins implements ActorSpec {
     @Shadow
     public boolean isMonster() {
         return false;
+    }
+
+    @SuppressWarnings("cast")
+    @Override
+    public boolean isParticle() {
+        return !((Object) this instanceof StateActor);
     }
 
     @Override
