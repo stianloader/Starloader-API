@@ -56,6 +56,21 @@ public final class RegistryKeys {
     public static final @NotNull NamespacedKey GALIMULATOR_HEAT_MAPMODE = new GalimulatorResourceKey("MAPMODE_HEAT");
     public static final @NotNull NamespacedKey GALIMULATOR_RELIGION_MAPMODE = new GalimulatorResourceKey("MAPMODE_RELIGIONS");
     public static final @NotNull NamespacedKey GALIMULATOR_WEALTH_MAPMODE = new GalimulatorResourceKey("MAPMODE_WEALTH");
+
+    // Weapon types
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_LASER = new GalimulatorResourceKey("WEAPONTYPE_LASER");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_WEAKLASER = new GalimulatorResourceKey("WEAPONTYPE_WEAKLASER");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_ANTISHIP_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_ANTISHIP_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_LOVELING_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_LOVELING_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_SURFACE_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_SURFACE_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_SPREAD_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_SPREAD_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_MIRV_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_MIRV_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_DRAGON_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_DRAGON_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_HEAL_RAY = new GalimulatorResourceKey("WEAPONTYPE_HEAL_RAY");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_DISRUPTOR = new GalimulatorResourceKey("WEAPONTYPE_DISRUPTOR");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_ILLUMINATOR = new GalimulatorResourceKey("WEAPONTYPE_ILLUMINATOR");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_DRAGONS_BREATH = new GalimulatorResourceKey("WEAPONTYPE_DRAGONS_BREATH");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_CHAIN_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_CHAIN_MISSILE");
 }
 
 /**

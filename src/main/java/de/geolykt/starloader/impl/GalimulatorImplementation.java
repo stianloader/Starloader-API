@@ -12,6 +12,7 @@ import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.Galimulator.GameImplementation;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.Dynbind;
@@ -118,6 +119,11 @@ public class GalimulatorImplementation implements GameImplementation {
     @Override
     public @NotNull List<@NotNull Star> getStars() {
         return Space.a;
+    }
+
+    @Override
+    public @NotNull WeaponsManager getWeaponsManager() {
+        return SLWeaponsManager.getInstance();
     }
 
     @Override

@@ -12,6 +12,7 @@ import de.geolykt.starloader.api.NamespacedKey;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.MapMode.MapModes;
+import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
 /**
  * Registry of enum and/or enum-like objects. This is added for extension
@@ -38,6 +39,11 @@ public abstract class Registry<T> {
      * Enum registry for map modes.
      */
     public static Registry<MapModes> MAP_MODES;
+
+    /**
+     * Enum registry for the weapon types that can be used within the JSON actor definitions.
+     */
+    public static Registry<WeaponsFactory> WEAPON_TYPES;
 
     /**
      * Internal map containing the key-value pairs of the registry for lookup.

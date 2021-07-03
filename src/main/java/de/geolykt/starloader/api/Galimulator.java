@@ -7,6 +7,7 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
@@ -150,6 +151,14 @@ public final class Galimulator {
         public @NotNull List<@NotNull Star> getStars();
 
         /**
+         * Obtains the weapons manager that is valid for this instance.
+         * It is more or less a series of helper methods.
+         *
+         * @return The weapons manager.
+         */
+        public @NotNull WeaponsManager getWeaponsManager();
+
+        /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
          * It will also not cause the loading screen to show up.
          */
@@ -198,8 +207,8 @@ public final class Galimulator {
     }
 
     private static GameConfiguration config;
-    private static GameImplementation impl;
 
+    private static GameImplementation impl;
     /**
      * Connect two stars with each other. The preferred way of connecting two stars.
      *
@@ -482,6 +491,16 @@ public final class Galimulator {
      */
     public @NotNull MapMode[] getMapModes() {
         return impl.getMapModes();
+    }
+
+    /**
+     * Obtains the weapons manager that is valid for this instance.
+     * It is more or less a series of helper methods.
+     *
+     * @return The weapons manager.
+     */
+    public @NotNull WeaponsManager getWeaponsManager() {
+        return impl.getWeaponsManager();
     }
 
     /**

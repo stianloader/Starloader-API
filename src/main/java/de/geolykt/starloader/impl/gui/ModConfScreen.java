@@ -35,7 +35,7 @@ public class ModConfScreen implements ck, Screen {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({ "all" })
     @Override
     public @NotNull List<@NotNull ScreenComponent> getChildren() {
         List<@NotNull ScreenComponent> ret = getItems();

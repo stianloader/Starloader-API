@@ -24,8 +24,8 @@ public class ApplicationMixins {
      */
     @Inject(method = "create", at = @At("HEAD"))
     public void start(CallbackInfo ci) {
-        Registries.init();
         try {
+            Registries.init();
             Throwable t = EventManager.handleEventExcept(new ApplicationStartEvent());
             if (t != null) {
                 throw t;

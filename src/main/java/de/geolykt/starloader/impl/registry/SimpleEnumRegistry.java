@@ -16,7 +16,8 @@ import de.geolykt.starloader.api.registry.RegistryKeyed;
  *
  * @param <T> The enum to encapsulate
  */
-public class SimpleEnumRegistry<T extends Enum<?>> extends Registry<T> {
+@SuppressWarnings("rawtypes")
+public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
 
     protected final @NotNull Class<T> clazz;
 
@@ -36,10 +37,12 @@ public class SimpleEnumRegistry<T extends Enum<?>> extends Registry<T> {
         return (RegistryKeyed) object;
     }
 
+    // TODO allow bulk registration, teh current method is inefficent at best
+
     @Override
     public void register(@NotNull NamespacedKey key, @NotNull T value) {
-        if (super.keyedValues.containsKey(key)) {
-            throw new IllegalStateException("The key is already asociated!");
+        if (super.keyedValues.containsKey(Objects.requireNonNull(key, "parameter 'key' is null"))) {
+            throw new IllegalStateException("The namespaced key is already asociated!");
         }
         if (super.keyedValuesIntern.containsKey(value.toString())) {
             throw new IllegalStateException("The enum name has already been registered! (consider using a different internal name for the enum)");

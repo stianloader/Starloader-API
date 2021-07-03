@@ -1,6 +1,8 @@
 package de.geolykt.starloader.impl.registry;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
@@ -15,18 +17,22 @@ import snoddasmannen.galimulator.AudioManager.AudioSample;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.MapMode.MapModes;
+import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
 /**
  * Base registry init class.
  */
 public class Registries {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(Registries.class);
+
     /**
      * Assigns the registries and assigns the respective galimulator enums to them.
      */
     public static void init() {
         initAudio();
-        SimpleEnumRegistry<EmpireSpecial> specials = new SimpleEnumRegistry<EmpireSpecial>(EmpireSpecial.class);
+        LOGGER.info("Registering empire specials");
+        SimpleEnumRegistry<EmpireSpecial> specials = new SimpleEnumRegistry<>(EmpireSpecial.class);
         specials.register(RegistryKeys.GALIMULATOR_MILITANT, EmpireSpecial.MILITANT);
         specials.register(RegistryKeys.GALIMULATOR_AGGRESSIVE, EmpireSpecial.AGGRESSIVE);
         specials.register(RegistryKeys.GALIMULATOR_DEFENSIVE, EmpireSpecial.DEFENSIVE);
@@ -44,6 +50,7 @@ public class Registries {
         specials.register(RegistryKeys.GALIMULATOR_CULT, EmpireSpecial.CULT);
         specials.register(RegistryKeys.GALIMULATOR_INDUSTRIAL, EmpireSpecial.INDUSTRIAL);
         Registry.EMPIRE_SPECIALS = specials;
+        LOGGER.info("Registering empire states");
         EmpireStateRegistry empireStateRegistry = new EmpireStateRegistry();
         empireStateRegistry.registerAll(
                 new @NotNull NamespacedKey[] { RegistryKeys.GALIMULATOR_EXPANDING, RegistryKeys.GALIMULATOR_FORTIFYING,
@@ -59,12 +66,29 @@ public class Registries {
                         new EmpireStateMetadataEntry(false, false), new EmpireStateMetadataEntry(false, true),
                         new EmpireStateMetadataEntry(false, true) });
         Registry.EMPIRE_STATES = empireStateRegistry;
+        LOGGER.info("Registering weapon factories");
+        SimpleEnumRegistry<WeaponsFactory> weaponTypes = new SimpleEnumRegistry<>(WeaponsFactory.class);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_LASER, WeaponsFactory.LASER);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_WEAKLASER, WeaponsFactory.WEAKLASER);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_ANTISHIP_MISSILE, WeaponsFactory.A2A_MISSILE);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_LOVELING_MISSILE, WeaponsFactory.LOVELING_MISSILE);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_SURFACE_MISSILE, WeaponsFactory.A2S_MISSILE);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_SPREAD_MISSILE, WeaponsFactory.SPREAD_MISSILE);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_MIRV_MISSILE, WeaponsFactory.MIRV_MISSILE);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_DRAGON_MISSILE, WeaponsFactory.DRAGON_MISSILE);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_HEAL_RAY, WeaponsFactory.HEAL_RAY);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_DISRUPTOR, WeaponsFactory.DISRUPTOR);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_ILLUMINATOR, WeaponsFactory.ILLUMINATOR);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_DRAGONS_BREATH, WeaponsFactory.DRAGONS_BREATH);
+        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_CHAIN_MISSILE, WeaponsFactory.CHAIN_MISSILE);
+        Registry.WEAPON_TYPES = weaponTypes;
     }
 
     /**
      * Initialises the Audio wrapper layer.
      */
     private static void initAudio() {
+        LOGGER.info("Wrapping audio samples");
         AudioSampleWrapper.ACTOR_SELECTED = new StarloaderAudioSample("uismallselect.wav", AudioSample.ACTOR_SELECTED);
         AudioSampleWrapper.ACTOR_ORDERED = new StarloaderAudioSample("uismallselect.wav", AudioSample.ACTOR_ORDERED);
         AudioSampleWrapper.GOOD_MINI = new StarloaderAudioSample("goodmini.wav", AudioSample.GOOD_MINI);
@@ -86,7 +110,8 @@ public class Registries {
     }
 
     public static void initMapModes() {
-        SimpleEnumRegistry<MapModes> mapModeRegistry = new SimpleEnumRegistry<MapModes>(MapModes.class);
+        LOGGER.info("Wrapping map modes");
+        SimpleEnumRegistry<MapModes> mapModeRegistry = new SimpleEnumRegistry<>(MapModes.class);
         mapModeRegistry.register(RegistryKeys.GALIMULATOR_DEFAULT_MAPMODE, MapModes.NORMAL);
         mapModeRegistry.register(RegistryKeys.GALIMULATOR_WEALTH_MAPMODE, MapModes.WEALTH);
         mapModeRegistry.register(RegistryKeys.GALIMULATOR_HEAT_MAPMODE, MapModes.HEAT);

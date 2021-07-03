@@ -30,6 +30,7 @@
     "RaiderMixins",
     "SettingsscreenMixins",
     "StarMixins",
-    "StateActorMixins"
+    "StateActorMixins",
+    "WeaponsFactoryMixins"
   ]
 }
