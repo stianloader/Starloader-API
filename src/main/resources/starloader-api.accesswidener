@@ -20,6 +20,7 @@ accessible      method  snoddasmannen/galimulator/hl                        <ini
 accessible      field   com/example/Main                                    shortcuts  Ljava/util/List;
 accessible      field   snoddasmannen/galimulator/ui/bi                     d          J
 extendable      field   snoddasmannen/galimulator/ui/on                     c          Ljava/lang/String;
+accessible      field   snoddasmannen/galimulator/ui/Widget                 u          Lsnoddasmannen/galimulator/ui/ga;
 accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound      Lcom/badlogic/gdx/audio/Sound;
 accessible      field   snoddasmannen/galimulator/Space                     i          Ljava/util/Vector;
 
