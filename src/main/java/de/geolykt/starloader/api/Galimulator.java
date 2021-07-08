@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -198,6 +199,25 @@ public final class Galimulator {
         public void resumeGame();
 
         /**
+         * Saves a file inside the data folder.
+         * The file will NOT be overriden if it already exists.
+         *
+         * @param name The name of the file, the `data/` part must be ommited
+         * @param data The data of the file.
+         */
+        public void saveFile(@NotNull String name, byte[] data);
+
+        /**
+         * Saves a file inside the data folder.
+         * The file will NOT be overriden if it already exists. The input data stream will be exhausted by this operation,
+         * however it will NOT be closed
+         *
+         * @param name The name of the file, the `data/` part must be ommited
+         * @param data The data of the file.
+         */
+        public void saveFile(@NotNull String name, InputStream data);
+
+        /**
          * Changes the currently active map mode to a new value.
          *
          * @param mode The new active map mode.
@@ -209,6 +229,7 @@ public final class Galimulator {
     private static GameConfiguration config;
 
     private static GameImplementation impl;
+
     /**
      * Connect two stars with each other. The preferred way of connecting two stars.
      *
@@ -228,6 +249,16 @@ public final class Galimulator {
      */
     public static void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
         impl.disconnectStars(starA, starB);
+    }
+
+    /**
+     * Obtains the currently active map mode.
+     *
+     * @return The currently active map mode.
+     * @see #setActiveMapmode(MapMode)
+     */
+    public static @NotNull MapMode getActiveMapmode() {
+        return impl.getActiveMapmode();
     }
 
     /**
@@ -311,6 +342,26 @@ public final class Galimulator {
     }
 
     /**
+     * Obtains the mapmode that was registered to this key. If there is no map mode that is registered to it,
+     * then null should be returned
+     *
+     * @return The map mode bound to the key, or null if none were found
+     */
+    public static @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key) {
+        return impl.getMapmodeByKey(Objects.requireNonNull(key, "Null registry key!"));
+    }
+
+    /**
+     * Obtains all currently registered map modes.
+     * Map modes cannot be unregistered, so chances are those will also be valid in the future.
+     *
+     * @return All valid map modes
+     */
+    public static @NotNull MapMode[] getMapModes() {
+        return impl.getMapModes();
+    }
+
+    /**
      * Convenience method to obtain the neutral empire. The neutral empire should
      * NOT be ticked as it may create serious side effects within the ticking
      * mechanism. Additionally merging or destroying the empire might have serious
@@ -385,6 +436,16 @@ public final class Galimulator {
     }
 
     /**
+     * Obtains the weapons manager that is valid for this instance.
+     * It is more or less a series of helper methods.
+     *
+     * @return The weapons manager.
+     */
+    public static @NotNull WeaponsManager getWeaponsManager() {
+        return impl.getWeaponsManager();
+    }
+
+    /**
      * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
      * It will also not cause the loading screen to show up.
      *
@@ -437,6 +498,39 @@ public final class Galimulator {
     }
 
     /**
+     * Saves a file inside the data folder.
+     * The file will NOT be overriden if it already exists.
+     *
+     * @param name The name of the file, the `data/` part must be ommited
+     * @param data The data of the file.
+     */
+    public static void saveFile(@NotNull String name, byte[] data) {
+        impl.saveFile(name, data);
+    }
+
+    /**
+     * Saves a file inside the data folder.
+     * The file will NOT be overriden if it already exists. The input data stream will be exhausted by this operation,
+     * however it will NOT be closed
+     *
+     * @param name The name of the file, the `data/` part must be ommited
+     * @param data The data of the file.
+     */
+    public static void saveFile(@NotNull String name, InputStream data) {
+        impl.saveFile(name, data);
+    }
+
+    /**
+     * Changes the currently active map mode to a new value.
+     *
+     * @param mode The new active map mode.
+     * @see #getActiveMapmode()
+     */
+    public static void setActiveMapmode(@NotNull MapMode mode) {
+        impl.setActiveMapmode(Objects.requireNonNull(mode, "The map mode cannot be set to a null value"));
+    }
+
+    /**
      * Sets the {@link GameConfiguration} directly.
      * It is unlikely that anyone would need to use this method except the API implementation itself.
      *
@@ -462,54 +556,4 @@ public final class Galimulator {
      * Constructor that should not be called because there is no need to have an instance of this class.
      */
     private Galimulator() { }
-
-    /**
-     * Obtains the currently active map mode.
-     *
-     * @return The currently active map mode.
-     * @see #setActiveMapmode(MapMode)
-     */
-    public @NotNull MapMode getActiveMapmode() {
-        return impl.getActiveMapmode();
-    }
-
-    /**
-     * Obtains the mapmode that was registered to this key. If there is no map mode that is registered to it,
-     * then null should be returned
-     *
-     * @return The map mode bound to the key, or null if none were found
-     */
-    public @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key) {
-        return impl.getMapmodeByKey(Objects.requireNonNull(key, "Null registry key!"));
-    }
-
-    /**
-     * Obtains all currently registered map modes.
-     * Map modes cannot be unregistered, so chances are those will also be valid in the future.
-     *
-     * @return All valid map modes
-     */
-    public @NotNull MapMode[] getMapModes() {
-        return impl.getMapModes();
-    }
-
-    /**
-     * Obtains the weapons manager that is valid for this instance.
-     * It is more or less a series of helper methods.
-     *
-     * @return The weapons manager.
-     */
-    public @NotNull WeaponsManager getWeaponsManager() {
-        return impl.getWeaponsManager();
-    }
-
-    /**
-     * Changes the currently active map mode to a new value.
-     *
-     * @param mode The new active map mode.
-     * @see #getActiveMapmode()
-     */
-    public void setActiveMapmode(@NotNull MapMode mode) {
-        impl.setActiveMapmode(Objects.requireNonNull(mode, "The map mode cannot be set to a null value"));
-    }
 }

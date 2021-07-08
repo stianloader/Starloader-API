@@ -1,5 +1,9 @@
 package de.geolykt.starloader.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +16,7 @@ import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.Galimulator.GameImplementation;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
@@ -160,6 +165,32 @@ public class GalimulatorImplementation implements GameImplementation {
     @Override
     public void resumeGame() {
         Space.c(false);
+    }
+
+    @Override
+    public void saveFile(@NotNull String name, byte[] data) {
+        File out = new File("data", NullUtils.requireNotNull(name));
+        if (!out.exists()) {
+            try (FileOutputStream fos = new FileOutputStream(out)) {
+                fos.write(data);
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void saveFile(@NotNull String name, InputStream data) {
+        File out = new File("data", NullUtils.requireNotNull(name));
+        if (!out.exists()) {
+            try (FileOutputStream fos = new FileOutputStream(out)) {
+                data.transferTo(fos);
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
