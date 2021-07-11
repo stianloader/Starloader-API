@@ -3,6 +3,7 @@ package de.geolykt.starloader.impl.text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,10 +34,10 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
 
     @Override
     public @NotNull FormattedTextComponent build() {
-        TextComponent main = new ColoredTextComponent(text, color, size);
+        TextComponent main = new ColoredTextComponent(text, color, Objects.requireNonNull(size));
         ArrayList<@NotNull TextComponent> components = new ArrayList<>(jitter.size());
         for (Map.Entry<@NotNull GalColor, @NotNull Double> entry : jitter) {
-            components.add(new JitterTextComponent(text, entry.getKey(), entry.getValue(), size));
+            components.add(new JitterTextComponent(text, entry.getKey(), entry.getValue(), Objects.requireNonNull(size)));
         }
         return new BaseFormattedTextComponent(main, components);
     }

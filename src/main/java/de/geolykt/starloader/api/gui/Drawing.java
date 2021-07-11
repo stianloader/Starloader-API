@@ -5,9 +5,11 @@ import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
@@ -87,8 +89,8 @@ public final class Drawing {
      * @param size    The font size.
      * @return The width of the text that was just drawn
      */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.TextSize size) {
-        return implementation.drawText(message, x, y, color, size);
+    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size) {
+        return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"));
     }
 
     /**
@@ -143,6 +145,20 @@ public final class Drawing {
      */
     public static @NotNull TextFactory getTextFactory() {
         return implementation.getTextFactory();
+    }
+
+    /**
+     * Reads the file at the given path (which is relative to the data directory)
+     * as a texture and binds it into the game's texture atlas.
+     * If a texture is already bound, then that bound texture is returned.
+     * If the texture cannot be bound then a placeholder texture is returned.
+     * By default this is the smiling flower texture.
+     *
+     * @param path The path to the image file to load.
+     * @return The bound texture.
+     */
+    public static @NotNull Texture loadTexture(@NotNull String path) {
+        return implementation.loadTexture(path);
     }
 
     /**

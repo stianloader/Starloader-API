@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -104,6 +105,18 @@ public interface DrawingImpl {
      * @return The {@link TextFactory} bound to the implementation
      */
     public @NotNull TextFactory getTextFactory();
+
+    /**
+     * Reads the file at the given path (which is relative to the data directory)
+     * as a texture and binds it into the game's texture atlas.
+     * If a texture is already bound, then that bound texture is returned.
+     * If the texture cannot be bound then a placeholder texture is returned.
+     * By default this is the smiling flower texture.
+     *
+     * @param path The path to the image file to load.
+     * @return The bound texture.
+     */
+    public @NotNull Texture loadTexture(@NotNull String path);
 
     /**
      * Sends a bulletin to the player which is visible in the bottom left in most

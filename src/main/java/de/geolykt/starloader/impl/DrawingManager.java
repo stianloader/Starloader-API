@@ -3,13 +3,16 @@ package de.geolykt.starloader.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
@@ -97,6 +100,11 @@ public class DrawingManager implements DrawingImpl {
     @Override
     public @NotNull TextFactory getTextFactory() {
         return TEXT_FACTORY;
+    }
+
+    @Override
+    public @NotNull Texture loadTexture(@NotNull String path) {
+        return NullUtils.requireNotNull(GalFX.a(Objects.requireNonNull(path, "Path cannot be null")));
     }
 
     @Override

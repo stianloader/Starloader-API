@@ -1,5 +1,7 @@
 package de.geolykt.starloader.impl.text;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NullUtils;
@@ -22,7 +24,7 @@ public class ColoredTextComponent implements TextComponent {
         this(s, color, Drawing.TextSize.SMALL);
     }
 
-    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color, Drawing.TextSize size) {
+    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color, @NotNull Drawing.TextSize size) {
         this.text = s;
         this.color = color;
         this.size = size;
@@ -35,6 +37,6 @@ public class ColoredTextComponent implements TextComponent {
 
     @Override
     public float renderText(float x, float y) {
-        return Drawing.drawText(text, x, y, color, size);
+        return Drawing.drawText(text, x, y, color, Objects.requireNonNull(size));
     }
 }
