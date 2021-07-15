@@ -1,6 +1,7 @@
 package de.geolykt.starloader.apimixins;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -104,7 +105,7 @@ public class ActorMixins implements ActorSpec {
     @Override
     public @NotNull List<Weapon> getWeapons() {
         if (!isParticle()) {
-            return new ArrayList<>(((StateActor) (Object) this).weapons);
+            return new ArrayList<>((Collection<? extends Weapon>) ((StateActor) (Object) this).weapons);
         }
         return new ArrayList<>();
     }

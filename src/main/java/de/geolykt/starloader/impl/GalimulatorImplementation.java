@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,10 +76,10 @@ public class GalimulatorImplementation implements GameImplementation {
         return (ActiveEmpire) Space.d(uid);
     }
 
-    @SuppressWarnings("null")
+    @SuppressWarnings({ "null", "unchecked", "rawtypes" })
     @Override
     public @NotNull List<@NotNull ActiveEmpire> getEmpires() {
-        return Space.b;
+        return (Vector) Space.b;
     }
 
     @Override
@@ -120,10 +121,10 @@ public class GalimulatorImplementation implements GameImplementation {
         return (ActiveEmpire) plyr.a();
     }
 
-    @SuppressWarnings("null")
+    @SuppressWarnings({ "null", "unchecked", "rawtypes" })
     @Override
     public @NotNull List<@NotNull Star> getStars() {
-        return Space.a;
+        return (Vector) Space.a;
     }
 
     @Override
