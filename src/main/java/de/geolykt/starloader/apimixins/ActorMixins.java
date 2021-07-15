@@ -101,11 +101,11 @@ public class ActorMixins implements ActorSpec {
         return 0;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public @NotNull List<Weapon> getWeapons() {
         if (!isParticle()) {
-            return new ArrayList<>((Collection<? extends Weapon>) ((StateActor) (Object) this).weapons);
+            return new ArrayList<>((Collection) ((StateActor) (Object) this).weapons);
         }
         return new ArrayList<>();
     }
