@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
@@ -194,6 +195,15 @@ public final class Drawing {
 
     public static void setImplementation(@NotNull DrawingImpl implementation) {
         Drawing.implementation = implementation;
+    }
+
+    /**
+     * Shows this specific screen to the user.
+     *
+     * @param screen The screen to display
+     */
+    public static void showScreen(@NotNull Screen screen) {
+        implementation.showScreen(screen);
     }
 
     /**

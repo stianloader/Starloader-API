@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
@@ -143,6 +144,13 @@ public interface DrawingImpl {
      * @param message The message to send
      */
     public void sendOddityBulletin(@NotNull String message);
+
+    /**
+     * Shows this specific screen to the user.
+     *
+     * @param screen The screen to display
+     */
+    public void showScreen(@NotNull Screen screen);
 
     /**
      * Creates a {@link TextInputBuilder} for obtaining String input from the User.

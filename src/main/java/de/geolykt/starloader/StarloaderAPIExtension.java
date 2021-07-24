@@ -10,11 +10,13 @@ import de.geolykt.starloader.api.event.lifecycle.SignalExtensionTerminationEvent
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
+import de.geolykt.starloader.api.gui.screen.Screenbuilder;
 import de.geolykt.starloader.impl.DrawingManager;
 import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
 import de.geolykt.starloader.impl.asm.UIASMTransformer;
+import de.geolykt.starloader.impl.gui.SLScreenbuilder;
 import de.geolykt.starloader.mod.Extension;
 
 /**
@@ -46,5 +48,6 @@ public class StarloaderAPIExtension extends Extension {
         Drawing.setImplementation(new DrawingManager());
         SidebarInjector.setImplementation(new SLSidebarInjector());
         MinestomRootClassLoader.getInstance().addCodeModifier(new UIASMTransformer());
+        Screenbuilder.setFactory(SLScreenbuilder::new);
     }
 }

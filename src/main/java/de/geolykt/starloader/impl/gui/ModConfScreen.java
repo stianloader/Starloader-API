@@ -18,6 +18,7 @@ import de.geolykt.starloader.api.gui.modconf.StringOption;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.ck;
+import snoddasmannen.galimulator.b.class_s;
 
 public class ModConfScreen implements ck, Screen {
 
@@ -32,13 +33,18 @@ public class ModConfScreen implements ck, Screen {
 
     @Override
     public void addChild(@NotNull ScreenComponent o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot add new children to this class.");
+    }
+
+    @Override
+    public boolean canAddChildren() {
+        return false;
     }
 
     @SuppressWarnings({ "all" })
     @Override
     public @NotNull List<@NotNull ScreenComponent> getChildren() {
-        List<@NotNull ScreenComponent> ret = getItems();
+        List<@NotNull ScreenComponent> ret = (List) getItems();
         if (ret == null) {
             throw new NullPointerException();
         }
@@ -51,8 +57,8 @@ public class ModConfScreen implements ck, Screen {
     }
 
     @Override
-    public ArrayList getItems() {
-        ArrayList<ScreenComponent> alist = new ArrayList<>();
+    public ArrayList<class_s> getItems() {
+        ArrayList<class_s> alist = new ArrayList<>();
         for (ConfigurationSection section : config.getSections()) {
             for (ConfigurationOption<?> option : section.getChildren()) {
                 if (option instanceof BooleanOption) {

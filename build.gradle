@@ -7,7 +7,7 @@ plugins {
 
 group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
-def gdxVersion = '1.9.13'
+def gdxVersion = '1.9.11' // The InputAdapter class is otherwise invalid
 version '1.4.0'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'

@@ -16,6 +16,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
+import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
@@ -23,6 +24,7 @@ import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.ck;
 import snoddasmannen.galimulator.du;
 import snoddasmannen.galimulator.gh;
 
@@ -120,6 +122,19 @@ public class DrawingManager implements DrawingImpl {
     @Override
     public void sendOddityBulletin(@NotNull String message) {
         Space.a(new du(message));
+    }
+
+    @Override
+    public void showScreen(@NotNull Screen screen) {
+        if (!(screen instanceof ck)) {
+            if (Objects.isNull(screen)) {
+                throw new NullPointerException("Screen is null.");
+            } else {
+                throw new IllegalArgumentException("You cannot extend your own instances of \"Screen\".");
+            }
+        }
+        // probably: screen, ???, type, closeOthers
+        Space.a((ck) screen, true, null, false);
     }
 
     @Override

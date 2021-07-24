@@ -510,7 +510,7 @@ public class ModConf implements ModConfSpec {
         }
     }
 
-    protected final ModConfScreen screen = new ModConfScreen(this);
+    protected final @NotNull ModConfScreen screen = new ModConfScreen(this);
 
     /**
      * The name of the currently registered sections. Used for easy state
@@ -545,7 +545,7 @@ public class ModConf implements ModConfSpec {
         //
     }
 
-    public ModConfScreen getScreen() {
+    public @NotNull ModConfScreen getScreen() {
         return screen;
     }
 
