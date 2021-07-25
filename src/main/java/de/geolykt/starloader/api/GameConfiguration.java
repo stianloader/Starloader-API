@@ -34,6 +34,13 @@ public interface GameConfiguration {
     public boolean allowTranscendence();
 
     /**
+     * Obtains the minimum height of Galimulator Widgets / Starloader screen components.
+     *
+     * @return The minimum height. By default 40 (cannot be changed on the user side)
+     */
+    public int getMinimumComponentHeight();
+
+    /**
      * Obtains a modifier that is imposed on the ship count. This modifier does not immediately affect modded modifiers,
      * though implementations are free to react on changes accordingly.
      *

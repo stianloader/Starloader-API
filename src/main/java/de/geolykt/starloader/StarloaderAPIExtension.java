@@ -16,6 +16,7 @@ import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
 import de.geolykt.starloader.impl.asm.UIASMTransformer;
+import de.geolykt.starloader.impl.gui.SLComponentCreator;
 import de.geolykt.starloader.impl.gui.SLScreenbuilder;
 import de.geolykt.starloader.mod.Extension;
 
@@ -49,5 +50,6 @@ public class StarloaderAPIExtension extends Extension {
         SidebarInjector.setImplementation(new SLSidebarInjector());
         MinestomRootClassLoader.getInstance().addCodeModifier(new UIASMTransformer());
         Screenbuilder.setFactory(SLScreenbuilder::new);
+        Screenbuilder.setComponentCreator(new SLComponentCreator());
     }
 }

@@ -62,6 +62,11 @@ public class SimpleScreen implements ck, Screen {
     }
 
     @Override
+    public int getInnerWidth() {
+        return getInspectorWidth() - 20;
+    }
+
+    @Override
     public int getInspectorWidth() {
         if (widthProvider == null) {
             return width;

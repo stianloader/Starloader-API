@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Camera;
+
 /**
  * A subcomponent of a bigger text component.
  */
@@ -33,10 +35,20 @@ public interface FormattedTextComponent extends TextRenderable {
      * @param y The Y-Coordinate of the rendering position
      * @return The width of the text (?)
      */
+    @Override
     public default float renderText(float x, float y) {
         float width = 0.0f;
         for (TextComponent component : getComponents()) {
             width = Math.max(component.renderText(x, y), width);
+        }
+        return width;
+    }
+
+    @Override
+    public default float renderTextAt(float x, float y, @NotNull Camera camera) {
+        float width = 0.0f;
+        for (TextComponent component : getComponents()) {
+            width = Math.max(component.renderTextAt(x, y, camera), width);
         }
         return width;
     }

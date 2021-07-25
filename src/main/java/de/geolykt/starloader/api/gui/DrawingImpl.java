@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -61,6 +62,22 @@ public interface DrawingImpl {
      * @return The width of the text that was just drawn
      */
     public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size);
+
+    /**
+     * Draws text at the given location. The specified color should be used.
+     * Additionally the font shall be inferred by the given font size,
+     * however no further guarantees are made.
+     * The text may not persist across frames.
+     *
+     * @param message The message to write
+     * @param x       The X-location of the text
+     * @param y       The Y-location of the text
+     * @param color   The color of the message
+     * @param size    The font size.
+     * @param camera  The camera to use (used for internal unprojecting)
+     * @return The width of the text that was just drawn
+     */
+    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size, @NotNull Camera camera);
 
     /**
      * Draws text at the given location. The specified color should be used.

@@ -8,9 +8,11 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
@@ -59,6 +61,21 @@ public class DrawingManager implements DrawingImpl {
         case SMALL:
         default:
             return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL);
+        }
+    }
+
+    @Override
+    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color,
+            @NotNull Drawing.TextSize size, @NotNull Camera camera) {
+        // x, y, rotation, pivot, text, color, font, camera
+        switch (size) {
+        case LARGE:
+            return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG, camera);
+        case MEDIUM:
+            return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, camera);
+        case SMALL:
+        default:
+            return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
         }
     }
 

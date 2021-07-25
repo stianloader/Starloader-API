@@ -1,6 +1,7 @@
 package de.geolykt.starloader.api.gui.screen;
 
 import java.awt.Color;
+import java.util.Objects;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -14,6 +15,8 @@ import de.geolykt.starloader.api.gui.text.TextColor;
  * Builder class to create {@link Screen} objects.
  */
 public abstract class Screenbuilder {
+
+    private static ComponentCreator componentCreator;
 
     /**
      * The implementation of {@link #getBuilder()} that is set via {@link #setFactory(Supplier)}.
@@ -30,6 +33,26 @@ public abstract class Screenbuilder {
      */
     public static @NotNull Screenbuilder getBuilder() {
         return NullUtils.requireNotNull(factory.get());
+    }
+
+    /**
+     * Obtains the currently valid component creator.
+     * This component creator can be used to in turn to populate your newly created screens.
+     *
+     * @return The curently active {@link ComponentCreator}.
+     * @throws NullPointerException If the component creator was not set.
+     */
+    public static @NotNull ComponentCreator getComponentCreator() {
+        return NullUtils.requireNotNull(componentCreator);
+    }
+
+    /**
+     * Sets the current {@link ComponentCreator} instance that should be returned by {@link #getComponentCreator()}.
+     *
+     * @param componentCreator The new valid ComponentCreator.
+     */
+    public static void setComponentCreator(@NotNull ComponentCreator componentCreator) {
+        Screenbuilder.componentCreator = Objects.requireNonNull(componentCreator);
     }
 
     /**

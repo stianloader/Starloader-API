@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Camera;
+
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
@@ -40,5 +42,10 @@ public class SingletonTextComponent implements FormattedTextComponent {
     @Override
     public float renderText(float x, float y) {
         return component.renderText(x, y);
+    }
+
+    @Override
+    public float renderTextAt(float x, float y, @NotNull Camera camera) {
+        return component.renderTextAt(x, y, camera);
     }
 }

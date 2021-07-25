@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Camera;
+
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.TextComponent;
@@ -38,5 +40,10 @@ public class ColoredTextComponent implements TextComponent {
     @Override
     public float renderText(float x, float y) {
         return Drawing.drawText(text, x, y, color, Objects.requireNonNull(size));
+    }
+
+    @Override
+    public float renderTextAt(float x, float y, @NotNull Camera camera) {
+        return Drawing.drawText(text, x, y, color, Objects.requireNonNull(size), camera);
     }
 }

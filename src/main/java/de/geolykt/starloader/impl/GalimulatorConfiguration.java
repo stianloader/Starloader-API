@@ -27,6 +27,11 @@ public class GalimulatorConfiguration implements GameConfiguration {
     }
 
     @Override
+    public int getMinimumComponentHeight() {
+        return snoddasmannen.galimulator.df.getConfiguration().getMinHeight();
+    }
+
+    @Override
     public int getShipMultiplier() {
         return (int) SHIP_NUMBER_MOD.b();
     }

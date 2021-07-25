@@ -52,6 +52,11 @@ public class ModConfScreen implements ck, Screen {
     }
 
     @Override
+    public int getInnerWidth() {
+        return getInspectorWidth() - 20;
+    }
+
+    @Override
     public int getInspectorWidth() {
         return 600;
     }

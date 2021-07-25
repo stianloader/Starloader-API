@@ -1,5 +1,9 @@
 package de.geolykt.starloader.api.gui.text;
 
+import org.jetbrains.annotations.NotNull;
+
+import com.badlogic.gdx.graphics.Camera;
+
 import de.geolykt.starloader.api.gui.Renderable;
 
 public interface TextRenderable extends Renderable {
@@ -11,8 +15,24 @@ public interface TextRenderable extends Renderable {
      * @param x The X-Coordinate of the rendering position
      * @param y The Y-Coordinate of the rendering position
      */
+    @Override
     public default void render(float x, float y) {
         renderText(x, y);
+    }
+
+    /**
+     * Renders the text on screen at the given coordinates. The view may get
+     * unprojected with the given camera.
+     * It may be more usefull to use {@link #renderTextAt(float, float, Camera)} instead
+     * as it will print the width of the text.
+     *
+     * @param x The X-Coordinate of the rendering position
+     * @param y The Y-Coordinate of the rendering position
+     * @param camera The camera to use (used for unprojection)
+     */
+    @Override
+    public default void renderAt(float x, float y, @NotNull Camera camera) {
+        renderAt(x, y, camera);
     }
 
     /**
@@ -24,4 +44,15 @@ public interface TextRenderable extends Renderable {
      * @return The width of the text (?)
      */
     public float renderText(float x, float y); // TODO get more info on return value
+
+    /**
+     * Renders the text on screen at the given coordinates. The view may get
+     * unprojected with the given camera
+     *
+     * @param x The X-Coordinate of the rendering position
+     * @param y The Y-Coordinate of the rendering position
+     * @param camera The camera to use (used for unprojection)
+     * @return The width of the text
+     */
+    public float renderTextAt(float x, float y, @NotNull Camera camera);
 }

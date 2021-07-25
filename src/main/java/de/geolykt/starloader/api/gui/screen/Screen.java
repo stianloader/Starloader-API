@@ -12,7 +12,7 @@ public interface Screen {
     /**
      * Adds a child component to this screen.
      * Note: while this method might look attractive, only the fewest implementations support it.
-     * {@link Screenbuilder} exposes {@link Screenbuilder#addComponentProvider(java.util.function.Consumer)},
+     * {@link Screenbuilder} exposes {@link Screenbuilder#addComponentProvider(ComponentProvider)},
      * which you may want to use instead.
      *
      * @param child The child component to add
@@ -39,6 +39,14 @@ public interface Screen {
      * @return The direct children assigned to this screen
      */
     public @NotNull List<@NotNull ScreenComponent> getChildren();
+
+    /**
+     * Obtains the width of the screen that is at disposal for components within the screen.
+     * This is not the actual width (due to border margins), which may be a bit larger.
+     *
+     * @return The width availiable to inner components.
+     */
+    public int getInnerWidth();
 
     /**
      * Obtains the title of this screen.

@@ -5,6 +5,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Camera;
+
 import de.geolykt.starloader.api.gui.Drawing;
 
 import snoddasmannen.galimulator.GalColor;
@@ -27,5 +29,12 @@ public class JitterTextComponent extends ColoredTextComponent {
         float jitterX = (ThreadLocalRandom.current().nextFloat() - 0.5f) * intensity;
         float jitterY = (ThreadLocalRandom.current().nextFloat() - 0.5f) * intensity;
         return super.renderText(jitterX + x, jitterY + y);
+    }
+
+    @Override
+    public float renderTextAt(float x, float y, @NotNull Camera camera) {
+        float jitterX = (ThreadLocalRandom.current().nextFloat() - 0.5f) * intensity;
+        float jitterY = (ThreadLocalRandom.current().nextFloat() - 0.5f) * intensity;
+        return super.renderTextAt(jitterX + x, jitterY + y, camera);
     }
 }
