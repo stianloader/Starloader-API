@@ -8,6 +8,7 @@ accessWidener   v2     intermediary
 # ---------------------------------------------------------
 
 # Methods
+accessible      method  snoddasmannen/galimulator/AudioManager              f          ()V
 accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
 accessible      method  snoddasmannen/galimulator/be                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
 extendable      method  snoddasmannen/galimulator/ho                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
@@ -21,6 +22,9 @@ accessible      field   com/example/Main                                    shor
 accessible      field   snoddasmannen/galimulator/ui/bi                     d          J
 extendable      field   snoddasmannen/galimulator/ui/on                     c          Ljava/lang/String;
 accessible      field   snoddasmannen/galimulator/ui/Widget                 u          Lsnoddasmannen/galimulator/ui/ga;
+accessible      field   snoddasmannen/galimulator/AudioManager              a          Lsnoddasmannen/galimulator/u;
+accessible      field   snoddasmannen/galimulator/AudioManager              b          I
+accessible      field   snoddasmannen/galimulator/AudioManager              c          Ljava/util/ArrayList;
 accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound      Lcom/badlogic/gdx/audio/Sound;
 accessible      field   snoddasmannen/galimulator/Space                     i          Ljava/util/Vector;
 

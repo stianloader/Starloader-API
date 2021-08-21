@@ -24,7 +24,7 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.registry.Registry;
-
+import de.geolykt.starloader.api.sound.SoundHandler;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Space;
 
@@ -119,6 +119,11 @@ public class GalimulatorImplementation implements GameImplementation {
             return null;
         }
         return (ActiveEmpire) plyr.a();
+    }
+
+    @Override
+    public @NotNull SoundHandler getSoundHandler() {
+        return SLSoundHandler.getInstance();
     }
 
     @SuppressWarnings({ "null", "unchecked", "rawtypes" })

@@ -14,6 +14,7 @@ import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.sound.SoundHandler;
 
 /**
  * Class to redirect to instance-wide constants or other static
@@ -136,6 +137,13 @@ public final class Galimulator {
          * @return The {@link ActiveEmpire} owned by the player, or null
          */
         public @Nullable ActiveEmpire getPlayerEmpire();
+
+        /**
+         * Obtains the currently active {@link SoundHandler}.
+         *
+         * @return The active {@link SoundHandler}.
+         */
+        public @NotNull SoundHandler getSoundHandler();
 
         /**
          * Gets the currently registered Stars. Note that like many other methods in the
@@ -399,6 +407,15 @@ public final class Galimulator {
     @Deprecated(forRemoval = true, since = "1.1.0")
     public static int getReleaseCode() {
         return 8;
+    }
+
+    /**
+     * Obtains the currently active {@link SoundHandler}.
+     *
+     * @return The active {@link SoundHandler}.
+     */
+    public static @NotNull SoundHandler getSoundHandler() {
+        return impl.getSoundHandler();
     }
 
     /**

@@ -8,6 +8,7 @@
     "ActorMixins",
     "AllianceMixins",
     "ApplicationMixins",
+    "AudioManagerMixins",
     "AudioSampleMixins",
     "BattleshipMixins",
     "DestroyerMixins",
@@ -32,6 +33,7 @@
     "SettingsscreenMixins",
     "StarMixins",
     "StateActorMixins",
+    "TrackMixins",
     "WeaponMixins",
     "WeaponsFactoryMixins"
   ]
