@@ -10,6 +10,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.TextScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
+import de.geolykt.starloader.impl.gui.SLAbstractWidget;
 
 import snoddasmannen.galimulator.b.class_s;
 import snoddasmannen.galimulator.ui.Widget;
@@ -66,22 +67,22 @@ public class SLTextScreenComponent implements TextScreenComponent, SLScreenCompo
 
     @Override
     public Widget b(boolean boolean1) {
-        return new Widget() {
+        return new SLAbstractWidget() {
 
             @Override
-            public int d() { // height
+            public int getHeight() { // height
                 return Galimulator.getConfiguration().getMinimumComponentHeight();
             }
 
             @Override
-            public int c() { // width (I assume)
+            public int getWidth() { // width (I assume)
                 return parent.getInnerWidth();
             }
 
             @Override
-            public void a() {
+            public void onRender() {
                 // TODO galimulator is a lot more complicated than I expected with text drawing. Perhaps it is better to introduce even more drawing methods.
-                getText().renderAt(4.0F, this.d(), NullUtils.requireNotNull(this.q, "The internal camera is null, strange isn't it? Not that I fully expect this to happen or anything. But it will be the future me to resolve this either way, so fuck it."));
+                getText().renderAt(4.0F, this.getHeight(), NullUtils.requireNotNull(this.q, "The internal camera is null, strange isn't it? Not that I fully expect this to happen or anything. But it will be the future me to resolve this either way, so fuck it."));
             }
         };
     }
