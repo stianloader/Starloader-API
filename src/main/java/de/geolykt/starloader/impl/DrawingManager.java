@@ -21,14 +21,15 @@ import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
+import de.geolykt.starloader.impl.gui.SLScreenWidget;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
-
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ck;
 import snoddasmannen.galimulator.du;
 import snoddasmannen.galimulator.gh;
+import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
 
 public class DrawingManager implements DrawingImpl {
 
@@ -143,15 +144,19 @@ public class DrawingManager implements DrawingImpl {
 
     @Override
     public void showScreen(@NotNull Screen screen) {
-        if (!(screen instanceof ck)) {
-            if (Objects.isNull(screen)) {
-                throw new NullPointerException("Screen is null.");
+        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof ck) {
+            // Standard screen using the dialog api
+            if (screen.isHeadless()) {
+                SLScreenWidget screenWrapper = new SLScreenWidget(screen, false); // headless
+                screenWrapper.a((WIDGET_ID) null);
+                Space.c(screenWrapper);
             } else {
-                throw new IllegalArgumentException("You cannot extend your own instances of \"Screen\".");
+                // probably: screen, ???, type, closeOthers
+                Space.a((ck) screen, true, null, false);
             }
+        } else {
+            throw new IllegalArgumentException(screen.getClass().getName() + " is a nonstandard screen implementation.");
         }
-        // probably: screen, ???, type, closeOthers
-        Space.a((ck) screen, true, null, false);
     }
 
     @Override

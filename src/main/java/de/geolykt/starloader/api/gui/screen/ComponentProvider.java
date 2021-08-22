@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A basic component provider interface that allows to dynamically create objects.
- * This is currently only used in the {@link Screenbuilder} class, however
+ * This is currently only used in the {@link ScreenBuilder} class, however
  * this interface might see more widespread use if noone comes with a better alternative,
  * because right now this interface is pretty hacky.
- * However I totally didn't create this method because we would otherwise come into unbelieable
+ * However I totally didn't create this method because we would otherwise come into unbelievable
  * terrains of {@link NotNull}
  */
 @FunctionalInterface

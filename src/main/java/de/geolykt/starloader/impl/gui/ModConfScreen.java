@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.badlogic.gdx.graphics.Camera;
 
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
@@ -22,9 +25,16 @@ import snoddasmannen.galimulator.b.class_s;
 
 public class ModConfScreen implements ck, Screen {
 
+    /**
+     * Internal logger instance for this class
+     */
     protected static final Logger LOGGER = LoggerFactory.getLogger(ModConfScreen.class);
 
     protected final ModConfSpec config;
+
+    /**
+     * Whether the component is currently considered "dirty", i.e whether it needs to be resized or redrawn.
+     */
     protected boolean dirty = false;
 
     public ModConfScreen(ModConfSpec config) {
@@ -97,6 +107,11 @@ public class ModConfScreen implements ck, Screen {
     }
 
     @Override
+    public boolean isHeadless() {
+        return false;
+    }
+
+    @Override
     public boolean isValid() {
         return !dirty;
     }
@@ -104,5 +119,15 @@ public class ModConfScreen implements ck, Screen {
     @Override
     public void markDirty() {
         dirty = true;
+    }
+
+    @Override
+    public @Nullable Camera getCamera() {
+        return null;
+    }
+
+    @Override
+    public void setCamera(@NotNull Camera camera) {
+        // BITVOID
     }
 }

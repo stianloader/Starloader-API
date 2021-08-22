@@ -23,7 +23,7 @@ public interface TextRenderable extends Renderable {
     /**
      * Renders the text on screen at the given coordinates. The view may get
      * unprojected with the given camera.
-     * It may be more usefull to use {@link #renderTextAt(float, float, Camera)} instead
+     * It may be more useful to use {@link #renderTextAt(float, float, Camera)} instead
      * as it will print the width of the text.
      *
      * @param x The X-Coordinate of the rendering position
@@ -32,7 +32,7 @@ public interface TextRenderable extends Renderable {
      */
     @Override
     public default void renderAt(float x, float y, @NotNull Camera camera) {
-        renderAt(x, y, camera);
+        renderTextAt(x, y, camera);
     }
 
     /**

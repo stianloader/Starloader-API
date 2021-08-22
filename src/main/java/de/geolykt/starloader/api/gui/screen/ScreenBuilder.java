@@ -14,14 +14,18 @@ import de.geolykt.starloader.api.gui.text.TextColor;
 /**
  * Builder class to create {@link Screen} objects.
  */
-public abstract class Screenbuilder {
+public abstract class ScreenBuilder {
 
+    /**
+     * The componentCreator instance used by {@link #getComponentCreator()}
+     * and set by {@link #setComponentCreator(ComponentCreator)}.
+     */
     private static ComponentCreator componentCreator;
 
     /**
      * The implementation of {@link #getBuilder()} that is set via {@link #setFactory(Supplier)}.
      */
-    private static Supplier<Screenbuilder> factory;
+    private static Supplier<ScreenBuilder> factory;
 
     /**
      * Obtains a <b>new</b> builder instance.
@@ -31,7 +35,7 @@ public abstract class Screenbuilder {
      *
      * @return The newly created builder instance.
      */
-    public static @NotNull Screenbuilder getBuilder() {
+    public static @NotNull ScreenBuilder getBuilder() {
         return NullUtils.requireNotNull(factory.get());
     }
 
@@ -39,7 +43,7 @@ public abstract class Screenbuilder {
      * Obtains the currently valid component creator.
      * This component creator can be used to in turn to populate your newly created screens.
      *
-     * @return The curently active {@link ComponentCreator}.
+     * @return The currently active {@link ComponentCreator}.
      * @throws NullPointerException If the component creator was not set.
      */
     public static @NotNull ComponentCreator getComponentCreator() {
@@ -52,7 +56,7 @@ public abstract class Screenbuilder {
      * @param componentCreator The new valid ComponentCreator.
      */
     public static void setComponentCreator(@NotNull ComponentCreator componentCreator) {
-        Screenbuilder.componentCreator = Objects.requireNonNull(componentCreator);
+        ScreenBuilder.componentCreator = Objects.requireNonNull(componentCreator);
     }
 
     /**
@@ -60,8 +64,8 @@ public abstract class Screenbuilder {
      *
      * @param factory The factory implementation
      */
-    public static void setFactory(@NotNull Supplier<Screenbuilder> factory) {
-        Screenbuilder.factory = NullUtils.requireNotNull(factory);
+    public static void setFactory(@NotNull Supplier<ScreenBuilder> factory) {
+        ScreenBuilder.factory = NullUtils.requireNotNull(factory);
     }
 
     /**
@@ -75,11 +79,11 @@ public abstract class Screenbuilder {
 
     /**
      * Creates a {@link Screen} instance based on the current values of this builder.
-     * Calling this method depeatedly should have no unexpected effects, though the
+     * Calling this method repeatedly should have no unexpected effects, though the
      * returned instance should always be newly created and may not be cached.
      * Requires {@link #setTitle(String)} to be invoked before this method as otherwise
      * it will throw an exception.
-     * While not required, it is recommened to use {@link #addComponentProvider(ComponentProvider)}
+     * While not required, it is recommend to use {@link #addComponentProvider(ComponentProvider)}
      * beforehand as otherwise the screen will have no components to display. Additionally,
      * calling addComponentProvider(ComponentProvider) does not have any effects to
      * the newly created screen if the method was called after build().
@@ -90,7 +94,7 @@ public abstract class Screenbuilder {
 
     /**
      * Sets the background color of the header.
-     * All RGBA channels will be used and the default value is an Orage-ish color.
+     * All RGBA channels will be used and the default value is an Orange-ish color.
      *
      * @param awtColor The color to use as an Java AWT Color. It will get transformed into Galimulator's internal Color type later on.
      */
@@ -105,9 +109,21 @@ public abstract class Screenbuilder {
     public abstract void setHeaderColor(@NotNull TextColor textColor);
 
     /**
+     * Enables or Disables the header. By default it is true.
+     * Should this method be called with false as a parameter then
+     * the screen will show in headless mode and calls to
+     * {@link #setHeaderColor(Color)}, {@link #setHeaderColor(TextColor)} and
+     * {@link #setTitle(String)} will be ignored, however will not throw an exception.
+     *
+     * @param enabled Whether to enable the header.
+     */
+    public abstract void setHeaderEnabled(boolean enabled);
+
+    /**
      * Sets the title of the screen as shown in the screen header.
      * The default color of this title is white.
-     * This method is a required operation and otherwise {@link #build()} will fail.
+     * This method is a required operation and otherwise {@link #build()} will fail,
+     * except if {@link #setHeaderEnabled(boolean)} was called if false as a parameter.
      *
      * @param title The title of the screen.
      */
