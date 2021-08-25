@@ -4,8 +4,6 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.NullUtils;
-
 import snoddasmannen.galimulator.ui.fl;
 
 public class SLSidebarButton extends fl {
@@ -14,7 +12,7 @@ public class SLSidebarButton extends fl {
 
     public SLSidebarButton(@NotNull String textureName, int w, int h, @NotNull Runnable action) {
         super(Objects.requireNonNull(textureName), w, h);
-        this.action = NullUtils.requireNotNull(action);
+        this.action = Objects.requireNonNull(action);
     }
 
     @Override

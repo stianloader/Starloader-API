@@ -146,6 +146,7 @@ public class SimpleScreen implements ck, Screen {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public ArrayList<class_s> getItems() {
+        dirty = false;
         return new ArrayList<>((List) getChildren());
     }
 

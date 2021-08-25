@@ -1,7 +1,7 @@
 package de.geolykt.starloader.impl.gui;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import de.geolykt.starloader.impl.gui.screencomponents.SLScreenComponent;
  * A collection class that sets the parent screen of all the components. Note: in order for this to work the component
  * must implement {@link SLScreenComponent}.
  */
-public class SimpleScreenChildList extends ArrayList<@NotNull ScreenComponent> {
+public class SimpleScreenChildList extends LinkedList<@NotNull ScreenComponent> {
 
     /**
      * serialVersionUID

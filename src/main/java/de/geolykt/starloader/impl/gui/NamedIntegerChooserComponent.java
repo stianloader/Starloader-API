@@ -10,6 +10,7 @@ import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerChooseOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.gui.modconf.NumberOption;
+import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
@@ -18,22 +19,22 @@ import snoddasmannen.galimulator.hl;
 
 public class NamedIntegerChooserComponent extends hl implements ScreenComponent {
 
-    protected final @NotNull Screen parent;
-    protected final @NotNull NumberOption<? extends Number> option;
-
-    public NamedIntegerChooserComponent(@NotNull Screen parent, @NotNull NumberOption<? extends Number> option) {
-        // Irrelevant  / name / currentValue / options / category / Irrelevant
-        super(null, option.getName(), option.get().toString(), getOptions(option), option.getParent().getName(), null);
-        this.parent = NullUtils.requireNotNull(parent);
-        this.option = option;
-    }
-
     protected static Vector<@NotNull Object> getOptions(@NotNull NumberOption<?> option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
         if (!(option instanceof IntegerChooseOption)) {
             options.add("Custom");
         }
         return options;
+    }
+    protected final @NotNull NumberOption<? extends Number> option;
+
+    protected final @NotNull Screen parent;
+
+    public NamedIntegerChooserComponent(@NotNull Screen parent, @NotNull NumberOption<? extends Number> option) {
+        // Irrelevant  / name / currentValue / options / category / Irrelevant
+        super(null, option.getName(), option.get().toString(), getOptions(option), option.getParent().getName(), null);
+        this.parent = NullUtils.requireNotNull(parent);
+        this.option = option;
     }
 
     public void a(final String o) {
@@ -94,7 +95,27 @@ public class NamedIntegerChooserComponent extends hl implements ScreenComponent 
     }
 
     @Override
+    public int getHeight() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public @NotNull LineWrappingInfo getLineWrappingInfo() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public @NotNull Screen getParentScreen() {
         return parent;
+    }
+
+    @Override
+    public int getWidth() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isSameType(@NotNull ScreenComponent component) {
+        return component instanceof NamedIntegerChooserComponent || component instanceof NamedStringChooserComponent;
     }
 }

@@ -72,9 +72,9 @@ public class SLScreenBuilder extends ScreenBuilder {
             }
         }
         if (widthProvider == null) {
-            return new SimpleScreen(title, width, headerColor, components, !enableHeader);
+            return new SLScreenWidget(title, width, headerColor, components, !enableHeader);
         } else {
-            return new SimpleScreen(title, NullUtils.requireNotNull(widthProvider), headerColor, components, !enableHeader);
+            return new SLScreenWidget(title, NullUtils.requireNotNull(widthProvider), headerColor, components, !enableHeader);
         }
     }
 

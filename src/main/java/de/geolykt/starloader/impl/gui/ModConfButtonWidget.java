@@ -6,7 +6,7 @@ import de.geolykt.starloader.api.gui.modconf.ModConf;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.ho;
 
-// We are hijacking the Blacklist widget since intended class cannot be referenced
+// We are hijacking the Blacklist widget class since intended class cannot be referenced
 public class ModConfButtonWidget extends ho {
 
     public ModConfButtonWidget(String arg1, GalColor arg2, GalColor arg3, String arg4) {
