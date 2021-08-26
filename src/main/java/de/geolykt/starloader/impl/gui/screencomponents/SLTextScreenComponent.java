@@ -123,4 +123,9 @@ public class SLTextScreenComponent implements TextScreenComponent, SLScreenCompo
         }
         this.currentText = text;
     }
+
+    @Override
+    public int renderAt(float x, float y, @NotNull Camera camera) {
+        return Math.round(getText().renderTextAt(x, y, camera)); // casting to int always rounds down
+    }
 }

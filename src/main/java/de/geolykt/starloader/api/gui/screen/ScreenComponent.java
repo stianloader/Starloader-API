@@ -2,12 +2,14 @@ package de.geolykt.starloader.api.gui.screen;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.gui.Renderable;
+
 /**
  * A graphical component that can be added as a child object of a implementation of the {@link Screen} interface.
  * Due to how galimulator's component hierarchy works, not everything that looks like a component can be used, though
  * the SLAPI will lead efforts into making those available via this interface.
  */
-public interface ScreenComponent {
+public interface ScreenComponent extends Renderable {
 
     /**
      * Obtains the expected height of this component.
@@ -67,4 +69,10 @@ public interface ScreenComponent {
      * @return Whether this component is of a similar type to the other component
      */
     public boolean isSameType(@NotNull ScreenComponent component);
+
+    @Override
+    @Deprecated(forRemoval = true, since = "1.4.0")
+    default void render(float x, float y) {
+        throw new UnsupportedOperationException("The camera of the parent object needs to be known in order to render the component.");
+    }
 }

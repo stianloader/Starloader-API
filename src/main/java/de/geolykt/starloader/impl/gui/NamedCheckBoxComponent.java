@@ -2,6 +2,8 @@ package de.geolykt.starloader.impl.gui;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Camera;
+
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
@@ -48,5 +50,10 @@ public class NamedCheckBoxComponent extends hj implements ScreenComponent {
     @Override
     public boolean isSameType(@NotNull ScreenComponent component) {
         return component instanceof NamedCheckBoxComponent;
+    }
+
+    @Override
+    public int renderAt(float x, float y, @NotNull Camera camera) {
+        throw new UnsupportedOperationException("The galimulator native dialog API does not support such things.");
     }
 }

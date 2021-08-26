@@ -4,6 +4,8 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Camera;
+
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
@@ -88,5 +90,9 @@ public class NamedStringChooserComponent extends hk implements ScreenComponent {
     @Override
     public boolean isSameType(@NotNull ScreenComponent component) {
         return component instanceof NamedIntegerChooserComponent || component instanceof NamedStringChooserComponent;
+    }
+    @Override
+    public int renderAt(float x, float y, @NotNull Camera camera) {
+        throw new UnsupportedOperationException("The galimulator native dialog API does not support such things.");
     }
 }
