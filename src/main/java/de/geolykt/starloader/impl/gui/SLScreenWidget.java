@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.IntSupplier;
@@ -22,11 +23,6 @@ import snoddasmannen.galimulator.GalColor;
  * more favourable, as the screen's camera can be obtained far more easily.
  */
 public class SLScreenWidget extends SLAbstractWidget implements Screen {
-
-    /**
-     * The camera object set via {@link #setCamera(Camera)} and obtainable via {@link #getCamera()}.
-     */
-    protected Camera camera;
 
     /**
      * The list of components displayed by the screen instance.
@@ -132,7 +128,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public @NotNull List<@NotNull ScreenComponent> getChildren() {
-        return this.components;
+        return new ArrayList<>(components);
     }
 
     @Override
@@ -183,12 +179,15 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
                 }
             }
         }
+        if (!headless) {
+            height += 20;
+        }
         return height + lineheight;
     }
 
     @Override
     public int getInnerWidth() {
-        return getWidth() - 20; // TODO frameless mode?
+        return getWidth() - 20;
     }
 
     @Override
@@ -222,9 +221,64 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         if (!headless) {
             drawHeader();
         }
-        // FIXME implement ze rest
+        renderSLChildComponents();
     }
 
+    protected void renderSLChildComponents() {
+        Camera camera = NullUtils.requireNotNull(getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
+        // For galimulator, y = 0, x = 0 is the lower left edge, positive numbers go more towards the upper right. Really strange system.
+        int y = (int) camera.viewportHeight;
+        if (!headless) {
+            y -= 25;
+        }
+        int nextY = 0;
+        int x = 0;
+        final int maxWidth = getInnerWidth();
+        ScreenComponent previousComponent = null;
+        for (ScreenComponent component : components) {
+            LineWrappingInfo lwrapinfo = component.getLineWrappingInfo();
+            int beginX = x;
+            if (previousComponent == null) {
+                if (lwrapinfo.isWrapEndOfObject()) {
+                    y -= component.getHeight();
+                    nextY = 0;
+                    x = 0;
+                } else {
+                    nextY = component.getHeight();
+                    x = component.getWidth();
+                    previousComponent = component;
+                }
+            } else if (lwrapinfo.isWrapBeginOfObject()) {
+                y -= nextY;
+                nextY = component.getHeight();
+                x = component.getWidth();
+                previousComponent = component;
+            } else {
+                boolean isSimilar = component.isSameType(previousComponent) || previousComponent.isSameType(component);
+                if ((isSimilar && lwrapinfo.isWrapSameType()) || (!isSimilar && lwrapinfo.isWrapDifferentType())) {
+                    y -= nextY;
+                    nextY = component.getHeight();
+                    x = component.getWidth();
+                    previousComponent = component;
+                } else if (lwrapinfo.isWrapEndOfObject()) {
+                    y -= nextY + component.getHeight();
+                    nextY = 0;
+                    x = 0;
+                } else {
+                    x += component.getWidth();
+                    if (x > maxWidth) {
+                        y -= nextY;
+                        nextY = component.getHeight();
+                        x = component.getWidth();
+                    } else {
+                        nextY = Math.max(nextY, component.getHeight());
+                        previousComponent = component;
+                    }
+                }
+            }
+            component.renderAt(beginX + 10, y - 10, camera);
+        }
+    }
     /**
      * Shorthand for "drawBackground(getBackgroundColor())". This method is used in the {@link #onRender()} implementation.
      */

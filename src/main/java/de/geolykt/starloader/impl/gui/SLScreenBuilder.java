@@ -68,7 +68,7 @@ public class SLScreenBuilder extends ScreenBuilder {
         } else {
             title = this.title;
             if (title == null) {
-                title = "Headless";
+                title = NullUtils.requireNotNull(this.toString(), "Internal logic error. (did the universe collapse?)");
             }
         }
         if (widthProvider == null) {
