@@ -49,12 +49,11 @@ public abstract class MetadatableRegistry<T, U extends MetadatableRegistry.Metad
     }
 
     /**
-     * @deprecated This method has no use as it does not specify the metadata.
-     *
-     *             This operation instantly throws an exception
+     * This operation instantly throws an exception.
      *
      * @param key   irrelevant
      * @param value irrelevant
+     * @deprecated This method has no use as it does not specify the metadata.
      */
     @Override
     @Deprecated(forRemoval = false, since = "1.1.0")

@@ -15,6 +15,7 @@ import de.geolykt.starloader.api.gui.screen.ComponentProvider;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+
 import snoddasmannen.galimulator.GalColor;
 
 /**
@@ -279,6 +280,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
             component.renderAt(beginX + 10, y - 10, camera);
         }
     }
+
     /**
      * Shorthand for "drawBackground(getBackgroundColor())". This method is used in the {@link #onRender()} implementation.
      */

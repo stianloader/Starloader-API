@@ -58,7 +58,7 @@ public interface ScreenComponent extends Renderable {
      *  x.isSameType(y) should return the same return value. </li>
      *  <li> It should be unintrusive: Invocations to this method should not change the state of the component. </li>
      * </ul>
-     *
+     *<br/>
      * While most often a simple instanceof suffices, this may not always be the case. The simplest example would be
      * multiple implementations of the {@link TextScreenComponent}. Additionally the symmetric and transitive properties
      * of this method may be hard to achieve if the component's implementations stem from two different source extensions,
@@ -72,7 +72,7 @@ public interface ScreenComponent extends Renderable {
 
     @Override
     @Deprecated(forRemoval = true, since = "1.4.0")
-    default void render(float x, float y) {
+    public default void render(float x, float y) {
         throw new UnsupportedOperationException("The camera of the parent object needs to be known in order to render the component.");
     }
 }

@@ -74,14 +74,13 @@ public class BasicDialogBuilder {
     }
 
     /**
-     * @deprecated This method's name is ambiguous since there are now multiple
-     *             types of listeners
-     *
-     *             Sets the close listeners for the Dialog. Any previous listeners
-     *             are getting overridden
+     * Sets the close listeners for the Dialog. Any previous listeners
+     * are getting overridden
      *
      * @param listeners The list of listeners to use
      * @return The instance of the builder
+     * @deprecated This method's name is ambiguous since there are now multiple
+     *             types of listeners
      */
     @Deprecated(forRemoval = true, since = "1.1.0")
     public BasicDialogBuilder setListeners(@NotNull ArrayList<@NotNull BasicDialogCloseListener> listeners) {
@@ -90,14 +89,13 @@ public class BasicDialogBuilder {
     }
 
     /**
-     * @deprecated This method's name is ambiguous since there are now multiple
-     *             types of listeners
-     *
-     *             Adds a close listener to the list of close listeners for the
-     *             Dialog.
+     * Adds a close listener to the list of close listeners for the
+     * Dialog.
      *
      * @param closeListener The listener to add
      * @return The instance of the builder
+     * @deprecated This method's name is ambiguous since there are now multiple
+     *             types of listeners
      */
     @Deprecated(forRemoval = true, since = "1.1.0")
     public BasicDialogBuilder addListener(@NotNull BasicDialogCloseListener closeListener) {

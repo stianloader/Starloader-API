@@ -12,9 +12,9 @@ public interface TextRenderable extends Renderable {
      * Renders the text on screen at the given coordinates. The view may get
      * unprojected depending on the context
      *
-     * @deprecated It is highly recommended to make use of the camera
      * @param x The X-Coordinate of the rendering position
      * @param y The Y-Coordinate of the rendering position
+     * @deprecated It is highly recommended to make use of the camera
      */
     @Override
     @Deprecated(forRemoval = true, since = "1.4.0")

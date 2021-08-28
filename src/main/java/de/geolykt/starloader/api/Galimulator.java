@@ -182,12 +182,12 @@ public final class Galimulator {
         public void recalculateVoronoiGraphs();
 
         /**
-         * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
          * Registers the given keybind to the list of active keybinds.
          * The keybind keycode and character will only be requested once and cannot
          * be changed dynamically.
          *
          * @param bind The keybind to register.
+         * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} interface is deprecated for removal
          */
         @Deprecated(forRemoval = true, since = "1.3.0")
         public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind);
@@ -392,8 +392,6 @@ public final class Galimulator {
     }
 
     /**
-     * @deprecated The return value of this method is questionable
-     *
      * Obtains the int code of the galimulator version; this int code is bumped for
      * every beta release and is -1 for stable releases. Note that this int code
      * isn't anything official and the sole authority over this code are the
@@ -402,11 +400,12 @@ public final class Galimulator {
      * getting which release this is, other than looking a the hashcode or last
      * modification date of the executable.
      *
-     * @return 8
+     * @return -1
+     * @deprecated The return value of this method is questionable
      */
     @Deprecated(forRemoval = true, since = "1.1.0")
     public static int getReleaseCode() {
-        return 8;
+        return -1;
     }
 
     /**
@@ -483,13 +482,12 @@ public final class Galimulator {
     }
 
     /**
-     * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
-     *
      * Registers the given keybind to the list of active keybinds.
      * The keybind keycode and character will only be requested once and cannot
      * be changed dynamically.
      *
      * @param bind The keybind to register.
+     * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
      */
     @Deprecated(forRemoval = true, since = "1.3.0")
     public static void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind) {

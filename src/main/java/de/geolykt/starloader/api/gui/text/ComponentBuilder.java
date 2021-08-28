@@ -32,14 +32,13 @@ public interface ComponentBuilder {
     public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity);
 
     /**
-     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
-     *
      * Add a jitter sub-component to the component This is for example used in the
      * Space oddity bulletin. The jitter there is 10.0D.
      *
      * @param color     The color of the jitter
      * @param intensity The intensity of the jitter
      * @return The builder reference
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
      */
     @Deprecated(forRemoval = true)
     public default @NotNull ComponentBuilder addJitter(@NotNull TextColor color, double intensity) {
@@ -62,12 +61,11 @@ public interface ComponentBuilder {
     public @NotNull ComponentBuilder setColor(@NotNull GalColor color);
 
     /**
-     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
-     *
      * Sets the color of the component.
      *
      * @param color The color of the component
      * @return The builder reference
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
      */
     @Deprecated(forRemoval = true)
     public default @NotNull ComponentBuilder setColor(@NotNull TextColor color) {

@@ -124,14 +124,13 @@ public interface TextFactory {
     public @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text, @NotNull GalColor color);
 
     /**
-     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
-     *
      * Creates a {@link FormattedTextComponent} based on a String. The specified
      * color is used.
      *
      * @param text  The text to encode
      * @param color The color of the component
      * @return The text as a {@link FormattedTextComponent}
+     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
      */
     @Deprecated(forRemoval = true)
     public default @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text,

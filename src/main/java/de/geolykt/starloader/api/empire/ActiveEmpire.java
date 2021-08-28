@@ -32,11 +32,10 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public void addActor(@NotNull ActorSpec actor);
 
     /**
-     * @deprecated The direct use of Galimulator Actor API is bound for removal
-     *
      * Assigns a {@link StateActor} to the empire.
      *
      * @param actor The StateActor to assign
+     * @deprecated The direct use of Galimulator Actor API is bound for removal
      */
     @Deprecated(since = "1.2", forRemoval = true)
     public void addActor(@NotNull StateActor actor);
@@ -90,8 +89,6 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public boolean decreaseTechnologyLevel(boolean notify, boolean force);
 
     /**
-     * @deprecated The direct use of Galimulator Actor API is bound for removal
-     *
      * Obtains the {@link Vector} of the {@link StateActor StateActors} that are
      * currently assigned to the empire. The list is backing the internal actor
      * list, which is why it should NOT be modified. Use
@@ -99,6 +96,7 @@ public interface ActiveEmpire extends Empire, Metadatable {
      *
      * @return A {@link Vector} of the {@link StateActor StateActors} that are
      *         assigned to the empire.
+     * @deprecated The direct use of Galimulator Actor API is subject to removal
      */
     @Deprecated
     public @NotNull Vector<StateActor> getActors();
@@ -286,11 +284,10 @@ public interface ActiveEmpire extends Empire, Metadatable {
     }
 
     /**
-     * @deprecated The direct use of Galimulator Actor API is not recommended and bound for removal.
-     *
      * Unassign a {@link StateActor} from the empire.
      *
      * @param actor The StateActor to unassign
+     * @deprecated The direct use of Galimulator Actor API is not recommended and bound for removal.
      */
     @Deprecated(since = "1.2", forRemoval = true)
     public void removeActor(@NotNull StateActor actor);

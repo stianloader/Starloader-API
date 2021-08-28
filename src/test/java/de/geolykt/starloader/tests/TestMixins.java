@@ -59,7 +59,7 @@ public class TestMixins {
                 if (hasAnnot && field.value != null) {
                     // I do not think that field.value can be anything but null, but it is safe to be safe.
                     // This is a unit test after all
-                    throw new IllegalStateException(clazzNode.name + "." + field.name + " " + field.desc
+                    throw new AssertionError(clazzNode.name + "." + field.name + " " + field.desc
                             + " is annotated as @Shadow but has a starting value (" + field.value + ").");
                 }
             }
@@ -72,7 +72,7 @@ public class TestMixins {
                             FieldInsnNode fieldInsn = (FieldInsnNode) instruction;
                             if (fieldInsn.owner.equals(clazzNode.name)
                                     && annotatedFields.contains(Map.entry(fieldInsn.name, fieldInsn.desc))) {
-                                throw new IllegalStateException(clazzNode.name + "." + fieldInsn.name + " " + fieldInsn.desc
+                                throw new AssertionError(clazzNode.name + "." + fieldInsn.name + " " + fieldInsn.desc
                                         + " is annotated as @Shadow but has a starting value.");
                             }
                         }

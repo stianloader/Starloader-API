@@ -78,12 +78,12 @@ public abstract class Registry<T> {
     }
 
     /**
-     * @deprecated This is internal API not meant for non-internal use. Internal
-     *             API, DO NOT USE! This method seeks to replace
-     *             {@link Enum#valueOf(Class, String)} to some degree.
+     * Internal API, DO NOT USE! This method seeks to replace
+     * {@link Enum#valueOf(Class, String)} to some degree.
      *
      * @param key The key of the entry
      * @return The value associated under the key
+     * @deprecated This is internal API not meant for non-internal use.
      */
     @Deprecated(forRemoval = false, since = "1.1.0")
     public @Nullable T getIntern(@NotNull String key) {

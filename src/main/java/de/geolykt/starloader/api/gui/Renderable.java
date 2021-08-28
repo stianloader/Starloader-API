@@ -14,9 +14,9 @@ public interface Renderable {
      * Renders the object on screen at the given coordinates. The view may get
      * unprojected depending on the context
      *
-     * @deprecated Starting from 1.4.0 it is strongly recommended to make use of camera-based rendering
      * @param x The X-Coordinate of the rendering position
      * @param y The Y-Coordinate of the rendering position
+     * @deprecated Starting from 1.4.0 it is strongly recommended to make use of camera-based rendering
      */
     @Deprecated(forRemoval = true, since = "1.4.0")
     public void render(float x, float y);

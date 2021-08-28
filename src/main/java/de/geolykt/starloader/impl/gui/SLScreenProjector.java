@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.Screen;
+
 import snoddasmannen.galimulator.ck;
 import snoddasmannen.galimulator.ui.fu;
 
@@ -23,7 +24,7 @@ import snoddasmannen.galimulator.ui.fu;
 public class SLScreenProjector extends fu {
 
     /**
-     * The screen used by this widget
+     * The screen projected by this widget.
      */
     private final @NotNull Screen screen;
 

@@ -17,7 +17,7 @@ import de.geolykt.starloader.impl.gui.screencomponents.SLScreenComponent;
 public class SimpleScreenChildList extends LinkedList<@NotNull ScreenComponent> {
 
     /**
-     * serialVersionUID
+     * serialVersionUID.
      */
     private static final long serialVersionUID = -6470572605204534819L;
 

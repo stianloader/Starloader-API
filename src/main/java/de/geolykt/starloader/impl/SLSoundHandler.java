@@ -12,6 +12,7 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.sound.TrackSwitchEvent;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.sound.Track;
+
 import snoddasmannen.galimulator.AudioManager;
 
 public final class SLSoundHandler implements SoundHandler {
@@ -39,7 +40,7 @@ public final class SLSoundHandler implements SoundHandler {
     /**
      * Declared to reduce visibility of this class - we do not want anyone to extend it.
      */
-    private SLSoundHandler() {}
+    private SLSoundHandler() { }
 
     @Override
     public @Nullable Track getCurrentTrack() {
@@ -102,7 +103,7 @@ public final class SLSoundHandler implements SoundHandler {
         playNextTrack();
     }
 
-     @Override
+    @Override
     public void setMusicVolume(double vol) {
         AudioManager.a((int) vol);
     }

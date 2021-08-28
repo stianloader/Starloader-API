@@ -86,7 +86,6 @@ public class TrackSwitchEvent extends Event {
     }
 
     /**
-     *
      * The track number that would be playing after the tracks are switched.
      *
      * @return The track number

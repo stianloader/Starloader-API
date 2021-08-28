@@ -15,6 +15,7 @@ import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.screen.TextScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
+
 import snoddasmannen.galimulator.b.class_s;
 import snoddasmannen.galimulator.ui.Widget;
 

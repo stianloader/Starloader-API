@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import com.badlogic.gdx.audio.Music;
 
 import de.geolykt.starloader.api.sound.Track;
+
 import snoddasmannen.galimulator.class_u;
 
 @Mixin(class_u.class)

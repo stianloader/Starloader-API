@@ -26,10 +26,14 @@ import snoddasmannen.galimulator.b.class_s;
 public class ModConfScreen implements ck, Screen {
 
     /**
-     * Internal logger instance for this class
+     * Internal logger instance for this class.
      */
     protected static final Logger LOGGER = LoggerFactory.getLogger(ModConfScreen.class);
 
+    /**
+     * The ModConf implementation that is used by this screen. This class
+     * does not care what implements this interface.
+     */
     protected final ModConfSpec config;
 
     /**
@@ -37,6 +41,11 @@ public class ModConfScreen implements ck, Screen {
      */
     protected boolean dirty = false;
 
+    /**
+     * The constructor.
+     *
+     * @param config The ModConf implementation that is used by this screen.
+     */
     public ModConfScreen(ModConfSpec config) {
         this.config = config;
     }

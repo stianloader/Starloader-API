@@ -11,6 +11,7 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.sound.TrackSwitchEvent;
 import de.geolykt.starloader.api.sound.Track;
 import de.geolykt.starloader.impl.SLSoundHandler;
+
 import snoddasmannen.galimulator.AudioManager;
 import snoddasmannen.galimulator.class_u;
 
@@ -21,25 +22,25 @@ import snoddasmannen.galimulator.class_u;
 public class AudioManagerMixins {
 
     /**
-     * currentTrack
+     * currentTrack.
      */
     @Shadow
     public static class_u a;
 
     /**
-     * currentTrackId
+     * currentTrackId.
      */
     @Shadow
     public static int b;
 
     /**
-     * tracks
+     * tracks.
      */
     @Shadow
     public static ArrayList<Track> c;
 
     /**
-     * nextTrack
+     * nextTrack.
      */
     @Overwrite
     public static void f() {

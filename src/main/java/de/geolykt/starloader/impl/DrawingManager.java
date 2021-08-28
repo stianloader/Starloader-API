@@ -23,6 +23,7 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.impl.gui.SLScreenProjector;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
+
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;

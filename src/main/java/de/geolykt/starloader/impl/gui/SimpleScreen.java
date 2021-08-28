@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Camera;
 import de.geolykt.starloader.api.gui.screen.ComponentProvider;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.ck;
 import snoddasmannen.galimulator.b.class_s;
@@ -33,12 +34,10 @@ public class SimpleScreen implements ck, Screen {
      */
     protected final @NotNull List<@NotNull ComponentProvider> componentProviders;
 
-
     /**
      * Whether the component is currently considered "dirty", i.e whether it needs to be resized or redrawn.
      */
     protected boolean dirty = false;
-
 
     /**
      * The colour of the header bar. Usually it is orange, however can be set to a different colour in the constructor.
