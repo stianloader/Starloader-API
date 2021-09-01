@@ -1,6 +1,8 @@
 package de.geolykt.starloader.api;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -8,10 +10,13 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.sound.SoundHandler;
@@ -90,7 +95,7 @@ public final class Galimulator {
          * Get the year in-game. The year is rarely a negative number and should not get
          * lower later in game unless a new galaxy is spun up. 1000 in-game years span
          * an in-game millenia, which is the time format most players are familiar with
-         * in the game. However please note that this is not always calculate in years,
+         * in the game. However please note that this is not always corresponding in years,
          * sometimes it is also in milliyears or other time formats.
          *
          * @return The in-game year.
@@ -160,12 +165,64 @@ public final class Galimulator {
         public @NotNull List<@NotNull Star> getStars();
 
         /**
+         * Obtains the amount of empires that have transcended in during the game.
+         *
+         * @return The amount of transcended empires
+         */
+        public int getTranscendedEmpires();
+
+        /**
+         * Sets the amount of empires that have transcended in during the game.
+         *
+         * @param count The amount of transcended empires
+         */
+        public void setTranscendedEmpires(int count);
+
+        /**
+         * Obtains the unsafe that is valid for this implementation.
+         * Note that this unsafe class is not fully supported.
+         *
+         * @return The unsafe instance
+         * @deprecated The resulting unsafe object is unsafe and it's usage not recommend
+         */
+        @Deprecated(forRemoval = false, since = "1.5.0")
+        public @NotNull Galimulator.Unsafe getUnsafe();
+
+        /**
          * Obtains the weapons manager that is valid for this instance.
          * It is more or less a series of helper methods.
          *
          * @return The weapons manager.
          */
         public @NotNull WeaponsManager getWeaponsManager();
+
+        /**
+         * Whether the sandbox mode has been used within this savegame.
+         *
+         * @return The sandbox used modifier
+         */
+        public boolean hasUsedSandbox();
+
+        /**
+         * Loads the state of the game from given input data.
+         * Additional warning: it is recommended to pause the game during the operation as otherwise
+         * it might corrupt the data
+         *
+         * @param data The input data
+         * @throws IOException If any IO issues occur at the underlying layers
+         */
+        public void loadGameState(byte[] data) throws IOException;
+
+        /**
+         * Loads the state of the game from a given input stream. All bytes may be read from the input stream,
+         * however the implementation may also want to try to guess what the end of the input stream is.
+         * Additional warning: it is recommended to pause the game during the operation as otherwise
+         * it might corrupt the data
+         *
+         * @param in The input stream to read the data from
+         * @throws IOException If any IO issues occur at the underlying layers
+         */
+        public void loadGameState(@NotNull InputStream in) throws IOException;
 
         /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
@@ -226,12 +283,221 @@ public final class Galimulator {
         public void saveFile(@NotNull String name, InputStream data);
 
         /**
+         * Saves the current state of the game and dumps it into an output stream.
+         * Warning: the provided stream is closed during the operation.
+         * Additional warning: it is recommended to pause the game during the operation as otherwise
+         * it might corrupt the data
+         *
+         * @param out The output stream to dump the state into
+         */
+        public void saveGameState(@NotNull OutputStream out);
+
+        /**
          * Changes the currently active map mode to a new value.
          *
          * @param mode The new active map mode.
          * @see #getActiveMapmode()
          */
         public void setActiveMapmode(@NotNull MapMode mode);
+
+        /**
+         * Set the year in-game. The year is rarely a negative number and should not get
+         * lower later in game unless a new galaxy is spun up. 1000 in-game years span
+         * an in-game millenia, which is the time format most players are familiar with
+         * in the game. However please note that this is not always corresponding in years,
+         * sometimes it is also in milliyears or other time formats.
+         *
+         * @param year The in-game year.
+         */
+        public void setGameYear(int year);
+
+        /**
+         * Sets the currently active map.
+         *
+         * @param map The currently active map
+         */
+        public void setMap(@NotNull Map map);
+
+        /**
+         * Sets whether the sandbox mode has been used within this savegame.
+         *
+         * @param state The sandbox used modifier
+         */
+        public void setUsedSandbox(boolean state);
+    }
+
+    /**
+     * "Unsafe" methods for implementation.
+     * Usage of these methods is discouraged, however could prove to be beneficial in some
+     * circumstances, especially when performance is required.
+     * @deprecated Binary compatibility is not guaranteed for this interface.
+     */
+    @Deprecated(forRemoval = false, since = "1.5.0")
+    public interface Unsafe {
+
+        /**
+         * Obtains the internal agent vector without cloning it.
+         *
+         * @return The actors currently active
+         */
+        public Vector<ActorSpec> getActorsUnsafe();
+
+        /**
+         * Obtains the internal list of alliances without cloning it.
+         *
+         * @return The internal list of quests
+         */
+        public Vector<Alliance> getAlliancesUnsafe();
+
+        /**
+         * Obtains the internal list of active artifacts without cloning it.
+         *
+         * @return The artifacts that are currently still alive
+         */
+        public Vector<?> getArtifactsUnsafe();
+
+        /**
+         * Obtains the internal list of cooperations that are currently active.
+         * It is not exactly known whether this feature is implemented and usable
+         * nor whether the feature will get implemented anytime soon. It may even get removed
+         * without notice, though this will be announced as something like that would
+         * result in savegames to break.
+         * SLAPI makes no effort in wrapping the underlying data structure until it is
+         * implemented in a functional manner.
+         *
+         * @return The internal list of cooperations
+         */
+        public Vector<?> getCooperationsUnsafe();
+
+        /**
+         * Obtains an internal list of disrupted stars.
+         * Disrupted stars do not have a starlane connection.
+         *
+         * @return The stars currently disrupted
+         */
+        public Vector<Star> getDisruptedStarsUnsafe();
+
+        /**
+         * Obtains the internal empire vector without cloning it.
+         *
+         * @return The empires currently active
+         */
+        public Vector<ActiveEmpire> getEmpiresUnsafe();
+
+        /**
+         * Obtains the internal list of people without cloning it.
+         *
+         * @return The internal list of people
+         */
+        public Vector<DynastyMember> getPeopleUnsafe();
+
+        /**
+         * Obtains the internal list of quests.
+         *
+         * @return The internal list of quests
+         */
+        public Vector<?> getQuestsUnsafe();
+
+        /**
+         * Obtains the internal star vector without cloning it.
+         *
+         * @return The stars currently registered
+         */
+        public Vector<Star> getStarsUnsafe();
+
+        /**
+         * Obtains the internal list of wars without cloning it.
+         *
+         * @return The ongoing wars
+         */
+        public Vector<?> getWarsUnsafe();
+
+        /**
+         * Sets the internal agent vector without cloning it.
+         *
+         * @param actors The actors currently active
+         */
+        public void setActorsUnsafe(Vector<ActorSpec> actors);
+
+        /**
+         * Sets the internal list of alliances without cloning it.
+         *
+         * @param alliances The internal list of quests
+         */
+        public void setAlliancesUnsafe(Vector<Alliance> alliances);
+
+        /**
+         * Sets the internal list of active artifacts without cloning it.
+         *
+         * @param artifacts The artifacts that are currently still alive
+         */
+        public void setArtifactsUnsafe(Vector<?> artifacts);
+
+        /**
+         * Sets the internal list of cooperations that are currently active.
+         * It is not exactly known whether this feature is implemented and usable
+         * nor whether the feature will get implemented anytime soon. It may even get removed
+         * without notice, though this will be announced as something like that would
+         * result in savegames to break.
+         * SLAPI makes no effort in wrapping the underlying data structure until it is
+         * implemented in a functional manner.
+         *
+         * @param cooperations The internal list of cooperations
+         */
+        public void setCooperationsUnsafe(Vector<?> cooperations);
+
+        /**
+         * Sets an internal list of disrupted stars.
+         * Disrupted stars do not have a starlane connection.
+         *
+         * @param disruptedStars The stars currently disrupted
+         */
+        public void setDisruptedStarsUnsafe(Vector<Star> disruptedStars);
+
+        /**
+         * Sets the internal empire vector without cloning it.
+         *
+         * @param empires The empires currently active
+         */
+        public void setEmpiresUnsafe(Vector<ActiveEmpire> empires);
+
+        /**
+         * Sets the neutral empire used by the game.
+         * The neutral empire MUST be an instance of galimulator's underlying
+         * empire class. This method can be under some circumstances be destructive,
+         * which is why it is set to be in the unsafe class.
+         *
+         * @param empire The empire that is not the neutral empire
+         */
+        public void setNeutralEmpire(@NotNull ActiveEmpire empire);
+
+        /**
+         * Sets the internal list of people without cloning it.
+         *
+         * @param members The internal list of people
+         */
+        public void setPeopleUnsafe(Vector<DynastyMember> members);
+
+        /**
+         * Sets the internal list of quests.
+         *
+         * @param quests The internal list of quests
+         */
+        public void setQuestsUnsafe(Vector<?> quests);
+
+        /**
+         * Sets the internal star vector without cloning it.
+         *
+         * @param stars The stars currently registered
+         */
+        public void setStarsUnsafe(Vector<Star> stars);
+
+        /**
+         * Sets the internal list of wars without cloning it.
+         *
+         * @param wars The wars list to set
+         */
+        public void setWarsUnsafe(Vector<?> wars);
     }
 
     private static GameConfiguration config;
@@ -318,7 +584,7 @@ public final class Galimulator {
      * Get the year in-game. The year is rarely a negative number and should not get
      * lower later in game unless a new galaxy is spun up. 1000 in-game years span
      * an in-game millenia, which is the time format most players are familiar with
-     * in the game. However please note that this is not always calculate in years,
+     * in the game. However please note that this is not always corresponding in years,
      * sometimes it is also in milliyears or other time formats.
      *
      * @return The in-game year.
@@ -452,6 +718,24 @@ public final class Galimulator {
     }
 
     /**
+     * Obtains the amount of empires that have transcended in during the game.
+     *
+     * @return The amount of transcended empires
+     */
+    public static int getTranscendedEmpires() {
+        return impl.getTranscendedEmpires();
+    }
+
+    /**
+     * Sets the amount of empires that have transcended in during the game.
+     *
+     * @param count The amount of transcended empires
+     */
+    public static void setTranscendedEmpires(int count) {
+        impl.setTranscendedEmpires(count);
+    }
+
+    /**
      * Obtains the weapons manager that is valid for this instance.
      * It is more or less a series of helper methods.
      *
@@ -459,6 +743,40 @@ public final class Galimulator {
      */
     public static @NotNull WeaponsManager getWeaponsManager() {
         return impl.getWeaponsManager();
+    }
+
+    /**
+     * Whether the sandbox mode has been used within this savegame.
+     *
+     * @return The sandbox used modifier
+     */
+    public static boolean hasUsedSandbox() {
+        return impl.hasUsedSandbox();
+    }
+
+    /**
+     * Loads the state of the game from given input data.
+     * Additional warning: it is recommended to pause the game during the operation as otherwise
+     * it might corrupt the data
+     *
+     * @param data The input data
+     * @throws IOException If any IO issues occur at the underlying layers
+     */
+    public static void loadGameState(byte[] data) throws IOException {
+        impl.loadGameState(data);
+    }
+
+    /**
+     * Loads the state of the game from a given input stream. All bytes may be read from the input stream,
+     * however the implementation may also want to try to guess what the end of the input stream is.
+     * Additional warning: it is recommended to pause the game during the operation as otherwise
+     * it might corrupt the data
+     *
+     * @param in The input stream to read the data from
+     * @throws IOException If any IO issues occur at the underlying layers
+     */
+    public static void loadGameState(@NotNull InputStream in) throws IOException {
+        impl.loadGameState(in);
     }
 
     /**
@@ -536,6 +854,18 @@ public final class Galimulator {
     }
 
     /**
+     * Saves the current state of the game and dumps it into an output stream.
+     * Warning: the provided stream is closed during the operation.
+     * Additional warning: it is recommended to pause the game during the operation as otherwise
+     * it might corrupt the data
+     *
+     * @param out The output stream to dump the state into
+     */
+    public static void saveGameState(@NotNull OutputStream out) {
+        impl.saveGameState(out);
+    }
+
+    /**
      * Changes the currently active map mode to a new value.
      *
      * @param mode The new active map mode.
@@ -557,6 +887,19 @@ public final class Galimulator {
     }
 
     /**
+     * Get the year in-game. The year is rarely a negative number and should not get
+     * lower later in game unless a new galaxy is spun up. 1000 in-game years span
+     * an in-game millenia, which is the time format most players are familiar with
+     * in the game. However please note that this is not always corresponding in years,
+     * sometimes it is also in milliyears or other time formats.
+     *
+     * @param year The in-game year.
+     */
+    public static void setGameYear(int year) {
+        impl.setGameYear(year);
+    }
+
+    /**
      * Sets the {@link GameImplementation} directly.
      * It is unlikely that anyone would need to use this method except the API implementation itself.
      *
@@ -565,6 +908,24 @@ public final class Galimulator {
     public static void setImplementation(@NotNull GameImplementation implementation) {
         NullUtils.requireNotNull(implementation);
         impl = implementation;
+    }
+
+    /**
+     * Sets the currently active map.
+     *
+     * @param map The currently active map
+     */
+    public static void setMap(@NotNull Map map) {
+        impl.setMap(map);
+    }
+
+    /**
+     * Sets whether the sandbox mode has been used within this savegame.
+     *
+     * @param state The sandbox used modifier
+     */
+    public static void setUsedSandbox(boolean state) {
+        impl.setUsedSandbox(state);
     }
 
     /**

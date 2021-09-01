@@ -10,6 +10,7 @@ accessWidener   v2     intermediary
 # Methods
 accessible      method  snoddasmannen/galimulator/AudioManager              f          ()V
 accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+accessible      method  snoddasmannen/galimulator/SpaceState                <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
 accessible      method  snoddasmannen/galimulator/be                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
 extendable      method  snoddasmannen/galimulator/ho                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
 accessible      method  snoddasmannen/galimulator/hj                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;ZLjava/lang/String;Lsnoddasmannen/galimulator/ht;)V
@@ -18,15 +19,36 @@ accessible      method  snoddasmannen/galimulator/hk                        <ini
 accessible      method  snoddasmannen/galimulator/hl                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/ht;)V
 
 # Fields
-accessible      field   com/example/Main                                    shortcuts  Ljava/util/List;
-accessible      field   snoddasmannen/galimulator/ui/bi                     d          J
-extendable      field   snoddasmannen/galimulator/ui/on                     c          Ljava/lang/String;
-accessible      field   snoddasmannen/galimulator/ui/Widget                 u          Lsnoddasmannen/galimulator/ui/ga;
-accessible      field   snoddasmannen/galimulator/AudioManager              a          Lsnoddasmannen/galimulator/u;
-accessible      field   snoddasmannen/galimulator/AudioManager              b          I
-accessible      field   snoddasmannen/galimulator/AudioManager              c          Ljava/util/ArrayList;
-accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound      Lcom/badlogic/gdx/audio/Sound;
-accessible      field   snoddasmannen/galimulator/Space                     i          Ljava/util/Vector;
+accessible      field   com/example/Main                                    shortcuts         Ljava/util/List;
+accessible      field   snoddasmannen/galimulator/ui/bi                     d                 J
+extendable      field   snoddasmannen/galimulator/ui/on                     c                 Ljava/lang/String;
+accessible      field   snoddasmannen/galimulator/ui/Widget                 u                 Lsnoddasmannen/galimulator/ui/ga;
+accessible      field   snoddasmannen/galimulator/AudioManager              a                 Lsnoddasmannen/galimulator/u;
+accessible      field   snoddasmannen/galimulator/AudioManager              b                 I
+accessible      field   snoddasmannen/galimulator/AudioManager              c                 Ljava/util/ArrayList;
+accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound             Lcom/badlogic/gdx/audio/Sound;
+accessible      field   snoddasmannen/galimulator/Space                     i                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     j                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     l                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     n                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     p                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     T                 I
+accessible      field   snoddasmannen/galimulator/Space                     ac                I
+accessible      field   snoddasmannen/galimulator/Space                     ag                Lsnoddasmannen/galimulator/Player;
+accessible      field   snoddasmannen/galimulator/Space                     ah                Lsnoddasmannen/galimulator/MapData;
+accessible      field   snoddasmannen/galimulator/Space                     ap                Ljava/util/List;
+accessible      field   snoddasmannen/galimulator/SpaceState                stars             Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                empires           Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                artifacts         Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                actors            Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                disruptedStars    Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                quests            Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                corporations      Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                persons           Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                alliances         Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                borders           Ljava/util/List;
+accessible      field   snoddasmannen/galimulator/SpaceState                employmentAgency  Lsnoddasmannen/galimulator/EmploymentAgency;
+accessible      field   snoddasmannen/galimulator/SpaceState                vanity            Lsnoddasmannen/galimulator/VanityHolder;
 
 # Classes
 accessible      class   snoddasmannen/galimulator/be
@@ -35,3 +57,4 @@ accessible      class   snoddasmannen/galimulator/ho
 accessible      class   snoddasmannen/galimulator/hj
 accessible      class   snoddasmannen/galimulator/hk
 accessible      class   snoddasmannen/galimulator/hl
+accessible      class   snoddasmannen/galimulator/Space$SaveMode
