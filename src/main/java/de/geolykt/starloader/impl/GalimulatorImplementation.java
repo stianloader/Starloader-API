@@ -14,6 +14,7 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,6 +173,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     public @Nullable snoddasmannen.galimulator.Player getPlayer() {
+        try {
+            System.out.println((Space.class.getDeclaredField("ag").getModifiers() & Opcodes.ACC_PUBLIC) == 0);
+        } catch (NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+        }
         return Space.ag;
     }
 

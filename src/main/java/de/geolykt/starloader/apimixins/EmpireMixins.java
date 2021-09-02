@@ -30,7 +30,6 @@ import de.geolykt.starloader.api.empire.ShipCapacityModifier.Type;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
-import de.geolykt.starloader.api.event.TickEvent;
 import de.geolykt.starloader.api.event.empire.EmpireRiotingEvent;
 import de.geolykt.starloader.api.event.empire.EmpireSpecialAddEvent;
 import de.geolykt.starloader.api.event.empire.EmpireSpecialRemoveEvent;
@@ -63,6 +62,13 @@ import snoddasmannen.galimulator.actors.StateActor;
 @Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
 
+    /**
+     * The last year in which the neutral empire was ticked.
+     *
+     * @deprecated This field only exist for redundancy checking for the {@link de.geolykt.starloader.api.event.TickEvent},
+     * which is a class that is deprecated for removal.
+     */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     private static transient int lastTick = -1;
 
     @SuppressWarnings("rawtypes")
@@ -691,6 +697,19 @@ public class EmpireMixins implements ActiveEmpire {
         }
     }
 
+    @SuppressWarnings({ "all" })
+    private static final void emitTick() {
+        // Two layers of redundancy should be enough
+        if (lastTick != Galimulator.getGameYear() && de.geolykt.starloader.api.event.TickEvent.tryAquireLock()) {
+            EventManager.handleEvent(new de.geolykt.starloader.api.event.TickEvent());
+            de.geolykt.starloader.api.event.TickEvent.releaseLock();
+            lastTick = Galimulator.getGameYear();
+        } else {
+            DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
+                    + "This usually indicates a broken neutral empire");
+        }
+    }
+
     /**
      * Mixin callback. Cannot be called directly at runtime
      *
@@ -699,15 +718,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Inject(method = "J()V", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
         if (this == Galimulator.getNeutralEmpire()) {
-            // Two layers of redundancy should be enough
-            if (TickEvent.tryAquireLock() && lastTick != Galimulator.getGameYear()) {
-                EventManager.handleEvent(new TickEvent());
-                TickEvent.releaseLock();
-                lastTick = Galimulator.getGameYear();
-            } else {
-                DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
-                        + "This usually indicates a broken neutral empire");
-            }
+            emitTick();
         }
         if (tickCallbacks == null) {
             tickCallbacks = new ArrayList<>();
