@@ -232,8 +232,8 @@ public final class Drawing {
      * unless otherwise specified.
      *
      * @param title The title of the input dialog.
-     * @param text
-     * @param hint
+     * @param text The text of the dialog, is - misleadingly - the text of the widget, not the prefilled text.
+     * @param hint The hint of the dialog, is - misleadingly - the text of the widget, not the prefilled text. They only differ in the colour of the text.
      * @return A new {@link TextInputBuilder} instance
      */
     public static @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,

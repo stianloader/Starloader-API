@@ -172,13 +172,6 @@ public final class Galimulator {
         public int getTranscendedEmpires();
 
         /**
-         * Sets the amount of empires that have transcended in during the game.
-         *
-         * @param count The amount of transcended empires
-         */
-        public void setTranscendedEmpires(int count);
-
-        /**
          * Obtains the unsafe that is valid for this implementation.
          * Note that this unsafe class is not fully supported.
          *
@@ -202,6 +195,16 @@ public final class Galimulator {
          * @return The sandbox used modifier
          */
         public boolean hasUsedSandbox();
+
+        /**
+         * Checks whether the game is currently paused.
+         * If the game is paused most ticking activities are halted, though mostly cosmetic ticking
+         * activities might still proceed as normal. An example for this is the background, which will move
+         * even when paused.
+         *
+         * @return The global pause state
+         */
+        public boolean isPaused();
 
         /**
          * Loads the state of the game from given input data.
@@ -317,6 +320,13 @@ public final class Galimulator {
          * @param map The currently active map
          */
         public void setMap(@NotNull Map map);
+
+        /**
+         * Sets the amount of empires that have transcended in during the game.
+         *
+         * @param count The amount of transcended empires
+         */
+        public void setTranscendedEmpires(int count);
 
         /**
          * Sets whether the sandbox mode has been used within this savegame.
@@ -727,15 +737,6 @@ public final class Galimulator {
     }
 
     /**
-     * Sets the amount of empires that have transcended in during the game.
-     *
-     * @param count The amount of transcended empires
-     */
-    public static void setTranscendedEmpires(int count) {
-        impl.setTranscendedEmpires(count);
-    }
-
-    /**
      * Obtains the weapons manager that is valid for this instance.
      * It is more or less a series of helper methods.
      *
@@ -752,6 +753,18 @@ public final class Galimulator {
      */
     public static boolean hasUsedSandbox() {
         return impl.hasUsedSandbox();
+    }
+
+    /**
+     * Checks whether the game is currently paused.
+     * If the game is paused most ticking activities are halted, though mostly cosmetic ticking
+     * activities might still proceed as normal. An example for this is the background, which will move
+     * even when paused.
+     *
+     * @return The global pause state
+     */
+    public static boolean isPaused() {
+        return impl.isPaused();
     }
 
     /**
@@ -917,6 +930,15 @@ public final class Galimulator {
      */
     public static void setMap(@NotNull Map map) {
         impl.setMap(map);
+    }
+
+    /**
+     * Sets the amount of empires that have transcended in during the game.
+     *
+     * @param count The amount of transcended empires
+     */
+    public static void setTranscendedEmpires(int count) {
+        impl.setTranscendedEmpires(count);
     }
 
     /**

@@ -2,6 +2,8 @@ package de.geolykt.starloader.api.gui;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.Input;
+
 /**
  * Dynamic Keybind - short Dynbind. They are functionally similar to the regular keybind with the
  * added difference that the Starloader API implementation <b>has</b> to always query the methods described
@@ -40,7 +42,7 @@ public interface Dynbind {
     /**
      * Checks whether the keycode is valid for this keybind at this moment.
      * If true, {@link #performAction()} should usually be called afterwards.
-     * Keycodes are magic constants that are documented somewhere, but do not ask where exactly.
+     * Keycodes are magic constants that are defined in the {@link Input.Keys} class.
      *
      * @param key The keycode to check for
      * @return True if valid, false otherwise

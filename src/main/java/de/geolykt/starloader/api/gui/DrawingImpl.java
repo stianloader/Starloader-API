@@ -175,8 +175,8 @@ public interface DrawingImpl {
      * unless otherwise specified.
      *
      * @param title The title of the input dialog.
-     * @param text  Exact use unknown.
-     * @param hint  Exact use unknown.
+     * @param text The text of the dialog, is - misleadingly - the text of the widget, not the prefilled text.
+     * @param hint The hint of the dialog, is - misleadingly - the text of the widget, not the prefilled text. Hint and text only differ in colour.
      * @return A new {@link TextInputBuilder} instance
      */
     public @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,

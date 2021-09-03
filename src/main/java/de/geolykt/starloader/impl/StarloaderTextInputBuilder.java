@@ -21,10 +21,11 @@ import snoddasmannen.galimulator.ui.qm;
 
 public class StarloaderTextInputBuilder implements TextInputBuilder {
 
-    private String hint;
-    private final List<Consumer<@Nullable String>> hooks = new ArrayList<>();
-    private String text;
-    private String title;
+    private @NotNull String hint;
+    private final @NotNull List<Consumer<@Nullable String>> hooks = new ArrayList<>();
+    private @NotNull String text;
+    private @Nullable String initialText;
+    private @NotNull String title;
 
     public StarloaderTextInputBuilder(@NotNull String title, @NotNull String text, @NotNull String hint) {
         this.title = title;
@@ -52,6 +53,10 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
         }
         // Based on the galactic preview and a few others, might require something better
         StarloaderInputDialog dialog = new StarloaderInputDialog(title, new TextInputWrapper(hooks), text, hint);
+        String initialText = this.initialText;
+        if (initialText != null) {
+            dialog.setText(initialText);
+        }
         Space.i.add(new qm(dialog, GalFX.G() - dialog.c() - 120.0f, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
         return dialog;
     }
@@ -71,6 +76,12 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     @Override
     public @NotNull TextInputBuilder setTitle(@NotNull String title) {
         this.title = title;
+        return this;
+    }
+
+    @Override
+    public @NotNull TextInputBuilder setInitialText(@NotNull String text) {
+        this.initialText = text;
         return this;
     }
 }

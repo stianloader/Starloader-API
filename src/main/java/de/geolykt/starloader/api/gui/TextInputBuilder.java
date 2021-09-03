@@ -45,6 +45,8 @@ public interface TextInputBuilder {
 
     /**
      * Updates the hint of the Dialog.
+     * The hint of the dialog, is - misleadingly - the text of the widget, not the prefilled text.
+     * Hint and text only differ in colour.
      *
      * @param hint The hint of the dialog.
      * @return The builder instance, for chaining
@@ -52,7 +54,17 @@ public interface TextInputBuilder {
     public @NotNull TextInputBuilder setHint(@NotNull String hint);
 
     /**
+     * Sets the initial text of the dialog. Unlike {@link #setText(String)}, this is the prefilled text - for real.
+     *
+     * @param text The text to use
+     * @return The builder instance, for chaining
+     */
+    public @NotNull TextInputBuilder setInitialText(@NotNull String text);
+
+    /**
      * Updates the text of the Dialog.
+     * The text of the dialog, is - misleadingly - the text of the widget, not the prefilled text.
+     * Hint and text only differ in colour.
      *
      * @param text The text of the dialog.
      * @return The builder instance, for chaining

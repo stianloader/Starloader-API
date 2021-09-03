@@ -33,6 +33,7 @@ accessible      field   snoddasmannen/galimulator/Space                     l   
 accessible      field   snoddasmannen/galimulator/Space                     n                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     p                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     T                 I
+accessible      field   snoddasmannen/galimulator/Space                     U                 Z
 accessible      field   snoddasmannen/galimulator/Space                     ac                I
 accessible      field   snoddasmannen/galimulator/Space                     ag                Lsnoddasmannen/galimulator/Player;
 accessible      field   snoddasmannen/galimulator/Space                     ah                Lsnoddasmannen/galimulator/MapData;

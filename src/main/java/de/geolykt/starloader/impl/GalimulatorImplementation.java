@@ -226,6 +226,15 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return this;
     }
 
+    /**
+     * Obtains the currently valid vanity holder instance.
+     *
+     * @return The valid vanity holder instance
+     */
+    public VanityHolder getVanityHolder() {
+        return Space.w;
+    }
+
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getWarsUnsafe() {
@@ -243,19 +252,20 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public void loadGameState(byte[] data) throws IOException {
+    public boolean isPaused() {
+        return Space.U;
+    }
+
+    @Override
+    public synchronized void loadGameState(byte[] data) throws IOException {
         try (ByteArrayInputStream in = new ByteArrayInputStream(data)) {
             loadGameState(in);
         }
     }
 
-    public void setPlayer(Player player) {
-        Space.ag = player;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
-    public void loadGameState(@NotNull InputStream input) throws IOException {
+    public synchronized void loadGameState(@NotNull InputStream input) throws IOException {
         try (ObjectInputStream in = new ObjectInputStream(input)) {
             Object readObject;
             try {
@@ -298,24 +308,6 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void recalculateVoronoiGraphs() {
         Space.ao();
-    }
-
-    /**
-     * Obtains the currently valid vanity holder instance.
-     *
-     * @return The valid vanity holder instance
-     */
-    public VanityHolder getVanityHolder() {
-        return Space.w;
-    }
-
-    /**
-     * Sets the valid vanity holder instance that dictates the vanity names to use.
-     *
-     * @param holder The vanity holder to use
-     */
-    public void setVanityHolder(VanityHolder holder) {
-        Space.w = holder;
     }
 
     @Override
@@ -432,10 +424,32 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         Space.b = NullUtils.requireNotNull((Vector) empires);
     }
 
+    @Override
+    public void setGameYear(int year) {
+        Space.T = year;
+    }
+
+    @Override
+    public void setMap(@NotNull Map map) {
+        if (!(map instanceof snoddasmannen.galimulator.MapData)) {
+            throw new ExpectedObfuscatedValueException();
+        }
+        Space.ah = (snoddasmannen.galimulator.MapData) map;
+    }
+
+    @Override
+    public void setNeutralEmpire(@NotNull ActiveEmpire empire) {
+        Space.x = ExpectedObfuscatedValueException.requireEmpire(NullUtils.requireNotNull(empire));
+    }
+
     @SuppressWarnings("rawtypes")
     @Override
     public void setPeopleUnsafe(Vector<DynastyMember> members) {
         Space.n = NullUtils.requireNotNull((Vector) members);
+    }
+
+    public void setPlayer(Player player) {
+        Space.ag = player;
     }
 
     @SuppressWarnings("rawtypes")
@@ -451,36 +465,27 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
+    public void setTranscendedEmpires(int count) {
+        Space.ac = count;
+    }
+
+    @Override
     public void setUsedSandbox(boolean state) {
         Space.I = state;
+    }
+
+    /**
+     * Sets the valid vanity holder instance that dictates the vanity names to use.
+     *
+     * @param holder The vanity holder to use
+     */
+    public void setVanityHolder(VanityHolder holder) {
+        Space.w = holder;
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setWarsUnsafe(Vector<?> wars) {
         Space.c = NullUtils.requireNotNull((Vector) wars);
-    }
-
-    @Override
-    public void setMap(@NotNull Map map) {
-        if (!(map instanceof snoddasmannen.galimulator.MapData)) {
-            throw new ExpectedObfuscatedValueException();
-        }
-        Space.ah = (snoddasmannen.galimulator.MapData) map;
-    }
-
-    @Override
-    public void setGameYear(int year) {
-        Space.T = year;
-    }
-
-    @Override
-    public void setNeutralEmpire(@NotNull ActiveEmpire empire) {
-        Space.x = ExpectedObfuscatedValueException.requireEmpire(NullUtils.requireNotNull(empire));
-    }
-
-    @Override
-    public void setTranscendedEmpires(int count) {
-        Space.ac = count;
     }
 }
