@@ -77,6 +77,13 @@ public class SpaceASMTransformer extends CodeModifier {
     }
 
     /**
+     * Called at the very beginning of the global tick method.
+     */
+    public static final void logicalTickEarly() {
+        EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE_GRAPHICAL));
+    }
+
+    /**
      * Called at the end of the global tick method.
      */
     public static final void logicalTickPost() {
@@ -84,10 +91,10 @@ public class SpaceASMTransformer extends CodeModifier {
     }
 
     /**
-     * Called at the beginning of the global tick method.
+     * Called at the beginning of the pause-sensitive portion of the global tick method.
      */
     public static final void logicalTickPre() {
-        EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE));
+        EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE_LOGICAL));
     }
 
     /**
@@ -146,6 +153,7 @@ public class SpaceASMTransformer extends CodeModifier {
                 }
                 method.instructions.insert(currentInsn, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPre", "()V"));
                 method.instructions.insertBefore(lastNode, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPost", "()V"));
+                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickEarly", "()V"));
             }
             currentInsn = currentInsn.getNext();
         }

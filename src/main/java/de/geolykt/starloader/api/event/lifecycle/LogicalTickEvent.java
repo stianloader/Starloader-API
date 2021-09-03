@@ -19,12 +19,21 @@ public class LogicalTickEvent extends Event {
     public enum Phase {
 
         /**
-         * The event was emitted before any other logical processing occurred.
+         * The event was emitted before anything was processed. This phase will be triggered even if the game is paused
+         * or when the game is in slow-mode.
          */
-        PRE,
+        PRE_GRAPHICAL,
 
         /**
-         * The event was emitted after any logical processing occurred.
+         * The event was emitted before any logical processing occurred. However some graphical-ish
+         * processing might have occoured, such as background ticking. Event will not be emitted if the game is
+         * paused or the tick is skipped due to the game being in slow-mode.
+         */
+        PRE_LOGICAL,
+
+        /**
+         * The event was emitted after any logical processing occurred. This phase will not be triggered if the
+         * game is paused or when the tick is skipped die to the game being in slow-mode.
          */
         POST;
     }
