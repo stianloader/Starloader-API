@@ -8,8 +8,11 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +39,11 @@ import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.sound.SoundHandler;
 
-import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.EmploymentAgency;
+import snoddasmannen.galimulator.GalFX;
+import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Player;
+import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
@@ -296,7 +301,73 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             setPeopleUnsafe(NullUtils.requireNotNull((Vector<DynastyMember>) spaceState.persons));
             setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
             setStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.stars));
+            Space.H = spaceState.stars.size();
             EmploymentAgency.a(spaceState.employmentAgency);
+
+            // Many magic methods and stuff. See Space#i(String) (as of galimulator-4.9-STABLE)
+            Space.o = null;
+            Space.C = true;
+
+            HashMap<Integer, Star> uidToStar = new HashMap<>();
+            HashMap<Integer, ActiveEmpire> uidToEmpire = new HashMap<>();
+
+            for (Star star : getStarsUnsafe()) {
+                star.setInternalRandom(new Random());
+                uidToStar.put(star.getUID(), star);
+            }
+
+            for (ActiveEmpire empire : getEmpiresUnsafe()) {
+                empire.setRecentlyLostStars(new ArrayDeque<>());
+                empire.setInternalRandom(new Random());
+                uidToEmpire.put(empire.getUID(), empire);
+            }
+
+            getNeutralEmpire().setInternalRandom(new Random());
+            getNeutralEmpire().setRecentlyLostStars(new ArrayDeque<>());
+            @SuppressWarnings("null")
+            final @NotNull Religion nullReligion = (Religion) NullUtils.provideNull();
+            getNeutralEmpire().setReligion(nullReligion);
+            Space.aq(); // probably sets up the background
+            Space.ah.getGenerator().h(); // Change the xmax and ymax of the generator area
+            Space.an(); // big calculations with voronoi diagrams
+            Space.ae = Space.q(); // set the width/height of the board
+            Space.af = Space.r();
+
+            // repopulate the starlanes
+            for (Star star : getStarsUnsafe()) {
+                Vector<Star> neighbours = new Vector<>();
+                for (Integer starB : star.getNeighbourIDs()) {
+                    neighbours.add(uidToStar.get(starB));
+                }
+                star.setNeighbours(neighbours);
+                ActiveEmpire owner = uidToEmpire.get(star.getAssignedEmpireUID());
+                if (owner == null) {
+                    owner = getNeutralEmpire();
+                }
+                star.setAssignedEmpire(owner);
+            }
+
+            Space.al(); // setup quad trees
+            if (getAlliancesUnsafe() == null) {
+                setAlliancesUnsafe(new Vector<>());
+            } else {
+                for (Alliance alliance : getAlliancesUnsafe()) {
+                    for (ActiveEmpire member : alliance.getMembers()) {
+                        member.setAlliance(alliance);
+                    }
+                }
+            }
+
+            Vector<DynastyMember> followedMembers = new Vector<>();
+            for (DynastyMember member : getPeopleUnsafe()) {
+                if (member.isFollowed()) {
+                    followedMembers.add(member);
+                }
+            }
+            setFollowedPeopleUnsafe(followedMembers);
+            Space.p().getGenerator().m();
+            GalFX.l.zoom = GalFX.e();
+            GalFX.l.update();
         }
     }
 
@@ -364,6 +435,10 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void saveGameState(@NotNull OutputStream out) {
+        if (!isPaused()) {
+            throw new IllegalStateException("The game must be paused when saving the game. Async game saves may lead to"
+                    + " concurrent modifications.");
+        }
         Space.G = 0; // reset Stack depth
         SpaceState var2 = new SpaceState(getStarsUnsafe(), getEmpiresUnsafe(), getArtifactsUnsafe(),
                 getActorsUnsafe(), getDisruptedStarsUnsafe(), (snoddasmannen.galimulator.Empire) getNeutralEmpire(),
@@ -487,5 +562,18 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void setWarsUnsafe(Vector<?> wars) {
         Space.c = NullUtils.requireNotNull((Vector) wars);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes", "null" })
+    @Override
+    @NotNull
+    public Vector<DynastyMember> getFollowedPeopleUnsafe() {
+        return (Vector) Space.t;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void setFollowedPeopleUnsafe(@NotNull Vector<DynastyMember> people) {
+        Space.t = NullUtils.requireNotNull((Vector) people);
     }
 }

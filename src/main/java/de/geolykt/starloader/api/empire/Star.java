@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
+import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Locateable;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.event.TickCallback;
@@ -20,7 +21,7 @@ import snoddasmannen.galimulator.Religion;
  * extensions and are solely to be implemented by the starloader API
  * implementation.
  */
-public interface Star extends Identifiable, Metadatable, Locateable {
+public interface Star extends Identifiable, Metadatable, Locateable, InternalRandom {
 
     /**
      * Adds a star to the neighbour lists. Please note that you likely do not want
@@ -66,6 +67,14 @@ public interface Star extends Identifiable, Metadatable, Locateable {
      * @return The {@link ActiveEmpire} that controls the star
      */
     public @NotNull ActiveEmpire getAssignedEmpire();
+
+    /**
+     * Gets the empire that is said to have control over the star. This may also be
+     * the neutral (unaffiliated) empire.
+     *
+     * @return The integer identifier of the {@link ActiveEmpire} that controls the star
+     */
+    public int getAssignedEmpireUID();
 
     /**
      * Obtains the location where the star is located at. This returns the internal
@@ -189,6 +198,14 @@ public interface Star extends Identifiable, Metadatable, Locateable {
      * @param religion The {@link Religion} that is less prevalent in this system
      */
     public void setMinorityFaith(@Nullable Religion religion);
+
+    /**
+     * Sets the direct neighbours of the star.
+     *
+     * @param neighbours A {@link Vector} of {@link Star Stars} that the current Star has a
+     *         starlane to
+     */
+    public void setNeighbours(@NotNull Vector<Star> neighbours);
 
     /**
      * Obtains the wealth of the star. Wealthier stars are harder to take and have

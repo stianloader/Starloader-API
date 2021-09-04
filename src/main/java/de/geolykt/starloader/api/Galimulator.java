@@ -230,6 +230,9 @@ public final class Galimulator {
         /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
          * It will also not cause the loading screen to show up.
+         *
+         * @implNote Warning: while it sounds laughable, this operation is NOT thread safe and WILL crash if called on another thread.
+         * It is advisable to call this method on the next tick.
          */
         public void pauseGame();
 
@@ -395,6 +398,14 @@ public final class Galimulator {
         public Vector<ActiveEmpire> getEmpiresUnsafe();
 
         /**
+         * Obtains the internal vector of followed people without cloning it.
+         *
+         * @return A {@link Vector} of {@link DynastyMember}s where {@link DynastyMember#isFollowed()} would return true.
+         */
+        @NotNull
+        public Vector<DynastyMember> getFollowedPeopleUnsafe();
+
+        /**
          * Obtains the internal list of people without cloning it.
          *
          * @return The internal list of people
@@ -470,6 +481,14 @@ public final class Galimulator {
          * @param empires The empires currently active
          */
         public void setEmpiresUnsafe(Vector<ActiveEmpire> empires);
+
+        /**
+         * Sets the internal list of followed people. Using this when it does not apply is generally
+         * considered unsafe and may have damaging side effects.
+         *
+         * @param people The new value of the internal list.
+         */
+        public void setFollowedPeopleUnsafe(@NotNull Vector<DynastyMember> people);
 
         /**
          * Sets the neutral empire used by the game.
@@ -797,6 +816,8 @@ public final class Galimulator {
      * It will also not cause the loading screen to show up.
      *
      * @see #resumeGame()
+     * @implNote Warning: while it sounds laughable, this operation is NOT thread safe and WILL crash if called on another thread.
+     * It is advisable to call this method on the next tick.
      */
     public static void pauseGame() {
         impl.pauseGame();

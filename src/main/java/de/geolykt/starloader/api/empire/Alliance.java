@@ -11,7 +11,8 @@ public interface Alliance extends Dateable {
 
     /**
      * Adds the empire to the alliance, however some logic might be skipped that is
-     * required for the change to propagate to the fullest. Caution is advised
+     * required for the change to propagate to the fullest. Caution is advised.
+     * For example {@link ActiveEmpire#setAlliance(Alliance)} needs to be called separately.
      *
      * @param empire The {@link ActiveEmpire} to add to the alliance
      */
@@ -28,7 +29,7 @@ public interface Alliance extends Dateable {
     /**
      * Obtains the Color of the Alliance used for UI as a color component used by Java AWT.
      * This method can be preferable over {@link #getColor()} as latter is only present within Galimulator proper
-     * while this component is provided by the JVM
+     * while this component is provided by most Java SE implementations starloader will run on.
      *
      * @return The {@link Color} of the alliance
      */

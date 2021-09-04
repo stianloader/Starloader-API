@@ -92,4 +92,18 @@ public interface DynastyMember extends Dateable, Identifiable {
      * @return True if the member is no longer alive
      */
     public boolean hasDied();
+
+    /**
+     * Checks whether the member is currently followed, which is a flag that makes so the member is not GC'd on death.
+     *
+     * @return the followed modifier
+     */
+    public boolean isFollowed();
+
+    /**
+     * Sets whether the member is currently followed, which is a flag that makes so the member is not GC'd on death.
+     *
+     * @param followed the followed modifier
+     */
+    public void setFollowed(boolean followed);
 }

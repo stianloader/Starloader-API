@@ -38,6 +38,9 @@ public class PersonMixins implements DynastyMember {
     private Vector<Person.CVEntry> cv;
 
     @Shadow
+    private boolean isFollowed;
+
+    @Shadow
     private Job job;
 
     @Shadow
@@ -103,5 +106,15 @@ public class PersonMixins implements DynastyMember {
     @Override
     public boolean hasDied() {
         return !alive;
+    }
+
+    @Override
+    public boolean isFollowed() {
+        return isFollowed;
+    }
+
+    @Override
+    public void setFollowed(boolean followed) {
+        isFollowed = followed;
     }
 }

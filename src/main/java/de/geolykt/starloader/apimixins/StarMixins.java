@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,9 @@ public class StarMixins implements Star {
     transient HashMap b; // starlaneCache
 
     @Shadow
+    transient Random d; // internalRandom
+
+    @Shadow
     private Religion faith; // majorityFaith
 
     @Shadow
@@ -54,6 +58,9 @@ public class StarMixins implements Star {
     @Shadow
     @Nullable
     private Religion minorityFaith; // minorityFaith
+
+    @Shadow
+    int ownerid;
 
     @Shadow
     @Nullable
@@ -140,9 +147,20 @@ public class StarMixins implements Star {
     }
 
     @Override
+    public int getAssignedEmpireUID() {
+        return ownerid;
+    }
+
+    @Override
     @Shadow
     public @NotNull Vector2 getCoordinates() { // thankfully this is already implemented by the base class
         throw new UnsupportedOperationException("This should be created by the shadowed field!");
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull Random getInternalRandom() {
+        return d;
     }
 
     @SuppressWarnings("null")
@@ -242,6 +260,11 @@ public class StarMixins implements Star {
     }
 
     @Override
+    public void setInternalRandom(@NotNull Random random) {
+        d = NullUtils.requireNotNull(random);
+    }
+
+    @Override
     public void setMajorityFaith(@NotNull Religion religion) {
         faith = religion;
         if (faith == minorityFaith) {
@@ -268,6 +291,11 @@ public class StarMixins implements Star {
         } else {
             minorityFaith = religion;
         }
+    }
+
+    @Override
+    public void setNeighbours(@NotNull Vector<Star> neighbours) {
+        a = NullUtils.requireNotNull(neighbours);
     }
 
     @Override

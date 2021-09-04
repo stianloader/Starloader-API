@@ -1,12 +1,15 @@
 package de.geolykt.starloader.api.empire;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.List;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
@@ -22,7 +25,7 @@ import snoddasmannen.galimulator.actors.StateActor;
 /**
  * Interface for any empire that is still in the game.
  */
-public interface ActiveEmpire extends Empire, Metadatable {
+public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
 
     /**
      * Assigns an {@link ActorSpec Actor} to the empire.
@@ -49,6 +52,16 @@ public interface ActiveEmpire extends Empire, Metadatable {
      * @param modifier The modifier to add
      */
     public void addCapacityModifier(@NotNull ShipCapacityModifier modifier);
+
+    /**
+     * Assigns an {@link ActorSpec Actor} to the empire.
+     * Workaround through javac binding issues.
+     *
+     * @param actor The actor to assign
+     */
+    public default void addSLActor(@NotNull ActorSpec actor) {
+        addActor(actor);
+    }
 
     /**
      * Adds a special to the empire. The implementation of the method should throw a
@@ -182,6 +195,16 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public @NotNull String getMotto();
 
     /**
+     * Obtains the most recently lost stars.
+     * In theory the collection should hold no more than 6 stars and
+     * is reset with every reload of the galaxy.
+     * This method returns a clone.
+     *
+     * @return The stars that were recently lost.
+     */
+    public @NotNull Collection<Star> getRecentlyLostStars();
+
+    /**
      * The religion of an empire. It may change after an empire has been founded so
      * it should not be assumed to be a constant.
      *
@@ -264,26 +287,6 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public void removeActor(@NotNull ActorSpec actor);
 
     /**
-     * Unassign a {@link ActorSpec} from the empire.
-     * Workaround through javac binding issues.
-     *
-     * @param actor The ActorSpec to unassign
-     */
-    public default void removeSLActor(@NotNull ActorSpec actor) {
-        removeActor(actor);
-    }
-
-    /**
-     * Assigns an {@link ActorSpec Actor} to the empire.
-     * Workaround through javac binding issues.
-     *
-     * @param actor The actor to assign
-     */
-    public default void addSLActor(@NotNull ActorSpec actor) {
-        addActor(actor);
-    }
-
-    /**
      * Unassign a {@link StateActor} from the empire.
      *
      * @param actor The StateActor to unassign
@@ -302,6 +305,16 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public void removeCapacityModifier(@NotNull ShipCapacityModifier modifier);
 
     /**
+     * Unassign a {@link ActorSpec} from the empire.
+     * Workaround through javac binding issues.
+     *
+     * @param actor The ActorSpec to unassign
+     */
+    public default void removeSLActor(@NotNull ActorSpec actor) {
+        removeActor(actor);
+    }
+
+    /**
      * Removes a special to the empire. The implementation of the method may throw a
      * {@link IllegalArgumentException} if the key is not registered under it's
      * respective registry. This method should return false if
@@ -315,6 +328,15 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public boolean removeSpecial(@NotNull NamespacedKey empireSpecial, boolean force);
 
     /**
+     * Sets the alliance that the empire is an owner in.
+     *
+     * @param alliance The Alliance the empire should join, or null if not applicable
+     * @implNote {@link Alliance#addMember(ActiveEmpire)} should also be called in most cases
+     * as the change will otherwise not be propagated to the fullest.
+     */
+    public void setAlliance(@Nullable Alliance alliance);
+
+    /**
      * Sets the motto of the empire. The motto of an empire is purely for the user
      * and has no real effect on the simulation.
      *
@@ -323,12 +345,23 @@ public interface ActiveEmpire extends Empire, Metadatable {
     public void setMotto(@NotNull String motto);
 
     /**
+     * Sets the most recently lost stars.
+     * In theory the collection should hold no more than 6 stars and
+     * is reset with every reload of the galaxy.
+     * The method does not clone anything.
+     *
+     * @param stars The stars to set as the most recently lost stars.
+     */
+    public void setRecentlyLostStars(@NotNull Deque<Star> stars);
+
+    /**
      * Sets the new dominant religion of the empire. The religion of the stars may
      * however stay unaltered, so some changes can backfire for the empire. Does not
      * set the degeneration state as it would happen if the player would switch
      * religion manually.
      *
      * @param religion The new religion to preach
+     * @implSpec The implementation has to allow null religions only on the neutral empire.
      */
     public void setReligion(@NotNull Religion religion);
 

@@ -48,6 +48,24 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
+javadoc {
+    options {
+        addBooleanOption('html5', true)
+        tags("apiNote:a:API Notice:", "implSpec:a:Implementation Specification:", "implNote:a:Implementation Notice:")
+        links "https://docs.oracle.com/en/java/javase/16/docs/api/"
+    }
+
+    // see https://stackoverflow.com/a/56641766
+    doLast {
+        // Append the fix to the file
+        def searchScript = new File(destinationDir, '/search.js')
+        searchScript.append '\n\n' +
+            'getURLPrefix = function(ui) {\n' +
+            '    return \'\';\n' +
+            '};\n'
+    }
+}
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource

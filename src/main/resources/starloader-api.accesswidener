@@ -10,6 +10,8 @@ accessWidener   v2     intermediary
 # Methods
 accessible      method  snoddasmannen/galimulator/AudioManager              f          ()V
 accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+accessible      method  snoddasmannen/galimulator/Space                     aq         ()V
+accessible      method  snoddasmannen/galimulator/Space                     aW         ()V
 accessible      method  snoddasmannen/galimulator/SpaceState                <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
 accessible      method  snoddasmannen/galimulator/be                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
 extendable      method  snoddasmannen/galimulator/ho                        <init>     (Lsnoddasmannen/galimulator/hi;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
@@ -32,9 +34,13 @@ accessible      field   snoddasmannen/galimulator/Space                     j   
 accessible      field   snoddasmannen/galimulator/Space                     l                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     n                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     p                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     t                 Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                     o                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     T                 I
 accessible      field   snoddasmannen/galimulator/Space                     U                 Z
 accessible      field   snoddasmannen/galimulator/Space                     ac                I
+accessible      field   snoddasmannen/galimulator/Space                     ae                F
+accessible      field   snoddasmannen/galimulator/Space                     af                F
 accessible      field   snoddasmannen/galimulator/Space                     ag                Lsnoddasmannen/galimulator/Player;
 accessible      field   snoddasmannen/galimulator/Space                     ah                Lsnoddasmannen/galimulator/MapData;
 accessible      field   snoddasmannen/galimulator/Space                     ap                Ljava/util/List;
@@ -50,6 +56,7 @@ accessible      field   snoddasmannen/galimulator/SpaceState                alli
 accessible      field   snoddasmannen/galimulator/SpaceState                borders           Ljava/util/List;
 accessible      field   snoddasmannen/galimulator/SpaceState                employmentAgency  Lsnoddasmannen/galimulator/EmploymentAgency;
 accessible      field   snoddasmannen/galimulator/SpaceState                vanity            Lsnoddasmannen/galimulator/VanityHolder;
+accessible      field   snoddasmannen/galimulator/GalFX                     l                 Lcom/badlogic/gdx/graphics/OrthographicCamera;
 
 # Classes
 accessible      class   snoddasmannen/galimulator/be

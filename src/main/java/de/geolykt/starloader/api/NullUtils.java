@@ -13,10 +13,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class NullUtils {
 
-    private NullUtils() {
-        // reduce visibillity to help JIT
-    }
-
     /**
      * Similar to {@link Optional#ofNullable(Object)} but with correct annotations.
      * Java null analysis is not simple after all.
@@ -70,6 +66,15 @@ public final class NullUtils {
     }
 
     /**
+     * Returns null. Always.
+     *
+     * @return null
+     */
+    public static Object provideNull() {
+        return null;
+    }
+
+    /**
      * Basically {@link Objects#requireNonNull(Object)} but with correct annotations that do not
      * confuse eclipse (which I use to analyse the null checks).
      *
@@ -117,5 +122,9 @@ public final class NullUtils {
             return object;
         }
         throw new NullPointerException(message.get());
+    }
+
+    private NullUtils() {
+        // reduce visibility to help JIT
     }
 }

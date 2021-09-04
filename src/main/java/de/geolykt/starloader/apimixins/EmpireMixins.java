@@ -2,9 +2,12 @@ package de.geolykt.starloader.apimixins;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -71,12 +74,31 @@ public class EmpireMixins implements ActiveEmpire {
     @Deprecated(forRemoval = true, since = "1.5.0")
     private static transient int lastTick = -1;
 
+    @SuppressWarnings({ "all" })
+    private static final void emitTick() {
+        // Two layers of redundancy should be enough
+        if (lastTick != Galimulator.getGameYear() && de.geolykt.starloader.api.event.TickEvent.tryAquireLock()) {
+            EventManager.handleEvent(new de.geolykt.starloader.api.event.TickEvent());
+            de.geolykt.starloader.api.event.TickEvent.releaseLock();
+            lastTick = Galimulator.getGameYear();
+        } else {
+            DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
+                    + "This usually indicates a broken neutral empire");
+        }
+    }
+
     @SuppressWarnings("rawtypes")
     @Shadow
     private Vector agents; // actors - this is indeed the right name - i know, it is misleading
 
     @Shadow
+    protected transient Random b; // internalRandom
+
+    @Shadow
     int birthMilliYear; // foundationYear
+
+    @Shadow
+    public transient Deque<Star> c; // recentlyLost
 
     private transient ArrayList<ShipCapacityModifier> capModifiers;
 
@@ -444,6 +466,12 @@ public class EmpireMixins implements ActiveEmpire {
         return birthMilliYear;
     }
 
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull Random getInternalRandom() {
+        return b;
+    }
+
     @Override
     public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
         if (metadata == null) {
@@ -456,6 +484,11 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public String getMotto() {
         return motto;
+    }
+
+    @Override
+    public @NotNull Collection<Star> getRecentlyLostStars() {
+        return new ArrayList<>(c);
     }
 
     @SuppressWarnings("null")
@@ -603,6 +636,16 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public void setAlliance(@Nullable Alliance alliance) {
+        h = (snoddasmannen.galimulator.Alliance) alliance;
+    }
+
+    @Override
+    public void setInternalRandom(@NotNull Random random) {
+        b = random;
+    }
+
+    @Override
     public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
         if (metadata == null) {
             metadata = new HashMap<>();
@@ -620,7 +663,15 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    public void setRecentlyLostStars(@NotNull Deque<Star> stars) {
+        c = NullUtils.requireNotNull(stars);
+    }
+
+    @Override
     public void setReligion(Religion religion) {
+        if (Objects.isNull(religion) && this != Galimulator.getNeutralEmpire()) {
+            throw new NullPointerException("religion cannot be null.");
+        }
         a(religion);
     }
 
@@ -694,19 +745,6 @@ public class EmpireMixins implements ActiveEmpire {
         if (event.isCancelled()) {
             ci.cancel();
             return;
-        }
-    }
-
-    @SuppressWarnings({ "all" })
-    private static final void emitTick() {
-        // Two layers of redundancy should be enough
-        if (lastTick != Galimulator.getGameYear() && de.geolykt.starloader.api.event.TickEvent.tryAquireLock()) {
-            EventManager.handleEvent(new de.geolykt.starloader.api.event.TickEvent());
-            de.geolykt.starloader.api.event.TickEvent.releaseLock();
-            lastTick = Galimulator.getGameYear();
-        } else {
-            DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
-                    + "This usually indicates a broken neutral empire");
         }
     }
 
