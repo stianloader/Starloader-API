@@ -34,6 +34,7 @@
     "StarMixins",
     "StateActorMixins",
     "TrackMixins",
+    "WarMixins",
     "WeaponMixins",
     "WeaponsFactoryMixins"
   ]

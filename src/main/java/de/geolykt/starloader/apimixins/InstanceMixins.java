@@ -7,7 +7,6 @@ import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratingEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyLoadingEvent;
-import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 
 import snoddasmannen.galimulator.Space;
 
@@ -35,9 +34,6 @@ public class InstanceMixins {
             evt = new GalaxyLoadingEvent();
             break;
         default:
-            if (j.startsWith("Saving galaxy: ")) {
-                evt = new GalaxySavingEvent(j.split(" ", 3)[2]);
-            }
             break;
         }
         if (evt != null) {

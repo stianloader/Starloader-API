@@ -9,9 +9,10 @@ import de.geolykt.starloader.api.event.Event;
 
 /**
  * Event that is fired when a Galaxy is about to save.
- * Note that this event may get fired outside of the main thread.
+ * Note that this event may get fired outside of the main thread - invoking
+ * saves in an async manner is highly discouraged however.
  */
-public class GalaxySavingEvent extends Event {
+public class GalaxySavingEndEvent extends Event {
 
     /**
      * The location where the state was saved to.
@@ -25,31 +26,12 @@ public class GalaxySavingEvent extends Event {
     protected final boolean natural;
 
     /**
-     * The reason of why the event was fired.
-     */
-    private final @NotNull String reason;
-
-    /**
      * Constructor.
      *
-     * @param reason the reason why the event was fired.
-     *
-     * @deprecated The event now supplies the location of the save game, which is not provided by the constructor.
-     */
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public GalaxySavingEvent(String reason) {
-        this(reason == null ? "unknown" : reason, "unknown", false);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param reason the reason why the event was fired.
      * @param location The location where the game state was saved to
      * @param natural Whether the event was not (indirectly or directly) caused by another mod
      */
-    public GalaxySavingEvent(@NotNull String reason, @NotNull String location, boolean natural) {
-        this.reason = Objects.requireNonNull(reason, "reason must not be null");
+    public GalaxySavingEndEvent(@NotNull String location, boolean natural) {
         this.location = Objects.requireNonNull(location, "location must not be null");
         this.natural = natural;
     }
@@ -65,16 +47,6 @@ public class GalaxySavingEvent extends Event {
      */
     public @NotNull String getLocation() {
         return location;
-    }
-
-    /**
-     * Obtains the reason of why the event was fired.
-     * An example return value is "User triggered save".
-     *
-     * @return The reason of the event.
-     */
-    public @NotNull String getReason() {
-        return reason;
     }
 
     /**

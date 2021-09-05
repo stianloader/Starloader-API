@@ -1,6 +1,8 @@
 package de.geolykt.starloader.impl.asm;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassWriter;
@@ -15,16 +17,26 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.minestom.server.extras.selfmodification.CodeModifier;
 
 import de.geolykt.starloader.DebugNagException;
+import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
+import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
+import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
+import de.geolykt.starloader.impl.GalimulatorImplementation;
+
+import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.fn;
 
 /**
  * Transformers targeting the Space class.
@@ -35,6 +47,11 @@ public class SpaceASMTransformer extends CodeModifier {
      * The internal name of the {@link ActiveEmpire} class.
      */
     private static final String ACTIVE_EMPIRE_CLASS = "de/geolykt/starloader/api/empire/ActiveEmpire";
+
+    /**
+     * The logger object that should be used used throughout this class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpaceASMTransformer.class);
 
     /**
      * The internal name of the class that this transformer seeks to modify.
@@ -59,7 +76,7 @@ public class SpaceASMTransformer extends CodeModifier {
             DebugNagException.nag("This method is thought to be only used for GC after a empire has no stars!");
         }
         EventManager.handleEvent(e);
-        return !e.isCancelled();
+        return e.isCancelled();
     }
 
     /**
@@ -95,6 +112,26 @@ public class SpaceASMTransformer extends CodeModifier {
      */
     public static final void logicalTickPre() {
         EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE_LOGICAL));
+    }
+
+    public static final void save(String cause, String location) {
+        Space.J = "Saving galaxy: " + cause;
+        LOGGER.info("Saving state to disk.");
+        GalimulatorImplementation.suppressSaveEvent = true;
+        EventManager.handleEvent(new GalaxySavingEvent(NullUtils.requireNotNull(cause, "cause is null"), NullUtils.requireNotNull(location, "location is null"), true));
+        try (FileOutputStream fos = new FileOutputStream(new File(location))) {
+            Galimulator.saveGameState(fos);
+        } catch (IOException e) {
+            LOGGER.error("IO Error while saving the state of the game", e);
+        } catch (Throwable e) {
+            LOGGER.error("Error while saving the state of the game", e);
+        } finally {
+            EventManager.handleEvent(new GalaxySavingEndEvent(NullUtils.requireNotNull(location, "location is null"), true));
+            GalimulatorImplementation.suppressSaveEvent = false;
+        }
+        for (fn var1 : Space.u) {
+            var1.f();
+        }
     }
 
     /**
@@ -175,6 +212,13 @@ public class SpaceASMTransformer extends CodeModifier {
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPost", "()V"));
                 } else if (method.name.equals("B") && method.desc.equals("()V")) {
                     addLogicalListener(method);
+                } else if (method.name.equals("b") && method.desc.equals("(Ljava/lang/String;Ljava/lang/String;)V")) {
+                    method.instructions.clear();
+                    method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                    method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                    method.instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "save", "(Ljava/lang/String;Ljava/lang/String;)V"));
+                    method.instructions.add(new InsnNode(Opcodes.RETURN));
+                    method.tryCatchBlocks.clear();
                 }
             }
             ClassWriter w = new ClassWriter(0);
