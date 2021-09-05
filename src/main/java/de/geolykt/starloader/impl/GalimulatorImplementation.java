@@ -33,6 +33,7 @@ import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
@@ -242,7 +243,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     @SuppressWarnings("rawtypes")
-    public Vector<?> getWarsUnsafe() {
+    public Vector<War> getWarsUnsafe() {
         return NullUtils.requireNotNull((Vector) Space.c);
     }
 
@@ -560,7 +561,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void setWarsUnsafe(Vector<?> wars) {
+    public void setWarsUnsafe(Vector<War> wars) {
         Space.c = NullUtils.requireNotNull((Vector) wars);
     }
 

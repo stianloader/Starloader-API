@@ -68,7 +68,7 @@ public class EmpireAnnalsMixins implements Empire {
         }
         ActiveEmpire slempire = Galimulator.getEmpirePerUID(getUID());
         if (slempire == null) {
-            throw new IllegalStateException("The empire no longer exists despite it should be existing");
+            throw new IllegalStateException("The empire no longer exists even though it should be existing");
         }
         return slempire.getStarCount();
     }

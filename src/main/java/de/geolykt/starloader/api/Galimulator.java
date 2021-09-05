@@ -16,6 +16,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
@@ -343,7 +344,8 @@ public final class Galimulator {
      * "Unsafe" methods for implementation.
      * Usage of these methods is discouraged, however could prove to be beneficial in some
      * circumstances, especially when performance is required.
-     * @deprecated Binary compatibility is not guaranteed for this interface.
+     *
+     * @deprecated Full binary compatibility is not guaranteed for this interface.
      */
     @Deprecated(forRemoval = false, since = "1.5.0")
     public interface Unsafe {
@@ -431,7 +433,7 @@ public final class Galimulator {
          *
          * @return The ongoing wars
          */
-        public Vector<?> getWarsUnsafe();
+        public Vector<War> getWarsUnsafe();
 
         /**
          * Sets the internal agent vector without cloning it.
@@ -526,7 +528,7 @@ public final class Galimulator {
          *
          * @param wars The wars list to set
          */
-        public void setWarsUnsafe(Vector<?> wars);
+        public void setWarsUnsafe(Vector<War> wars);
     }
 
     private static GameConfiguration config;
