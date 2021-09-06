@@ -9,6 +9,7 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,9 +22,12 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.empire.Faction;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
+import de.geolykt.starloader.api.event.empire.factions.FactionLooseControlEvent;
+import de.geolykt.starloader.api.event.empire.factions.FactionTakeStarEvent;
 import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
 
 import snoddasmannen.galimulator.Empire;
@@ -42,6 +46,12 @@ public class StarMixins implements Star {
 
     @Shadow
     transient Random d; // internalRandom
+
+    /**
+     * The reference to the internal faction object.
+     */
+    @Shadow
+    private @Nullable snoddasmannen.galimulator.factions.Faction faction;
 
     @Shadow
     private Religion faith; // majorityFaith
@@ -90,6 +100,11 @@ public class StarMixins implements Star {
     @Shadow
     public void a(snoddasmannen.galimulator.Empire var0) { // setEmpire
         return;
+    }
+
+    @Overwrite
+    public void a(snoddasmannen.galimulator.factions.Faction faction) { // setFaction
+        setFaction((Faction) faction);
     }
 
     @Shadow
@@ -155,6 +170,11 @@ public class StarMixins implements Star {
     @Shadow
     public @NotNull Vector2 getCoordinates() { // thankfully this is already implemented by the base class
         throw new UnsupportedOperationException("This should be created by the shadowed field!");
+    }
+
+    @Override
+    public @Nullable Faction getFaction() {
+        return (Faction) faction;
     }
 
     @SuppressWarnings("null")
@@ -257,6 +277,33 @@ public class StarMixins implements Star {
         oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
         newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
         a(newEmp);
+    }
+
+    @Override
+    public void setFaction(@Nullable Faction faction) {
+        snoddasmannen.galimulator.factions.Faction old = this.faction;
+        if (old == faction) {
+            return; // don't emit too many events for no reason at all :)
+        }
+        if (old != null) {
+            FactionLooseControlEvent event = new FactionLooseControlEvent((Faction) old, faction, this);
+            EventManager.handleEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+            old.c((snoddasmannen.galimulator.Star) (Object) this);
+        }
+        if (faction != null) {
+            FactionTakeStarEvent event = new FactionTakeStarEvent(faction, this);
+            EventManager.handleEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+            this.faction = (snoddasmannen.galimulator.factions.Faction) faction;
+            this.faction.b((snoddasmannen.galimulator.Star) (Object) this);
+        } else {
+            this.faction = null;
+        }
     }
 
     @Override

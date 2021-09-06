@@ -58,6 +58,7 @@ import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
+import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.gf;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
@@ -746,6 +747,12 @@ public class EmpireMixins implements ActiveEmpire {
             ci.cancel();
             return;
         }
+    }
+
+    @Override
+    public @NotNull ActiveEmpire spawnOffspring(@NotNull Star location) {
+        snoddasmannen.galimulator.Star star = (snoddasmannen.galimulator.Star) location;
+        return (ActiveEmpire) NullUtils.requireNotNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
     }
 
     /**

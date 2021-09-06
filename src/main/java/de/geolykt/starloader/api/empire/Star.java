@@ -89,6 +89,14 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     public @NotNull Vector2 getCoordinates();
 
     /**
+     * returns the faction that is currently controlling the star or null if not applicable (i. e. the star is not
+     * controlled by a faction)
+     *
+     * @return The controlling faction
+     */
+    public @Nullable Faction getFaction();
+
+    /**
      * Obtains the majority faith within the starsystem. Should not be null.
      *
      * @return The {@link Religion} that is prevalent in this system
@@ -183,6 +191,15 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @param empire The {@link ActiveEmpire} controlling the star
      */
     public void setAssignedEmpire(@NotNull ActiveEmpire empire);
+
+    /**
+     * Sets the faction that would be controlling this star. Can be set to null in order to remove faction
+     * control. This method also increments or decrements the Faction's {@link Faction#getStarCount()} counter
+     * and emits the respective events.
+     *
+     * @param faction The new faction that controls this star
+     */
+    public void setFaction(@Nullable Faction faction);
 
     /**
      * Sets the majority religion of the system.

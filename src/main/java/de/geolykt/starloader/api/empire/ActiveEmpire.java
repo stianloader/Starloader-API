@@ -377,4 +377,16 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @return Whether the state was changed
      */
     public boolean setState(@NotNull NamespacedKey state, boolean force);
+
+    /**
+     * Spawns an offspring empire at the given star.
+     * The specified star will not be used for any operations, however is required
+     * and marked as not null for futureproofing. This means that the returned
+     * empire will <b>not</b> own any stars at the beginning.
+     * The offspring empire will consider this {@link ActiveEmpire} instance as it's parent empire.
+     *
+     * @param location The location of the empire.
+     * @return the newly created offspring empire
+     */
+    public @NotNull ActiveEmpire spawnOffspring(@NotNull Star location);
 }
