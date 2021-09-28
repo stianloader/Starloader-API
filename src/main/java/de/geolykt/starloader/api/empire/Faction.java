@@ -2,6 +2,8 @@ package de.geolykt.starloader.api.empire;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.event.empire.factions.FactionRebelEvent;
+
 /**
  * A faction within an empire that can control stars and rebel.
  * Should ownership of a star change to another empire then the faction
@@ -47,6 +49,7 @@ public interface Faction extends Dateable {
 
     /**
      * Creates a new empire. The empire will own all stars in control by the faction and the faction will be disbanded.
+     * Invoking this method also generates a {@link FactionRebelEvent}.
      */
     public void rebel();
 

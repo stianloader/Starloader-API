@@ -86,6 +86,6 @@ final class GalimulatorResourceKey extends NamespacedKey {
      * @param key The key-string of the resource key
      */
     GalimulatorResourceKey(@NotNull String key) {
-        super("Galimulator", key);
+        super("galimulator", key);
     }
 }

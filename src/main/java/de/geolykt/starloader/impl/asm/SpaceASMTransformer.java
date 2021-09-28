@@ -10,6 +10,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
@@ -40,6 +41,7 @@ import snoddasmannen.galimulator.fn;
 
 /**
  * Transformers targeting the Space class.
+ * Also transforms other classes because we shouldn't have 200 highly specialised ASM transformers.
  */
 public class SpaceASMTransformer extends CodeModifier {
 
@@ -198,7 +200,7 @@ public class SpaceASMTransformer extends CodeModifier {
 
     @Override
     public @Nullable String getNamespace() {
-        return "snoddasmannen.galimulator.Space";
+        return "snoddasmannen.galimulator";
     }
 
     @Override
@@ -221,9 +223,39 @@ public class SpaceASMTransformer extends CodeModifier {
                     method.tryCatchBlocks.clear();
                 }
             }
+            /*
             ClassWriter w = new ClassWriter(0);
             source.accept(w);
             try (FileOutputStream fos = new FileOutputStream("Space.class")) {
+                fos.write(w.toByteArray());
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }*/
+            return true;
+        } else if (source.name.equals("snoddasmannen/galimulator/factions/Faction")) {
+            for (MethodNode method : source.methods) {
+                if (method.name.equals("d") && method.desc.equals("()V")) {
+                    final String factionRebelEvent = "de/geolykt/starloader/api/event/empire/factions/FactionRebelEvent";
+                    LabelNode skipLabel = new LabelNode();
+                    InsnList injectedInstructions = new InsnList();
+                    injectedInstructions.add(new TypeInsnNode(Opcodes.NEW, factionRebelEvent));
+                    injectedInstructions.add(new InsnNode(Opcodes.DUP));
+                    injectedInstructions.add(new VarInsnNode(Opcodes.ALOAD, 0)); // ALOAD THIS
+                    injectedInstructions.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, factionRebelEvent, "<init>", "(Lde/geolykt/starloader/api/empire/Faction;)V"));
+                    injectedInstructions.add(new VarInsnNode(Opcodes.ASTORE, 1)); // ASTORE 1
+                    injectedInstructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                    injectedInstructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/api/event/EventManager", "handleEvent", "(Lde/geolykt/starloader/api/event/Event;)V"));
+                    injectedInstructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                    injectedInstructions.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, factionRebelEvent, "isCancelled", "()Z"));
+                    injectedInstructions.add(new JumpInsnNode(Opcodes.IFEQ, skipLabel));
+                    injectedInstructions.add(new InsnNode(Opcodes.RETURN));
+                    injectedInstructions.add(skipLabel);
+                    method.instructions.insert(injectedInstructions);
+                }
+            }
+            ClassWriter w = new ClassWriter(0);
+            source.accept(w);
+            try (FileOutputStream fos = new FileOutputStream("Faction.class")) {
                 fos.write(w.toByteArray());
             } catch (Throwable t) {
                 t.printStackTrace();

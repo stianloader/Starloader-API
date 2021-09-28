@@ -57,6 +57,9 @@ accessible      field   snoddasmannen/galimulator/SpaceState                bord
 accessible      field   snoddasmannen/galimulator/SpaceState                employmentAgency  Lsnoddasmannen/galimulator/EmploymentAgency;
 accessible      field   snoddasmannen/galimulator/SpaceState                vanity            Lsnoddasmannen/galimulator/VanityHolder;
 accessible      field   snoddasmannen/galimulator/GalFX                     l                 Lcom/badlogic/gdx/graphics/OrthographicCamera;
+# Stupid workaround to ObfTools incorrectly guessing the access flags of the Lazy$EmpireLazy class
+accessible      field   snoddasmannen/galimulator/War                       e1                Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+accessible      field   snoddasmannen/galimulator/War                       e2                Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 
 # Classes
 accessible      class   snoddasmannen/galimulator/be

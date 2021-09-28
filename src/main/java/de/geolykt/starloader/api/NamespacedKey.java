@@ -34,7 +34,7 @@ public class NamespacedKey {
         if (a == null) {
             throw new IllegalStateException("Both namespace and it's namesake is null.");
         }
-        if (isNull(a.getDescription())) {
+        if (Objects.isNull(a.getDescription())) {
             throw new IllegalStateException("The descriptor of the namesake is not yet initialized."
                     + "Consider using the namespaced key in the init block of the extension.");
         }
@@ -65,22 +65,20 @@ public class NamespacedKey {
         return keyString;
     }
 
+    @SuppressWarnings("null")
+    public @NotNull String getNamespace() {
+        if (namespaceString == null) {
+            calculateNamespace();
+        }
+        return namespaceString;
+    }
+
     @Override
     public int hashCode() {
         if (namespaceString == null) {
             calculateNamespace();
         }
         return Objects.hash(namespaceString, keyString);
-    }
-
-    /**
-     * Hack.
-     *
-     * @param a The argument
-     * @return True if the argument is null
-     */
-    private boolean isNull(@Nullable Object a) {
-        return a == null;
     }
 
     public boolean matches(@NotNull Extension namespace, @NotNull String key) {
@@ -94,7 +92,7 @@ public class NamespacedKey {
         if (namespaceString == null) {
             calculateNamespace();
         }
-        return namespaceString.equals(namespace) && keyString.matches(key);
+        return namespaceString.equals(namespace) && keyString.equals(key);
     }
 
     @Override

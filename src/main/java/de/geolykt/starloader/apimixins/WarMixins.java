@@ -9,19 +9,11 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.War;
 
-import snoddasmannen.galimulator.Lazy.EmpireLazy;
-
 @Mixin(snoddasmannen.galimulator.War.class)
 public class WarMixins implements War {
 
     @Shadow
     int conqueredStarBalance;
-
-    @Shadow
-    EmpireLazy e1;
-
-    @Shadow
-    EmpireLazy e2;
 
     @Shadow
     int lastAction;
@@ -44,12 +36,12 @@ public class WarMixins implements War {
 
     @Override
     public @NotNull Empire getEmpireA() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(e1.d()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
+        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e1.d()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override
     public @NotNull Empire getEmpireB() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(e2.d()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
+        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e2.d()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override
@@ -70,9 +62,9 @@ public class WarMixins implements War {
     @Override
     public void noteStarChange(@NotNull Empire empire) throws IllegalArgumentException {
         int uid = empire.getUID();
-        if (e1.d() == uid) {
+        if (((snoddasmannen.galimulator.War) (Object) this).e1.d() == uid) {
             conqueredStarBalance++;
-        } else if (e2.d() == uid) {
+        } else if (((snoddasmannen.galimulator.War) (Object) this).e2.d() == uid) {
             conqueredStarBalance--;
         } else {
             throw new IllegalArgumentException("The given empire matches no participant.");
