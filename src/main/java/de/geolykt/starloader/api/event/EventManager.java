@@ -9,9 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.DebugNagException;
 
@@ -20,6 +21,8 @@ public final class EventManager {
 
     private EventManager() {
     } // The class should not be constructed
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
 
     private static final Map<Listener, List<@NotNull Method>> LISTENERS = new HashMap<>();
 
@@ -75,7 +78,7 @@ public final class EventManager {
 
     private static void rebuild() {
         wasBuilt = true;
-        LogManager.getRootLogger().info("Rebuilding event tree");
+        LOGGER.info("Rebuilding event tree");
         EVENT_HANDLERS.clear();
         for (EventPriority prio : EventPriority.values()) {
             EVENT_HANDLERS.add(prio.ordinal(), new HashMap<>());
