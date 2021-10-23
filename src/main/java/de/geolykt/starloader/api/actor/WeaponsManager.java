@@ -22,7 +22,7 @@ public interface WeaponsManager {
     public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull NamespacedKey key);
 
     /**
-     * Obtains the weapon type based on it's name that is used by json actor definition.
+     * Obtains the weapon type based on it's name that is used by JSON actor definition.
      * Should the name not be mapped to any weapon type, then an empty optional should be returned.
      *
      * @param key The key to look up for

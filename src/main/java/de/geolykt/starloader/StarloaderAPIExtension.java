@@ -1,16 +1,22 @@
 package de.geolykt.starloader;
 
+import java.io.File;
+
 import org.slf4j.Logger;
+
+import com.badlogic.gdx.files.FileHandle;
 
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.SignalExtensionTerminationEvent;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
+import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.impl.DrawingManager;
 import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
@@ -28,6 +34,7 @@ import de.geolykt.starloader.mod.Extension;
 @SuppressWarnings("resource")
 public class StarloaderAPIExtension extends Extension {
 
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public static Logger lggr;
 
     @Override
@@ -45,6 +52,8 @@ public class StarloaderAPIExtension extends Extension {
     }
 
     static {
+        File dataFolder = new File("data");
+        DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), NullUtils.requireNotNull(dataFolder.toPath())));
         MinestomRootClassLoader.getInstance().addCodeModifier(new UIASMTransformer());
         MinestomRootClassLoader.getInstance().addCodeModifier(new SpaceASMTransformer());
         Galimulator.setImplementation(new GalimulatorImplementation());

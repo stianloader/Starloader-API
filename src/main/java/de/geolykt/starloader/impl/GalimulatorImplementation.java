@@ -41,6 +41,7 @@ import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.api.sound.SoundHandler;
 
 import snoddasmannen.galimulator.EmploymentAgency;
@@ -431,7 +432,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void saveFile(@NotNull String name, byte[] data) {
-        File out = new File("data", NullUtils.requireNotNull(name));
+        File out = new File(DataFolderProvider.getProvider().provideAsFile(), NullUtils.requireNotNull(name));
         if (!out.exists()) {
             try (FileOutputStream fos = new FileOutputStream(out)) {
                 fos.write(data);
@@ -444,7 +445,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void saveFile(@NotNull String name, InputStream data) {
-        File out = new File("data", NullUtils.requireNotNull(name));
+        File out = new File(DataFolderProvider.getProvider().provideAsFile(), NullUtils.requireNotNull(name));
         if (!out.exists()) {
             try (FileOutputStream fos = new FileOutputStream(out)) {
                 data.transferTo(fos);

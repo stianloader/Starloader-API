@@ -39,6 +39,7 @@ public interface ColorTextured extends Textured {
      * that being said developers should avoid inserting null to remove the texture.
      *
      * @param texture The applicable texture name, without the needed `data/sprites/`, or null to remove the texture
+     * @see DataFolderProvider
      */
     public void setColorlessTextureName(@Nullable String texture);
 }

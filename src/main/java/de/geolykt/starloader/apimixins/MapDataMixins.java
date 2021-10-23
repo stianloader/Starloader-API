@@ -11,12 +11,11 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.resource.DataFolderProvider;
 
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.gd;
@@ -38,8 +37,7 @@ public class MapDataMixins implements Map {
             if (awtImage != null) {
                 return awtImage;
             }
-            File f = new File("data", backgroundImage);
-            // TODO support SL 2.0 data directories
+            File f = new File(DataFolderProvider.getProvider().provideAsFile(), backgroundImage);
             if (f.exists()) {
                 try {
                     awtImage = ImageIO.read(f);
@@ -48,31 +46,7 @@ public class MapDataMixins implements Map {
                 }
             }
         }
-        // Very overdone and cursed :/
-        // And does not even appear to work
-        Texture t = getGDXBackground();
-        if (t == null) {
-            return null;
-        }
-        File temp;
-        try {
-            temp = File.createTempFile("slcache_" + System.identityHashCode(t), ".png");
-        } catch (IOException e) {
-            if (awtImage != null) {
-                return awtImage;
-            }
-            e.printStackTrace();
-            return null;
-        }
-        if (temp.exists()) {
-            return awtImage;
-        }
-        try {
-            PixmapIO.writePNG(new FileHandle(temp), t.getTextureData().consumePixmap());
-            return ImageIO.read(temp);
-        } catch (IOException e) {
-            return null;
-        }
+        return null; // FIXME Is there any other way?
     }
 
     @Override
