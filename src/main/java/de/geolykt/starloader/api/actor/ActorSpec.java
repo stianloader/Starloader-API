@@ -122,13 +122,14 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
 
     /**
      * Checks whether the actor is a particle. If it is not a particle, then it can be assumed that it is a "StateActor",
-     * which allows the useage of this instance in a greater amount of areas. Such state actors can be owned by empires,
-     * where as particles cannot be owned by empires. It is an interesting design descision on the game's part and an even
+     * which allows the usage of this instance in a greater amount of areas. Such state actors can be owned by empires,
+     * where as particles cannot be owned by empires. It is an interesting design decision on the game's part and an even
      * more interesting decision that SLAPI is actively hiding this from you only for you to be confused to why as something
      * does not work as intended. Some things such as Missiles may also be particles
      *
      * @return False if the actor is a "StateActor"
      */
+    // FIXME This idea may be completely wrong
     public boolean isParticle();
 
     /**

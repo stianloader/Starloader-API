@@ -12,14 +12,17 @@ import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
 import de.geolykt.starloader.api.actor.wrapped.WrappingConfiguration;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 
+@Deprecated(forRemoval = true, since = "1.5.0")
 public class ActorWrapperImpl implements Spec {
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public <T extends ActorSpec> WrappingActor<T> wrapActor(@NotNull T spec, @NotNull WrappingConfiguration config) {
         return null;
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public <T extends MissileSpec> WrappingActor<T> wrapMissile(float x, float y, float angle, float velocity,
             @Nullable Spacecraft originCraft, @NotNull ActiveEmpire originEmpire, int missileRange, boolean targetStars,
             boolean targetCrafts, boolean scaleWithCraftLevel, float damage, @NotNull T spec,

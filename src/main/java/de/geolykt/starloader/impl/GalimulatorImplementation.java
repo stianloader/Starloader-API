@@ -136,8 +136,14 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public @Nullable ActiveEmpire getEmpirePerUID(int uid) { // TODO rename to getEmpireByUID
+    public @Nullable ActiveEmpire getEmpireByUID(int uid) {
         return (ActiveEmpire) Space.d(uid);
+    }
+
+    @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
+    public @Nullable ActiveEmpire getEmpirePerUID(int uid) {
+        return getEmpireByUID(uid);
     }
 
     @SuppressWarnings({ "null" })

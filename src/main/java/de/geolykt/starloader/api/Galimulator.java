@@ -77,7 +77,22 @@ public final class Galimulator {
          *
          * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
          * @return The {@link ActiveEmpire} bound to the unique ID
+         * @since 1.5.0
          */
+        public @Nullable ActiveEmpire getEmpireByUID(int uid);
+
+        /**
+         * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however
+         * there is no matching empire, the neutral empire is to be returned. Default
+         * implementation notice: The implementation of this method is very inefficient
+         * as it iterates over all known empires at worst. It is advisable that the extensions
+         * make use of caching.
+         *
+         * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
+         * @return The {@link ActiveEmpire} bound to the unique ID
+         * @deprecated The name of this method is a bit unconventional, use {@link #getEmpireByUID(int)} instead.
+         */
+        @Deprecated(forRemoval = true, since = "1.5.0")
         public @Nullable ActiveEmpire getEmpirePerUID(int uid);
 
         /**

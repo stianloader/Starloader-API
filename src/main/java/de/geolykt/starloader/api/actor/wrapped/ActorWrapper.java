@@ -10,7 +10,10 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 
 /**
  * Wrapper creator to convert custom Actor specifications into Galimulator-compatible actors.
+ *
+ * @deprecated Wrapped actors prove to be a particular pain to implement & use and do not make much sense given that JSON-defined actors are a thing in vanilla galimulator.
  */
+@Deprecated(forRemoval = true, since = "1.5.0")
 public final class ActorWrapper {
 
     /**
@@ -28,7 +31,10 @@ public final class ActorWrapper {
 
     /**
      * The interface where all actor creation is delegated to.
+     *
+     * @deprecated Wrapped actors prove to be a particular pain to implement & use and do not make much sense given that JSON-defined actors are a thing in vanilla galimulator.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public static interface Spec {
 
         /**
@@ -39,7 +45,9 @@ public final class ActorWrapper {
          * @param spec The Actor specification that is used as a delegate for the wrapping actor.
          * @param config The configuration that impacts the newly created wrapper actor.
          * @return The wrapping actor
+         * @deprecated Actor wrapping is a feature scheduled for removal.
          */
+        @Deprecated(forRemoval = true, since = "1.5.0")
         public <T extends ActorSpec> WrappingActor<T> wrapActor(@NotNull T spec, @NotNull WrappingConfiguration config);
 
         /**
@@ -62,7 +70,9 @@ public final class ActorWrapper {
          * @param config The configuration that impacts the newly created wrapper actor.
          * @param override Whether {@link MissileSpec#onHitActor(ActorSpec)} and {@link MissileSpec#onHitStar(de.geolykt.starloader.api.empire.Star)} of the delegate should replace the default actions
          * @return The wrapping actor
+         * @deprecated Actor wrapping is a feature scheduled for removal.
          */
+        @Deprecated(forRemoval = true, since = "1.5.0")
         public <T extends MissileSpec> WrappingActor<T> wrapMissile(
                 float x,
                 float y,
@@ -85,7 +95,9 @@ public final class ActorWrapper {
      * The use of this method is discouraged as it is mainly intended to be used by the starloader implementation.
      *
      * @param impl The implementation to use
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public static void setImplementation(Spec impl) {
         implementation = impl;
     }
@@ -99,7 +111,9 @@ public final class ActorWrapper {
      * @param spec The Actor specification that is used as a delegate for the wrapping actor.
      * @param config The configuration that impacts the newly created wrapper actor.
      * @return The wrapping actor
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public static <T extends ActorSpec> WrappingActor<T> wrapActor(@NotNull T spec, @NotNull WrappingConfiguration config) {
         return implementation.wrapActor(spec, config);
     }
@@ -127,7 +141,9 @@ public final class ActorWrapper {
      * @param config The configuration that impacts the newly created wrapper actor.
      * @param override Whether {@link MissileSpec#onHitActor(ActorSpec)} and {@link MissileSpec#onHitStar(de.geolykt.starloader.api.empire.Star)} of the delegate should replace the default actions
      * @return The wrapping actor
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public <T extends MissileSpec> WrappingActor<T> wrapMissile(
             float x,
             float y,

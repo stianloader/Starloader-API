@@ -14,7 +14,10 @@ import de.geolykt.starloader.api.actor.ActorSpec;
  * <li> {@link ActorSpec#getDistance(de.geolykt.starloader.api.Locateable)} </li>
  * <li> {@link ActorSpec#getUID()} </li>
  * </ul>
+ *
+ * @deprecated Actor wrapping is a feature scheduled for removal.
  */
+@Deprecated(forRemoval = true, since = "1.5.0")
 public interface WrappingConfiguration {
 
     /**
@@ -26,7 +29,9 @@ public interface WrappingConfiguration {
      * thrown by this call will be suppressed however if it is inherited
      *
      * @return The texture inheritance property
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean inheritTexture();
 
     /**
@@ -34,7 +39,9 @@ public interface WrappingConfiguration {
      * will be relayed to the Actor the is wrapped. If false the Wrapper actor will handle them.
      *
      * @return The name inheritance property
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean inheritName();
 
     /**
@@ -43,11 +50,11 @@ public interface WrappingConfiguration {
      * If false the Wrapper actor will handle them.
      *
      * @return The name inheritance property
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean inheritVelocity();
 
-    // TODO provide a way to obtain the default ActorSpec#getExperienceLevel implementation
-    //      in many cases this is not wanted
     /**
      * Whether the velocity should be inherited. If true, calls such as {@link ActorSpec#addXP(int)},
      * {@link ActorSpec#getExperienceLevel()} or {@link ActorSpec#getXPWorth()} will be relayed to the
@@ -55,6 +62,8 @@ public interface WrappingConfiguration {
      * If false the Wrapper actor will handle them.
      *
      * @return The name inheritance property
+     * @deprecated Actor wrapping is a feature scheduled for removal.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean inheritExperience();
 }

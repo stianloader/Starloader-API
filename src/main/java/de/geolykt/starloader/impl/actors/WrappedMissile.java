@@ -17,6 +17,7 @@ import de.geolykt.starloader.api.empire.Star;
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.actors.StateActor;
 
+@Deprecated(forRemoval = true, since = "1.5.0")
 public class WrappedMissile<T extends MissileSpec> extends SLMissile implements WrappingActor<T> {
 
     /**
@@ -24,10 +25,16 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
      */
     private static final long serialVersionUID = 2936173314981349098L;
 
+    @Deprecated(forRemoval = true, since = "1.5.0")
     protected @NotNull WrappingConfiguration config;
 
+    @Deprecated(forRemoval = true, since = "1.5.0")
     protected @NotNull T delegate;
+
+    @Deprecated(forRemoval = true, since = "1.5.0")
     protected boolean override;
+
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public WrappedMissile(float x, float y, float angle, float maxSpeed, StateActor shooter, Empire owner, int range,
             boolean targetStars, boolean targetActors, boolean matchTargetTech, float firepower,
             @NotNull T delegate, @NotNull WrappingConfiguration config, boolean override) {
@@ -38,6 +45,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public ActorSpec cast() {
         return this;
     }

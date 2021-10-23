@@ -19,9 +19,13 @@ import snoddasmannen.galimulator.actors.StateActor;
  * I might honestly need to use Mixins for this, but who knows?
  * This cursed class might be useful for certain extensions
  * that choose to extend the Actor class on their own
+ *
+ * @deprecated The Wrapper actor API is scheduled for removal
  */
+@Deprecated(forRemoval = true, since = "1.5.0")
 public abstract class SLMissile extends Missile implements MissileSpec {
 
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public SLMissile(float x, float y, float angle, float maxSpeed, StateActor shooter, Empire owner, int range,
             boolean targetStars, boolean targetActors, boolean matchTargetTech, float firepower) {
         super(x, y, angle, maxSpeed, shooter, owner, range, targetStars, targetActors, matchTargetTech, firepower);
@@ -34,115 +38,121 @@ public abstract class SLMissile extends Missile implements MissileSpec {
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public int getExperienceLevel() {
         return 0;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public float getMaximumVelocity() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public @NotNull ActiveEmpire getOwningempire() {
-        // TODO Auto-generated method stub
         return Galimulator.getNeutralEmpire();
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public float getVelocity() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public int getXPWorth() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean isBuilt() {
         return true;
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean isInvulnerable() {
         return false;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean isThreat() {
         return false;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public boolean setVelocity(float velocity) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public int getUID() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public int getFoundationYear() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public @Nullable String getColorlessTextureName() {
-        // TODO Auto-generated method stub
         return "";
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public void setColorlessTextureName(@Nullable String texture) {
-        // TODO Auto-generated method stub
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public @NotNull String getTextureName() {
-        // TODO Auto-generated method stub
         return "";
     }
 
     @Pseudo
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public void setTextureName(@NotNull String texture) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     @Pseudo
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public @Nullable ActorSpec getShooter() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     @Pseudo
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public void onHitActor(ActorSpec actor) {
     }
 
     @Override
     @Pseudo
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public void onHitStar(Star star) {
     }
 }

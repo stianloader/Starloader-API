@@ -15,7 +15,10 @@ import snoddasmannen.galimulator.actors.Actor;
  * I might honestly need to use Mixins for this, but who knows?
  * This cursed class might be useful for certain extensions
  * that choose to extend the Actor class on their own
+ *
+ * @deprecated There is little use for this class
  */
+@Deprecated(forRemoval = true, since = "1.5.0")
 public abstract class SLActor extends Actor implements ActorSpec {
 
     private static final long serialVersionUID = 3855844103192831708L;

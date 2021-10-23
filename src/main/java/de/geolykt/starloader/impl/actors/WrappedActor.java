@@ -12,6 +12,7 @@ import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.actor.wrapped.WrappingActor;
 import de.geolykt.starloader.api.actor.wrapped.WrappingConfiguration;
 
+@Deprecated(forRemoval = true, since = "1.5.0")
 public class WrappedActor<T extends ActorSpec> extends SLActor implements WrappingActor<T> {
 
     private static final long serialVersionUID = 5188823282975107166L;
