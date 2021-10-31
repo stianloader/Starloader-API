@@ -11,7 +11,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 /**
  * Wrapper creator to convert custom Actor specifications into Galimulator-compatible actors.
  *
- * @deprecated Wrapped actors prove to be a particular pain to implement & use and do not make much sense given that JSON-defined actors are a thing in vanilla galimulator.
+ * @deprecated Wrapped actors prove to be a particular pain to implement and use and do not make much sense given that JSON-defined actors are a thing in vanilla galimulator.
  */
 @Deprecated(forRemoval = true, since = "1.5.0")
 public final class ActorWrapper {
@@ -32,7 +32,7 @@ public final class ActorWrapper {
     /**
      * The interface where all actor creation is delegated to.
      *
-     * @deprecated Wrapped actors prove to be a particular pain to implement & use and do not make much sense given that JSON-defined actors are a thing in vanilla galimulator.
+     * @deprecated Wrapped actors prove to be a particular pain to implement and use and do not make much sense given that JSON-defined actors are a thing in vanilla galimulator.
      */
     @Deprecated(forRemoval = true, since = "1.5.0")
     public static interface Spec {
