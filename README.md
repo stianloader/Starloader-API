@@ -36,6 +36,8 @@ at `https://geolykt.de/maven`
 
 - [Datadriven-specials](https://github.com/Geolykt/Datadriven-specials)
 - [Timelapser](https://github.com/Geolykt/Timelapser)
+- [Variable Data Folder](https://github.com/Geolykt/VariableDataFolder)
+- [FeedbackVectors](https://github.com/Geolykt/Feedbackvectors)
 
 ## Licensing and decompiled code
 

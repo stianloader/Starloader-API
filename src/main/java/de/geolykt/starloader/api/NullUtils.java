@@ -3,6 +3,7 @@ package de.geolykt.starloader.api;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +64,39 @@ public final class NullUtils {
             throw new InternalError(); // Not possible, but let's have it there either way
         }
         return ret;
+    }
+
+    /**
+     * Obtains an empty OptionalInt.
+     * Basically calls {@link OptionalInt#empty()}, but throws an
+     * {@link InternalError} should that method magically return null.
+     * As per the API Note of {@link OptionalInt#empty()}, using this method
+     * to compare two OptionalInts via instance comparison ("==") is not recommended at all.
+     *
+     * @return The OptionalInt that was created. Or cached, depending on the implementation of the method.
+     */
+    public static @NotNull OptionalInt getEmptyOptionalInt() {
+        OptionalInt opt = OptionalInt.empty();
+        if (opt == null) {
+            throw new InternalError();
+        }
+        return opt;
+    }
+
+    /**
+     * Obtains an OptionalInt that wraps the specified value.
+     * Basically calls {@link OptionalInt#of(int)}, but throws an
+     * {@link InternalError} should that method magically return null.
+     *
+     * @param value The value to wrap
+     * @return The OptionalInt that was created.
+     */
+    public static @NotNull OptionalInt getOptionalInt(int value) {
+        OptionalInt opt = OptionalInt.of(value);
+        if (opt == null) {
+            throw new InternalError();
+        }
+        return opt;
     }
 
     /**

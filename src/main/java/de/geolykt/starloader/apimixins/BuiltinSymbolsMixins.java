@@ -1,25 +1,30 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.OptionalInt;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.gui.FlagSymbol;
 import de.geolykt.starloader.api.registry.Registry;
-import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.impl.registry.Registries;
 
 import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 
 @Mixin(value = BuiltinSymbols.class, priority = 0)
-public class BuiltinSymbolsMixins implements RegistryKeyed {
+public class BuiltinSymbolsMixins implements FlagSymbol {
 
     @Overwrite
     public static BuiltinSymbols b() {
@@ -52,9 +57,26 @@ public class BuiltinSymbolsMixins implements RegistryKeyed {
         return Registry.FLAG_SYMBOLS.getValues();
     }
 
+    @Shadow
+    private int fixedH;
+
+    @Shadow
+    private int fixedW;
+
+    @Shadow
+    private boolean mustBeSquare;
+
     @Unique
     @Nullable
     private NamespacedKey registryKey = null;
+
+    @Shadow
+    private TextureRegion texture;
+
+    @Override
+    public @NotNull OptionalInt getHeight() {
+        return fixedH != 0 ? NullUtils.getOptionalInt(fixedH) : NullUtils.getEmptyOptionalInt();
+    }
 
     @Override
     public @NotNull NamespacedKey getRegistryKey() {
@@ -63,6 +85,22 @@ public class BuiltinSymbolsMixins implements RegistryKeyed {
             throw new IllegalStateException("Registry key not yet defined");
         }
         return key;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull TextureRegion getTexture() {
+        return texture;
+    }
+
+    @Override
+    public @NotNull OptionalInt getWidth() {
+        return fixedW != 0 ? NullUtils.getOptionalInt(fixedW) : NullUtils.getEmptyOptionalInt();
+    }
+
+    @Override
+    public boolean isSquare() {
+        return mustBeSquare;
     }
 
     @Override

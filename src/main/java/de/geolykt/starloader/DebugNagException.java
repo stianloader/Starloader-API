@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Pure debugging exception to debug the occurrence of unexpected calls of
  * methods and why they happened. It's mainly used to get a fancy stacktrace.
+ * On a sidenote, if you only wish to print a stacktrace while debugging,
+ * {@link Thread#dumpStack()} is equally viable.
  */
 public class DebugNagException extends RuntimeException {
 

@@ -15,6 +15,7 @@ import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.event.TickCallback;
+import de.geolykt.starloader.api.gui.FlagComponent;
 
 import snoddasmannen.galimulator.Fleet;
 import snoddasmannen.galimulator.GalColor;
@@ -157,7 +158,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     /**
      * Obtains the name of the empire with color. The format of the colored string
      * is [123456]text[] where as 123456 is a 48 bit integer encoded in hexadecimal.
-     * This integer represents the rgb values of the color.
+     * This integer represents the RGB values of the color.
      *
      * @return A formatted string the is the colored name of the empire
      */
@@ -166,6 +167,14 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
         // The * 255 is intended, as the range of `%02X` is 0 - 255 (both inclusive)
         return NullUtils.format("[#%02X%02X%02X]%s[]", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName());
     }
+
+    /**
+     * Obtains the components that make up the flag of the empire.
+     *
+     * @return The flag.
+     */
+    @NotNull
+    public Collection<? extends FlagComponent> getFlag();
 
     /**
      * Obtains the Flagship of the empire. In most cases it is null, except for

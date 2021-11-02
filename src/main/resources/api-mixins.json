@@ -23,6 +23,7 @@
     "EmploymentAgencyMixins",
     "FactionMixins",
     "FighterMixins",
+    "FlagItemMixins",
     "GalColorMixins",
     "GunstationMixins",
     "HealshipMixins",

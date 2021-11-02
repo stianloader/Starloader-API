@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +46,7 @@ import de.geolykt.starloader.api.event.empire.TechnologyLevelSetEvent;
 import de.geolykt.starloader.api.gui.BasicDialogBuilder;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.Drawing.TextSize;
+import de.geolykt.starloader.api.gui.FlagComponent;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
@@ -75,7 +77,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Deprecated(forRemoval = true, since = "1.5.0")
     private static transient int lastTick = -1;
 
-    @SuppressWarnings({ "all" })
+    @Deprecated(forRemoval = true, since = "1.5.0")
     private static final void emitTick() {
         // Two layers of redundancy should be enough
         if (lastTick != Galimulator.getGameYear() && de.geolykt.starloader.api.event.TickEvent.tryAquireLock()) {
@@ -449,6 +451,13 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public String getEmpireName() {
         return name;
+    }
+
+    @SuppressWarnings({ "null", "unchecked" })
+    @Override
+    @NotNull
+    public Collection<? extends FlagComponent> getFlag() {
+        return Collections.unmodifiableCollection(((snoddasmannen.galimulator.Empire) (Object) this).n());
     }
 
     @Override
