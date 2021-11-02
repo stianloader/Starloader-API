@@ -11,6 +11,7 @@
     "AudioManagerMixins",
     "AudioSampleMixins",
     "BattleshipMixins",
+    "BuiltinSymbolsMixins",
     "DestroyerMixins",
     "DiploRequestMixins",
     "DisruptMissileMixins",

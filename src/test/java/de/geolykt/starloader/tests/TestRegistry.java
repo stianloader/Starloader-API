@@ -33,6 +33,7 @@ public class TestRegistry {
             add("snoddasmannen/galimulator/EmpireState.class");
             add("snoddasmannen/galimulator/MapMode$MapModes.class");
             add("snoddasmannen/galimulator/weapons/WeaponsFactory.class");
+            add("snoddasmannen/galimulator/FlagItem$BuiltinSymbols.class");
         }
     };
 

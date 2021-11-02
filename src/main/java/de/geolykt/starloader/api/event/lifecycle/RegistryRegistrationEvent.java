@@ -13,6 +13,7 @@ public class RegistryRegistrationEvent extends Event {
 
     public static final String REGISTRY_EMPIRE_SPECIAL = "EMPIRESPECIAL";
     public static final String REGISTRY_EMPIRE_STATE = "EMPIRESTATE";
+    public static final String REGISTRY_FLAG_SYMBOL = "FLAGSYMBOL";
     public static final String REGISTRY_MAP_MODE = "MAPMODES";
     public static final String REGISTRY_WEAPONS_TYPE = "WEAPONSFACTORY";
 

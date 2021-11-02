@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -223,14 +222,6 @@ public class SpaceASMTransformer extends CodeModifier {
                     method.tryCatchBlocks.clear();
                 }
             }
-            /*
-            ClassWriter w = new ClassWriter(0);
-            source.accept(w);
-            try (FileOutputStream fos = new FileOutputStream("Space.class")) {
-                fos.write(w.toByteArray());
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }*/
             return true;
         } else if (source.name.equals("snoddasmannen/galimulator/factions/Faction")) {
             for (MethodNode method : source.methods) {
@@ -252,13 +243,6 @@ public class SpaceASMTransformer extends CodeModifier {
                     injectedInstructions.add(skipLabel);
                     method.instructions.insert(injectedInstructions);
                 }
-            }
-            ClassWriter w = new ClassWriter(0);
-            source.accept(w);
-            try (FileOutputStream fos = new FileOutputStream("Faction.class")) {
-                fos.write(w.toByteArray());
-            } catch (Throwable t) {
-                t.printStackTrace();
             }
             return true;
         }

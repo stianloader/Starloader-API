@@ -34,7 +34,14 @@ obfTools {
 dependencies {
     // Galimulator proper
     compileOnly files("build/obftools/intermediary.jar")
-    api "de.geolykt:starloader:1.1.0-SNAPSHOT" // The minimalistic starloader base "api" as well all of it's depends
+    api ("de.geolykt:starloader:1.1.0-SNAPSHOT") { // The minimalistic starloader base "api" as well all of it's depends
+        // SLL 3.+ does not ship with log4j as it does not have proper JPMS support
+        exclude module: 'log4j-api'
+        exclude module: 'log4j-core'
+        exclude module: 'log4j-slf4j-impl'
+    }
+    // We removed this depend above
+    api "org.slf4j:slf4j-api:2.0.0-alpha5"
 
     // All APIs that are already provided by galimulator (natives excluded)
     // Note: these libraries are likely to be too updated as stuff like LWJGL 2 is still used internally.
@@ -95,5 +102,8 @@ publishing {
     }
     repositories {
         mavenLocal()
+        /*maven {
+            url = "/home/Geolykt/maven-alt/repo/"
+        }*/
     }
 }

@@ -19,7 +19,8 @@ public class MapModeRegistrationEvent extends RegistryRegistrationEvent {
         super(registry, MapModes.class, RegistryRegistrationEvent.REGISTRY_MAP_MODE);
     }
 
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public MapModeRegistrationEvent() {
-        this(Registry.MAP_MODES); // Legacy constructor to honor SemVer
+        this(Registry.MAP_MODES); // Legacy constructor to honour SemVer
     }
 }

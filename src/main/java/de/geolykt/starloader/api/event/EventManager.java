@@ -85,7 +85,6 @@ public final class EventManager {
         }
         LISTENERS.forEach((listener, handles) -> {
             for (Method handle : handles) {
-                @SuppressWarnings("null")
                 EventHandler info = handle.getDeclaredAnnotation(EventHandler.class);
                 Class<?> clazz = handle.getParameters()[0].getType();
                 while (Event.class.isAssignableFrom(clazz)) {

@@ -11,6 +11,7 @@ import de.geolykt.starloader.api.NamespacedKey;
 
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
+import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
@@ -34,6 +35,11 @@ public abstract class Registry<T> {
      * The empire state registry.
      */
     public static MetadatableRegistry<EmpireState, EmpireStateMetadataEntry> EMPIRE_STATES;
+
+    /**
+     * Enum registry for the symbols that can be used within the flags of empires.
+     */
+    public static Registry<BuiltinSymbols> FLAG_SYMBOLS;
 
     /**
      * Enum registry for map modes.

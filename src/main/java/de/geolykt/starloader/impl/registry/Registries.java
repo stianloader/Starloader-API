@@ -17,6 +17,7 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 import snoddasmannen.galimulator.AudioManager.AudioSample;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
+import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
@@ -107,6 +108,52 @@ public final class Registries {
     }
 
     /**
+     * Creates, assigns and initializes the flag symbol registry.
+     * It also emits the required events.
+     */
+    public static void initFlagSymbols() {
+        LOGGER.info("Registering flag symbols");
+        SimpleEnumRegistry<BuiltinSymbols> symbolRegistry = new SimpleEnumRegistry<>(BuiltinSymbols.class);
+        symbolRegistry.registerBulk(new @NotNull NamespacedKey[] {
+                RegistryKeys.GALIMULATOR_FLAG_CIRCLE,
+                RegistryKeys.GALIMULATOR_FLAG_SQUARE,
+                RegistryKeys.GALIMULATOR_FLAG_TRIANGLE,
+                RegistryKeys.GALIMULATOR_FLAG_STRIPES,
+                RegistryKeys.GALIMULATOR_FLAG_HORIZONTAL_STRIPE,
+                RegistryKeys.GALIMULATOR_FLAG_VERTICAL_STRIPE,
+                RegistryKeys.GALIMULATOR_FLAG_GRADIENT_HORIZONTAL_STRIPE,
+                RegistryKeys.GALIMULATOR_FLAG_GRADIENT_VERTICAL_STRIPE,
+                RegistryKeys.GALIMULATOR_FLAG_FORCEFIELD,
+                RegistryKeys.GALIMULATOR_FLAG_STAR,
+                RegistryKeys.GALIMULATOR_FLAG_STAR2,
+                RegistryKeys.GALIMULATOR_FLAG_CRESCENT,
+                RegistryKeys.GALIMULATOR_FLAG_SEMICIRCLE,
+                RegistryKeys.GALIMULATOR_FLAG_CROSS,
+                RegistryKeys.GALIMULATOR_FLAG_FUNNEL,
+                RegistryKeys.GALIMULATOR_FLAG_FRAME
+        }, new @NotNull BuiltinSymbols[] {
+                BuiltinSymbols.CIRCLE,
+                BuiltinSymbols.SQUARE,
+                BuiltinSymbols.TRIANGLE,
+                BuiltinSymbols.STRIPES,
+                BuiltinSymbols.HORIZONTAL_STRIPE,
+                BuiltinSymbols.VERTICAL_STRIPE,
+                BuiltinSymbols.GRADIENT_HORIZONTAL_STRIPE,
+                BuiltinSymbols.GRADIENTLVERTICAL_STRIPE, // What should we do with this typo?
+                BuiltinSymbols.FORCEFIELD,
+                BuiltinSymbols.STAR,
+                BuiltinSymbols.STAR2,
+                BuiltinSymbols.CRESCENT,
+                BuiltinSymbols.SEMICIRCLE,
+                BuiltinSymbols.CROSS,
+                BuiltinSymbols.FUNNEL,
+                BuiltinSymbols.FRAME
+        });
+        Registry.FLAG_SYMBOLS = symbolRegistry;
+        EventManager.handleEvent(new RegistryRegistrationEvent(symbolRegistry, BuiltinSymbols.class, RegistryRegistrationEvent.REGISTRY_FLAG_SYMBOL));
+    }
+
+    /**
      * Creates, assigns and initializes the map modes registry.
      * It also emits the required events.
      */
@@ -133,19 +180,35 @@ public final class Registries {
     public static void initWeaponsTypes() {
         LOGGER.info("Registering weapon factories");
         SimpleEnumRegistry<WeaponsFactory> weaponTypes = new SimpleEnumRegistry<>(WeaponsFactory.class);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_LASER, WeaponsFactory.LASER);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_WEAKLASER, WeaponsFactory.WEAKLASER);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_ANTISHIP_MISSILE, WeaponsFactory.A2A_MISSILE);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_LOVELING_MISSILE, WeaponsFactory.LOVELING_MISSILE);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_SURFACE_MISSILE, WeaponsFactory.A2S_MISSILE);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_SPREAD_MISSILE, WeaponsFactory.SPREAD_MISSILE);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_MIRV_MISSILE, WeaponsFactory.MIRV_MISSILE);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_DRAGON_MISSILE, WeaponsFactory.DRAGON_MISSILE);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_HEAL_RAY, WeaponsFactory.HEAL_RAY);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_DISRUPTOR, WeaponsFactory.DISRUPTOR);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_ILLUMINATOR, WeaponsFactory.ILLUMINATOR);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_DRAGONS_BREATH, WeaponsFactory.DRAGONS_BREATH);
-        weaponTypes.register(RegistryKeys.GALIMULATOR_WT_CHAIN_MISSILE, WeaponsFactory.CHAIN_MISSILE);
+        weaponTypes.registerBulk(new @NotNull NamespacedKey[] {
+                RegistryKeys.GALIMULATOR_WT_LASER,
+                RegistryKeys.GALIMULATOR_WT_WEAKLASER,
+                RegistryKeys.GALIMULATOR_WT_ANTISHIP_MISSILE,
+                RegistryKeys.GALIMULATOR_WT_LOVELING_MISSILE,
+                RegistryKeys.GALIMULATOR_WT_SURFACE_MISSILE,
+                RegistryKeys.GALIMULATOR_WT_SPREAD_MISSILE,
+                RegistryKeys.GALIMULATOR_WT_MIRV_MISSILE,
+                RegistryKeys.GALIMULATOR_WT_DRAGON_MISSILE,
+                RegistryKeys.GALIMULATOR_WT_HEAL_RAY,
+                RegistryKeys.GALIMULATOR_WT_DISRUPTOR,
+                RegistryKeys.GALIMULATOR_WT_ILLUMINATOR,
+                RegistryKeys.GALIMULATOR_WT_DRAGONS_BREATH,
+                RegistryKeys.GALIMULATOR_WT_CHAIN_MISSILE
+        }, new @NotNull WeaponsFactory[] {
+                WeaponsFactory.LASER,
+                WeaponsFactory.WEAKLASER,
+                WeaponsFactory.A2A_MISSILE,
+                WeaponsFactory.LOVELING_MISSILE,
+                WeaponsFactory.A2S_MISSILE,
+                WeaponsFactory.SPREAD_MISSILE,
+                WeaponsFactory.MIRV_MISSILE,
+                WeaponsFactory.DRAGON_MISSILE,
+                WeaponsFactory.HEAL_RAY,
+                WeaponsFactory.DISRUPTOR,
+                WeaponsFactory.ILLUMINATOR,
+                WeaponsFactory.DRAGONS_BREATH,
+                WeaponsFactory.CHAIN_MISSILE
+        });
         Registry.WEAPON_TYPES = weaponTypes;
         EventManager.handleEvent(new RegistryRegistrationEvent(weaponTypes, WeaponsFactory.class, RegistryRegistrationEvent.REGISTRY_WEAPONS_TYPE));
     }

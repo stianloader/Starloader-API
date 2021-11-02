@@ -48,6 +48,30 @@ public final class RegistryKeys {
     public static final @NotNull NamespacedKey GALIMULATOR_RIOTING = new GalimulatorResourceKey("STATE_RIOTING");
     public static final @NotNull NamespacedKey GALIMULATOR_TRANSCENDING = new GalimulatorResourceKey("STATE_TRANSCENDING");
 
+    // Flag symbols
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_CIRCLE = new GalimulatorResourceKey("CIRCLE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_SQUARE = new GalimulatorResourceKey("SQUARE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_TRIANGLE = new GalimulatorResourceKey("TRIANGLE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_STRIPES = new GalimulatorResourceKey("STRIPES");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_HORIZONTAL_STRIPE = new GalimulatorResourceKey("HORIZONTAL_STRIPE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_VERTICAL_STRIPE = new GalimulatorResourceKey("VERTICAL_STRIPE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_GRADIENT_HORIZONTAL_STRIPE = new GalimulatorResourceKey("GRADIENT_HORIZONTAL_STRIPE");
+
+    /**
+     * The registry key mirroring the "GRADIENTLVERTICAL_STRIPE" member of the BUiltinSymbols enum.
+     * the SLAPI does currently mirrors the typo for savegame compatibility, but the value of this member may get changed due to reasons.
+     */
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_GRADIENT_VERTICAL_STRIPE = new GalimulatorResourceKey("GRADIENTLVERTICAL_STRIPE");
+
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_FORCEFIELD = new GalimulatorResourceKey("FORCEFIELD");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_STAR = new GalimulatorResourceKey("STAR");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_STAR2 = new GalimulatorResourceKey("STAR2");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_CRESCENT = new GalimulatorResourceKey("CRESCENT");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_SEMICIRCLE = new GalimulatorResourceKey("SEMICIRCLE");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_CROSS = new GalimulatorResourceKey("CROSS");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_FUNNEL = new GalimulatorResourceKey("FUNNEL");
+    public static final @NotNull NamespacedKey GALIMULATOR_FLAG_FRAME = new GalimulatorResourceKey("FRAME");
+
     // Map Modes
     public static final @NotNull NamespacedKey GALIMULATOR_ALLIANCES_MAPMODE = new GalimulatorResourceKey("MAPMODE_ALLIANCES");
     public static final @NotNull NamespacedKey GALIMULATOR_CULTURE_MAPMODE = new GalimulatorResourceKey("MAPMODE_CULTURE");
@@ -74,7 +98,7 @@ public final class RegistryKeys {
 }
 
 /**
- * Namespaced key using the galimulator namespace. Exclusively use for Registry
+ * Namespaced key using the galimulator namespace. Exclusively used for Registry
  * keys that are provided by starloader. Not that java would prevent you from
  * using this either way
  */
