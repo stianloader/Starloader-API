@@ -34,25 +34,26 @@ obfTools {
 dependencies {
     // Galimulator proper
     compileOnly files("build/obftools/intermediary.jar")
-    api ("de.geolykt:starloader:1.1.0-SNAPSHOT") { // The minimalistic starloader base "api" as well all of it's depends
+    compileOnlyApi ("de.geolykt:starloader:1.1.0-SNAPSHOT") { // The minimalistic starloader base "api" as well all of it's depends
         // SLL 3.+ does not ship with log4j as it does not have proper JPMS support
         exclude module: 'log4j-api'
         exclude module: 'log4j-core'
         exclude module: 'log4j-slf4j-impl'
     }
     // We removed this depend above
-    api "org.slf4j:slf4j-api:2.0.0-alpha5"
+    compileOnlyApi "org.slf4j:slf4j-api:2.0.0-alpha5"
 
     // All APIs that are already provided by galimulator (natives excluded)
     // Note: these libraries are likely to be too updated as stuff like LWJGL 2 is still used internally.
-    api "com.badlogicgames.gdx:gdx:$gdxVersion"
-    api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-    api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-    api "xmlpull:xmlpull:1.1.3.4d_b4_min"
+    compileOnlyApi "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compileOnlyApi "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    compileOnlyApi "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    compileOnlyApi "xmlpull:xmlpull:1.1.3.4d_b4_min"
     // https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream
-    api group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.16'
+    compileOnlyApi group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.16'
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.ow2.asm:asm-util:9.2'
 }
 
 javadoc {

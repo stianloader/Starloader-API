@@ -74,8 +74,24 @@ public abstract class ScreenBuilder {
      * the screen has been otherwise been marked as dirty.
      *
      * @param provider The provider that does the things mentioned above
+     * @since 1.4.0
+     * @deprecated See the deprecation note of the {@link ComponentProvider} interface. Replaced by {@link #addComponentSupplier(ComponentSupplier)}.
      */
-    public abstract void addComponentProvider(@NotNull ComponentProvider provider);
+    @Deprecated(forRemoval = true, since = "1.5.0")
+    public void addComponentProvider(@NotNull ComponentProvider provider) {
+        addComponentSupplier(provider);
+    }
+
+    /**
+     * Adds a callback-like functional interface to the screen.
+     * This callback is called everytime the components within the screen need to be reordered or when
+     * the screen has been otherwise been marked as dirty.
+     *
+     * @param supplier The component supplier that does the things mentioned above
+     * @return The instance of the screen builder.
+     * @since 1.5.0
+     */
+    public abstract @NotNull ScreenBuilder addComponentSupplier(@NotNull ComponentSupplier supplier);
 
     /**
      * Creates a {@link Screen} instance based on the current values of this builder.

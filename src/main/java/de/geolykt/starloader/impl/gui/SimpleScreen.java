@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
 
-import de.geolykt.starloader.api.gui.screen.ComponentProvider;
+import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
@@ -32,7 +32,7 @@ public class SimpleScreen implements ck, Screen {
     /**
      * The list of component providers for the screen instance.
      */
-    protected final @NotNull List<@NotNull ComponentProvider> componentProviders;
+    protected final @NotNull List<@NotNull ComponentSupplier> componentProviders;
 
     /**
      * Whether the component is currently considered "dirty", i.e whether it needs to be resized or redrawn.
@@ -76,7 +76,7 @@ public class SimpleScreen implements ck, Screen {
      * @param componentProviders The providers for the components of this screen.
      * @param headless Whether to display this screen without a "head"/title
      */
-    public SimpleScreen(@NotNull String title, int width, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentProvider> componentProviders, boolean headless) {
+    public SimpleScreen(@NotNull String title, int width, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentSupplier> componentProviders, boolean headless) {
         this.title = Objects.requireNonNull(title, "Title cannot be null.");
         this.widthProvider = null;
         this.width = width;
@@ -95,7 +95,7 @@ public class SimpleScreen implements ck, Screen {
      * @param componentProviders The providers for the components of this screen.
      * @param headless Whether to display this screen without a "head"/title
      */
-    public SimpleScreen(@NotNull String title, @NotNull IntSupplier widthProvider, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentProvider> componentProviders, boolean headless) {
+    public SimpleScreen(@NotNull String title, @NotNull IntSupplier widthProvider, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentSupplier> componentProviders, boolean headless) {
         this.title = Objects.requireNonNull(title, "Title cannot be null.");
         this.widthProvider = Objects.requireNonNull(widthProvider, "The width provider may not be null.");
         this.width = -1;
@@ -122,8 +122,8 @@ public class SimpleScreen implements ck, Screen {
     @Override
     public @NotNull List<@NotNull ScreenComponent> getChildren() {
         List<@NotNull ScreenComponent> children = new SimpleScreenChildList(this);
-        for (ComponentProvider provider : componentProviders) {
-            provider.supplyComponent(children);
+        for (ComponentSupplier provider : componentProviders) {
+            provider.supplyComponent(this, children);
         }
         return children;
     }

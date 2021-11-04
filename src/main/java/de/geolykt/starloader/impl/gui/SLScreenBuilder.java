@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.gui.screen.ComponentProvider;
+import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
 import de.geolykt.starloader.api.gui.text.TextColor;
@@ -23,7 +23,7 @@ public class SLScreenBuilder extends ScreenBuilder {
     /**
      * The list of component providers for the screen instance.
      */
-    protected final @NotNull List<@NotNull ComponentProvider> componentProviders = new ArrayList<>();
+    protected final @NotNull List<@NotNull ComponentSupplier> componentProviders = new ArrayList<>();
 
     /**
      * Whether the header should be enabled, see {@link #setHeaderEnabled(boolean)}.
@@ -55,13 +55,8 @@ public class SLScreenBuilder extends ScreenBuilder {
     protected @Nullable IntSupplier widthProvider;
 
     @Override
-    public void addComponentProvider(@NotNull ComponentProvider provider) {
-        componentProviders.add(Objects.requireNonNull(provider, "Provider was null."));
-    }
-
-    @Override
     public @NotNull Screen build() {
-        List<@NotNull ComponentProvider> components = new LinkedList<>(componentProviders);
+        List<@NotNull ComponentSupplier> components = new LinkedList<>(componentProviders);
         String title = null;
         if (enableHeader) {
             title = NullUtils.requireNotNull(this.title, "The title was never provided!");
@@ -108,5 +103,11 @@ public class SLScreenBuilder extends ScreenBuilder {
     @Override
     public void setWidthProvider(@Nullable IntSupplier width) {
         this.widthProvider = width;
+    }
+
+    @Override
+    public @NotNull ScreenBuilder addComponentSupplier(@NotNull ComponentSupplier supplier) {
+        componentProviders.add(NullUtils.requireNotNull(supplier, "supplier must not be null."));
+        return this;
     }
 }

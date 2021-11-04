@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.Camera;
 
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.gui.screen.ComponentProvider;
+import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
@@ -66,17 +66,17 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
      * @param title The title of this screen.
      * @param width The static width of this screen
      * @param headerColor The colour of the header/title of this screen
-     * @param componentProviders The providers for the components of this screen.
+     * @param components2 The providers for the components of this screen.
      * @param headless Whether to display this screen without a "head"/title
      */
-    public SLScreenWidget(@NotNull String title, int width, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentProvider> componentProviders, boolean headless) {
+    public SLScreenWidget(@NotNull String title, int width, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentSupplier> components2, boolean headless) {
         this.title = Objects.requireNonNull(title, "Title cannot be null.");
         this.widthProvider = null;
         this.width = width;
         this.headerColor = Objects.requireNonNull(headerColor, "Null header color");
         this.components = new SimpleScreenChildList(this);
-        for (ComponentProvider provider : componentProviders) {
-            provider.supplyComponent(components);
+        for (ComponentSupplier provider : components2) {
+            provider.supplyComponent(this, components);
         }
         this.headless = headless;
         if (!headless) {
@@ -97,14 +97,14 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
      * @param componentProviders The providers for the components of this screen.
      * @param headless Whether to display this screen without a "head"/title
      */
-    public SLScreenWidget(@NotNull String title, @NotNull IntSupplier widthProvider, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentProvider> componentProviders, boolean headless) {
+    public SLScreenWidget(@NotNull String title, @NotNull IntSupplier widthProvider, @NotNull GalColor headerColor, @NotNull List<@NotNull ComponentSupplier> componentProviders, boolean headless) {
         this.title = Objects.requireNonNull(title, "Title cannot be null.");
         this.widthProvider = Objects.requireNonNull(widthProvider, "The width provider may not be null.");
         this.width = -1;
         this.headerColor = Objects.requireNonNull(headerColor, "Null header color");
         this.components = new SimpleScreenChildList(this);
-        for (ComponentProvider provider : Objects.requireNonNull(componentProviders, "Null component providers")) {
-            provider.supplyComponent(components);
+        for (ComponentSupplier provider : Objects.requireNonNull(componentProviders, "Null component providers")) {
+            provider.supplyComponent(this, components);
         }
         this.headless = headless;
         if (!headless) {
