@@ -125,6 +125,13 @@ public interface DrawingImpl {
     public @NotNull TextFactory getTextFactory();
 
     /**
+     * Obtains the texture provider that is valid for this drawing instance.
+     *
+     * @return The connected {@link TextureProvider}.
+     */
+    public @NotNull TextureProvider getTextureProvider();
+
+    /**
      * Reads the file at the given path (which is relative to the data directory)
      * as a texture and binds it into the game's texture atlas.
      * If a texture is already bound, then that bound texture is returned.

@@ -88,6 +88,10 @@ build {
     dependsOn postprocess
 }
 
+publish {
+    dependsOn postprocess
+}
+
 publishing {
     publications {
         plugin(MavenPublication) { publication ->

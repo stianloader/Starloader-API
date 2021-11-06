@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
@@ -18,6 +19,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
+import de.geolykt.starloader.api.gui.TextureProvider;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
@@ -33,7 +35,7 @@ import snoddasmannen.galimulator.gh;
 import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
 
-public class DrawingManager implements DrawingImpl {
+public class DrawingManager implements DrawingImpl, TextureProvider {
 
     private static final @NotNull StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
 
@@ -82,6 +84,12 @@ public class DrawingManager implements DrawingImpl {
         }
     }
 
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull NinePatch getAlternateWindowNinepatch() {
+        return GalFX.NINEPATCH.WINDOW3.a();
+    }
+
     @Override
     public @NotNull Collection<String> getAvailiableFonts() {
         Collection<String> ret = fonts;
@@ -94,6 +102,12 @@ public class DrawingManager implements DrawingImpl {
             fonts = ret;
         }
         return ret;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull NinePatch getBoxButtonNinePatch() {
+        return GalFX.NINEPATCH.NICEBUTTON.a();
     }
 
     @SuppressWarnings("unchecked")
@@ -119,9 +133,26 @@ public class DrawingManager implements DrawingImpl {
         return GalFX.a;
     }
 
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull NinePatch getRoundedButtonNinePatch() {
+        return GalFX.NINEPATCH.BUTTON3.a();
+    }
+
     @Override
     public @NotNull TextFactory getTextFactory() {
         return TEXT_FACTORY;
+    }
+
+    @Override
+    public @NotNull TextureProvider getTextureProvider() {
+        return this;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public @NotNull NinePatch getWindowNinepatch() {
+        return GalFX.NINEPATCH.WINDOW.a();
     }
 
     @Override
@@ -149,7 +180,7 @@ public class DrawingManager implements DrawingImpl {
         if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof ck) {
             // Standard screen using the dialog api
             // We want to mimic this call:
-            // probably: screen, ???, type, closeOthers
+            // arguments probably mean: screen, ???, type, closeOthers
             // Space.a((ck) screen, true, null, false);
             SLScreenProjector screenWrapper = new SLScreenProjector(screen, true);
             screenWrapper.a((WIDGET_ID) null);

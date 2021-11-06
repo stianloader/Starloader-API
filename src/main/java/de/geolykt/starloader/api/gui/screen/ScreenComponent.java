@@ -14,6 +14,10 @@ public interface ScreenComponent extends Renderable {
     /**
      * Obtains the expected height of this component.
      *
+     * <p>Depending on the screen implementation, this method may be called very, very frequently.
+     * To reduce issues with both content within the screen and performance, it is best to implement
+     * this method by returning a final field.
+     *
      * @return The height of the component
      */
     public int getHeight();
@@ -39,6 +43,10 @@ public interface ScreenComponent extends Renderable {
 
     /**
      * Obtains the expected width of this component.
+     *
+     * <p>Depending on the screen implementation, this method may be called very, very frequently.
+     * To reduce issues with both content within the screen and performance, it is best to implement
+     * this method by returning a final field.
      *
      * @return The width of the component
      */

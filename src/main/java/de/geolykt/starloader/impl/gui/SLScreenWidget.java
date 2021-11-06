@@ -1,7 +1,10 @@
 package de.geolykt.starloader.impl.gui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.IntSupplier;
 
@@ -9,19 +12,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
+import de.geolykt.starloader.api.gui.screen.ReactiveComponent;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
 import snoddasmannen.galimulator.GalColor;
 
 /**
- * A custom-coded alternative of the cursed {@link SimpleScreen} + {@link SLScreenProjector} combo that relies less
- * on classes whose intent is mostly unknown. The fact that it directly extends {@link SLAbstractWidget} is also
- * more favourable, as the screen's camera can be obtained far more easily.
+ * The main implementation of the {@link Screen} interface that delegates most calls to the Galimulator Widget
+ * API via {@link SLAbstractWidget}.
  */
 public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
@@ -212,6 +216,15 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     }
 
     @Override
+    public Iterator<Entry<Vector2, ScreenComponent>> iterator() {
+        @SuppressWarnings("null")
+        @NotNull Iterator<ScreenComponent> components = this.components.iterator();
+        Camera c = getCamera();
+        int height = (c == null ? getHeight() : (int) c.viewportHeight);
+        return new SLScreenWidgetIterator(height, isHeadless(), getInnerWidth(), components, true);
+    }
+
+    @Override
     public void markDirty() {
         this.a(WIDGET_MESSAGE.WIDGET_FORCE_REDRAW);
     }
@@ -225,67 +238,42 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         renderSLChildComponents();
     }
 
-    protected void renderSLChildComponents() {
-        Camera camera = NullUtils.requireNotNull(getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
-        // For galimulator, y = 0, x = 0 is the lower left edge, positive numbers go more towards the upper right. Really strange system.
-        int y = (int) camera.viewportHeight;
-        if (!headless) {
-            y -= 25;
-        }
-        int nextY = 0;
-        int x = 0;
-        final int maxWidth = getInnerWidth();
-        ScreenComponent previousComponent = null;
-        for (ScreenComponent component : components) {
-            LineWrappingInfo lwrapinfo = component.getLineWrappingInfo();
-            int beginX = x;
-            if (previousComponent == null) {
-                if (lwrapinfo.isWrapEndOfObject()) {
-                    y -= component.getHeight();
-                    nextY = 0;
-                    x = 0;
-                } else {
-                    nextY = component.getHeight();
-                    x = component.getWidth();
-                    previousComponent = component;
-                }
-            } else if (lwrapinfo.isWrapBeginOfObject()) {
-                y -= nextY;
-                nextY = component.getHeight();
-                x = component.getWidth();
-                previousComponent = component;
-            } else {
-                boolean isSimilar = component.isSameType(previousComponent) || previousComponent.isSameType(component);
-                if ((isSimilar && lwrapinfo.isWrapSameType()) || (!isSimilar && lwrapinfo.isWrapDifferentType())) {
-                    y -= nextY;
-                    nextY = component.getHeight();
-                    x = component.getWidth();
-                    previousComponent = component;
-                } else if (lwrapinfo.isWrapEndOfObject()) {
-                    y -= nextY + component.getHeight();
-                    nextY = 0;
-                    x = 0;
-                } else {
-                    x += component.getWidth();
-                    if (x > maxWidth) {
-                        y -= nextY;
-                        nextY = component.getHeight();
-                        x = component.getWidth();
-                    } else {
-                        nextY = Math.max(nextY, component.getHeight());
-                        previousComponent = component;
-                    }
-                }
-            }
-            component.renderAt(beginX + 10, y - 10, camera);
-        }
-    }
-
     /**
      * Shorthand for "drawBackground(getBackgroundColor())". This method is used in the {@link #onRender()} implementation.
      */
     protected final void paintBackground() {
         drawBackground(getBackgroundColor());
+    }
+
+    protected void renderSLChildComponents() {
+        Camera c = NullUtils.requireNotNull(getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
+        for (Map.Entry<Vector2, ScreenComponent> component : this) {
+            Vector2 pos = component.getKey();
+            component.getValue().renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove
+        }
+    }
+
+    @Override
+    protected void tap(double x, double y, boolean isLongTap) {
+        Camera c = NullUtils.requireNotNull(getCamera(), "Camera may not be null.");
+        for (Map.Entry<Vector2, ScreenComponent> component : this) {
+            // For galimulator, y = 0, x = 0 is the lower left edge, positive numbers go more towards the upper right.
+            // We follow the same principle within our screen API.
+            ScreenComponent comp = component.getValue();
+            if (!(comp instanceof ReactiveComponent)) {
+                continue;
+            }
+            Vector2 pos = component.getKey();
+            if ((x >= pos.x && x <= pos.x + comp.getWidth())
+                    && (y <= pos.y && y >= pos.y - comp.getHeight())) {
+                // FIXME galimulator provides values that I did not expect. Was my initial reverse-engineering wrong?
+                if (isLongTap) {
+                    ((ReactiveComponent) comp).onLongClick((int) (x - pos.x), (int) (y - pos.y) + comp.getHeight(), (int) pos.x, (int) pos.y, c);
+                } else {
+                    ((ReactiveComponent) comp).onClick((int) (x - pos.x), (int) (y - pos.y) + comp.getHeight(), (int) pos.x, (int) pos.y, c);
+                }
+            }
+        }
     }
 
     @Override

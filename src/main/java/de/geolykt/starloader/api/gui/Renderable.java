@@ -12,7 +12,9 @@ public interface Renderable {
 
     /**
      * Renders the object on screen at the given coordinates. The view may get
-     * unprojected depending on the context
+     * unprojected depending on the context.
+     * For galimulator, y = 0, x = 0 is the lower left edge, positive numbers go more towards the upper right.
+     * Within most sub-APIs provided by the SLAPI this behaviour is mirrored.
      *
      * @param x The X-Coordinate of the rendering position
      * @param y The Y-Coordinate of the rendering position
@@ -23,7 +25,9 @@ public interface Renderable {
 
     /**
      * Renders the object on screen at the given coordinates. The view may get
-     * unprojected with the given camera
+     * unprojected with the given camera.
+     * For galimulator, y = 0, x = 0 is the lower left edge, positive numbers go more towards the upper right.
+     * Within most sub-APIs provided by the SLAPI this behaviour is mirrored.
      *
      * @param x The X-Coordinate of the rendering position
      * @param y The Y-Coordinate of the rendering position

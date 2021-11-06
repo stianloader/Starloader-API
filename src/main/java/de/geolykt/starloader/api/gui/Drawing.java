@@ -169,6 +169,15 @@ public final class Drawing {
     }
 
     /**
+     * Obtains the texture provider that is valid for the current drawing instance.
+     *
+     * @return The connected {@link TextureProvider}.
+     */
+    public static @NotNull TextureProvider getTextureProvider() {
+        return implementation.getTextureProvider();
+    }
+
+    /**
      * Reads the file at the given path (which is relative to the data directory)
      * as a texture and binds it into the game's texture atlas.
      * If a texture is already bound, then that bound texture is returned.

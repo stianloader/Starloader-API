@@ -1,18 +1,18 @@
 package de.geolykt.starloader.api.gui.screen;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
-
-import de.geolykt.starloader.impl.gui.SimpleScreen;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * A container of sorts. Includes further components that the User can interact with.
  */
-public interface Screen {
+public interface Screen extends Iterable<Map.Entry<Vector2, ScreenComponent>> {
 
     /**
      * Adds a child component to this screen.
@@ -86,8 +86,7 @@ public interface Screen {
 
     /**
      * Sets the internal camera to use for this screen.
-     * This method will be called automatically if you choose to extend {@link SimpleScreen}
-     * or choose to implement Galimulator's screen API.
+     * This method will be called automatically if you choose to implement Galimulator's screen API.
      *
      * @param camera The camera object to set
      */

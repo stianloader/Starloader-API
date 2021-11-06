@@ -109,7 +109,7 @@ public final class NullUtils {
     }
 
     /**
-     * Basically {@link Objects#requireNonNull(Object)} but with correct annotations that do not
+     * Basically {@link Objects#requireNonNull(Object)} but with &quot;correct&quot; annotations that do not
      * confuse eclipse (which I use to analyse the null checks).
      *
      * @param <T> The object type
@@ -117,7 +117,8 @@ public final class NullUtils {
      * @return The non-null object
      * @throws NullPointerException If the input object is null
      */
-    public static @NotNull <T> T requireNotNull(@Nullable T object) {
+    @NotNull
+    public static <T> T requireNotNull(@Nullable T object) {
         if (object != null) {
             return object;
         }
@@ -125,7 +126,7 @@ public final class NullUtils {
     }
 
     /**
-     * Basically {@link Objects#requireNonNull(Object, String)} but with correct annotations that do not
+     * Basically {@link Objects#requireNonNull(Object, String)} but with &quot;correct&quot; annotations that do not
      * confuse eclipse (which I use to analyse the null checks).
      *
      * @param <T> The object type
@@ -134,7 +135,8 @@ public final class NullUtils {
      * @return The non-null object
      * @throws NullPointerException If the input object is null
      */
-    public static @NotNull <T> T requireNotNull(@Nullable T object, @NotNull String message) {
+    @NotNull
+    public static <T> T requireNotNull(@Nullable T object, @NotNull String message) {
         if (object != null) {
             return object;
         }
@@ -142,7 +144,7 @@ public final class NullUtils {
     }
 
     /**
-     * Basically {@link Objects#requireNonNull(Object, Supplier)} but with correct annotations that do not
+     * Basically {@link Objects#requireNonNull(Object, Supplier)} but with &quot;correct&quot; annotations that do not
      * confuse eclipse (which I use to analyse the null checks).
      *
      * @param <T> The object type
@@ -151,7 +153,8 @@ public final class NullUtils {
      * @return The non-null object
      * @throws NullPointerException If the input object is null
      */
-    public static @NotNull <T> T requireNotNull(@Nullable T object, @NotNull Supplier<String> message) {
+    @NotNull
+    public static <T> T requireNotNull(@Nullable T object, @NotNull Supplier<String> message) {
         if (object != null) {
             return object;
         }

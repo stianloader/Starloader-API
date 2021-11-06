@@ -1,7 +1,9 @@
 package de.geolykt.starloader.impl.gui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
@@ -58,6 +61,11 @@ public class ModConfScreen implements ck, Screen {
     @Override
     public boolean canAddChildren() {
         return false;
+    }
+
+    @Override
+    public @Nullable Camera getCamera() {
+        return null;
     }
 
     @SuppressWarnings({ "all" })
@@ -126,13 +134,13 @@ public class ModConfScreen implements ck, Screen {
     }
 
     @Override
-    public void markDirty() {
-        dirty = true;
+    public Iterator<Entry<Vector2, ScreenComponent>> iterator() {
+        throw new UnsupportedOperationException("Not supported - screen contents are calculated on the fly.");
     }
 
     @Override
-    public @Nullable Camera getCamera() {
-        return null;
+    public void markDirty() {
+        dirty = true;
     }
 
     @Override
