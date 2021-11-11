@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -44,6 +45,11 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     private EnumMap fontBitmapCache = new EnumMap(GalFX.FONT_TYPE.class);
 
     private Collection<String> fonts;
+
+    @Override
+    public void drawLine(double x1, double y1, double x2, double y2, float width, @NotNull Color color, @NotNull Camera camera) {
+        GalFX.a(x1, y1, x2, y2, width, new GalColor(color), camera);
+    }
 
     @Override
     public float drawText(@NotNull String message, float x, float y) {
@@ -82,6 +88,11 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
         default:
             return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
         }
+    }
+
+    @Override
+    public void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
+        GalFX.a(x, y, width, height, new GalColor(color), camera);
     }
 
     @SuppressWarnings("null")

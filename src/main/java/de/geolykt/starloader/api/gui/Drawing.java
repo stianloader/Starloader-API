@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -48,6 +49,29 @@ public final class Drawing {
     }
 
     private static DrawingImpl implementation;
+
+    /**
+     * Draws a line on the user interface. Due to libGDX not supporting this
+     * operation in a conventional way this method will by default be implemented by
+     * stretching and rotating a pixel. As such this method indirectly calls
+     * {@link Math#atan2(double, double)} and {@link Math#sqrt(double)} - but even
+     * if libGDX had a .drawLine method, it would more or less involve using one of
+     * these methods in the first place, so the caller should not worry about
+     * performance all too much.
+     *
+     * @param x1     The X position of the origin point of the line
+     * @param y1     The Y position of the origin point of the line
+     * @param x2     The X position of the target point of the line
+     * @param y2     The Y position of the target point of the line
+     * @param width  The width of the line to draw
+     * @param color  The color of the line that should be drawn
+     * @param camera The camera, used to move the input positions to the global
+     *               context.
+     */
+    public static void drawLine(double x1, double y1, double x2, double y2, float width, @NotNull Color color,
+            @NotNull Camera camera) {
+        implementation.drawLine(x1, y1, x2, y2, width, color, camera);
+    }
 
     /**
      * Draws text at the given location. The default color is used, which under
@@ -130,6 +154,30 @@ public final class Drawing {
     }
 
     /**
+     * <b>As specified by the APINote, this method has unintended consequences. It does not only operate
+     * like a fillRect() method, but also draws a frame around the rectangle. More specifically
+     * this frame is assumed to be linked with {@link TextureProvider#getAlternateWindowNinepatch()}.</b>
+     *
+     * <p>Fills a rectangle with a given width and height with a specified color. As a
+     * friendly reminder, the position 0,0 is the lower left corner and as the
+     * values increase it moves to the to top right corner.
+     *
+     * @param x      The X position of the top left corner of the area to fill.
+     * @param y      The Y position of the top left corner of the area to fill.
+     * @param width  The width of the rectangle to fill.
+     * @param height The height of the rectangle to fill.
+     * @param color  The color used for the operation.
+     * @param camera The camera used for the operation.
+     * @apiNote It is not known what the effects are if this method is called by
+     *          anything but the Widget. Act carefully for you may not want to call
+     *          this method.
+     */
+    public static void fillWindow(float x, float y, float width, float height, @NotNull Color color,
+            @NotNull Camera camera) {
+        implementation.fillWindow(x, y, width, height, color, camera);
+    }
+
+    /**
      * Obtains the main drawing sprite batch. Operations performed on this batch
      * will result in them getting displayed on the user interface.
      *
@@ -157,6 +205,17 @@ public final class Drawing {
      */
     public static @NotNull Collection<String> getFonts() {
         return implementation.getAvailiableFonts();
+    }
+
+    /**
+     * Obtains the currently valid instance of {@link DrawingImpl} that is used to delegate static methods of this class.
+     * Should there be no such instance, then null will be returned.
+     *
+     * @return The current instance used as a delegate.
+     * @see Drawing#requireInstance()
+     */
+    public static @Nullable DrawingImpl getInstance() {
+        return implementation;
     }
 
     /**
@@ -189,6 +248,22 @@ public final class Drawing {
      */
     public static @NotNull Texture loadTexture(@NotNull String path) {
         return implementation.loadTexture(path);
+    }
+
+    /**
+     * Obtains the currently valid instance of {@link DrawingImpl} that is used to delegate static methods of this class.
+     * Should there be no such instance, then a {@link IllegalStateException} will be thrown.
+     *
+     * @return The current instance used as a delegate.
+     * @see Drawing#getInstance()
+     * @throws IllegalStateException if the Drawing implementation has not yet been set.
+     */
+    public static @NotNull DrawingImpl requireInstance() {
+        DrawingImpl implementation = Drawing.implementation;
+        if (implementation == null) {
+            throw new IllegalStateException("Drawing implementation not yet set.");
+        }
+        return implementation;
     }
 
     /**
