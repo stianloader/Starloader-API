@@ -9,6 +9,8 @@ accessWidener   v2     intermediary
 
 # Methods
 accessible      method  snoddasmannen/galimulator/AudioManager              f          ()V
+extendable      method  snoddasmannen/galimulator/EmpireSpecial             <init>     (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+accessible      method  snoddasmannen/galimulator/FlagItem$BuiltinSymbols    <init>     (Ljava/lang/String;ILjava/lang/String;ZII)V
 accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
 accessible      method  snoddasmannen/galimulator/Space                     aq         ()V
 accessible      method  snoddasmannen/galimulator/Space                     aW         ()V
@@ -68,4 +70,6 @@ accessible      class   snoddasmannen/galimulator/ho
 accessible      class   snoddasmannen/galimulator/hj
 accessible      class   snoddasmannen/galimulator/hk
 accessible      class   snoddasmannen/galimulator/hl
+denumerised     class   snoddasmannen/galimulator/EmpireSpecial
+denumerised     class   snoddasmannen/galimulator/FlagItem$BuiltinSymbols
 accessible      class   snoddasmannen/galimulator/Space$SaveMode

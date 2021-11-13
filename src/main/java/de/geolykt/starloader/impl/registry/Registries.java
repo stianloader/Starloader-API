@@ -63,22 +63,43 @@ public final class Registries {
     public static void initEmpireSpecials() {
         LOGGER.info("Registering empire specials");
         SimpleEnumRegistry<EmpireSpecial> specials = new SimpleEnumRegistry<>(EmpireSpecial.class);
-        specials.register(RegistryKeys.GALIMULATOR_MILITANT, EmpireSpecial.MILITANT);
-        specials.register(RegistryKeys.GALIMULATOR_AGGRESSIVE, EmpireSpecial.AGGRESSIVE);
-        specials.register(RegistryKeys.GALIMULATOR_DEFENSIVE, EmpireSpecial.DEFENSIVE);
-        specials.register(RegistryKeys.GALIMULATOR_SCIENTIFIC, EmpireSpecial.SCIENTIFIC);
-        specials.register(RegistryKeys.GALIMULATOR_STABLE, EmpireSpecial.STABLE);
-        specials.register(RegistryKeys.GALIMULATOR_UNSTABLE, EmpireSpecial.UNSTABLE);
-        specials.register(RegistryKeys.GALIMULATOR_EXPLOSIVE, EmpireSpecial.EXPLOSIVE);
-        specials.register(RegistryKeys.GALIMULATOR_SLOW_STARTER, EmpireSpecial.SLOW_STARTER);
-        specials.register(RegistryKeys.GALIMULATOR_DIPLOMATIC, EmpireSpecial.DIPLOMATIC);
-        specials.register(RegistryKeys.GALIMULATOR_XENOPHOBIC, EmpireSpecial.XENOPHOBIC);
-        specials.register(RegistryKeys.GALIMULATOR_FANATICAL, EmpireSpecial.FANATICAL);
-        specials.register(RegistryKeys.GALIMULATOR_RECLUSIVE, EmpireSpecial.RECLUSIVE);
-        specials.register(RegistryKeys.GALIMULATOR_HORDE, EmpireSpecial.HORDE);
-        specials.register(RegistryKeys.GALIMULATOR_CAPITALIST, EmpireSpecial.CAPITALIST);
-        specials.register(RegistryKeys.GALIMULATOR_CULT, EmpireSpecial.CULT);
-        specials.register(RegistryKeys.GALIMULATOR_INDUSTRIAL, EmpireSpecial.INDUSTRIAL);
+        @SuppressWarnings("null") // Since we removed the enum access flag for the EmpireSpecial class, eclipse treats it as an ordinary class; thus we have to use hacks to make it comprehend that the members are not null.
+        @NotNull EmpireSpecial[] specialsArray = new EmpireSpecial[] {
+            EmpireSpecial.MILITANT,
+            EmpireSpecial.AGGRESSIVE,
+            EmpireSpecial.DEFENSIVE,
+            EmpireSpecial.SCIENTIFIC,
+            EmpireSpecial.STABLE,
+            EmpireSpecial.UNSTABLE,
+            EmpireSpecial.EXPLOSIVE,
+            EmpireSpecial.SLOW_STARTER,
+            EmpireSpecial.DIPLOMATIC,
+            EmpireSpecial.XENOPHOBIC,
+            EmpireSpecial.FANATICAL,
+            EmpireSpecial.RECLUSIVE,
+            EmpireSpecial.HORDE,
+            EmpireSpecial.CAPITALIST,
+            EmpireSpecial.CULT,
+            EmpireSpecial.INDUSTRIAL
+        };
+        specials.registerBulk(new @NotNull NamespacedKey[] {
+                RegistryKeys.GALIMULATOR_MILITANT,
+                RegistryKeys.GALIMULATOR_AGGRESSIVE,
+                RegistryKeys.GALIMULATOR_DEFENSIVE,
+                RegistryKeys.GALIMULATOR_SCIENTIFIC,
+                RegistryKeys.GALIMULATOR_STABLE,
+                RegistryKeys.GALIMULATOR_UNSTABLE,
+                RegistryKeys.GALIMULATOR_EXPLOSIVE,
+                RegistryKeys.GALIMULATOR_SLOW_STARTER,
+                RegistryKeys.GALIMULATOR_DIPLOMATIC,
+                RegistryKeys.GALIMULATOR_XENOPHOBIC,
+                RegistryKeys.GALIMULATOR_FANATICAL,
+                RegistryKeys.GALIMULATOR_RECLUSIVE,
+                RegistryKeys.GALIMULATOR_HORDE,
+                RegistryKeys.GALIMULATOR_CAPITALIST,
+                RegistryKeys.GALIMULATOR_CULT,
+                RegistryKeys.GALIMULATOR_INDUSTRIAL
+        }, specialsArray);
         Registry.EMPIRE_SPECIALS = specials;
         EventManager.handleEvent(new RegistryRegistrationEvent(specials, EmpireSpecial.class, RegistryRegistrationEvent.REGISTRY_EMPIRE_SPECIAL));
     }
@@ -114,6 +135,25 @@ public final class Registries {
     public static void initFlagSymbols() {
         LOGGER.info("Registering flag symbols");
         SimpleEnumRegistry<BuiltinSymbols> symbolRegistry = new SimpleEnumRegistry<>(BuiltinSymbols.class);
+        @SuppressWarnings("null")
+        @NotNull BuiltinSymbols[] symbols = new @NotNull BuiltinSymbols[] {
+            BuiltinSymbols.CIRCLE,
+            BuiltinSymbols.SQUARE,
+            BuiltinSymbols.TRIANGLE,
+            BuiltinSymbols.STRIPES,
+            BuiltinSymbols.HORIZONTAL_STRIPE,
+            BuiltinSymbols.VERTICAL_STRIPE,
+            BuiltinSymbols.GRADIENT_HORIZONTAL_STRIPE,
+            BuiltinSymbols.GRADIENTLVERTICAL_STRIPE, // What should we do with this typo?
+            BuiltinSymbols.FORCEFIELD,
+            BuiltinSymbols.STAR,
+            BuiltinSymbols.STAR2,
+            BuiltinSymbols.CRESCENT,
+            BuiltinSymbols.SEMICIRCLE,
+            BuiltinSymbols.CROSS,
+            BuiltinSymbols.FUNNEL,
+            BuiltinSymbols.FRAME
+        };
         symbolRegistry.registerBulk(new @NotNull NamespacedKey[] {
                 RegistryKeys.GALIMULATOR_FLAG_CIRCLE,
                 RegistryKeys.GALIMULATOR_FLAG_SQUARE,
@@ -131,24 +171,7 @@ public final class Registries {
                 RegistryKeys.GALIMULATOR_FLAG_CROSS,
                 RegistryKeys.GALIMULATOR_FLAG_FUNNEL,
                 RegistryKeys.GALIMULATOR_FLAG_FRAME
-        }, new @NotNull BuiltinSymbols[] {
-                BuiltinSymbols.CIRCLE,
-                BuiltinSymbols.SQUARE,
-                BuiltinSymbols.TRIANGLE,
-                BuiltinSymbols.STRIPES,
-                BuiltinSymbols.HORIZONTAL_STRIPE,
-                BuiltinSymbols.VERTICAL_STRIPE,
-                BuiltinSymbols.GRADIENT_HORIZONTAL_STRIPE,
-                BuiltinSymbols.GRADIENTLVERTICAL_STRIPE, // What should we do with this typo?
-                BuiltinSymbols.FORCEFIELD,
-                BuiltinSymbols.STAR,
-                BuiltinSymbols.STAR2,
-                BuiltinSymbols.CRESCENT,
-                BuiltinSymbols.SEMICIRCLE,
-                BuiltinSymbols.CROSS,
-                BuiltinSymbols.FUNNEL,
-                BuiltinSymbols.FRAME
-        });
+        }, symbols);
         Registry.FLAG_SYMBOLS = symbolRegistry;
         EventManager.handleEvent(new RegistryRegistrationEvent(symbolRegistry, BuiltinSymbols.class, RegistryRegistrationEvent.REGISTRY_FLAG_SYMBOL));
     }

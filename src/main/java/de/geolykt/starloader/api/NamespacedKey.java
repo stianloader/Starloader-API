@@ -9,7 +9,7 @@ import de.geolykt.starloader.mod.Extension;
 
 public class NamespacedKey {
 
-    private final String keyString;
+    private final @NotNull String keyString;
     private final @Nullable Extension nameSpaceNamesake;
     private String namespaceString; // initialised in a lazy manner
 
@@ -61,7 +61,7 @@ public class NamespacedKey {
      *
      * @return The key of this key
      */
-    public String getKey() {
+    public @NotNull String getKey() {
         return keyString;
     }
 
