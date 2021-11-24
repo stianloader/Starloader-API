@@ -17,16 +17,16 @@ import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationSection;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
-import de.geolykt.starloader.api.gui.screen.Screen;
-import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.modconf.NumberOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
+import de.geolykt.starloader.api.gui.screen.Screen;
+import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.ck;
-import snoddasmannen.galimulator.b.class_s;
+import snoddasmannen.galimulator.interface_e;
+import snoddasmannen.galimulator.b.interface_a;
 
-public class ModConfScreen implements ck, Screen {
+public class ModConfScreen implements interface_e, Screen {
 
     /**
      * Internal logger instance for this class.
@@ -89,8 +89,8 @@ public class ModConfScreen implements ck, Screen {
     }
 
     @Override
-    public ArrayList<class_s> getItems() {
-        ArrayList<class_s> alist = new ArrayList<>();
+    public ArrayList<interface_a> getItems() {
+        ArrayList<interface_a> alist = new ArrayList<>();
         for (ConfigurationSection section : config.getSections()) {
             for (ConfigurationOption<?> option : section.getChildren()) {
                 if (option instanceof BooleanOption) {

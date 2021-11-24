@@ -74,10 +74,10 @@ public class PersonMixins implements DynastyMember {
     @Override
     public @Nullable ActiveEmpire getEmpire() {
         if (alive) {
-            if (job.g() == null) {
-                return null; // ???
+            if (job.getEmployer() == null) {
+                return null; // this does not make much sense ... why would a job have no employer? But I am sure I coded that check for a reason.
             }
-            return (@Nullable ActiveEmpire) job.g().getJobEmpire();
+            return (@Nullable ActiveEmpire) job.getEmployer().getJobEmpire();
         } else {
             return null;
         }

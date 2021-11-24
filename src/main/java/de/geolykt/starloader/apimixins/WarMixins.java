@@ -36,12 +36,12 @@ public class WarMixins implements War {
 
     @Override
     public @NotNull Empire getEmpireA() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e1.d()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
+        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e1.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override
     public @NotNull Empire getEmpireB() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e2.d()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
+        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e2.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override
@@ -62,9 +62,9 @@ public class WarMixins implements War {
     @Override
     public void noteStarChange(@NotNull Empire empire) throws IllegalArgumentException {
         int uid = empire.getUID();
-        if (((snoddasmannen.galimulator.War) (Object) this).e1.d() == uid) {
+        if (((snoddasmannen.galimulator.War) (Object) this).e1.get_id() == uid) {
             conqueredStarBalance++;
-        } else if (((snoddasmannen.galimulator.War) (Object) this).e2.d() == uid) {
+        } else if (((snoddasmannen.galimulator.War) (Object) this).e2.get_id() == uid) {
             conqueredStarBalance--;
         } else {
             throw new IllegalArgumentException("The given empire matches no participant.");

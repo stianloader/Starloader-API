@@ -10,9 +10,9 @@ import com.badlogic.gdx.audio.Music;
 
 import de.geolykt.starloader.api.sound.Track;
 
-import snoddasmannen.galimulator.class_u;
+import snoddasmannen.galimulator.class_e;
 
-@Mixin(class_u.class)
+@Mixin(class_e.class)
 public class TrackMixins implements Track {
 
     @Shadow

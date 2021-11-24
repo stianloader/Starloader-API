@@ -18,7 +18,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 
 import snoddasmannen.galimulator.MapData;
-import snoddasmannen.galimulator.gd;
+import snoddasmannen.galimulator.interface_k;
 
 @Mixin(MapData.class)
 public class MapDataMixins implements Map {
@@ -29,7 +29,7 @@ public class MapDataMixins implements Map {
     private String backgroundImage;
 
     @Shadow
-    private gd generator;
+    private interface_k generator;
 
     @Override
     public @Nullable BufferedImage getAWTBackground() {

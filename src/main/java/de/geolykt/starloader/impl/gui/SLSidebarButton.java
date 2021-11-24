@@ -4,9 +4,9 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
-import snoddasmannen.galimulator.ui.fl;
+import snoddasmannen.galimulator.ui.class_am;
 
-public class SLSidebarButton extends fl {
+public class SLSidebarButton extends class_am {
 
     protected final @NotNull Runnable action;
 

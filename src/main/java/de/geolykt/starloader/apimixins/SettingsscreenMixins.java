@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import de.geolykt.starloader.impl.gui.ModConfButtonWidget;
 
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.hi;
+import snoddasmannen.galimulator.class_at;
 
-@Mixin(hi.class)
+@Mixin(class_at.class)
 public class SettingsscreenMixins {
 
     @Inject(method = "getItems", at = @At("TAIL"))

@@ -30,9 +30,9 @@ import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.ck;
-import snoddasmannen.galimulator.du;
-import snoddasmannen.galimulator.gh;
+import snoddasmannen.galimulator.class_ac;
+import snoddasmannen.galimulator.class_an;
+import snoddasmannen.galimulator.interface_e;
 import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
 
@@ -98,7 +98,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     @SuppressWarnings("null")
     @Override
     public @NotNull NinePatch getAlternateWindowNinepatch() {
-        return GalFX.NINEPATCH.WINDOW3.a();
+        return GalFX.NINEPATCH.WINDOW3.getNine();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     @SuppressWarnings("null")
     @Override
     public @NotNull NinePatch getBoxButtonNinePatch() {
-        return GalFX.NINEPATCH.NICEBUTTON.a();
+        return GalFX.NINEPATCH.NICEBUTTON.getNine();
     }
 
     @SuppressWarnings("unchecked")
@@ -147,7 +147,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     @SuppressWarnings("null")
     @Override
     public @NotNull NinePatch getRoundedButtonNinePatch() {
-        return GalFX.NINEPATCH.BUTTON3.a();
+        return GalFX.NINEPATCH.BUTTON3.getNine();
     }
 
     @Override
@@ -163,7 +163,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     @SuppressWarnings("null")
     @Override
     public @NotNull NinePatch getWindowNinepatch() {
-        return GalFX.NINEPATCH.WINDOW.a();
+        return GalFX.NINEPATCH.WINDOW.getNine();
     }
 
     @Override
@@ -178,17 +178,17 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new gh(message));
+        Space.a(new class_an(message));
     }
 
     @Override
     public void sendOddityBulletin(@NotNull String message) {
-        Space.a(new du(message));
+        Space.a(new class_ac(message));
     }
 
     @Override
     public void showScreen(@NotNull Screen screen) {
-        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof ck) {
+        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof interface_e) {
             // Standard screen using the dialog api
             // We want to mimic this call:
             // arguments probably mean: screen, ???, type, closeOthers

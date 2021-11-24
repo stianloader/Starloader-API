@@ -10,9 +10,9 @@ import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
-import snoddasmannen.galimulator.hj;
+import snoddasmannen.galimulator.ppclass_fd;
 
-public class NamedCheckBoxComponent extends hj implements ScreenComponent {
+public class NamedCheckBoxComponent extends ppclass_fd implements ScreenComponent {
 
     protected final @NotNull BooleanOption option;
     protected final @NotNull Screen parent;

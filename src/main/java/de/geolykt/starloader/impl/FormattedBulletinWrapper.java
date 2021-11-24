@@ -2,9 +2,9 @@ package de.geolykt.starloader.impl;
 
 import de.geolykt.starloader.api.gui.text.FormattedText;
 
-import snoddasmannen.galimulator.gh;
+import snoddasmannen.galimulator.class_an;
 
-public class FormattedBulletinWrapper extends gh {
+public class FormattedBulletinWrapper extends class_an {
 
     private final FormattedText text;
 

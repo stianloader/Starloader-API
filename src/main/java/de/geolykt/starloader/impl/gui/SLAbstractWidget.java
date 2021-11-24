@@ -122,7 +122,7 @@ public abstract class SLAbstractWidget extends Widget {
      * @return The X-position of the widget
      */
     public final int getX() {
-        return (int) super.v();
+        return (int) super.get_e();
     }
 
     /**
@@ -135,7 +135,7 @@ public abstract class SLAbstractWidget extends Widget {
      * @return The Y-position of the widget
      */
     public final int getY() {
-        return (int) super.w();
+        return (int) super.get_f();
     }
 
     /**

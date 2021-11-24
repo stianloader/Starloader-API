@@ -20,7 +20,7 @@ import de.geolykt.starloader.impl.registry.Registries;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.ui.fm;
+import snoddasmannen.galimulator.ui.class_an;
 
 /**
  * Mixins into the empire special class, which makes it more registry-like.
@@ -37,14 +37,13 @@ public class EmpireSpecialMixins implements RegistryKeyed {
     @Overwrite
     private static void k() {
         // I do not even know if this is called, but better be safe than sorry
-        HashMap<EmpireSpecial, fm> maps = new HashMap<>();
+        HashMap<EmpireSpecial, class_an> maps = new HashMap<>();
         EmpireSpecial[] var0 = Registry.EMPIRE_SPECIALS.getValues();
         int var1 = var0.length;
 
         for (int var2 = 0; var2 < var1; ++var2) {
             EmpireSpecial var3 = var0[var2];
-            maps.put(var3,
-                    new fm("specialsbox.png", 30, GalFX.Q(), var3.h(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
+            maps.put(var3, new class_an("specialsbox.png", 30, GalFX.Q(), var3.getAbbreviation(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
         }
         EmpireSpecial.q = maps;
     }

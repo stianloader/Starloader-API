@@ -52,7 +52,7 @@ import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
-import snoddasmannen.galimulator.df;
+import snoddasmannen.galimulator.class_z;
 
 public class GalimulatorImplementation implements Galimulator.GameImplementation, Galimulator.Unsafe {
 
@@ -104,7 +104,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("null")
     @Override
     public @NotNull MapMode getActiveMapmode() {
-        return toSLMode(snoddasmannen.galimulator.MapMode.b());
+        return toSLMode(snoddasmannen.galimulator.MapMode.get_a());
     }
 
     @SuppressWarnings("rawtypes")
@@ -174,7 +174,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("null")
     @Override
     public @NotNull Map getMap() {
-        return (Map) Space.p();
+        return (Map) Space.get_ah();
     }
 
     @Override
@@ -217,7 +217,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             // this might return null, so we are going to make sure just in case.
             return null;
         }
-        return (ActiveEmpire) plyr.a();
+        return (ActiveEmpire) plyr.getEmpire();
     }
 
     @Override
@@ -388,7 +388,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 }
             }
             setFollowedPeopleUnsafe(followedMembers);
-            Space.p().getGenerator().m();
+            Space.get_ah().getGenerator().m();
             GalFX.l.zoom = GalFX.e();
             GalFX.l.update();
         }
@@ -468,7 +468,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 (snoddasmannen.galimulator.MapData) getMap(), hasUsedSandbox(),
                 snoddasmannen.galimulator.EmploymentAgency.a(), getPeopleUnsafe(), Space.s, null /* (unused) */,
                 getAlliancesUnsafe(), getCooperationsUnsafe(), getWarsUnsafe());
-        if (df.getConfiguration().useXStream()) {
+        if (class_z.getConfiguration().useXStream()) {
             LOGGER.warn("XStream is not supported for saving directly.");
         }
         try {

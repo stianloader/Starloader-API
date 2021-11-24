@@ -61,7 +61,7 @@ import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.gf;
+import snoddasmannen.galimulator.class_am;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
@@ -375,7 +375,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(gf.a().a("transcending"))).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_am.a().a("transcending"))).buildAndShow();
                 }
             }
         }
@@ -585,7 +585,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(gf.a().a("transcending"))).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_am.a().a("transcending"))).buildAndShow();
                 }
             }
         }

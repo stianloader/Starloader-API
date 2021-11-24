@@ -71,7 +71,7 @@ public class FactionMixins implements Faction {
     }
 
     public int getHost() {
-        return host.d();
+        return host.get_id();
     }
 
     public ActiveEmpire getHostEmpire() {

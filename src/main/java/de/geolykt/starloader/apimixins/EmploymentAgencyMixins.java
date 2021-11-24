@@ -31,8 +31,8 @@ import snoddasmannen.galimulator.Job;
 import snoddasmannen.galimulator.Job.JobType;
 import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.be;
-import snoddasmannen.galimulator.bf;
+import snoddasmannen.galimulator.ppclass_av;
+import snoddasmannen.galimulator.ppclass_aw;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
 
 @Mixin(EmploymentAgency.class)
@@ -55,7 +55,7 @@ public class EmploymentAgencyMixins {
     @Overwrite
     private Person a(final Job job, final int n) {
         List<Person> potentialCandidates;
-        if (job.f() == JobType.EMPEROR && (job.g() == Galimulator.getNeutralEmpire() || job.l() != null)) {
+        if (job.getType() == JobType.EMPEROR && (job.getEmployer() == Galimulator.getNeutralEmpire() || job.get_b() != null)) {
             potentialCandidates = job.n();
             if (potentialCandidates.isEmpty()) {
                 potentialCandidates = this.b(n);
@@ -67,8 +67,8 @@ public class EmploymentAgencyMixins {
             return null;
         }
         Person.f = 0;
-        if (job.f() == JobType.EMPEROR) {
-            if (Galimulator.getPlayerEmpire() == job.g().getJobEmpire()) {
+        if (job.getType() == JobType.EMPEROR) {
+            if (Galimulator.getPlayerEmpire() == job.getEmployer().getJobEmpire()) {
                 // Player empire
                 potentialCandidates.removeIf(person -> person.a(job) <= 0 || Claim.b(person, job) == null);
                 if (!potentialCandidates.isEmpty()) {
@@ -122,7 +122,7 @@ public class EmploymentAgencyMixins {
                     }
                     candidates.add((DynastyMember) o);
                 }
-                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, NullUtils.requireNotNull((ActiveEmpire) job.g()));
+                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, NullUtils.requireNotNull((ActiveEmpire) job.getEmployer()));
                 EventManager.handleEvent(evt);
                 List<@NotNull DynastyMember> finalSuggestions = evt.getSuccessors();
                 if (finalSuggestions.size() == 1) {
@@ -134,11 +134,11 @@ public class EmploymentAgencyMixins {
                 }
             }
         }
-        final ArrayList<Callable<bf>> callbacks = new ArrayList<>();
+        final ArrayList<Callable<ppclass_aw>> callbacks = new ArrayList<>();
         final int n2 = potentialCandidates.size() / 100 + 1;
         for (int i = 0; i < n2; ++i) {
             @SuppressWarnings("unchecked")
-            Callable<bf> callable = new be((EmploymentAgency) (Object) this, i * 100, potentialCandidates, job);
+            Callable<ppclass_aw> callable = new ppclass_av((EmploymentAgency) (Object) this, i * 100, potentialCandidates, job);
             callbacks.add(callable);
         }
         Person successor = null;
@@ -147,8 +147,8 @@ public class EmploymentAgencyMixins {
             if (this.b == null) {
                 this.b = Executors.newFixedThreadPool(4);
             }
-            for (Future<bf> finishedTask : b.invokeAll(callbacks)) {
-                final bf finishedTaskReturn = finishedTask.get();
+            for (Future<ppclass_aw> finishedTask : b.invokeAll(callbacks)) {
+                final ppclass_aw finishedTaskReturn = finishedTask.get();
                 if (successor == null || finishedTaskReturn.b > successorMerit) {
                     successor = finishedTaskReturn.a;
                     successorMerit = finishedTaskReturn.b;

@@ -36,7 +36,7 @@ import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.fn;
+import snoddasmannen.galimulator.interface_j;
 
 /**
  * Transformers targeting the Space class.
@@ -130,7 +130,7 @@ public class SpaceASMTransformer extends CodeModifier {
             EventManager.handleEvent(new GalaxySavingEndEvent(NullUtils.requireNotNull(location, "location is null"), true));
             GalimulatorImplementation.suppressSaveEvent = false;
         }
-        for (fn var1 : Space.u) {
+        for (interface_j var1 : Space.u) {
             var1.f();
         }
     }

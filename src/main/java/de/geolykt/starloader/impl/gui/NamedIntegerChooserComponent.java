@@ -17,9 +17,9 @@ import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
-import snoddasmannen.galimulator.hl;
+import snoddasmannen.galimulator.ppclass_ff;
 
-public class NamedIntegerChooserComponent extends hl implements ScreenComponent {
+public class NamedIntegerChooserComponent extends ppclass_ff implements ScreenComponent {
 
     protected static Vector<@NotNull Object> getOptions(@NotNull NumberOption<?> option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());

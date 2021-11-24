@@ -47,7 +47,7 @@ public class WeaponMixins implements Weapon {
 
     @Override
     public @NotNull String getName() {
-        return NullUtils.requireNotNull(snodWeapon().c());
+        return NullUtils.requireNotNull(snodWeapon().getName());
     }
 
     @Override

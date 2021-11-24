@@ -13,9 +13,9 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 
-import snoddasmannen.galimulator.cd;
+import snoddasmannen.galimulator.class_k;
 
-@Mixin(cd.class)
+@Mixin(class_k.class)
 public class ApplicationMixins {
 
     /**

@@ -4,10 +4,10 @@ import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.ho;
+import snoddasmannen.galimulator.ppclass_fi;
 
 // We are hijacking the Blacklist widget class since intended class cannot be referenced
-public class ModConfButtonWidget extends ho {
+public class ModConfButtonWidget extends ppclass_fi {
 
     public ModConfButtonWidget(String arg1, GalColor arg2, GalColor arg3, String arg4) {
         super(null, arg1, arg2, arg3, arg4);

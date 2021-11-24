@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.Camera;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.Screen;
 
-import snoddasmannen.galimulator.ck;
-import snoddasmannen.galimulator.ui.fu;
+import snoddasmannen.galimulator.interface_e;
+import snoddasmannen.galimulator.ui.class_av;
 
 /**
  * A lazy workaround through the fact that the cameras of items of the screen API never have their cameras
@@ -21,7 +21,7 @@ import snoddasmannen.galimulator.ui.fu;
  * instead use {@link Drawing#showScreen(Screen)}, which may eventually opt-in for a more favourable approach
  * without any dependent knowing about it.
  */
-public class SLScreenProjector extends fu {
+public class SLScreenProjector extends class_av {
 
     /**
      * The screen projected by this widget.
@@ -37,7 +37,7 @@ public class SLScreenProjector extends fu {
      * @param indepentWindow Whether this widget should not be nested into another widget.
      */
     public SLScreenProjector(@NotNull Screen screen, boolean indepentWindow) {
-        super((ck) Objects.requireNonNull(screen, "Screen cannot be null."), indepentWindow);
+        super((interface_e) Objects.requireNonNull(screen, "Screen cannot be null."), indepentWindow);
         this.screen = screen;
     }
 

@@ -1,6 +1,11 @@
 package de.geolykt.starloader.impl;
 
-import static snoddasmannen.galimulator.Settings.EnumSettings.*;
+import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_ALL_WILL_BE_ASHES;
+import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_BLOOD_PURGE;
+import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_DEGENERATION;
+import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_TRANSCENDENCE;
+import static snoddasmannen.galimulator.Settings.EnumSettings.SHIP_NUMBER_MOD;
+import static snoddasmannen.galimulator.Settings.EnumSettings.TRANSCEND_LEVEL;
 
 import de.geolykt.starloader.api.GameConfiguration;
 
@@ -28,7 +33,7 @@ public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     public int getMinimumComponentHeight() {
-        return snoddasmannen.galimulator.df.getConfiguration().getMinHeight();
+        return snoddasmannen.galimulator.class_z.getConfiguration().getMinHeight();
     }
 
     @Override
