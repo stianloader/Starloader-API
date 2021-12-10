@@ -154,9 +154,26 @@ public final class Drawing {
     }
 
     /**
+     * Fills a rectangle on the main drawing batch (as provided by {@link #getDrawingBatch()})
+     * with a certain color.
+     *
+     * @param x         The X-position to draw on; it is the left corner of the rectangle.
+     * @param y         The Y-position to draw on; it is not known which corner it corresponds to. Caution is advised
+     * @param width     The width of the rectangle.
+     * @param height    The height of the rectangle.
+     * @param camera    The camera to use. It transforms x/y-positions as well as width and height of the drawn rectangle.
+     * @param fillColor The GDX color to fill it with.
+     * @since 1.5.0
+     */
+    public static void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
+        implementation.fillRect(x, y, width, height, fillColor, camera);
+    }
+
+    /**
      * <b>As specified by the APINote, this method has unintended consequences. It does not only operate
      * like a fillRect() method, but also draws a frame around the rectangle. More specifically
      * this frame is assumed to be linked with {@link TextureProvider#getAlternateWindowNinepatch()}.</b>
+     * To fill the contents of a window/screen, use {@link #fillRect(float, float, float, float, Color, Camera)} instead.
      *
      * <p>Fills a rectangle with a given width and height with a specified color. As a
      * friendly reminder, the position 0,0 is the lower left corner and as the
@@ -172,8 +189,7 @@ public final class Drawing {
      *          anything but the Widget. Act carefully for you may not want to call
      *          this method.
      */
-    public static void fillWindow(float x, float y, float width, float height, @NotNull Color color,
-            @NotNull Camera camera) {
+    public static void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
         implementation.fillWindow(x, y, width, height, color, camera);
     }
 

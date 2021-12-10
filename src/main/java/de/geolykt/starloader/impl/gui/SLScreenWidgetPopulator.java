@@ -13,12 +13,15 @@ import com.badlogic.gdx.math.Vector2;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+import de.geolykt.starloader.impl.gui.ScreenComponentPositioningMeta.UnmodifableScreenComponentPositoningMetaIterator;
 
 /**
- * Internal class that implements the iterator required by the {@link Screen} interface.
+ * Internal class that fits the components based on their meta.
  * For use with {@link SLScreenWidget}, it iterates based on insertion order.
+ * The iterator required by the {@link Screen} interface is implemented by
+ * the {@link UnmodifableScreenComponentPositoningMetaIterator}.
  */
-final class SLScreenWidgetIterator implements Iterator<Map.Entry<Vector2, ScreenComponent>> {
+final class SLScreenWidgetPopulator implements Iterator<Map.Entry<Vector2, ScreenComponent>> {
 
     private final @NotNull Iterator<ScreenComponent> components;
     private final int maxWidth;
@@ -28,7 +31,7 @@ final class SLScreenWidgetIterator implements Iterator<Map.Entry<Vector2, Screen
     private int x;
     private int y;
 
-    public SLScreenWidgetIterator(int viewportHeight, boolean headless, int innerWidth, @NotNull Iterator<ScreenComponent> components, boolean supportRemove) {
+    public SLScreenWidgetPopulator(int viewportHeight, boolean headless, int innerWidth, @NotNull Iterator<ScreenComponent> components, boolean supportRemove) {
         this.components = components;
         this.y = viewportHeight;
         if (!headless) {

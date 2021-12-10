@@ -139,7 +139,7 @@ public abstract class ScreenBuilder {
      * Sets the title of the screen as shown in the screen header.
      * The default color of this title is white.
      * This method is a required operation and otherwise {@link #build()} will fail,
-     * except if {@link #setHeaderEnabled(boolean)} was called if false as a parameter.
+     * except if {@link #setHeaderEnabled(boolean)} was called with false as a parameter.
      *
      * @param title The title of the screen.
      */

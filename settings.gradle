@@ -9,7 +9,6 @@ pluginManagement {
             name = 'QuiltMC Releases'
             url 'https://maven.quiltmc.org/repository/release/'
         }
-        mavenLocal()
     }
 }
 

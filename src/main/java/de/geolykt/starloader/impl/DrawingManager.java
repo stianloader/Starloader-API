@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
 import de.geolykt.starloader.api.NullUtils;
@@ -91,8 +92,31 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     }
 
     @Override
+    public void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
+        SpriteBatch drawBatch = getMainDrawingBatch();
+        boolean beganDrawing = false;
+        if (!drawBatch.isDrawing()) {
+            drawBatch.begin();
+            beganDrawing = true;
+        }
+        TextureRegion region = findTextureRegion("whitesquare.png");
+        drawBatch.setColor(fillColor);
+        drawBatch.setProjectionMatrix(camera.combined);
+        drawBatch.draw(region, x, y, width, height);
+        if (beganDrawing) {
+            drawBatch.end();
+        }
+    }
+
+    @Override
     public void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
         GalFX.a(x, y, width, height, new GalColor(color), camera);
+    }
+
+    @Override
+    @NotNull
+    public TextureRegion findTextureRegion(@NotNull String name) {
+        return NullUtils.requireNotNull(GalFX.b(name));
     }
 
     @SuppressWarnings("null")

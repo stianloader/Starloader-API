@@ -16,7 +16,7 @@ public interface Screen extends Iterable<Map.Entry<Vector2, ScreenComponent>> {
 
     /**
      * Adds a child component to this screen.
-     * Note: while this method might look attractive, only the fewest implementations support it.
+     * Note: while this method might look attractive, some implementations may not support it.
      * {@link ScreenBuilder} exposes {@link ScreenBuilder#addComponentProvider(ComponentProvider)},
      * which you may want to use instead.
      *
@@ -26,10 +26,10 @@ public interface Screen extends Iterable<Map.Entry<Vector2, ScreenComponent>> {
 
     /**
      * Checks whether {@link #addChild(ScreenComponent)} is a valid operation in this implementation.
-     * This method is needed as many implementation will create their children by their needs,
+     * This method is needed as some implementation will create their children by their needs,
      * at which point it is hard to implement potential foreign children getting added by external means.
      *
-     * @return Where {@link #addChild(ScreenComponent)} is a valid operation.
+     * @return True when {@link #addChild(ScreenComponent)} is a valid operation, false otherwise
      */
     public boolean canAddChildren();
 

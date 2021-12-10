@@ -20,6 +20,7 @@ import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.ReactiveComponent;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+import de.geolykt.starloader.impl.gui.ScreenComponentPositioningMeta.UnmodifableScreenComponentPositoningMetaIterator;
 
 import snoddasmannen.galimulator.GalColor;
 
@@ -32,12 +33,14 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     /**
      * The list of components displayed by the screen instance.
      */
-    protected final @NotNull List<@NotNull ScreenComponent> components;
+    @NotNull
+    protected final List<@NotNull ScreenComponent> components;
 
     /**
      * The colour of the header bar. Usually it is orange, however can be set to a different colour in the constructor.
      */
-    protected final @NotNull GalColor headerColor;
+    @NotNull
+    protected final GalColor headerColor;
 
     /**
      * The value returned by {@link #isHeadless()}.
@@ -47,7 +50,8 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     /**
      * The title of the screen. Set in the constructor.
      */
-    protected final @NotNull String title;
+    @NotNull
+    protected final String title;
 
     /**
      * The width of the screen, set by the constructor.
@@ -59,7 +63,13 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
      * A dynamic provider for the width of the screen. This has to be null if {@link #width} is a non -1 value, but
      * cannot be null if {@link #width} has a -1 value.
      */
-    protected final @Nullable IntSupplier widthProvider;
+    @Nullable
+    protected final IntSupplier widthProvider;
+
+    @NotNull
+    private final List<ScreenComponentPositioningMeta> componentPositioningMeta = new ArrayList<>();
+
+    private double lastRenderHeight = Double.NaN;
 
     /**
      * The constructor of this screen instance.
@@ -217,11 +227,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public Iterator<Entry<Vector2, ScreenComponent>> iterator() {
-        @SuppressWarnings("null")
-        @NotNull Iterator<ScreenComponent> components = this.components.iterator();
-        Camera c = getCamera();
-        int height = (c == null ? getHeight() : (int) c.viewportHeight);
-        return new SLScreenWidgetIterator(height, isHeadless(), getInnerWidth(), components, true);
+        return new UnmodifableScreenComponentPositoningMetaIterator(this.componentPositioningMeta);
     }
 
     @Override
@@ -246,31 +252,39 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     }
 
     protected void renderSLChildComponents() {
+        @SuppressWarnings("null")
+        @NotNull Iterator<ScreenComponent> hackvar = this.components.iterator();
         Camera c = NullUtils.requireNotNull(getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
-        for (Map.Entry<Vector2, ScreenComponent> component : this) {
-            Vector2 pos = component.getKey();
-            component.getValue().renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove
+        int height = getHeight();
+        Iterator<Map.Entry<Vector2, ScreenComponent>> populator = new SLScreenWidgetPopulator(height, isHeadless(), getInnerWidth(), hackvar, false);
+
+        componentPositioningMeta.clear();
+        lastRenderHeight = height;
+        while (populator.hasNext()) {
+            Map.Entry<Vector2, ScreenComponent> componentEntry = populator.next();
+            Vector2 pos = componentEntry.getKey();
+            ScreenComponent component = componentEntry.getValue();
+            int width = component.renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove. (#getInnerWidth does not make any sense anymore dummy.)
+            componentPositioningMeta.add(new ScreenComponentPositioningMeta(pos, width, component.getHeight(), component));
         }
     }
 
     @Override
     protected void tap(double x, double y, boolean isLongTap) {
-        Camera c = NullUtils.requireNotNull(getCamera(), "Camera may not be null.");
-        for (Map.Entry<Vector2, ScreenComponent> component : this) {
-            // For galimulator, y = 0, x = 0 is the lower left edge, positive numbers go more towards the upper right.
-            // We follow the same principle within our screen API.
-            ScreenComponent comp = component.getValue();
-            if (!(comp instanceof ReactiveComponent)) {
+        Camera c = NullUtils.requireNotNull(getCamera());
+        double actualY = lastRenderHeight - y - 25.0D; // GDX and galimulator are a bit strange, but it makes sense once you get the gist.
+        for (ScreenComponentPositioningMeta posMeta : this.componentPositioningMeta) {
+            if (!(posMeta.component instanceof ReactiveComponent)) {
                 continue;
             }
-            Vector2 pos = component.getKey();
-            if ((x >= pos.x && x <= pos.x + comp.getWidth())
-                    && (y <= pos.y && y >= pos.y - comp.getHeight())) {
-                // FIXME galimulator provides values that I did not expect. Was my initial reverse-engineering wrong?
+            ReactiveComponent component = (ReactiveComponent) posMeta.component;
+            Vector2 pos = posMeta.pos;
+            if ((x >= pos.x && x <= pos.x + posMeta.width)
+                    && (pos.y <= actualY && (pos.y + posMeta.height) >= actualY)) {
                 if (isLongTap) {
-                    ((ReactiveComponent) comp).onLongClick((int) (x - pos.x), (int) (y - pos.y) + comp.getHeight(), (int) pos.x, (int) pos.y, c);
+                    component.onLongClick((int) (x - pos.x), (int) (posMeta.height - (actualY - pos.y)), (int) pos.x, (int) pos.y, c);
                 } else {
-                    ((ReactiveComponent) comp).onClick((int) (x - pos.x), (int) (y - pos.y) + comp.getHeight(), (int) pos.x, (int) pos.y, c);
+                    component.onClick((int) (x - pos.x), (int) (posMeta.height - (actualY - pos.y)), (int) pos.x, (int) pos.y, c);
                 }
             }
         }

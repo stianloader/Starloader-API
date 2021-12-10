@@ -135,7 +135,6 @@ public final class Registries {
     public static void initFlagSymbols() {
         LOGGER.info("Registering flag symbols");
         SimpleEnumRegistry<BuiltinSymbols> symbolRegistry = new SimpleEnumRegistry<>(BuiltinSymbols.class);
-        @SuppressWarnings("null")
         @NotNull BuiltinSymbols[] symbols = new @NotNull BuiltinSymbols[] {
             BuiltinSymbols.CIRCLE,
             BuiltinSymbols.SQUARE,
