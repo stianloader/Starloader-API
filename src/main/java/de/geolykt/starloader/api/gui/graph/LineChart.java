@@ -132,13 +132,11 @@ public class LineChart implements ScreenComponent {
         return 2.0F;
     }
 
-    protected @NotNull Color getColor(Object o) {
+    protected @NotNull Color getColor(@NotNull Object o) {
         if (o instanceof Empire) {
-            java.awt.Color awtColor = ((Empire) o).getAWTColor();
-            return new Color(awtColor.getRed() / 255.0F, awtColor.getGreen() / 255.0F, awtColor.getBlue() / 255.0F, awtColor.getAlpha() / 255.0F);
+            return ((Empire) o).getGDXColor();
         } else if (o instanceof Alliance) {
-            java.awt.Color awtColor = ((Alliance) o).getAWTColor();
-            return new Color(awtColor.getRed() / 255.0F, awtColor.getGreen() / 255.0F, awtColor.getBlue() / 255.0F, awtColor.getAlpha() / 255.0F);
+            return ((Alliance) o).getGDXColor();
         } else {
             Color c = new Color(o.hashCode());
             c.a = 1.0F;

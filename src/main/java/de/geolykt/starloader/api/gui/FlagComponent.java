@@ -19,8 +19,10 @@ public interface FlagComponent {
      * of this class. However this is cached once per instance of the underlying Galimulator-specific color object.
      *
      * @return The color that should be used to render the {@link FlagSymbol}. Converted to the AWT Color object.
+     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
      */
     @NotNull
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public java.awt.Color getAWTColor();
 
     /**

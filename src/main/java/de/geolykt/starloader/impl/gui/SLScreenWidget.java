@@ -287,9 +287,6 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
             }
             ReactiveComponent component = (ReactiveComponent) posMeta.component;
             Vector2 pos = posMeta.pos;
-            System.out.println("x >= pos.x && x <= pos.x + posMeta.width = " + (x >= pos.x && x <= pos.x + posMeta.width));
-            System.out.println("pos.y <= actualY = " + (pos.y <= actualY));
-            System.out.println("(pos.y + posMeta.height) >= actualY = " + ((pos.y + posMeta.height) >= actualY));
             if ((x >= pos.x && x <= pos.x + posMeta.width)
                     && (pos.y <= actualY && (pos.y + posMeta.height) >= actualY)) {
                 component.onScroll((int) (x - pos.x), (int) (posMeta.height - (actualY - pos.y)), (int) pos.x, (int) pos.y, c, amount);

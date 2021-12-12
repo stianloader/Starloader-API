@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.gui.FlagComponent;
 import de.geolykt.starloader.api.gui.FlagSymbol;
-import de.geolykt.starloader.impl.AWTColorAccesor;
 
 import snoddasmannen.galimulator.FlagItem;
 import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
@@ -46,8 +45,9 @@ public class FlagItemMixins implements FlagComponent {
 
     @Override
     @NotNull
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public Color getAWTColor() {
-        return ((AWTColorAccesor) color).asAWTColor();
+        return ((de.geolykt.starloader.impl.AWTColorAccesor) color).asAWTColor();
     }
 
     @SuppressWarnings("null")

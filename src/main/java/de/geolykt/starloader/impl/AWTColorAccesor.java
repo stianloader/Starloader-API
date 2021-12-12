@@ -8,7 +8,10 @@ import snoddasmannen.galimulator.GalColor;
 
 /**
  * Interface that is put on the {@link GalColor} class via Mixins at runtime.
+ *
+ * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
  */
+@Deprecated(forRemoval = true, since = "1.5.0")
 public interface AWTColorAccesor {
 
     /**
@@ -18,7 +21,9 @@ public interface AWTColorAccesor {
      * This operation needn't be equal to a cast.
      *
      * @return The current instance as a {@link Color}.
+     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
      */
     @NotNull
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public Color asAWTColor();
 }

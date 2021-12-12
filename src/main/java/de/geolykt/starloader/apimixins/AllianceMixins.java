@@ -16,7 +16,6 @@ import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.alliance.AllianceJoinEvent;
 import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
-import de.geolykt.starloader.impl.AWTColorAccesor;
 
 import snoddasmannen.galimulator.GalColor;
 
@@ -73,8 +72,9 @@ public class AllianceMixins implements Alliance {
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public @NotNull Color getAWTColor() {
-        return ((AWTColorAccesor) getColor()).asAWTColor();
+        return ((de.geolykt.starloader.impl.AWTColorAccesor) getColor()).asAWTColor();
     }
 
     @Override
@@ -91,6 +91,12 @@ public class AllianceMixins implements Alliance {
     @Override
     public @NotNull String getFullName() {
         return nameIdentifier;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
+        return c().getGDXColor();
     }
 
     @SuppressWarnings({ "unchecked", "null" })

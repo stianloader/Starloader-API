@@ -52,7 +52,6 @@ import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
-import de.geolykt.starloader.impl.AWTColorAccesor;
 
 import snoddasmannen.galimulator.EmpireAchievement.EmpireAchievementType;
 import snoddasmannen.galimulator.EmpireSpecial;
@@ -408,8 +407,9 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public @NotNull Color getAWTColor() {
-        return ((AWTColorAccesor) getColor()).asAWTColor();
+        return ((de.geolykt.starloader.impl.AWTColorAccesor) getColor()).asAWTColor();
     }
 
     @Override
@@ -474,6 +474,12 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public int getFoundationYear() {
         return birthMilliYear;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
+        return getColor().getGDXColor();
     }
 
     @SuppressWarnings("null")

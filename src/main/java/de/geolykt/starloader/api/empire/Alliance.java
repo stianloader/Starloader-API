@@ -1,9 +1,10 @@
 package de.geolykt.starloader.api.empire;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.badlogic.gdx.graphics.Color;
 
 import snoddasmannen.galimulator.GalColor;
 
@@ -31,9 +32,18 @@ public interface Alliance extends Dateable {
      * This method can be preferable over {@link #getColor()} as latter is only present within Galimulator proper
      * while this component is provided by most Java SE implementations starloader will run on.
      *
-     * @return The {@link Color} of the alliance
+     * @return The {@link java.awt.Color} of the alliance
+     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
      */
-    public @NotNull Color getAWTColor();
+    @Deprecated(forRemoval = true, since = "1.5.0")
+    public @NotNull java.awt.Color getAWTColor();
+
+    /**
+     * Obtains the Color of the Alliance used for UI.
+     *
+     * @return The {@link GalColor} of the alliance
+     */
+    public @NotNull Color getGDXColor();
 
     /**
      * Obtains the Color of the Alliance used for UI.

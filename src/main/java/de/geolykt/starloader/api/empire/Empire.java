@@ -1,8 +1,8 @@
 package de.geolykt.starloader.api.empire;
 
-import java.awt.Color;
-
 import org.jetbrains.annotations.NotNull;
+
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
@@ -26,15 +26,27 @@ public interface Empire extends Dateable, Identifiable {
     }
 
     /**
-     * The galimulator color is used for multiple interfaces as well as to paint the
+     * The empire color is used for multiple interfaces as well as to paint the
      * territory of an empire to a constant color, the color as such should not
      * change without reason to not confuse the user.
      * This method can be preferable over {@link #getColor()} as latter is only present within Galimulator proper
      * while this component is provided by the JVM
      *
-     * @return The AWT {@link Color} assigned to the empire
+     * @return The AWT {@link java.awt.Color} assigned to the empire
+     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
      */
-    public @NotNull Color getAWTColor();
+    @Deprecated(forRemoval = true, since = "1.5.0")
+    public @NotNull java.awt.Color getAWTColor();
+
+    /**
+     * The empire color is used for multiple interfaces as well as to paint the
+     * territory of an empire to a constant color, the color as such should not
+     * change without reason to not confuse the user.
+     *
+     * @return The GDX {@link Color} assigned to the empire
+     */
+    @NotNull
+    public Color getGDXColor();
 
     /**
      * The year the empire collapsed, or -1 if the empire did not collapse.
@@ -44,7 +56,7 @@ public interface Empire extends Dateable, Identifiable {
     public int getCollapseYear();
 
     /**
-     * The galimulator color is used for multiple interfaces as well as to paint the
+     * The empire color is used for multiple interfaces as well as to paint the
      * territory of an empire to a constant color, the color as such should not
      * change without reason to not confuse the user.
      *

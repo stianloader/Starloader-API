@@ -6,12 +6,16 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import de.geolykt.starloader.impl.AWTColorAccesor;
-
 import snoddasmannen.galimulator.GalColor;
 
+/**
+ * Mixin that implements the AWTColorAccessor on to the GalColor class.
+ *
+ * @deprecated The AWTColorAccess class is deprecated for removal and there is no other reason for this class to exist.
+ */
+@Deprecated(forRemoval = true, since = "1.5.0")
 @Mixin(GalColor.class)
-public class GalColorMixins implements AWTColorAccesor {
+public class GalColorMixins implements de.geolykt.starloader.impl.AWTColorAccesor {
 
     @Shadow
     public float a;

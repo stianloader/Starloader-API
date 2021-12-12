@@ -113,7 +113,10 @@ public abstract class ScreenBuilder {
      * All RGBA channels will be used and the default value is an Orange-ish color.
      *
      * @param awtColor The color to use as an Java AWT Color. It will get transformed into Galimulator's internal Color type later on.
+     *
+     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public abstract void setHeaderColor(@NotNull Color awtColor);
 
     /**
