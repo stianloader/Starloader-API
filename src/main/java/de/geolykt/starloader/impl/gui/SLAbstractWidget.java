@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 
@@ -39,6 +40,12 @@ public abstract class SLAbstractWidget extends Widget {
     public void a(double x, double y) {
         super.a(x, y);
         tap(x, getHeight() - y, false);
+    }
+
+    @Override
+    public void a(float unknown, float amount, float x, float y) {
+        super.a(unknown, amount, x, y);
+        scroll((int) x, (int) y, (int) amount / -40);
     }
 
     @Override
@@ -150,6 +157,21 @@ public abstract class SLAbstractWidget extends Widget {
      */
     protected final void renderChildren() {
         this.z();
+    }
+
+    /**
+     * Listener method for when the user chooses to scroll while having the mouse on this widget.
+     * Corresponds to {@link InputProcessor#scrolled(int)}.
+     *
+     * @param x      The X-position of the mouse at this time
+     * @param y      The Y-position of the mouse at this time
+     * @param amount The amount that should be scrolled. Either {@code -1} or {@code 1}.
+     * @return True when the game should not be zoomed. False when the zoom of the main board should not be blocked.
+     * @since 1.5.0
+     */
+    protected boolean scroll(int x, int y, int amount) {
+        // Stub
+        return true;
     }
 
     /**

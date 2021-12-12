@@ -13,7 +13,11 @@ import de.geolykt.starloader.impl.gui.screencomponents.SLScreenComponent;
 /**
  * A collection class that sets the parent screen of all the components. Note: in order for this to work the component
  * must implement {@link SLScreenComponent}.
+ *
+ * @deprecated The only functionality of this class depends on {@link SLScreenComponent}, which has been deprecated
+ * for removal
  */
+@Deprecated(forRemoval = true, since = "1.5.0")
 public class SimpleScreenChildList extends LinkedList<@NotNull ScreenComponent> {
 
     /**

@@ -161,7 +161,7 @@ public final class Drawing {
      * @param y         The Y-position to draw on; it is not known which corner it corresponds to. Caution is advised
      * @param width     The width of the rectangle.
      * @param height    The height of the rectangle.
-     * @param camera    The camera to use. It transforms x/y-positions as well as width and height of the drawn rectangle.
+     * @param camera    The camera to use. It transforms x/y-positions of the drawn rectangle. <b>Width and height are unaffected</b>
      * @param fillColor The GDX color to fill it with.
      * @since 1.5.0
      */

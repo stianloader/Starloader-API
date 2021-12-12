@@ -22,7 +22,7 @@ public final class NullUtils {
      * @param object The object to wrap
      * @return The newly created optional
      */
-    public static @NotNull <T> Optional<@NotNull T> asOptional(@Nullable T object) {
+    public static @NotNull <T> Optional<T> asOptional(@Nullable T object) {
         if (object == null) {
             return emptyOptional();
         }

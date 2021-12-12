@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.ReactiveComponent;
@@ -264,9 +265,43 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
             Map.Entry<Vector2, ScreenComponent> componentEntry = populator.next();
             Vector2 pos = componentEntry.getKey();
             ScreenComponent component = componentEntry.getValue();
-            int width = component.renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove. (#getInnerWidth does not make any sense anymore dummy.)
-            componentPositioningMeta.add(new ScreenComponentPositioningMeta(pos, width, component.getHeight(), component));
+            try {
+                int width = component.renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove. (#getInnerWidth does not make any sense anymore dummy.)
+                componentPositioningMeta.add(new ScreenComponentPositioningMeta(pos, width, component.getHeight(), component));
+            } catch (Exception e) {
+                // Throwing an exception here would cause serious UI issues
+                e.printStackTrace();
+                Drawing.toast("Unable to draw a screen component. Review the log for details!");
+            }
         }
+    }
+
+    @Override
+    protected boolean scroll(int x, int y, int amount) {
+        Camera c = NullUtils.requireNotNull(getCamera());
+        double actualY = lastRenderHeight - y - 25.0D;
+
+        for (ScreenComponentPositioningMeta posMeta : this.componentPositioningMeta) {
+            if (!(posMeta.component instanceof ReactiveComponent)) {
+                continue;
+            }
+            ReactiveComponent component = (ReactiveComponent) posMeta.component;
+            Vector2 pos = posMeta.pos;
+            System.out.println("x >= pos.x && x <= pos.x + posMeta.width = " + (x >= pos.x && x <= pos.x + posMeta.width));
+            System.out.println("pos.y <= actualY = " + (pos.y <= actualY));
+            System.out.println("(pos.y + posMeta.height) >= actualY = " + ((pos.y + posMeta.height) >= actualY));
+            if ((x >= pos.x && x <= pos.x + posMeta.width)
+                    && (pos.y <= actualY && (pos.y + posMeta.height) >= actualY)) {
+                component.onScroll((int) (x - pos.x), (int) (posMeta.height - (actualY - pos.y)), (int) pos.x, (int) pos.y, c, amount);
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void setCamera(@NotNull Camera camera) {
+        throw new UnsupportedOperationException("This method call is not permitted.");
     }
 
     @Override
@@ -288,10 +323,5 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
                 }
             }
         }
-    }
-
-    @Override
-    public void setCamera(@NotNull Camera camera) {
-        throw new UnsupportedOperationException("This method call is not permitted.");
     }
 }
