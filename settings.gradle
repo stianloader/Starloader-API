@@ -1,6 +1,8 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        //mavenLocal()
+        mavenCentral()
         maven {
             name = 'Geolykt'
             url = 'https://geolykt.de/maven/'
