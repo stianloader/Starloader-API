@@ -13,7 +13,7 @@ import de.geolykt.starloader.api.sound.Track;
 import de.geolykt.starloader.impl.SLSoundHandler;
 
 import snoddasmannen.galimulator.AudioManager;
-import snoddasmannen.galimulator.class_e;
+import snoddasmannen.galimulator.class_4;
 
 /**
  * Mixins into the AudioManager class.
@@ -25,7 +25,7 @@ public class AudioManagerMixins {
      * currentTrack.
      */
     @Shadow
-    public static class_e a;
+    public static class_4 a;
 
     /**
      * currentTrackId.
@@ -51,7 +51,7 @@ public class AudioManagerMixins {
             if (b >= c.size()) {
                 b = 0;
             }
-            a = (class_e) c.get(b);
+            a = (class_4) c.get(b);
             if (SLSoundHandler.supressEvents) {
                 SLSoundHandler.supressEvents = false;
             } else {

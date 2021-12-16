@@ -6,12 +6,12 @@ import de.geolykt.starloader.api.empire.people.DynastyMember;
 import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.Job;
 import snoddasmannen.galimulator.Person;
-import snoddasmannen.galimulator.ui.class_aq;
+import snoddasmannen.galimulator.ui.class_42;
 
 /**
  * A line entry in the dialog that allows users to choose their new emperor.
  */
-public class EmperorOption extends class_aq {
+public class EmperorOption extends class_42 {
 
     protected final EmploymentAgency agency;
     protected final Job job;

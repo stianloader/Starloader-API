@@ -15,9 +15,9 @@ import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
-import snoddasmannen.galimulator.ppclass_fe;
+import snoddasmannen.galimulator.ppclass_168;
 
-public class NamedStringChooserComponent extends ppclass_fe implements ScreenComponent {
+public class NamedStringChooserComponent extends ppclass_168 implements ScreenComponent {
 
     protected static Vector<@NotNull Object> getOptions(StringOption option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());

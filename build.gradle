@@ -25,6 +25,7 @@ obfTools {
     annotation = "Lde/geolykt/starloader/impl/Pseudo;"
     affectedJar = "./galimulator-desktop.jar"
     accessWidener = "src/main/resources/starloader-api.accesswidener"
+    alternateNaming = true
 }
 
 dependencies {

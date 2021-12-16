@@ -31,9 +31,9 @@ import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.class_ac;
-import snoddasmannen.galimulator.class_an;
-import snoddasmannen.galimulator.interface_e;
+import snoddasmannen.galimulator.class_30;
+import snoddasmannen.galimulator.class_41;
+import snoddasmannen.galimulator.interface_4;
 import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
 
@@ -202,21 +202,22 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new class_an(message));
+        Space.a(new class_41(message));
     }
 
     @Override
     public void sendOddityBulletin(@NotNull String message) {
-        Space.a(new class_ac(message));
+        Space.a(new class_30(message));
     }
 
     @Override
     public void showScreen(@NotNull Screen screen) {
-        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof interface_e) {
+        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof interface_4) {
             // Standard screen using the dialog api
             // We want to mimic this call:
             // arguments probably mean: screen, ???, type, closeOthers
             // Space.a((ck) screen, true, null, false);
+            @SuppressWarnings("removal")
             SLScreenProjector screenWrapper = new SLScreenProjector(screen, true);
             screenWrapper.a((WIDGET_ID) null);
             Space.c(screenWrapper);

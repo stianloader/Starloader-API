@@ -10,9 +10,9 @@ import com.badlogic.gdx.Input.TextInputListener;
 import de.geolykt.starloader.api.gui.InputDialog;
 
 import snoddasmannen.galimulator.ui.Widget;
-import snoddasmannen.galimulator.ui.class_cg;
+import snoddasmannen.galimulator.ui.class_88;
 
-public class StarloaderInputDialog extends class_cg implements InputDialog {
+public class StarloaderInputDialog extends class_88 implements InputDialog {
 
     /**
      * Reference to the implementation of the {@link TextInputListener} interface used by this dialog instance.

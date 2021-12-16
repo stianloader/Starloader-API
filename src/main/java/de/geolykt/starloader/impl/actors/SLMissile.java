@@ -11,6 +11,7 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.impl.Pseudo;
 
 import snoddasmannen.galimulator.Empire;
+import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.actors.Missile;
 import snoddasmannen.galimulator.actors.StateActor;
 
@@ -28,7 +29,13 @@ public abstract class SLMissile extends Missile implements MissileSpec {
     @Deprecated(forRemoval = true, since = "1.5.0")
     public SLMissile(float x, float y, float angle, float maxSpeed, StateActor shooter, Empire owner, int range,
             boolean targetStars, boolean targetActors, boolean matchTargetTech, float firepower) {
-        super(x, y, angle, maxSpeed, shooter, owner, range, targetStars, targetActors, matchTargetTech, firepower);
+        this(x, y, angle, maxSpeed, shooter, owner, range, targetStars, targetActors, matchTargetTech, firepower, true, "Missile.png", null);
+    }
+
+    @Deprecated(forRemoval = true, since = "1.6.0")
+    public SLMissile(float x, float y, float angle, float maxSpeed, StateActor shooter, Empire owner, int range,
+            boolean targetStars, boolean targetActors, boolean matchTargetTech, float firepower, boolean drawTrail, String missileTexture, GalColor color) {
+        super(x, y, angle, maxSpeed, shooter, owner, range, targetStars, targetActors, matchTargetTech, firepower, drawTrail, missileTexture, color);
     }
 
     /**

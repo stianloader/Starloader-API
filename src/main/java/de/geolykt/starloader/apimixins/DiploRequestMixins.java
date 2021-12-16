@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.DiplomacyRequestEvent;
 import de.geolykt.starloader.api.player.DiplomacyRequest;
+import de.geolykt.starloader.api.registry.RegistryKeys;
 
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.diplomacy.PlayerRequest;
@@ -22,8 +23,8 @@ public class DiploRequestMixins implements DiplomacyRequest {
     }
 
     @Shadow
-    public boolean a(final Empire empire) {
-        return empire.ae();
+    public boolean a(final Empire empire) { // isNotTranscending
+        return ((ActiveEmpire) empire).getState().equals(RegistryKeys.GALIMULATOR_TRANSCENDING);
     }
 
     @Shadow

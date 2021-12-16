@@ -33,7 +33,7 @@ public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     public int getMinimumComponentHeight() {
-        return snoddasmannen.galimulator.class_z.getConfiguration().getMinHeight();
+        return snoddasmannen.galimulator.class_27.getConfiguration().getMinHeight();
     }
 
     @Override

@@ -6,10 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.Keybind;
 
-import snoddasmannen.galimulator.class_ad;
+import snoddasmannen.galimulator.class_31;
 
 @Deprecated(forRemoval = true, since = "1.3.0")
-public class SLKeybind extends class_ad {
+public class SLKeybind extends class_31 {
 
     private final Keybind bind;
 

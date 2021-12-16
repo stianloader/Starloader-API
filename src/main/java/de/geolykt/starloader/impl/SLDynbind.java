@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Dynbind;
 
-import snoddasmannen.galimulator.class_ad;
+import snoddasmannen.galimulator.class_31;
 
-public class SLDynbind extends class_ad {
+public class SLDynbind extends class_31 {
 
     private final Dynbind bind;
 

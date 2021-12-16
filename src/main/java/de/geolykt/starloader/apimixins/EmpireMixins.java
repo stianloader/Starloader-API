@@ -60,7 +60,7 @@ import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.class_am;
+import snoddasmannen.galimulator.class_40;
 import snoddasmannen.galimulator.actors.Flagship;
 import snoddasmannen.galimulator.actors.StateActor;
 
@@ -126,7 +126,7 @@ public class EmpireMixins implements ActiveEmpire {
     private transient snoddasmannen.galimulator.Alliance h; // alliance
 
     @Shadow
-    private transient float i; // averageWealth
+    private transient float j; // averageWealth
 
     @Shadow
     public int id; // uniqueId
@@ -189,7 +189,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Overwrite
-    public void aa() { // Degenerate
+    public void ab() { // Degenerate
         decreaseTechnologyLevel(true, false);
     }
 
@@ -243,7 +243,7 @@ public class EmpireMixins implements ActiveEmpire {
         tickCallbacks.add(callback);
     }
 
-    @Inject(method = "au", at = @At("TAIL"))
+    @Inject(method = "ay", at = @At("TAIL"))
     public void applyShipModifiers(CallbackInfoReturnable<Double> ci) {
         if (flagNoModdedShipCapacity || capModifiers == null || capModifiers.isEmpty()) {
             flagNoModdedShipCapacity = false;
@@ -277,22 +277,22 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public void as() { // voidTreaties
+    public void av() { // voidTreaties
         return;
     }
 
     @Shadow
-    public double au() { // getShipCapcaity
+    public double ay() { // getShipCapcaity
         return 0.0;
     }
 
     @Shadow
-    public void av() { // danceForJoy
+    public void az() { // danceForJoy
         return;
     }
 
     @Shadow
-    private void aY() { // Reset bonuses
+    private void bc() { // Reset bonuses
         /*
          * this.specialsAttackBonus = null; this.specialsDefenseBonus = null;
          * this.specialsTechBonus = null; this.specialsIndustryBonus = null;
@@ -312,7 +312,7 @@ public class EmpireMixins implements ActiveEmpire {
             return;
         }
         this.specials.remove(empireSpecial);
-        this.aY();
+        this.bc();
         this.e();
     }
 
@@ -330,7 +330,7 @@ public class EmpireMixins implements ActiveEmpire {
      * @param news The news to broadcast
      */
     private void broadcastNews(String news) {
-        if (this.Y()) {
+        if (this.Z()) {
             TextFactory factory = Drawing.getTextFactory();
             var name = factory.componentBuilder(getEmpireName()).setColor(getColor()).setSize(TextSize.MEDIUM).build();
             var newsComp = factory.componentBuilder(": " + news).setSize(TextSize.MEDIUM).build();
@@ -350,7 +350,7 @@ public class EmpireMixins implements ActiveEmpire {
             }
             this.specials.add(empireSpecial);
         }
-        this.aY();
+        this.bc();
         this.e();
     }
 
@@ -374,7 +374,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_am.a().a("transcending"))).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_40.b().a("transcending"))).buildAndShow();
                 }
             }
         }
@@ -415,7 +415,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public double getBaseShipCapacity() {
         flagNoModdedShipCapacity = true;
-        return au();
+        return ay();
     }
 
     @Override
@@ -515,7 +515,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public double getShipCapacity() {
-        return au();
+        return ay();
     }
 
     @SuppressWarnings({ "unchecked", "null" })
@@ -546,7 +546,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public float getWealth() {
-        return i;
+        return j;
     }
 
     @Override
@@ -591,7 +591,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_am.a().a("transcending"))).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_40.b().a("transcending"))).buildAndShow();
                 }
             }
         }
@@ -606,11 +606,6 @@ public class EmpireMixins implements ActiveEmpire {
                     + "! This will give your armies and fleets a significant boost.").buildAndShow();
         }
         return true;
-    }
-
-    @Shadow
-    public String O() { // getIdentifierName
-        return "IDENTIFIER_NAME";
     }
 
     @Override
@@ -732,7 +727,7 @@ public class EmpireMixins implements ActiveEmpire {
         this.lastStateChange = Galimulator.getGameYear();
         broadcastNews("Is now " + state.toString());
         if (stateMeta.isWarmongering()) {
-            this.as(); // Diplomatic relations are reset as the empires will go to war
+            this.av(); // Diplomatic relations are reset as the empires will go to war
             if (stateKey == RegistryKeys.GALIMULATOR_ALL_WILL_BE_ASHES) {
                 // AWBA does not believe in development, and as such development is reset within
                 // it
@@ -746,7 +741,7 @@ public class EmpireMixins implements ActiveEmpire {
                 Drawing.sendBulletin("Nobody expects the Spanish inquisition!");
             }
         } else if (stateKey == RegistryKeys.GALIMULATOR_TRANSCENDING) {
-            this.av(); // dance for joy
+            this.az(); // dance for joy
         }
         return true;
     }
@@ -789,12 +784,12 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public boolean Y() { // isNoteable
+    public boolean Z() { // isNoteable
         return false;
     }
 
     @Overwrite
-    public void Z() { // advance
+    public void aa() { // advance
         increaseTechnologyLevel(true, false);
     }
 }

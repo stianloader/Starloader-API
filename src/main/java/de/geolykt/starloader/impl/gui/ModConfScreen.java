@@ -23,10 +23,10 @@ import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.interface_e;
-import snoddasmannen.galimulator.b.interface_a;
+import snoddasmannen.galimulator.interface_4;
+import snoddasmannen.galimulator.b.interface_0;
 
-public class ModConfScreen implements interface_e, Screen {
+public class ModConfScreen implements interface_4, Screen {
 
     /**
      * Internal logger instance for this class.
@@ -89,8 +89,8 @@ public class ModConfScreen implements interface_e, Screen {
     }
 
     @Override
-    public ArrayList<interface_a> getItems() {
-        ArrayList<interface_a> alist = new ArrayList<>();
+    public ArrayList<interface_0> getItems() {
+        ArrayList<interface_0> alist = new ArrayList<>();
         for (ConfigurationSection section : config.getSections()) {
             for (ConfigurationOption<?> option : section.getChildren()) {
                 if (option instanceof BooleanOption) {

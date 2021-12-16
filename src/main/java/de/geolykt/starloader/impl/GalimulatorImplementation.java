@@ -17,7 +17,6 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +51,7 @@ import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
-import snoddasmannen.galimulator.class_z;
+import snoddasmannen.galimulator.class_27;
 
 public class GalimulatorImplementation implements Galimulator.GameImplementation, Galimulator.Unsafe {
 
@@ -138,7 +137,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public @Nullable ActiveEmpire getEmpireByUID(int uid) {
-        return (ActiveEmpire) Space.d(uid);
+        return (ActiveEmpire) Space.e(uid);
     }
 
     @Override
@@ -168,13 +167,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public int getGameYear() {
-        return Space.T;
+        return Space.get_Y();
     }
 
     @SuppressWarnings("null")
     @Override
     public @NotNull Map getMap() {
-        return (Map) Space.get_ah();
+        return (Map) Space.get_am();
     }
 
     @Override
@@ -201,12 +200,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     public @Nullable snoddasmannen.galimulator.Player getPlayer() {
-        try {
-            System.out.println((Space.class.getDeclaredField("ag").getModifiers() & Opcodes.ACC_PUBLIC) == 0);
-        } catch (NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-        }
-        return Space.ag;
+        return Space.get_al();
     }
 
     @Override
@@ -245,7 +239,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public int getTranscendedEmpires() {
-        return Space.ac;
+        return Space.get_ah();
     }
 
     @Override
@@ -281,7 +275,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public boolean isPaused() {
-        return Space.U;
+        return Space.get_Z();
     }
 
     @Override
@@ -350,11 +344,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             @SuppressWarnings("null")
             final @NotNull Religion nullReligion = (Religion) NullUtils.provideNull();
             getNeutralEmpire().setReligion(nullReligion);
-            Space.aq(); // probably sets up the background
-            Space.ah.getGenerator().h(); // Change the xmax and ymax of the generator area
-            Space.an(); // big calculations with voronoi diagrams
-            Space.ae = Space.q(); // set the width/height of the board
-            Space.af = Space.r();
+            Space.ar(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
+            Space.get_am().getGenerator().i(); // Change the xmax and ymax of the generator area
+            Space.ao(); // big calculations with voronoi diagrams
+            Space.aj = Space.q(); // set the width/height of the board
+            Space.ak = Space.r();
 
             // repopulate the starlanes
             for (Star star : getStarsUnsafe()) {
@@ -388,7 +382,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 }
             }
             setFollowedPeopleUnsafe(followedMembers);
-            Space.get_ah().getGenerator().m();
+            Space.get_am().getGenerator().n();
             GalFX.l.zoom = GalFX.e();
             GalFX.l.update();
         }
@@ -468,7 +462,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 (snoddasmannen.galimulator.MapData) getMap(), hasUsedSandbox(),
                 snoddasmannen.galimulator.EmploymentAgency.a(), getPeopleUnsafe(), Space.s, null /* (unused) */,
                 getAlliancesUnsafe(), getCooperationsUnsafe(), getWarsUnsafe());
-        if (class_z.getConfiguration().useXStream()) {
+        if (class_27.getConfiguration().useXStream()) {
             LOGGER.warn("XStream is not supported for saving directly.");
         }
         try {
@@ -535,7 +529,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void setGameYear(int year) {
-        Space.T = year;
+        Space.Y = year;
     }
 
     @Override
@@ -543,7 +537,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         if (!(map instanceof snoddasmannen.galimulator.MapData)) {
             throw new ExpectedObfuscatedValueException();
         }
-        Space.ah = (snoddasmannen.galimulator.MapData) map;
+        Space.am = (snoddasmannen.galimulator.MapData) map;
     }
 
     @Override
@@ -558,7 +552,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     public void setPlayer(Player player) {
-        Space.ag = player;
+        Space.al = player;
     }
 
     @SuppressWarnings("rawtypes")
@@ -575,7 +569,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void setTranscendedEmpires(int count) {
-        Space.ac = count;
+        Space.ah = count;
     }
 
     @Override

@@ -95,6 +95,7 @@ public final class RegistryKeys {
     public static final @NotNull NamespacedKey GALIMULATOR_WT_ILLUMINATOR = new GalimulatorResourceKey("WEAPONTYPE_ILLUMINATOR");
     public static final @NotNull NamespacedKey GALIMULATOR_WT_DRAGONS_BREATH = new GalimulatorResourceKey("WEAPONTYPE_DRAGONS_BREATH");
     public static final @NotNull NamespacedKey GALIMULATOR_WT_CHAIN_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_CHAIN_MISSILE");
+    public static final @NotNull NamespacedKey GALIMULATOR_WT_RAILGUN = new GalimulatorResourceKey("WEAPONTYPE_RAILGUN");
 }
 
 /**

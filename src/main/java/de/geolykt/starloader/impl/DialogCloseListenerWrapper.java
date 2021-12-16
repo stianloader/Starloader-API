@@ -8,9 +8,9 @@ import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.DialogCloseCause;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
-import snoddasmannen.galimulator.ui.interface_a;
+import snoddasmannen.galimulator.ui.interface_0;
 
-public class DialogCloseListenerWrapper implements interface_a {
+public class DialogCloseListenerWrapper implements interface_0 {
 
     private final ArrayList<@NotNull BasicDialogCloseListener> listeners;
     private boolean playSFX = true;

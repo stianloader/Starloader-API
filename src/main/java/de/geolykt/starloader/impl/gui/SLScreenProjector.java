@@ -6,11 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
 
+import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.Screen;
 
-import snoddasmannen.galimulator.interface_e;
-import snoddasmannen.galimulator.ui.class_av;
+import snoddasmannen.galimulator.interface_4;
+import snoddasmannen.galimulator.ui.class_47;
 
 /**
  * A lazy workaround through the fact that the cameras of items of the screen API never have their cameras
@@ -20,8 +21,11 @@ import snoddasmannen.galimulator.ui.class_av;
  * Since the bright minds that develop this API may choose to undo this class, it is highly recommended to
  * instead use {@link Drawing#showScreen(Screen)}, which may eventually opt-in for a more favourable approach
  * without any dependent knowing about it.
+ *
+ * @deprecated This "API" is difficult to maintain and will be removed with galimulator 4.11
  */
-public class SLScreenProjector extends class_av {
+@Deprecated(forRemoval = true, since = "1.6.0")
+public class SLScreenProjector extends class_47 {
 
     /**
      * The screen projected by this widget.
@@ -35,10 +39,13 @@ public class SLScreenProjector extends class_av {
      *
      * @param screen The screen that belongs to this interface
      * @param indepentWindow Whether this widget should not be nested into another widget.
+     * @deprecated This "API" is difficult to maintain and will be removed with galimulator 4.11
      */
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public SLScreenProjector(@NotNull Screen screen, boolean indepentWindow) {
-        super((interface_e) Objects.requireNonNull(screen, "Screen cannot be null."), indepentWindow);
+        super((interface_4) Objects.requireNonNull(screen, "Screen cannot be null."), indepentWindow);
         this.screen = screen;
+        DebugNagException.nag("The SLScreenProjector is deprecated and will be removed with galimulator 4.11. Consider moving to true Screens via the SLScreenWidget.");
     }
 
     @Override
