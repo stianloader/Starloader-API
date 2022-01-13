@@ -97,7 +97,7 @@ publishing {
         plugin(MavenPublication) { publication ->
             groupId project.group
             artifactId project.archivesBaseName
-            version '1.5.0'
+            version '1.6.0'
 
             from components['java']
 

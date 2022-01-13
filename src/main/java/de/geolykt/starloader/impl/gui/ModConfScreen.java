@@ -1,17 +1,9 @@
 package de.geolykt.starloader.impl.gui;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
@@ -19,14 +11,12 @@ import de.geolykt.starloader.api.gui.modconf.ConfigurationSection;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 import de.geolykt.starloader.api.gui.modconf.NumberOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
-import de.geolykt.starloader.api.gui.screen.Screen;
-import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.interface_4;
 import snoddasmannen.galimulator.b.interface_0;
 
-public class ModConfScreen implements interface_4, Screen {
+public class ModConfScreen implements interface_4 {
 
     /**
      * Internal logger instance for this class.
@@ -54,36 +44,6 @@ public class ModConfScreen implements interface_4, Screen {
     }
 
     @Override
-    public void addChild(@NotNull ScreenComponent o) {
-        throw new UnsupportedOperationException("Cannot add new children to this class.");
-    }
-
-    @Override
-    public boolean canAddChildren() {
-        return false;
-    }
-
-    @Override
-    public @Nullable Camera getCamera() {
-        return null;
-    }
-
-    @SuppressWarnings({ "all" })
-    @Override
-    public @NotNull List<@NotNull ScreenComponent> getChildren() {
-        List<@NotNull ScreenComponent> ret = (List) getItems();
-        if (ret == null) {
-            throw new NullPointerException();
-        }
-        return ret;
-    }
-
-    @Override
-    public int getInnerWidth() {
-        return getInspectorWidth() - 20;
-    }
-
-    @Override
     public int getInspectorWidth() {
         return 600;
     }
@@ -94,7 +54,7 @@ public class ModConfScreen implements interface_4, Screen {
         for (ConfigurationSection section : config.getSections()) {
             for (ConfigurationOption<?> option : section.getChildren()) {
                 if (option instanceof BooleanOption) {
-                    alist.add(new NamedCheckBoxComponent(this, (BooleanOption) option));
+                    alist.add(new NamedCheckBoxComponent((BooleanOption) option));
                 } else if (option instanceof NumberOption<?>) {
                     alist.add(new NamedIntegerChooserComponent(this, (NumberOption<?>) option));
                 } else if (option instanceof StringOption) {
@@ -124,27 +84,11 @@ public class ModConfScreen implements interface_4, Screen {
     }
 
     @Override
-    public boolean isHeadless() {
-        return false;
-    }
-
-    @Override
     public boolean isValid() {
         return !dirty;
     }
 
-    @Override
-    public Iterator<Entry<Vector2, ScreenComponent>> iterator() {
-        throw new UnsupportedOperationException("Not supported - screen contents are calculated on the fly.");
-    }
-
-    @Override
     public void markDirty() {
         dirty = true;
-    }
-
-    @Override
-    public void setCamera(@NotNull Camera camera) {
-        // BITVOID
     }
 }

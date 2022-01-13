@@ -10,9 +10,12 @@ public class LineWrappingInfo {
 
     /**
      * Obtains an instance of {@link LineWrappingInfo} that always wraps, no matter the circumstances.
+     * Note: this produces a <b>new</b> instance of the class, however this detail might be changed in the future given that
+     * this class is immutable.
      *
      * @return See above
      */
+    @NotNull
     public static LineWrappingInfo alwaysWrapping() {
         return new LineWrappingInfo(true, true, true, true);
     }
@@ -20,14 +23,26 @@ public class LineWrappingInfo {
     /**
      * Obtains an instance of {@link LineWrappingInfo} that only wraps if the object before it is of a different type, or
      * when the width of the screen is exhausted and no further objects can be added to the screen on that line.
+     * Note: this produces a <b>new</b> instance of the class, however this detail might be changed in the future given that
+     * this class is immutable.
      *
      * @return See above
      */
+    @NotNull
     public static LineWrappingInfo wrapDifferyType() {
         return new LineWrappingInfo(false, false, true, false);
     }
 
-    public static @NotNull LineWrappingInfo wrapSameType() {
+    /**
+     * Obtains an instance of {@link LineWrappingInfo} that only wraps if the object is next to the same type as per
+     * {@link ScreenComponent#isSameType(ScreenComponent)}. It does not wrap if it follows the same type.
+     * Note: this produces a <b>new</b> instance of the class, however this detail might be changed in the future given that
+     * this class is immutable.
+     *
+     * @return See above.
+     */
+    @NotNull
+    public static LineWrappingInfo wrapSameType() {
         return new LineWrappingInfo(false, false, false, true);
     }
 

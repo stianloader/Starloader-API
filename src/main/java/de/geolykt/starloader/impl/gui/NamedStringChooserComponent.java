@@ -4,20 +4,15 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.badlogic.gdx.graphics.Camera;
-
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
-import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
-import de.geolykt.starloader.api.gui.screen.Screen;
-import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
 import snoddasmannen.galimulator.ppclass_168;
 
-public class NamedStringChooserComponent extends ppclass_168 implements ScreenComponent {
+public class NamedStringChooserComponent extends ppclass_168 {
 
     protected static Vector<@NotNull Object> getOptions(StringOption option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
@@ -28,9 +23,9 @@ public class NamedStringChooserComponent extends ppclass_168 implements ScreenCo
     }
     protected final @NotNull StringOption option;
 
-    protected final @NotNull Screen parent;
+    protected final @NotNull ModConfScreen parent;
 
-    public NamedStringChooserComponent(@NotNull Screen parent, @NotNull StringOption option) {
+    public NamedStringChooserComponent(@NotNull ModConfScreen parent, @NotNull StringOption option) {
         // Irrelevant  / name / currentValue / options / category / Irrelevant
         super(null, option.getName(), option.get(), getOptions(option), option.getParent().getName(), null);
         this.parent = NullUtils.requireNotNull(parent);
@@ -67,32 +62,7 @@ public class NamedStringChooserComponent extends ppclass_168 implements ScreenCo
         option.set(NullUtils.requireNotNull(o.toString()));
     }
 
-    @Override
-    public int getHeight() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public @NotNull LineWrappingInfo getLineWrappingInfo() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public @NotNull Screen getParentScreen() {
+    public @NotNull ModConfScreen getParentScreen() {
         return parent;
-    }
-
-    @Override
-    public int getWidth() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean isSameType(@NotNull ScreenComponent component) {
-        return component instanceof NamedIntegerChooserComponent || component instanceof NamedStringChooserComponent;
-    }
-    @Override
-    public int renderAt(float x, float y, @NotNull Camera camera) {
-        throw new UnsupportedOperationException("The galimulator native dialog API does not support such things.");
     }
 }

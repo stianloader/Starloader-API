@@ -537,14 +537,6 @@ public class ModConf implements ModConfSpec {
         return sect;
     }
 
-    /**
-     * Called after the {@link ApplicationStartedEvent} to fully initialise the GUI components of the
-     * system.
-     */
-    public void finishRegistration() {
-        //
-    }
-
     public @NotNull ModConfScreen getScreen() {
         return screen;
     }

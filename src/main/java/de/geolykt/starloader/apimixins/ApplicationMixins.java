@@ -10,8 +10,6 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
-import de.geolykt.starloader.api.gui.modconf.ModConf;
-import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 
 import snoddasmannen.galimulator.class_10;
 
@@ -60,10 +58,6 @@ public class ApplicationMixins {
         } catch (Throwable e) {
             e.printStackTrace();
             a(e);
-        }
-        ModConfSpec mconfSpec = ModConf.getImplementation();
-        if (mconfSpec instanceof de.geolykt.starloader.impl.ModConf) {
-            ((de.geolykt.starloader.impl.ModConf) mconfSpec).finishRegistration();
         }
     }
 

@@ -9,21 +9,19 @@ import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.math.Vector2;
 
-import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+final class ScreenComponentPositioningMeta<T> {
 
-final class ScreenComponentPositioningMeta {
-
-    public static class UnmodifableScreenComponentPositoningMetaIterator implements Iterator<Map.Entry<Vector2, ScreenComponent>> {
+    public static class UnmodifableScreenComponentPositoningMetaIterator<A> implements Iterator<Map.Entry<Vector2, A>> {
 
         @NotNull
-        private final Iterator<ScreenComponentPositioningMeta> backend;
+        private final Iterator<ScreenComponentPositioningMeta<A>> backend;
 
         @SuppressWarnings("null")
-        public UnmodifableScreenComponentPositoningMetaIterator(@NotNull Iterable<ScreenComponentPositioningMeta> backend) {
+        public UnmodifableScreenComponentPositoningMetaIterator(@NotNull Iterable<ScreenComponentPositioningMeta<A>> backend) {
             this(backend.iterator());
         }
 
-        public UnmodifableScreenComponentPositoningMetaIterator(@NotNull Iterator<ScreenComponentPositioningMeta> backend) {
+        public UnmodifableScreenComponentPositoningMetaIterator(@NotNull Iterator<ScreenComponentPositioningMeta<A>> backend) {
             Objects.requireNonNull(backend);
             this.backend = backend;
         }
@@ -34,9 +32,9 @@ final class ScreenComponentPositioningMeta {
         }
 
         @Override
-        public Entry<Vector2, ScreenComponent> next() {
-            ScreenComponentPositioningMeta meta = backend.next();
-            return Map.<Vector2, ScreenComponent>entry(meta.pos, meta.component);
+        public Entry<Vector2, A> next() {
+            ScreenComponentPositioningMeta<A> meta = backend.next();
+            return Map.<Vector2, A>entry(meta.pos, meta.component);
         }
 
         @Override
@@ -46,7 +44,7 @@ final class ScreenComponentPositioningMeta {
     }
 
     @NotNull
-    public final ScreenComponent component;
+    public final T component;
 
     public final int height;
     @NotNull
@@ -54,7 +52,7 @@ final class ScreenComponentPositioningMeta {
 
     public final int width;
 
-    public ScreenComponentPositioningMeta(@NotNull Vector2 pos, int width, int height, @NotNull ScreenComponent component) {
+    public ScreenComponentPositioningMeta(@NotNull Vector2 pos, int width, int height, @NotNull T component) {
         this.pos = pos;
         this.width = width;
         this.height = height;

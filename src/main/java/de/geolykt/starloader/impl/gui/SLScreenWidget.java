@@ -68,7 +68,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     protected final IntSupplier widthProvider;
 
     @NotNull
-    private final List<ScreenComponentPositioningMeta> componentPositioningMeta = new ArrayList<>();
+    private final List<ScreenComponentPositioningMeta<ScreenComponent>> componentPositioningMeta = new ArrayList<>();
 
     private double lastRenderHeight = Double.NaN;
 
@@ -228,7 +228,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public Iterator<Entry<Vector2, ScreenComponent>> iterator() {
-        return new UnmodifableScreenComponentPositoningMetaIterator(this.componentPositioningMeta);
+        return new UnmodifableScreenComponentPositoningMetaIterator<>(this.componentPositioningMeta);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
             ScreenComponent component = componentEntry.getValue();
             try {
                 int width = component.renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove. (#getInnerWidth does not make any sense anymore dummy.)
-                componentPositioningMeta.add(new ScreenComponentPositioningMeta(pos, width, component.getHeight(), component));
+                componentPositioningMeta.add(new ScreenComponentPositioningMeta<>(pos, width, component.getHeight(), component));
             } catch (Exception e) {
                 // Throwing an exception here would cause serious UI issues
                 e.printStackTrace();
@@ -281,7 +281,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         Camera c = NullUtils.requireNotNull(getCamera());
         double actualY = lastRenderHeight - y - 25.0D;
 
-        for (ScreenComponentPositioningMeta posMeta : this.componentPositioningMeta) {
+        for (ScreenComponentPositioningMeta<ScreenComponent> posMeta : this.componentPositioningMeta) {
             if (!(posMeta.component instanceof ReactiveComponent)) {
                 continue;
             }
@@ -305,7 +305,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     protected void tap(double x, double y, boolean isLongTap) {
         Camera c = NullUtils.requireNotNull(getCamera());
         double actualY = lastRenderHeight - y - 25.0D; // GDX and galimulator are a bit strange, but it makes sense once you get the gist.
-        for (ScreenComponentPositioningMeta posMeta : this.componentPositioningMeta) {
+        for (ScreenComponentPositioningMeta<ScreenComponent> posMeta : this.componentPositioningMeta) {
             if (!(posMeta.component instanceof ReactiveComponent)) {
                 continue;
             }

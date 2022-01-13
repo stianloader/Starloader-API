@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -25,7 +26,6 @@ import de.geolykt.starloader.api.gui.TextureProvider;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
-import de.geolykt.starloader.impl.gui.SLScreenProjector;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 
 import snoddasmannen.galimulator.GalColor;
@@ -211,14 +211,15 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public void showScreen(@NotNull Screen screen) {
         if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof interface_4) {
+            LoggerFactory.getLogger(DrawingManager.class).warn("Tried to show a screen which uses galimulator's native dialog system. This operation will fail in the future.");
             // Standard screen using the dialog api
             // We want to mimic this call:
             // arguments probably mean: screen, ???, type, closeOthers
             // Space.a((ck) screen, true, null, false);
-            @SuppressWarnings("removal")
-            SLScreenProjector screenWrapper = new SLScreenProjector(screen, true);
+            var screenWrapper = new de.geolykt.starloader.impl.gui.SLScreenProjector(screen, true);
             screenWrapper.a((WIDGET_ID) null);
             Space.c(screenWrapper);
         } else if (screen instanceof Widget) {
