@@ -48,10 +48,12 @@ import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.Religion;
+import snoddasmannen.galimulator.Settings.EnumSettings;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
 import snoddasmannen.galimulator.class_27;
+import snoddasmannen.galimulator.guides.class_0;
 
 public class GalimulatorImplementation implements Galimulator.GameImplementation, Galimulator.Unsafe {
 
@@ -167,13 +169,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public int getGameYear() {
-        return Space.get_Y();
+        return Space.get_Z();
     }
 
     @SuppressWarnings("null")
     @Override
     public @NotNull Map getMap() {
-        return (Map) Space.get_am();
+        return (Map) Space.get_an();
     }
 
     @Override
@@ -200,7 +202,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     public @Nullable snoddasmannen.galimulator.Player getPlayer() {
-        return Space.get_al();
+        return Space.get_am();
     }
 
     @Override
@@ -239,7 +241,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public int getTranscendedEmpires() {
-        return Space.get_ah();
+        return Space.get_ai();
     }
 
     @Override
@@ -275,7 +277,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public boolean isPaused() {
-        return Space.get_Z();
+        return Space.get_aa();
     }
 
     @Override
@@ -345,12 +347,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             final @NotNull Religion nullReligion = (Religion) NullUtils.provideNull();
             getNeutralEmpire().setReligion(nullReligion);
             Space.ar(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
-            Space.get_am().getGenerator().i(); // Change the xmax and ymax of the generator area
+            Space.get_an().getGenerator().i(); // Change the xmax and ymax of the generator area
             Space.ao(); // big calculations with voronoi diagrams
-            Space.aj = Space.q(); // set the width/height of the board
-            Space.ak = Space.r();
+            Space.ak = Space.q(); // set the width/height of the board
+            Space.al = Space.r();
 
-            // repopulate the starlanes
+            // repopulate the starlanes (this was extracted from another method)
+            // Also sets the owner empire, which was also extracted from another method
             for (Star star : getStarsUnsafe()) {
                 Vector<Star> neighbours = new Vector<>();
                 for (Integer starB : star.getNeighbourIDs()) {
@@ -364,7 +367,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 star.setAssignedEmpire(owner);
             }
 
-            Space.al(); // setup quad trees
+            Space.am(); // setup quad trees
             if (getAlliancesUnsafe() == null) {
                 setAlliancesUnsafe(new Vector<>());
             } else {
@@ -382,7 +385,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 }
             }
             setFollowedPeopleUnsafe(followedMembers);
-            Space.get_am().getGenerator().n();
+
+            if ((Boolean) EnumSettings.PATHFINDING_LANDMARKS.b()) {
+                class_0.b();
+            }
+
+            Space.get_an().getGenerator().n();
             GalFX.l.zoom = GalFX.e();
             GalFX.l.update();
         }
@@ -529,7 +537,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void setGameYear(int year) {
-        Space.Y = year;
+        Space.Z = year;
     }
 
     @Override
@@ -537,7 +545,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         if (!(map instanceof snoddasmannen.galimulator.MapData)) {
             throw new ExpectedObfuscatedValueException();
         }
-        Space.am = (snoddasmannen.galimulator.MapData) map;
+        Space.an = (snoddasmannen.galimulator.MapData) map;
     }
 
     @Override
@@ -552,7 +560,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     public void setPlayer(Player player) {
-        Space.al = player;
+        Space.am = player;
     }
 
     @SuppressWarnings("rawtypes")
@@ -569,7 +577,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void setTranscendedEmpires(int count) {
-        Space.ah = count;
+        Space.ai = count;
     }
 
     @Override

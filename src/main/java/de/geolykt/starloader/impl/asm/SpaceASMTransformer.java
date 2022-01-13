@@ -35,6 +35,7 @@ import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
+import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.interface_9;
 
@@ -129,7 +130,13 @@ public class SpaceASMTransformer extends CodeModifier {
         } finally {
             EventManager.handleEvent(new GalaxySavingEndEvent(NullUtils.requireNotNull(location, "location is null"), true));
             GalimulatorImplementation.suppressSaveEvent = false;
+            Settings.b("StartedLoading", false);
         }
+
+        // No idea what this does.
+        // Apparently there is no implementation of "interface_9" so we cannot really know.
+        // Upcoming feature perhaps?
+        // Apparently this has been there for quite a while too
         for (interface_9 var1 : Space.u) {
             var1.f();
         }

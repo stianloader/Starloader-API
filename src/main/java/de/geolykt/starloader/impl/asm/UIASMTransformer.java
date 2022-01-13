@@ -32,7 +32,7 @@ public final class UIASMTransformer extends CodeModifier {
      * The fully classified name of the class that is responsible for
      * the sidebar. Uses the saner ASM-style syntax.
      */
-    public static final @NotNull String MAIN_SIDEBAR_CLASS = "snoddasmannen/galimulator/ui/ml";
+    public static final @NotNull String MAIN_SIDEBAR_CLASS = "snoddasmannen/galimulator/ui/ne";
 
     /**
      * The bytecode name of the class you are currently reading.
