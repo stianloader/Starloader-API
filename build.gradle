@@ -7,7 +7,11 @@ plugins {
 
 group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
-def gdxVersion = '1.9.11' // The InputAdapter class is otherwise invalid
+// The InputAdapter class would be invalid after GDX 1.9.11
+// Array#isEmpty() would exist after GDX 1.9.9
+// As such we are going to opt into GDX 1.9.8, released in December 2017.
+// However it is likely that galimulator's GDX is far older than that
+def gdxVersion = '1.9.8'
 version '1.6.0'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
