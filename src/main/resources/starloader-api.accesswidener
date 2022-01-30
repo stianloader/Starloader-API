@@ -13,11 +13,11 @@ accessible      method  snoddasmannen/galimulator/Space                     ar  
 accessible      method  snoddasmannen/galimulator/Space                     aW         ()V
 accessible      method  snoddasmannen/galimulator/SpaceState                <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
 accessible      method  snoddasmannen/galimulator/ppclass_49                <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
-extendable      method  snoddasmannen/galimulator/ppclass_173               <init>     (Lsnoddasmannen/galimulator/class_47;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
-accessible      method  snoddasmannen/galimulator/ppclass_168               <init>     (Lsnoddasmannen/galimulator/class_47;Ljava/lang/String;ZLjava/lang/String;Lsnoddasmannen/galimulator/class_50;)V
-accessible      method  snoddasmannen/galimulator/class_50                  <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
-accessible      method  snoddasmannen/galimulator/ppclass_169               <init>     (Lsnoddasmannen/galimulator/class_47;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_50;)V
-accessible      method  snoddasmannen/galimulator/ppclass_170               <init>     (Lsnoddasmannen/galimulator/class_47;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_50;)V
+extendable      method  snoddasmannen/galimulator/ppclass_173               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
+accessible      method  snoddasmannen/galimulator/ppclass_168               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;ZLjava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
+accessible      method  snoddasmannen/galimulator/class_51                  <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
+accessible      method  snoddasmannen/galimulator/ppclass_169               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
+accessible      method  snoddasmannen/galimulator/ppclass_170               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
 
 # Fields
 accessible      field   com/example/Main                                    shortcuts         Ljava/util/List;
@@ -36,13 +36,11 @@ accessible      field   snoddasmannen/galimulator/Space                     p   
 accessible      field   snoddasmannen/galimulator/Space                     t                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     o                 Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                     Z                 I
-accessible      field   snoddasmannen/galimulator/Space                     U                 Z # Unsure if still needed (invalid entry nonetheless)
 accessible      field   snoddasmannen/galimulator/Space                     ai                I
 accessible      field   snoddasmannen/galimulator/Space                     ak                F
 accessible      field   snoddasmannen/galimulator/Space                     al                F
 accessible      field   snoddasmannen/galimulator/Space                     am                Lsnoddasmannen/galimulator/Player;
 accessible      field   snoddasmannen/galimulator/Space                     an                Lsnoddasmannen/galimulator/MapData;
-accessible      field   snoddasmannen/galimulator/Space                     ap                Ljava/util/List; # Unsure if still needed (invalid entry nonetheless)
 accessible      field   snoddasmannen/galimulator/SpaceState                stars             Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/SpaceState                empires           Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/SpaceState                artifacts         Ljava/util/Vector;
@@ -67,7 +65,8 @@ accessible      class   snoddasmannen/galimulator/ppclass_173
 accessible      class   snoddasmannen/galimulator/ppclass_168
 accessible      class   snoddasmannen/galimulator/ppclass_169
 accessible      class   snoddasmannen/galimulator/ppclass_170
-# FIXME this compile hack is only needed at compile time, but is it NOT needed at runtime! If it is used in runtime
+# FIXME this compile hack is only needed at compile time, but is it NOT needed at runtime! If it is used in runtime it causes issues with saving/loading. We mitigate this issue, but I'd rather not
 denumerised     class   snoddasmannen/galimulator/EmpireSpecial
+# FIXME this hack is needed
 #denumerised     class   snoddasmannen/galimulator/FlagItem$BuiltinSymbols
 accessible      class   snoddasmannen/galimulator/Space$SaveMode

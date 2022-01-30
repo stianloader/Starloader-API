@@ -8,10 +8,10 @@ plugins {
 group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
 // The InputAdapter class would be invalid after GDX 1.9.11
-// Array#isEmpty() would exist after GDX 1.9.9
+// Array#isEmpty() would exist with GDX 1.9.9 and later, but does not
 // As such we are going to opt into GDX 1.9.8, released in December 2017.
 // However it is likely that galimulator's GDX is far older than that
-def gdxVersion = '1.9.8'
+def gdxVersion = '1.9.8' // FIXME apparently galim is now using gdx 1.9.11 according to the META-INF
 version '1.6.0'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
@@ -37,11 +37,11 @@ dependencies {
     compileOnly files("build/obftools/intermediary.jar")
     compileOnlyApi ("de.geolykt:starloader:1.1.0-SNAPSHOT") { // The minimalistic starloader base "api" as well all of it's depends
         // SLL 3.+ does not ship with log4j as it does not have proper JPMS support
-        // Additionally, log4j is vulnerable to a critical security issue
+        // Additionally, log4j2 is vulnerable to a critical security issue
         exclude module: 'log4j-api'
         exclude module: 'log4j-core'
         exclude module: 'log4j-slf4j-impl'
-        exclude module: 'mixin' // Does not want to resolve correctly
+        exclude module: 'mixin' // Does not want to resolve correctly, even then we can make use of our own mixin fork which is hosted at our own repos
     }
     // We removed these depends above
     compileOnlyApi "org.slf4j:slf4j-api:2.0.0-alpha5"
