@@ -10,9 +10,9 @@ import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
 
-import snoddasmannen.galimulator.ppclass_169;
+import snoddasmannen.galimulator.ppclass_170;
 
-public class NamedStringChooserComponent extends ppclass_169 {
+public class NamedStringChooserComponent extends ppclass_170 {
 
     protected static Vector<@NotNull Object> getOptions(StringOption option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());

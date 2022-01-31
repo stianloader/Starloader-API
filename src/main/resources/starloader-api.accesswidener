@@ -12,12 +12,12 @@ accessible      method  snoddasmannen/galimulator/GalFX                     c   
 accessible      method  snoddasmannen/galimulator/Space                     ar         ()V
 accessible      method  snoddasmannen/galimulator/Space                     aW         ()V
 accessible      method  snoddasmannen/galimulator/SpaceState                <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
-accessible      method  snoddasmannen/galimulator/ppclass_49                <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
-extendable      method  snoddasmannen/galimulator/ppclass_173               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
-accessible      method  snoddasmannen/galimulator/ppclass_168               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;ZLjava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
+accessible      method  snoddasmannen/galimulator/ppclass_50                <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+extendable      method  snoddasmannen/galimulator/ppclass_174               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Lsnoddasmannen/galimulator/GalColor;Lsnoddasmannen/galimulator/GalColor;Ljava/lang/String;)V
+accessible      method  snoddasmannen/galimulator/ppclass_169               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;ZLjava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
 accessible      method  snoddasmannen/galimulator/class_51                  <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
-accessible      method  snoddasmannen/galimulator/ppclass_169               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
 accessible      method  snoddasmannen/galimulator/ppclass_170               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
+accessible      method  snoddasmannen/galimulator/ppclass_171               <init>     (Lsnoddasmannen/galimulator/class_48;Ljava/lang/String;Ljava/lang/String;Ljava/util/Vector;Ljava/lang/String;Lsnoddasmannen/galimulator/class_51;)V
 
 # Fields
 accessible      field   com/example/Main                                    shortcuts         Ljava/util/List;
@@ -59,12 +59,12 @@ accessible      field   snoddasmannen/galimulator/War                       e1  
 accessible      field   snoddasmannen/galimulator/War                       e2                Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 
 # Classes
-accessible      class   snoddasmannen/galimulator/ppclass_49
 accessible      class   snoddasmannen/galimulator/ppclass_50
-accessible      class   snoddasmannen/galimulator/ppclass_173
-accessible      class   snoddasmannen/galimulator/ppclass_168
+accessible      class   snoddasmannen/galimulator/ppclass_51
 accessible      class   snoddasmannen/galimulator/ppclass_169
 accessible      class   snoddasmannen/galimulator/ppclass_170
+accessible      class   snoddasmannen/galimulator/ppclass_171
+accessible      class   snoddasmannen/galimulator/ppclass_174
 # FIXME this compile hack is only needed at compile time, but is it NOT needed at runtime! If it is used in runtime it causes issues with saving/loading. We mitigate this issue, but I'd rather not
 denumerised     class   snoddasmannen/galimulator/EmpireSpecial
 # FIXME this hack is needed

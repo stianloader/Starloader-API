@@ -48,7 +48,6 @@ import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.Religion;
-import snoddasmannen.galimulator.Settings.EnumSettings;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
@@ -385,10 +384,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 }
             }
             setFollowedPeopleUnsafe(followedMembers);
-
-            if ((Boolean) EnumSettings.PATHFINDING_LANDMARKS.b()) {
-                class_0.b();
-            }
+            class_0.b();
 
             Space.get_an().getGenerator().n();
             GalFX.l.zoom = GalFX.e();

@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.modconf.BooleanOption;
 
-import snoddasmannen.galimulator.ppclass_168;
+import snoddasmannen.galimulator.ppclass_169;
 
-public class NamedCheckBoxComponent extends ppclass_168 {
+public class NamedCheckBoxComponent extends ppclass_169 {
 
     protected final @NotNull BooleanOption option;
 
