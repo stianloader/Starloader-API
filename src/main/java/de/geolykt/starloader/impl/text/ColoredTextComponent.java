@@ -1,7 +1,5 @@
 package de.geolykt.starloader.impl.text;
 
-import java.util.Objects;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
@@ -15,7 +13,7 @@ import snoddasmannen.galimulator.GalColor;
 public class ColoredTextComponent implements TextComponent {
 
     protected final @NotNull GalColor color;
-    protected final @NotNull Drawing.TextSize size;
+    protected final Drawing.@NotNull TextSize size;
     protected final @NotNull String text;
 
     public ColoredTextComponent(@NotNull String s) {
@@ -26,10 +24,10 @@ public class ColoredTextComponent implements TextComponent {
         this(s, color, Drawing.TextSize.SMALL);
     }
 
-    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color, @NotNull Drawing.TextSize size) {
+    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color, Drawing.@NotNull TextSize size) {
         this.text = s;
         this.color = color;
-        this.size = size;
+        this.size = NullUtils.requireNotNull(size);
     }
 
     @Override
@@ -39,11 +37,11 @@ public class ColoredTextComponent implements TextComponent {
 
     @Override
     public float renderText(float x, float y) {
-        return Drawing.drawText(text, x, y, color, Objects.requireNonNull(size));
+        return Drawing.drawText(text, x, y, color, size);
     }
 
     @Override
     public float renderTextAt(float x, float y, @NotNull Camera camera) {
-        return Drawing.drawText(text, x, y, color, Objects.requireNonNull(size), camera);
+        return Drawing.drawText(text, x, y, color, size, camera);
     }
 }

@@ -19,7 +19,7 @@ public class JitterTextComponent extends ColoredTextComponent {
         this(text, color, intensity, Drawing.TextSize.SMALL);
     }
 
-    public JitterTextComponent(@NotNull String text, @NotNull GalColor color, double intensity, @NotNull Drawing.TextSize size) {
+    public JitterTextComponent(@NotNull String text, @NotNull GalColor color, double intensity, Drawing.@NotNull TextSize size) {
         super(text, color, Objects.requireNonNull(size));
         this.intensity = (float) intensity;
     }

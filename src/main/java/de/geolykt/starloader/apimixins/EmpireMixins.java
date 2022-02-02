@@ -203,7 +203,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void addActor(StateActor actor) {
+    public void addActor(@NotNull StateActor actor) {
         a(actor);
     }
 
@@ -397,7 +397,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public Vector<StateActor> getActors() {
+    public @NotNull Vector<StateActor> getActors() {
         return agents;
     }
 
@@ -443,13 +443,13 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("null")
     @Override
-    public GalColor getColor() {
+    public @NotNull GalColor getColor() {
         return color;
     }
 
     @SuppressWarnings("null")
     @Override
-    public String getEmpireName() {
+    public @NotNull String getEmpireName() {
         return name;
     }
 
@@ -467,7 +467,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public ArrayList<snoddasmannen.galimulator.Fleet> getFleets() {
+    public @NotNull ArrayList<snoddasmannen.galimulator.Fleet> getFleets() {
         return fleets;
     }
 
@@ -498,7 +498,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("null")
     @Override
-    public String getMotto() {
+    public @NotNull String getMotto() {
         return motto;
     }
 
@@ -509,7 +509,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("null")
     @Override
-    public Religion getReligion() {
+    public @NotNull Religion getReligion() {
         return religion;
     }
 
@@ -618,7 +618,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void removeActor(StateActor actor) {
+    public void removeActor(@NotNull StateActor actor) {
         b(actor);
     }
 
@@ -669,7 +669,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void setMotto(String motto) {
+    public void setMotto(@NotNull String motto) {
         this.motto = motto;
     }
 
@@ -679,7 +679,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void setReligion(Religion religion) {
+    public void setReligion(@NotNull Religion religion) {
         if (Objects.isNull(religion) && this != Galimulator.getNeutralEmpire()) {
             throw new NullPointerException("religion cannot be null.");
         }

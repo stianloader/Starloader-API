@@ -134,7 +134,7 @@ public final class Drawing {
      * @param camera  The camera to use (used for internal unprojecting)
      * @return The width of the text that was just drawn
      */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size, @NotNull Camera camera) {
+    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size, @NotNull Camera camera) {
         return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"), Objects.requireNonNull(camera, "Camera cannot be null."));
     }
 

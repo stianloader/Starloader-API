@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.FlagComponent;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 
@@ -50,11 +51,9 @@ public class FlagItemMixins implements FlagComponent {
         return ((de.geolykt.starloader.impl.AWTColorAccesor) color).asAWTColor();
     }
 
-    @SuppressWarnings("null")
     @Override
-    @NotNull
-    public com.badlogic.gdx.graphics.Color getGDXColor() {
-        return color.getGDXColor();
+    public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
+        return NullUtils.requireNotNull(color.getGDXColor());
     }
 
     @Override

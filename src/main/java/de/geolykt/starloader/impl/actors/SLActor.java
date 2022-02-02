@@ -18,6 +18,7 @@ import snoddasmannen.galimulator.actors.Actor;
  *
  * @deprecated There is little use for this class
  */
+@SuppressWarnings("null")
 @Deprecated(forRemoval = true, since = "1.5.0")
 public abstract class SLActor extends Actor implements ActorSpec {
 

@@ -32,6 +32,7 @@ public class NamedStringChooserComponent extends ppclass_170 {
         this.option = option;
     }
 
+    @Override
     public void a(final String o) {
         if ("Custom".equals(o.toString()) && !(option instanceof StringChooseOption)) {
             var builder = Drawing.textInputBuilder("Change value of setting", option.get(), option.getName());

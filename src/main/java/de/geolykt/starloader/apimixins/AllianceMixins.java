@@ -42,7 +42,7 @@ public class AllianceMixins implements Alliance {
     } // addMember
 
     @Override
-    public void addMember(ActiveEmpire empire) {
+    public void addMember(@NotNull ActiveEmpire empire) {
         a((snoddasmannen.galimulator.Empire) empire);
     }
 
@@ -107,12 +107,12 @@ public class AllianceMixins implements Alliance {
     }
 
     @Override
-    public boolean hasEmpire(ActiveEmpire empire) {
+    public boolean hasEmpire(@NotNull ActiveEmpire empire) {
         return c((snoddasmannen.galimulator.Empire) empire);
     }
 
     @Override
-    public void removeMember(ActiveEmpire empire) {
+    public void removeMember(@NotNull ActiveEmpire empire) {
         b((snoddasmannen.galimulator.Empire) empire);
     }
 

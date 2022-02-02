@@ -21,6 +21,7 @@ public interface Empire extends Dateable, Identifiable {
      *
      * @return The age of the empire
      */
+    @Override
     public default int getAge() {
         return (hasCollapsed() ? getCollapseYear() : Galimulator.getGameYear()) - getFoundationYear();
     }

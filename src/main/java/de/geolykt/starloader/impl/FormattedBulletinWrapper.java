@@ -13,6 +13,7 @@ public class FormattedBulletinWrapper extends class_42 {
         this.text = text;
     }
 
+    @Override
     public void a(float var1, float var2) {
         text.renderText(var1, var2);
     }

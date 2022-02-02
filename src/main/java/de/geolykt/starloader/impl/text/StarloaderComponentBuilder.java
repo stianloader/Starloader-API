@@ -19,7 +19,7 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
 
     protected @NotNull GalColor color = TextColor.WHITE.toGalimulatorColor();
     protected @NotNull List<Map.Entry<@NotNull GalColor, @NotNull Double>> jitter = new ArrayList<>(1);
-    protected @NotNull Drawing.TextSize size = Drawing.TextSize.SMALL;
+    protected Drawing.@NotNull TextSize size = Drawing.TextSize.SMALL;
     protected @NotNull String text;
 
     public StarloaderComponentBuilder(@NotNull String text) {
@@ -37,7 +37,7 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
         TextComponent main = new ColoredTextComponent(text, color, Objects.requireNonNull(size));
         ArrayList<@NotNull TextComponent> components = new ArrayList<>(jitter.size());
         for (Map.Entry<@NotNull GalColor, @NotNull Double> entry : jitter) {
-            components.add(new JitterTextComponent(text, entry.getKey(), entry.getValue(), Objects.requireNonNull(size)));
+            components.add(new JitterTextComponent(text, entry.getKey(), entry.getValue(), size));
         }
         return new BaseFormattedTextComponent(main, components);
     }
@@ -49,7 +49,7 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
     }
 
     @Override
-    public @NotNull ComponentBuilder setSize(@NotNull Drawing.TextSize size) {
+    public @NotNull ComponentBuilder setSize(Drawing.@NotNull TextSize size) {
         this.size = size;
         return this;
     }

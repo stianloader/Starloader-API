@@ -1,7 +1,6 @@
 package de.geolykt.starloader.apimixins;
 
-import java.util.Objects;
-
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -50,31 +49,38 @@ public class FactionMixins implements Faction {
         return birthMilliYear;
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }
 
+    @Override
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
 
-    public String getName() {
-        return NullUtils.requireNotNull(name, "name must not be null.");
+    @Override
+    public @NotNull String getName() {
+        return NullUtils.requireNotNull(name);
     }
 
-    public void setName(String name) {
-        this.name = Objects.requireNonNull(name, "name must not be null");
+    @Override
+    public void setName(@NotNull String name) {
+        this.name = NullUtils.requireNotNull(name, "name must not be null");
     }
 
+    @Override
     public int getStarCount() {
         return starCount;
     }
 
+    @Override
     public int getHost() {
         return host.get_id();
     }
 
-    public ActiveEmpire getHostEmpire() {
+    @Override
+    public @NotNull ActiveEmpire getHostEmpire() {
         return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(getHost()), "Unable to find empire " + getHost());
     }
 

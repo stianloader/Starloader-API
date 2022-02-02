@@ -34,6 +34,7 @@ public class NamedIntegerChooserComponent extends ppclass_170 {
         this.option = option;
     }
 
+    @Override
     public void a(final String o) {
         if ("Custom".equals(o)) {
             var builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(option.get().toString()), option.getName());

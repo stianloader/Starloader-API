@@ -1,10 +1,9 @@
 package de.geolykt.starloader.api.event.lifecycle;
 
-import java.util.Objects;
-
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.Event;
 
 /**
@@ -32,7 +31,7 @@ public class GalaxySavingEndEvent extends Event {
      * @param natural Whether the event was not (indirectly or directly) caused by another mod
      */
     public GalaxySavingEndEvent(@NotNull String location, boolean natural) {
-        this.location = Objects.requireNonNull(location, "location must not be null");
+        this.location = NullUtils.requireNotNull(location, "location must not be null");
         this.natural = natural;
     }
 

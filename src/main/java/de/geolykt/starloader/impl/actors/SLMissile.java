@@ -23,6 +23,7 @@ import snoddasmannen.galimulator.actors.StateActor;
  *
  * @deprecated The Wrapper actor API is scheduled for removal
  */
+@SuppressWarnings("null")
 @Deprecated(forRemoval = true, since = "1.5.0")
 public abstract class SLMissile extends Missile implements MissileSpec {
 
@@ -154,12 +155,12 @@ public abstract class SLMissile extends Missile implements MissileSpec {
     @Override
     @Pseudo
     @Deprecated(forRemoval = true, since = "1.5.0")
-    public void onHitActor(ActorSpec actor) {
+    public void onHitActor(@NotNull ActorSpec actor) {
     }
 
     @Override
     @Pseudo
     @Deprecated(forRemoval = true, since = "1.5.0")
-    public void onHitStar(Star star) {
+    public void onHitStar(@NotNull Star star) {
     }
 }

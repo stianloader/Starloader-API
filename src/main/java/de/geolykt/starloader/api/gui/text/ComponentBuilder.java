@@ -79,7 +79,7 @@ public interface ComponentBuilder {
      * @param size The new {@link TextSize} to use.
      * @return The current builder instance
      */
-    public @NotNull ComponentBuilder setSize(@NotNull Drawing.TextSize size);
+    public @NotNull ComponentBuilder setSize(Drawing.@NotNull TextSize size);
 
     /**
      * Sets the text of the component.

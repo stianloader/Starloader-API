@@ -15,6 +15,7 @@ public class NamedCheckBoxComponent extends ppclass_169 {
         this.option = option;
     }
 
+    @Override
     public void a(final boolean b) {
         option.set(b);
     }

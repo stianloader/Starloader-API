@@ -25,7 +25,7 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     }
 
     @Override
-    public ActorSpec cast() {
+    public @NotNull ActorSpec cast() {
         return this;
     }
 
@@ -38,7 +38,7 @@ public class WrappedActor<T extends ActorSpec> extends SLActor implements Wrappi
     }
 
     @Override
-    public WrappingConfiguration getConfiguration() {
+    public @NotNull WrappingConfiguration getConfiguration() {
         return config;
     }
 

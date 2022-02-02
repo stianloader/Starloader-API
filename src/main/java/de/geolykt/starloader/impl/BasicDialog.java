@@ -44,6 +44,7 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
      * automatic closing is not done. The time is relative to the starting point of
      * {@link System#currentTimeMillis()} and is in milliseconds.
      */
+    @Override
     public long getAutocloseTime() {
         return dialog.d;
     }

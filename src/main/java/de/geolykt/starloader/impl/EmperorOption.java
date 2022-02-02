@@ -24,6 +24,7 @@ public class EmperorOption extends class_42 {
         agency = parentClass;
     }
 
+    @Override
     public void b() {
         agency.a(job, (Person) person);
         Galimulator.resumeGame();

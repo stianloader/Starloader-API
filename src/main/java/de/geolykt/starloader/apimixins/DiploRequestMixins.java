@@ -1,5 +1,6 @@
 package de.geolykt.starloader.apimixins;
 
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -46,7 +47,7 @@ public class DiploRequestMixins implements DiplomacyRequest {
     }
 
     @Override
-    public String doValidatedly(ActiveEmpire target) {
+    public String doValidatedly(@NotNull ActiveEmpire target) {
         return c(ExpectedObfuscatedValueException.requireEmpire(target));
     }
 
@@ -56,12 +57,12 @@ public class DiploRequestMixins implements DiplomacyRequest {
     }
 
     @Override
-    public boolean isValid(ActiveEmpire target) {
+    public boolean isValid(@NotNull ActiveEmpire target) {
         return a(ExpectedObfuscatedValueException.requireEmpire(target));
     }
 
     @Override
-    public String performAction(ActiveEmpire target) {
+    public String performAction(@NotNull ActiveEmpire target) {
         return b(ExpectedObfuscatedValueException.requireEmpire(target));
     }
 }

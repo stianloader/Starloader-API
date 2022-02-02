@@ -35,7 +35,7 @@ public class SLScreenBuilder extends ScreenBuilder {
      * but can be set to another colour via {@link #setHeaderColor(Color)}.
      * This value should be ignored is {@link #enableHeader} is false.
      */
-    protected @NotNull GalColor headerColor = Objects.requireNonNull(GalColor.ORANGE);
+    protected @NotNull GalColor headerColor = NullUtils.requireNotNull(GalColor.ORANGE);
 
     /**
      * The title of the screen. While it is annotated as {@link Nullable}, it can only be null if

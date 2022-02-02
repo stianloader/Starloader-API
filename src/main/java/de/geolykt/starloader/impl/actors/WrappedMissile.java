@@ -46,7 +46,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
 
     @Override
     @Deprecated(forRemoval = true, since = "1.5.0")
-    public ActorSpec cast() {
+    public @NotNull ActorSpec cast() {
         return this;
     }
 
@@ -59,7 +59,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
-    public WrappingConfiguration getConfiguration() {
+    public @NotNull WrappingConfiguration getConfiguration() {
         return config;
     }
 
@@ -121,7 +121,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
-    public void onHitActor(ActorSpec actor) {
+    public void onHitActor(@NotNull ActorSpec actor) {
         delegate.onHitActor(actor);
         if (!override) {
             super.onHitActor(actor);
@@ -129,7 +129,7 @@ public class WrappedMissile<T extends MissileSpec> extends SLMissile implements 
     }
 
     @Override
-    public void onHitStar(Star star) {
+    public void onHitStar(@NotNull Star star) {
         delegate.onHitStar(star);
         if (!override) {
             super.onHitStar(star);

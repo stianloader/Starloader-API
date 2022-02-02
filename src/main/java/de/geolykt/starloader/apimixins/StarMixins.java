@@ -204,6 +204,7 @@ public class StarMixins implements Star {
 
     @Override
     @Shadow
+    @NotNull
     public String getName() { // this is also already implemented by the base class
         return "";
     }
@@ -271,7 +272,7 @@ public class StarMixins implements Star {
     }
 
     @Override
-    public void setAssignedEmpire(ActiveEmpire empire) {
+    public void setAssignedEmpire(@NotNull ActiveEmpire empire) {
         snoddasmannen.galimulator.Empire newEmp = ExpectedObfuscatedValueException.requireEmpire(empire);
         snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
         oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
@@ -300,7 +301,7 @@ public class StarMixins implements Star {
                 return;
             }
             this.faction = (snoddasmannen.galimulator.factions.Faction) faction;
-            this.faction.b((snoddasmannen.galimulator.Star) (Object) this);
+            ((snoddasmannen.galimulator.factions.Faction) faction).b((snoddasmannen.galimulator.Star) (Object) this);
         } else {
             this.faction = null;
         }

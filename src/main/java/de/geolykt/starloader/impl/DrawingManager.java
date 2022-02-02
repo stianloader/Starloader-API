@@ -64,7 +64,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color,
-            @NotNull Drawing.TextSize size) {
+            Drawing.@NotNull TextSize size) {
         switch (size) {
         case LARGE:
             return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG);
@@ -78,7 +78,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color,
-            @NotNull Drawing.TextSize size, @NotNull Camera camera) {
+            Drawing.@NotNull TextSize size, @NotNull Camera camera) {
         // x, y, rotation, pivot, text, color, font, camera
         switch (size) {
         case LARGE:
@@ -147,7 +147,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @SuppressWarnings("unchecked")
     @Override
-    public @Nullable BitmapFont getFontBitmap(String font) {
+    public @Nullable BitmapFont getFontBitmap(@NotNull String font) {
         GalFX.FONT_TYPE arg;
         try {
             arg = GalFX.FONT_TYPE.valueOf(font);

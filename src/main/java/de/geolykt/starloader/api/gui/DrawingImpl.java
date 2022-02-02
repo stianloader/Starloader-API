@@ -83,7 +83,7 @@ public interface DrawingImpl {
      * @param size    The font size.
      * @return The width of the text that was just drawn
      */
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size);
+    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size);
 
     /**
      * Draws text at the given location. The specified color should be used.
@@ -99,7 +99,7 @@ public interface DrawingImpl {
      * @param camera  The camera to use (used for internal unprojecting)
      * @return The width of the text that was just drawn
      */
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size, @NotNull Camera camera);
+    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size, @NotNull Camera camera);
 
     /**
      * Draws text at the given location. The specified color should be used.
