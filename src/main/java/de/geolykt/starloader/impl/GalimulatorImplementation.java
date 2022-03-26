@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.api.sound.SoundHandler;
 
+import snoddasmannen.galimulator.DeviceConfiguration;
 import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.MapMode.MapModes;
@@ -51,7 +53,6 @@ import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
-import snoddasmannen.galimulator.class_27;
 import snoddasmannen.galimulator.guides.class_0;
 
 public class GalimulatorImplementation implements Galimulator.GameImplementation, Galimulator.Unsafe {
@@ -110,30 +111,30 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<ActorSpec> getActorsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.f);
+        return NullUtils.requireNotNull((Vector) Space.actors);
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<Alliance> getAlliancesUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.p);
+        return NullUtils.requireNotNull((Vector) Space.alliances);
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getArtifactsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.e);
+        return NullUtils.requireNotNull((Vector) Space.artifacts);
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getCooperationsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.l);
+        return NullUtils.requireNotNull((Vector) Space.corporations);
     }
 
     @Override
     public Vector<Star> getDisruptedStarsUnsafe() {
-        return NullUtils.requireNotNull(Space.j);
+        return NullUtils.requireNotNull(Space.disruptedStars);
     }
 
     @Override
@@ -156,7 +157,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<ActiveEmpire> getEmpiresUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.b);
+        return NullUtils.requireNotNull((Vector) Space.empires);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes", "null" })
@@ -168,13 +169,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public int getGameYear() {
-        return Space.get_Z();
+        return Space.getMilliYear();
     }
 
     @SuppressWarnings("null")
     @Override
     public @NotNull Map getMap() {
-        return (Map) Space.get_an();
+        return (Map) Space.getMapData();
     }
 
     @Override
@@ -191,17 +192,17 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("null")
     @Override
     public @NotNull ActiveEmpire getNeutralEmpire() {
-        return (ActiveEmpire) Space.x;
+        return (ActiveEmpire) Space.neutralEmpire;
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<DynastyMember> getPeopleUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.n);
+        return NullUtils.requireNotNull((Vector) Space.getPersons());
     }
 
     public @Nullable snoddasmannen.galimulator.Player getPlayer() {
-        return Space.get_am();
+        return Space.getPlayer();
     }
 
     @Override
@@ -218,7 +219,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getQuestsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.m);
+        return NullUtils.requireNotNull((Vector) Space.quests);
     }
 
     @Override
@@ -235,17 +236,17 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<Star> getStarsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.a);
+        return NullUtils.requireNotNull((Vector) Space.stars);
     }
 
     @Override
     public int getTranscendedEmpires() {
-        return Space.get_ai();
+        return Space.getTranscended();
     }
 
     @Override
     @Deprecated(forRemoval = false, since = "1.5.0")
-    public Galimulator.Unsafe getUnsafe() {
+    public Galimulator.@NotNull Unsafe getUnsafe() {
         return this;
     }
 
@@ -255,13 +256,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @return The valid vanity holder instance
      */
     public VanityHolder getVanityHolder() {
-        return Space.w;
+        return Space.vanity;
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<War> getWarsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.c);
+        return NullUtils.requireNotNull((Vector) Space.wars);
     }
 
     @Override
@@ -271,12 +272,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public boolean hasUsedSandbox() {
-        return Space.I;
+        return Space.sandboxUsed;
     }
 
     @Override
     public boolean isPaused() {
-        return Space.get_aa();
+        return Space.isPaused();
     }
 
     @Override
@@ -286,115 +287,115 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public synchronized void loadGameState(@NotNull InputStream input) throws IOException {
+        Object readObject;
         try (ObjectInputStream in = new ObjectInputStream(input)) {
-            Object readObject;
             try {
                 readObject = in.readObject();
             } catch (ClassNotFoundException | IOException e) {
                 throw new IOException("Failed to read savegame.", e);
             }
-            in.close();
             if (!(readObject instanceof SpaceState)) {
                 throw new IOException("The read object was not the excepted obect.");
             }
-            SpaceState spaceState = (SpaceState) readObject;
-            Space.s = spaceState.history;
-            setMap((Map) NullUtils.requireNotNull(spaceState.mapData));
-            setGameYear(spaceState.milliYear);
-            setNeutralEmpire(NullUtils.requireNotNull((ActiveEmpire) spaceState.neutralEmpire));
-            setPlayer(spaceState.player);
-            setUsedSandbox(spaceState.sandboxUsed);
-            setTranscendedEmpires(spaceState.transcended);
-            setWarsUnsafe(spaceState.wars);
-            setVanityHolder(spaceState.vanity);
-            setActorsUnsafe(NullUtils.requireNotNull((Vector<ActorSpec>) spaceState.actors));
-            setAlliancesUnsafe(NullUtils.requireNotNull((Vector<Alliance>) spaceState.alliances));
-            setArtifactsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.artifacts));
-            setCooperationsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.corporations));
-            setDisruptedStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.disruptedStars));
-            setEmpiresUnsafe(NullUtils.requireNotNull((Vector<ActiveEmpire>) spaceState.empires));
-            setPeopleUnsafe(NullUtils.requireNotNull((Vector<DynastyMember>) spaceState.persons));
-            setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
-            setStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.stars));
-            Space.H = spaceState.stars.size();
-            EmploymentAgency.a(spaceState.employmentAgency);
-
-            // Many magic methods and stuff. See Space#i(String) (as of galimulator-4.9-STABLE)
-            Space.o = null;
-            Space.C = true;
-
-            HashMap<Integer, Star> uidToStar = new HashMap<>();
-            HashMap<Integer, ActiveEmpire> uidToEmpire = new HashMap<>();
-
-            for (Star star : getStarsUnsafe()) {
-                star.setInternalRandom(new Random());
-                uidToStar.put(star.getUID(), star);
-            }
-
-            for (ActiveEmpire empire : getEmpiresUnsafe()) {
-                empire.setRecentlyLostStars(new ArrayDeque<>());
-                empire.setInternalRandom(new Random());
-                uidToEmpire.put(empire.getUID(), empire);
-            }
-
-            getNeutralEmpire().setInternalRandom(new Random());
-            getNeutralEmpire().setRecentlyLostStars(new ArrayDeque<>());
-            @SuppressWarnings("null")
-            final @NotNull Religion nullReligion = (Religion) NullUtils.provideNull();
-            getNeutralEmpire().setReligion(nullReligion);
-            Space.ar(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
-            Space.get_an().getGenerator().i(); // Change the xmax and ymax of the generator area
-            Space.ao(); // big calculations with voronoi diagrams
-            Space.ak = Space.q(); // set the width/height of the board
-            Space.al = Space.r();
-
-            // repopulate the starlanes (this was extracted from another method)
-            // Also sets the owner empire, which was also extracted from another method
-            for (Star star : getStarsUnsafe()) {
-                Vector<Star> neighbours = new Vector<>();
-                for (Integer starB : star.getNeighbourIDs()) {
-                    neighbours.add(uidToStar.get(starB));
-                }
-                star.setNeighbours(neighbours);
-                ActiveEmpire owner = uidToEmpire.get(star.getAssignedEmpireUID());
-                if (owner == null) {
-                    owner = getNeutralEmpire();
-                }
-                star.setAssignedEmpire(owner);
-            }
-
-            Space.am(); // setup quad trees
-            if (getAlliancesUnsafe() == null) {
-                setAlliancesUnsafe(new Vector<>());
-            } else {
-                for (Alliance alliance : getAlliancesUnsafe()) {
-                    for (ActiveEmpire member : alliance.getMembers()) {
-                        member.setAlliance(alliance);
-                    }
-                }
-            }
-
-            Vector<DynastyMember> followedMembers = new Vector<>();
-            for (DynastyMember member : getPeopleUnsafe()) {
-                if (member.isFollowed()) {
-                    followedMembers.add(member);
-                }
-            }
-            setFollowedPeopleUnsafe(followedMembers);
-            class_0.b();
-
-            Space.get_an().getGenerator().n();
-            GalFX.l.zoom = GalFX.e();
-            GalFX.l.update();
         }
+        SpaceState spaceState = (SpaceState) readObject;
+        Space.history = spaceState.history;
+        setMap((Map) NullUtils.requireNotNull(spaceState.mapData));
+        setGameYear(spaceState.milliYear);
+        setNeutralEmpire(NullUtils.requireNotNull((ActiveEmpire) spaceState.neutralEmpire));
+        setPlayer(spaceState.player);
+        setUsedSandbox(spaceState.sandboxUsed);
+        setTranscendedEmpires(spaceState.transcended);
+        setWarsUnsafe((Vector) spaceState.wars);
+        setVanityHolder(spaceState.vanity);
+        setActorsUnsafe(NullUtils.requireNotNull((Vector) spaceState.actors));
+        setAlliancesUnsafe(NullUtils.requireNotNull((Vector) spaceState.alliances));
+        setArtifactsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.artifacts));
+        setCooperationsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.corporations));
+        setDisruptedStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.disruptedStars));
+        setEmpiresUnsafe(NullUtils.requireNotNull((Vector) spaceState.empires));
+        setPeopleUnsafe(NullUtils.requireNotNull((Vector) spaceState.persons));
+        setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
+        setStarsUnsafe(NullUtils.requireNotNull((Vector) spaceState.stars));
+        Space.H = spaceState.stars.size();
+        EmploymentAgency.a(spaceState.employmentAgency);
+
+        // Many magic methods and stuff. See Space#i(String) (as of galimulator-4.9-STABLE)
+        Space.o = null;
+        Space.C = true;
+
+        HashMap<Integer, Star> uidToStar = new HashMap<>();
+        HashMap<Integer, ActiveEmpire> uidToEmpire = new HashMap<>();
+
+        for (Star star : getStarsUnsafe()) {
+            star.setInternalRandom(new Random());
+            uidToStar.put(star.getUID(), star);
+        }
+
+        for (ActiveEmpire empire : getEmpiresUnsafe()) {
+            empire.setRecentlyLostStars(new ArrayDeque<>());
+            empire.setInternalRandom(new Random());
+            uidToEmpire.put(empire.getUID(), empire);
+        }
+
+        getNeutralEmpire().setInternalRandom(new Random());
+        getNeutralEmpire().setRecentlyLostStars(new ArrayDeque<>());
+        @SuppressWarnings("null")
+        @NotNull
+        final Religion nullReligion = (Religion) NullUtils.provideNull();
+        getNeutralEmpire().setReligion(nullReligion);
+        Space.ar(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
+        Space.getMapData().getGenerator().i(); // Change the xmax and ymax of the generator area
+        Space.ao(); // big calculations with voronoi diagrams
+        Space.ak = Space.q(); // set the width/height of the board
+        Space.al = Space.r();
+
+        // repopulate the starlanes (this was extracted from another method)
+        // Also sets the owner empire, which was also extracted from another method
+        for (Star star : getStarsUnsafe()) {
+            Vector<Star> neighbours = new Vector<>();
+            for (Integer starB : star.getNeighbourIDs()) {
+                neighbours.add(uidToStar.get(starB));
+            }
+            star.setNeighbours(neighbours);
+            ActiveEmpire owner = uidToEmpire.get(star.getAssignedEmpireUID());
+            if (owner == null) {
+                owner = getNeutralEmpire();
+            }
+            star.setAssignedEmpire(owner);
+        }
+
+        Space.am(); // setup quad trees
+        if (getAlliancesUnsafe() == null) {
+            setAlliancesUnsafe(new Vector<>());
+        } else {
+            for (Alliance alliance : getAlliancesUnsafe()) {
+                for (ActiveEmpire member : alliance.getMembers()) {
+                    member.setAlliance(alliance);
+                }
+            }
+        }
+
+        Vector<DynastyMember> followedMembers = new Vector<>();
+        for (DynastyMember member : getPeopleUnsafe()) {
+            if (member.isFollowed()) {
+                followedMembers.add(member);
+            }
+        }
+        setFollowedPeopleUnsafe(followedMembers);
+        class_0.b();
+
+        Space.getMapData().getGenerator().n();
+        GalFX.l.zoom = GalFX.e();
+        GalFX.l.update();
     }
 
     @Override
     public void pauseGame() {
-        Space.c(true);
+        Space.setPaused(true);
     }
 
     @Override
@@ -404,7 +405,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     @Deprecated(forRemoval = true, since = "1.3.0")
-    public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind) {
+    public void registerKeybind(de.geolykt.starloader.api.gui.@NotNull Keybind bind) {
         Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
         if (bind.getCharacter() != '\0') {
             Main.shortcuts.add(new SLKeybind(bind, bind.getCharacter()));
@@ -425,7 +426,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void resumeGame() {
-        Space.c(false);
+        Space.setPaused(false);
     }
 
     @Override
@@ -454,19 +455,40 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @NotNull
+    @Contract(pure = true)
+    private final SpaceState createState() {
+        return new SpaceState((Vector) getStarsUnsafe(),
+                (Vector) getEmpiresUnsafe(),
+                (Vector) getArtifactsUnsafe(),
+                (Vector) getActorsUnsafe(),
+                (Vector) getDisruptedStarsUnsafe(),
+                (snoddasmannen.galimulator.Empire) getNeutralEmpire(),
+                getGameYear(),
+                getTranscendedEmpires(),
+                getVanityHolder(),
+                (Vector) getQuestsUnsafe(),
+                getPlayer(), 
+                Space.getMapData(),
+                hasUsedSandbox(),
+                snoddasmannen.galimulator.EmploymentAgency.a(),
+                (Vector) getPeopleUnsafe(),
+                Space.history,
+                (List) null,
+                (Vector) getAlliancesUnsafe(),
+                (Vector) getCooperationsUnsafe(),
+                (Vector) getWarsUnsafe());
+    }
+
     @Override
     public void saveGameState(@NotNull OutputStream out) {
         if (!suppressSaveEvent) {
             EventManager.handleEvent(new GalaxySavingEvent("Programmer issued save", "unspecified", false));
         }
         Space.G = 0; // reset Stack depth
-        SpaceState var2 = new SpaceState(getStarsUnsafe(), getEmpiresUnsafe(), getArtifactsUnsafe(),
-                getActorsUnsafe(), getDisruptedStarsUnsafe(), (snoddasmannen.galimulator.Empire) getNeutralEmpire(),
-                getGameYear(), getTranscendedEmpires(), getVanityHolder(), getQuestsUnsafe(), getPlayer(),
-                (snoddasmannen.galimulator.MapData) getMap(), hasUsedSandbox(),
-                snoddasmannen.galimulator.EmploymentAgency.a(), getPeopleUnsafe(), Space.s, null /* (unused) */,
-                getAlliancesUnsafe(), getCooperationsUnsafe(), getWarsUnsafe());
-        if (class_27.getConfiguration().useXStream()) {
+        SpaceState var2 = createState();
+        if (DeviceConfiguration.getConfiguration().useXStream()) {
             LOGGER.warn("XStream is not supported for saving directly.");
         }
         try {
@@ -493,36 +515,37 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setActorsUnsafe(Vector<ActorSpec> actors) {
-        Space.f = NullUtils.requireNotNull((Vector) actors);
+        Space.actors = NullUtils.requireNotNull((Vector) actors);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setAlliancesUnsafe(Vector<Alliance> alliances) {
-        Space.p = NullUtils.requireNotNull((Vector) alliances);
+        Space.alliances = NullUtils.requireNotNull((Vector) alliances);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setArtifactsUnsafe(Vector<?> artifacts) {
-        Space.e = NullUtils.requireNotNull((Vector) artifacts);
+        Space.artifacts = NullUtils.requireNotNull((Vector) artifacts);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
+    // TODO rename to corporations - old name is a typo
     public void setCooperationsUnsafe(Vector<?> cooperations) {
-        Space.l = NullUtils.requireNotNull((Vector) cooperations);
+        Space.corporations = NullUtils.requireNotNull((Vector) cooperations);
     }
 
     @Override
     public void setDisruptedStarsUnsafe(Vector<Star> disruptedStars) {
-        Space.j = NullUtils.requireNotNull(disruptedStars);
+        Space.disruptedStars = NullUtils.requireNotNull(disruptedStars);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setEmpiresUnsafe(Vector<ActiveEmpire> empires) {
-        Space.b = NullUtils.requireNotNull((Vector) empires);
+        Space.empires = NullUtils.requireNotNull((Vector) empires);
     }
 
     @SuppressWarnings("rawtypes")
@@ -533,7 +556,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void setGameYear(int year) {
-        Space.Z = year;
+        Space.milliYear = year;
     }
 
     @Override
@@ -541,44 +564,44 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         if (!(map instanceof snoddasmannen.galimulator.MapData)) {
             throw new ExpectedObfuscatedValueException();
         }
-        Space.an = (snoddasmannen.galimulator.MapData) map;
+        Space.mapData = (snoddasmannen.galimulator.MapData) map;
     }
 
     @Override
     public void setNeutralEmpire(@NotNull ActiveEmpire empire) {
-        Space.x = ExpectedObfuscatedValueException.requireEmpire(NullUtils.requireNotNull(empire));
+        Space.neutralEmpire = ExpectedObfuscatedValueException.requireEmpire(NullUtils.requireNotNull(empire));
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setPeopleUnsafe(Vector<DynastyMember> members) {
-        Space.n = NullUtils.requireNotNull((Vector) members);
+        Space.persons = NullUtils.requireNotNull((Vector) members);
     }
 
     public void setPlayer(Player player) {
-        Space.am = player;
+        Space.player = player;
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setQuestsUnsafe(Vector<?> quests) {
-        Space.m = NullUtils.requireNotNull((Vector) quests);
+        Space.quests = NullUtils.requireNotNull((Vector) quests);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setStarsUnsafe(Vector<Star> stars) {
-        Space.a = NullUtils.requireNotNull((Vector) stars);
+        Space.stars = NullUtils.requireNotNull((Vector) stars);
     }
 
     @Override
     public void setTranscendedEmpires(int count) {
-        Space.ai = count;
+        Space.transcended = count;
     }
 
     @Override
     public void setUsedSandbox(boolean state) {
-        Space.I = state;
+        Space.sandboxUsed = state;
     }
 
     /**
@@ -587,12 +610,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @param holder The vanity holder to use
      */
     public void setVanityHolder(VanityHolder holder) {
-        Space.w = holder;
+        Space.vanity = holder;
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setWarsUnsafe(Vector<War> wars) {
-        Space.c = NullUtils.requireNotNull((Vector) wars);
+        Space.wars = NullUtils.requireNotNull((Vector) wars);
     }
 }

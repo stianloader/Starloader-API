@@ -18,6 +18,7 @@ import net.minestom.server.extras.selfmodification.CodeModifier;
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.SidebarInjector.Orientation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
+import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
 
 import snoddasmannen.galimulator.ui.Widget;
 
@@ -32,12 +33,15 @@ public final class UIASMTransformer extends CodeModifier {
      * The fully classified name of the class that is responsible for
      * the sidebar. Uses the saner ASM-style syntax.
      */
-    public static final @NotNull String MAIN_SIDEBAR_CLASS = "snoddasmannen/galimulator/ui/ne";
+    @StarplaneReobfuscateReference
+    @NotNull
+    public final String mainSidebarClass = "snoddasmannen/galimulator/ui/SidebarWidget";
 
     /**
      * The bytecode name of the class you are currently reading.
      */
-    public static final @NotNull String THIS_CLASS = "de/geolykt/starloader/impl/asm/UIASMTransformer";
+    @NotNull
+    public static final String THIS_CLASS = "de/geolykt/starloader/impl/asm/UIASMTransformer";
 
     public static final void sideBarBottom(Object widget) {
         if (widget instanceof Widget && SidebarInjector.getImplementation() instanceof SLSidebarInjector) {
@@ -75,7 +79,7 @@ public final class UIASMTransformer extends CodeModifier {
             }
         }
         if (initializerMethod == null || flagInsn == null) {
-            LOGGER.error("UI transformer failed to find potential injection candidate in sidebar class " + MAIN_SIDEBAR_CLASS);
+            LOGGER.error("UI transformer failed to find potential injection candidate in sidebar class " + mainSidebarClass);
             return; // We are out of here
         }
         AbstractInsnNode currentInstruction = flagInsn.getNext();
@@ -109,7 +113,7 @@ public final class UIASMTransformer extends CodeModifier {
         if (source == null) {
             throw new NullPointerException(); // As you can see, the API was designed brilliantly
         }
-        if (source.name.equals(MAIN_SIDEBAR_CLASS)) {
+        if (source.name.equals(mainSidebarClass)) {
             transformSidebarClass(source);
             return true;
         }

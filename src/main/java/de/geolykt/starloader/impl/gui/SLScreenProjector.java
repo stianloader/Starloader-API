@@ -10,7 +10,7 @@ import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.Screen;
 
-import snoddasmannen.galimulator.interface_4;
+import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.ui.class_47;
 
 /**
@@ -43,7 +43,7 @@ public class SLScreenProjector extends class_47 {
      */
     @Deprecated(forRemoval = true, since = "1.6.0")
     public SLScreenProjector(@NotNull Screen screen, boolean indepentWindow) {
-        super((interface_4) Objects.requireNonNull(screen, "Screen cannot be null."), indepentWindow);
+        super((Dialog) Objects.requireNonNull(screen, "Screen cannot be null."), indepentWindow);
         this.screen = screen;
         DebugNagException.nag("The SLScreenProjector is deprecated and will be removed with galimulator 4.11. Consider moving to true Screens via the SLScreenWidget.");
     }

@@ -13,10 +13,10 @@ import de.geolykt.starloader.api.gui.DialogCloseCause;
 import de.geolykt.starloader.api.gui.WidgetAction;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
 
-import snoddasmannen.galimulator.interface_12;
+import snoddasmannen.galimulator.WidgetMessageReciever;
 import snoddasmannen.galimulator.ui.Widget;
 
-public class WidgetActionListenerWrapper implements interface_12 {
+public class WidgetActionListenerWrapper implements WidgetMessageReciever {
 
     private final List<@NotNull BasicDialogCloseListener> closeListeners;
     private final List<@NotNull WidgetActionListener> actionListeners;
@@ -63,7 +63,7 @@ public class WidgetActionListenerWrapper implements interface_12 {
     }
 
     @Override
-    public void a(Widget.WIDGET_MESSAGE var1) {
+    public void recieveMessage(Widget.WIDGET_MESSAGE var1) {
         if (var1 == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
             // Check if it was closed automatically due to timeout, if it was, then ignore
             // this request

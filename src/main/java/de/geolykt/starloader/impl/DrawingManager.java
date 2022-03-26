@@ -28,12 +28,12 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 
+import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.class_30;
 import snoddasmannen.galimulator.class_42;
-import snoddasmannen.galimulator.interface_4;
 import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
 
@@ -82,12 +82,12 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
         // x, y, rotation, pivot, text, color, font, camera
         switch (size) {
         case LARGE:
-            return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG, camera);
         case MEDIUM:
-            return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, camera);
         case SMALL:
         default:
-            return GalFX.a(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
         }
     }
 
@@ -110,13 +110,13 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
-        GalFX.a(x, y, width, height, new GalColor(color), camera);
+        GalFX.drawWindow(x, y, width, height, new GalColor(color), camera);
     }
 
     @Override
     @NotNull
     public TextureRegion findTextureRegion(@NotNull String name) {
-        return NullUtils.requireNotNull(GalFX.b(name));
+        return NullUtils.requireNotNull(GalFX.getTextureRegion(name));
     }
 
     @SuppressWarnings("null")
@@ -213,7 +213,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     @Override
     @Deprecated(forRemoval = true, since = "1.6.0")
     public void showScreen(@NotNull Screen screen) {
-        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof interface_4) {
+        if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof Dialog) {
             LoggerFactory.getLogger(DrawingManager.class).warn("Tried to show a screen which uses galimulator's native dialog system. This operation will fail in the future.");
             // Standard screen using the dialog api
             // We want to mimic this call:
@@ -221,9 +221,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
             // Space.a((ck) screen, true, null, false);
             var screenWrapper = new de.geolykt.starloader.impl.gui.SLScreenProjector(screen, true);
             screenWrapper.a((WIDGET_ID) null);
-            Space.c(screenWrapper);
+            Space.showWidget(screenWrapper);
         } else if (screen instanceof Widget) {
-            Space.c((Widget) screen);
+            Space.showWidget((Widget) screen);
         } else {
             throw new IllegalArgumentException(screen.getClass().getName() + " is a nonstandard screen implementation.");
         }
@@ -237,6 +237,6 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public void toast(@NotNull String text) {
-        Space.k(text);
+        Space.showToast(text);
     }
 }

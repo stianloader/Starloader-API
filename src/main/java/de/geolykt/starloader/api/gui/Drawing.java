@@ -116,7 +116,7 @@ public final class Drawing {
      * @param size    The font size.
      * @return The width of the text that was just drawn
      */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, @NotNull Drawing.TextSize size) {
+    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size) {
         return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"));
     }
 

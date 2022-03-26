@@ -19,7 +19,6 @@ import de.geolykt.starloader.api.event.alliance.AllianceLeaveEvent;
 
 import snoddasmannen.galimulator.GalColor;
 
-@SuppressWarnings("unused")
 @Mixin(value = snoddasmannen.galimulator.Alliance.class)
 public class AllianceMixins implements Alliance {
 
@@ -56,18 +55,14 @@ public class AllianceMixins implements Alliance {
     } // removeMember
 
     @Shadow
-    public @NotNull GalColor c() { // getColor
-        return new GalColor(0f, 0f, 0f);
-    }
-
-    @Shadow
     public boolean c(snoddasmannen.galimulator.Empire var1) { // hasMember
         return members.contains(var1);
     }
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull String getAbbreviation() {
+    @NotNull
+    public String getAbbreviation() {
         return name;
     }
 
@@ -77,9 +72,11 @@ public class AllianceMixins implements Alliance {
         return ((de.geolykt.starloader.impl.AWTColorAccesor) getColor()).asAWTColor();
     }
 
+    @SuppressWarnings("null")
     @Override
-    public @NotNull GalColor getColor() {
-        return c();
+    @NotNull
+    public GalColor getColor() {
+        return ((snoddasmannen.galimulator.Alliance) (Object) this).getColor();
     }
 
     @Override
@@ -96,7 +93,7 @@ public class AllianceMixins implements Alliance {
     @SuppressWarnings("null")
     @Override
     public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
-        return c().getGDXColor();
+        return getColor().getGDXColor();
     }
 
     @SuppressWarnings({ "unchecked", "null" })

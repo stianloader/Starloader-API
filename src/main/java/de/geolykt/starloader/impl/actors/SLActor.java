@@ -37,6 +37,13 @@ public abstract class SLActor extends Actor implements ActorSpec {
         return 0;
     }
 
+    @Override
+    @NotNull
+    @Deprecated(forRemoval = true, since = "1.5.0")
+    public String getName() {
+        return super.getName();
+    }
+
     @Pseudo
     @Override
     public @NotNull ActiveEmpire getOwningempire() {

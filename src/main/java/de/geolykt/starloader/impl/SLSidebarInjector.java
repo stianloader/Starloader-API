@@ -41,13 +41,13 @@ public class SLSidebarInjector extends SidebarInjector {
         case TOP:
             for (var entry : topPrototypes) {
                 widget.a(new SLSidebarButton(entry.getKey(), 106, 70, entry.getValue()));
-                widget.u.g();
+                widget.layout.newline();
             }
             break;
         case BOTTOM:
             for (var entry : bottomPrototypes) {
                 widget.a(new SLSidebarButton(entry.getKey(), 106, 70, entry.getValue()));
-                widget.u.g();
+                widget.layout.newline();
             }
             break;
         }

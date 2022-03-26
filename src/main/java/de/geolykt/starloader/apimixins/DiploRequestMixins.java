@@ -19,7 +19,7 @@ import snoddasmannen.galimulator.diplomacy.PlayerRequest;
 public class DiploRequestMixins implements DiplomacyRequest {
 
     @Shadow
-    public String a() {
+    public String getName() {
         return "";
     }
 
@@ -53,7 +53,7 @@ public class DiploRequestMixins implements DiplomacyRequest {
 
     @Override
     public String getText() {
-        return a();
+        return getName();
     }
 
     @Override

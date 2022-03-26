@@ -197,7 +197,7 @@ public final class Galimulator {
          * @deprecated The resulting unsafe object is unsafe and it's usage not recommend
          */
         @Deprecated(forRemoval = false, since = "1.5.0")
-        public @NotNull Galimulator.Unsafe getUnsafe();
+        public Galimulator.@NotNull Unsafe getUnsafe();
 
         /**
          * Obtains the weapons manager that is valid for this instance.
@@ -271,7 +271,7 @@ public final class Galimulator {
          * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} interface is deprecated for removal
          */
         @Deprecated(forRemoval = true, since = "1.3.0")
-        public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind);
+        public void registerKeybind(de.geolykt.starloader.api.gui.@NotNull Keybind bind);
 
         /**
          * Registers the given keybind to the list of active keybinds.
@@ -744,10 +744,12 @@ public final class Galimulator {
      * is supported or not given that the data directory is very important
      * to the runtime of the game.
      *
-     * @return "4.9"
+     * @return "4.10"
+     * @deprecated This method is implemented in an inconsistent manner. The return value is questionable
      */
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public static String getSourceVersion() {
-        return "4.9";
+        return "4.10";
     }
 
     /**
@@ -864,7 +866,7 @@ public final class Galimulator {
      * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
      */
     @Deprecated(forRemoval = true, since = "1.3.0")
-    public static void registerKeybind(@NotNull de.geolykt.starloader.api.gui.Keybind bind) {
+    public static void registerKeybind(de.geolykt.starloader.api.gui.@NotNull Keybind bind) {
         impl.registerKeybind(bind);
     }
 

@@ -58,6 +58,13 @@ public abstract class SLMissile extends Missile implements MissileSpec {
         return 0;
     }
 
+    @Override
+    @NotNull
+    @Deprecated(forRemoval = true, since = "1.5.0")
+    public String getName() {
+        return super.getName();
+    }
+
     @Pseudo
     @Override
     @Deprecated(forRemoval = true, since = "1.5.0")

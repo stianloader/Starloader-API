@@ -16,8 +16,8 @@ import de.geolykt.starloader.api.gui.TextInputBuilder;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.Widget;
-import snoddasmannen.galimulator.ui.class_99;
 
 public class StarloaderTextInputBuilder implements TextInputBuilder {
 
@@ -57,7 +57,7 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
         if (initialText != null) {
             dialog.setText(initialText);
         }
-        Space.i.add(new class_99(dialog, GalFX.G() - dialog.c() - 120.0f, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
+        Space.i.add(new BufferedWidgetWrapper(dialog, GalFX.G() - dialog.getWidth() - 120.0f, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
         return dialog;
     }
 

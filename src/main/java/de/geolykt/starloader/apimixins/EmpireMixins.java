@@ -85,7 +85,7 @@ public class EmpireMixins implements ActiveEmpire {
             lastTick = Galimulator.getGameYear();
         } else {
             DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
-                    + "This usually indicates a broken neutral empire");
+                    + " This usually indicates a broken neutral empire");
         }
     }
 
@@ -94,7 +94,7 @@ public class EmpireMixins implements ActiveEmpire {
     private Vector agents; // actors - this is indeed the right name - i know, it is misleading
 
     @Shadow
-    protected transient Random b; // internalRandom
+    protected transient Random internalSessionRandom; // internalRandom
 
     @Shadow
     int birthMilliYear; // foundationYear
@@ -243,7 +243,7 @@ public class EmpireMixins implements ActiveEmpire {
         tickCallbacks.add(callback);
     }
 
-    @Inject(method = "ay", at = @At("TAIL"))
+    @Inject(method = "getCurrentShipCapacity()D", at = @At("TAIL"))
     public void applyShipModifiers(CallbackInfoReturnable<Double> ci) {
         if (flagNoModdedShipCapacity || capModifiers == null || capModifiers.isEmpty()) {
             flagNoModdedShipCapacity = false;
@@ -279,11 +279,6 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     public void av() { // voidTreaties
         return;
-    }
-
-    @Shadow
-    public double ay() { // getShipCapcaity
-        return 0.0;
     }
 
     @Shadow
@@ -415,7 +410,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public double getBaseShipCapacity() {
         flagNoModdedShipCapacity = true;
-        return ay();
+        return slapiAsGalimulatorEmpire().getCurrentShipCapacity();
     }
 
     @Override
@@ -453,11 +448,11 @@ public class EmpireMixins implements ActiveEmpire {
         return name;
     }
 
-    @SuppressWarnings({ "null", "unchecked" })
+    @SuppressWarnings({ "all" })
     @Override
     @NotNull
     public Collection<? extends FlagComponent> getFlag() {
-        return Collections.unmodifiableCollection(((snoddasmannen.galimulator.Empire) (Object) this).n());
+        return Collections.unmodifiableCollection((Vector) ((snoddasmannen.galimulator.Empire) (Object) this).getFlagItems());
     }
 
     @Override
@@ -485,7 +480,7 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("null")
     @Override
     public @NotNull Random getInternalRandom() {
-        return b;
+        return internalSessionRandom;
     }
 
     @Override
@@ -515,7 +510,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public double getShipCapacity() {
-        return ay();
+        return slapiAsGalimulatorEmpire().getCurrentShipCapacity();
     }
 
     @SuppressWarnings({ "unchecked", "null" })
@@ -653,7 +648,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public void setInternalRandom(@NotNull Random random) {
-        b = random;
+        internalSessionRandom = random;
     }
 
     @Override
@@ -759,6 +754,11 @@ public class EmpireMixins implements ActiveEmpire {
         }
     }
 
+    @SuppressWarnings("null")
+    public snoddasmannen.galimulator.@NotNull Empire slapiAsGalimulatorEmpire() {
+        return (snoddasmannen.galimulator.@NotNull Empire) (@NotNull Object) this;
+    }
+
     @Override
     public @NotNull ActiveEmpire spawnOffspring(@NotNull Star location) {
         snoddasmannen.galimulator.Star star = (snoddasmannen.galimulator.Star) location;
@@ -770,7 +770,7 @@ public class EmpireMixins implements ActiveEmpire {
      *
      * @param info Unused, but required by mixins
      */
-    @Inject(method = "J()V", at = @At(value = "HEAD"), cancellable = false)
+    @Inject(method = "tickEmpire()V", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
         if (this == Galimulator.getNeutralEmpire()) {
             emitTick();

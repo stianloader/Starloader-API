@@ -16,13 +16,13 @@ import de.geolykt.starloader.api.gui.screen.TextScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
 
-import snoddasmannen.galimulator.b.interface_0;
+import snoddasmannen.galimulator.dialog.DialogComponent;
 import snoddasmannen.galimulator.ui.Widget;
 
 /**
  * The default implementation of {@link TextScreenComponent}.
  */
-public class SLTextScreenComponent implements TextScreenComponent, SLScreenComponent, interface_0 {
+public class SLTextScreenComponent implements TextScreenComponent, SLScreenComponent, DialogComponent {
 
     protected FormattedText currentText;
     protected Screen parent;

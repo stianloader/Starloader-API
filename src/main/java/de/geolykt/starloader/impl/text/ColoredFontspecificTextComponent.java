@@ -31,6 +31,6 @@ public class ColoredFontspecificTextComponent extends ColoredTextComponent {
     @Override
     public float renderTextAt(float x, float y, @NotNull Camera camera) {
         // x, y, rotation, pivot, text, color, font, camera
-        return GalFX.a(x, y, 0.0F, (Vector3) null, text, color, font, camera);
+        return GalFX.drawText(x, y, 0.0F, (Vector3) null, text, color, font, camera);
     }
 }

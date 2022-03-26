@@ -9,10 +9,10 @@ import com.badlogic.gdx.Input.TextInputListener;
 
 import de.geolykt.starloader.api.gui.InputDialog;
 
+import snoddasmannen.galimulator.ui.TextInputDialogWidget;
 import snoddasmannen.galimulator.ui.Widget;
-import snoddasmannen.galimulator.ui.class_88;
 
-public class StarloaderInputDialog extends class_88 implements InputDialog {
+public class StarloaderInputDialog extends TextInputDialogWidget implements InputDialog {
 
     /**
      * Reference to the implementation of the {@link TextInputListener} interface used by this dialog instance.
@@ -32,13 +32,13 @@ public class StarloaderInputDialog extends class_88 implements InputDialog {
     @Override
     public void close() {
         wrapper.canceled();
-        b(Widget.WIDGET_MESSAGE.WIDGET_CLOSED);
+        propagateMessageLocally(Widget.WIDGET_MESSAGE.WIDGET_CLOSED);
     }
 
     @Override
     public void confirm() {
         wrapper.input(c);
-        b(Widget.WIDGET_MESSAGE.WIDGET_CLOSED);
+        propagateMessageLocally(Widget.WIDGET_MESSAGE.WIDGET_CLOSED);
     }
 
     /**

@@ -20,6 +20,9 @@ import snoddasmannen.galimulator.ui.Widget;
  */
 public abstract class SLAbstractWidget extends Widget {
 
+    private boolean basicDrawLock = false;
+    private boolean basicMessageLock = false;
+
     /**
      * The constructor. Does not much other than invoking super as well as initialising a potentially
      * nullable field.
@@ -32,13 +35,18 @@ public abstract class SLAbstractWidget extends Widget {
     }
 
     @Override
-    public final void a() {
+    public final void draw() {
+        if (basicDrawLock) {
+            throw new IllegalStateException("Either a draw call completed abnormally or there is recursion going on!");
+        }
+        basicDrawLock = true;
         onRender();
+        basicDrawLock = false;
     }
 
     @Override
-    public void a(double x, double y) {
-        super.a(x, y);
+    public void onMouseUp(double x, double y) {
+        super.onMouseUp(x, y);
         tap(x, getHeight() - y, false);
     }
 
@@ -54,41 +62,38 @@ public abstract class SLAbstractWidget extends Widget {
         tap(x, getHeight() - y, true);
     }
 
-    @Override
-    public final int c() {
-        return getWidth();
-    }
-
-    @Override
-    public final int d() {
-        return getHeight();
-    }
-
     /**
      * Dispatches a galimulator widget API widget message to this component.
      *
      * @param message The widget message to dispatch
      */
     public final void dispatchMessage(@NotNull WIDGET_MESSAGE message) {
-        a(Objects.requireNonNull(message));
+        if (basicMessageLock) {
+            throw new IllegalStateException("Either a dispatchMessage call completed abnormally or there is recursion going on!");
+        }
+        basicMessageLock = true;
+        recieveMessage(Objects.requireNonNull(message));
+        basicMessageLock = false;
     }
 
     /**
      * Draws the background of the widget in a certain color. This method is not called naturally,
      * however a call to this method is imperative in the implementation of {@link #onRender()}.
      *
-     * @param color The color of the background
+     * @param color The color of the background, may not be null - annotation not present due to API Interferrence with vanilla
      */
-    protected final void drawBackground(@NotNull GalColor color) {
-        d(Objects.requireNonNull(color, "The background cannot be null."));
+    @Override
+    protected final void drawBackground(GalColor color) {
+        super.drawBackground(Objects.requireNonNull(color, "The background cannot be null."));
     }
 
     /**
      * Draws the title of the widget. While the title itself will not be rendered,
      * leaving out just this method call will not result in the vanishing of header background color.
      */
+    @Override
     protected final void drawHeader() {
-        this.H();
+        super.drawHeader();
     }
 
     /**
@@ -98,8 +103,10 @@ public abstract class SLAbstractWidget extends Widget {
      *
      * @return The internal camera
      */
-    public @Nullable Camera getCamera() {
-        return this.q;
+    @Nullable
+    @Override
+    public Camera getCamera() {
+        return super.getCamera();
     }
 
     /**
@@ -109,6 +116,7 @@ public abstract class SLAbstractWidget extends Widget {
      *
      * @return The height of the widget.
      */
+    @Override
     public abstract int getHeight();
 
     /**
@@ -117,6 +125,7 @@ public abstract class SLAbstractWidget extends Widget {
      *
      * @return The height of the widget.
      */
+    @Override
     public abstract int getWidth();
 
     /**
@@ -128,8 +137,8 @@ public abstract class SLAbstractWidget extends Widget {
      *
      * @return The X-position of the widget
      */
-    public final int getX() {
-        return (int) super.get_e();
+    public final int getXPosition() {
+        return (int) super.getX();
     }
 
     /**
@@ -141,8 +150,8 @@ public abstract class SLAbstractWidget extends Widget {
      *
      * @return The Y-position of the widget
      */
-    public final int getY() {
-        return (int) super.get_f();
+    public final int getYPosition() {
+        return (int) super.getY();
     }
 
     /**
@@ -156,7 +165,7 @@ public abstract class SLAbstractWidget extends Widget {
      * for obvious reasons. This method is not called naturally.
      */
     protected final void renderChildren() {
-        this.z();
+        this.drawChildren();
     }
 
     /**
@@ -181,7 +190,7 @@ public abstract class SLAbstractWidget extends Widget {
      * @param title The title of the header. May not be null
      */
     protected void setTitle(@NotNull String title) {
-        this.e(Objects.requireNonNull(title, "Title cannot be null."));
+        this.setHeaderTitle(Objects.requireNonNull(title, "Title cannot be null."));
     }
 
     /**
@@ -191,7 +200,7 @@ public abstract class SLAbstractWidget extends Widget {
      * @param color The color to set the background at. May not be null
      */
     protected void setTitleColor(@NotNull GalColor color) {
-        this.b(Objects.requireNonNull(color, "Color cannot be null."));
+        this.setHeaderColor(Objects.requireNonNull(color, "Color cannot be null."));
     }
 
     /**

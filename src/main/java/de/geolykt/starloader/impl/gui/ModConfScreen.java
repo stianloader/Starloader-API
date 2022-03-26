@@ -12,11 +12,11 @@ import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
 import de.geolykt.starloader.api.gui.modconf.NumberOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
 
+import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.interface_4;
-import snoddasmannen.galimulator.b.interface_0;
+import snoddasmannen.galimulator.dialog.DialogComponent;
 
-public class ModConfScreen implements interface_4 {
+public class ModConfScreen implements Dialog {
 
     /**
      * Internal logger instance for this class.
@@ -49,8 +49,8 @@ public class ModConfScreen implements interface_4 {
     }
 
     @Override
-    public ArrayList<interface_0> getItems() {
-        ArrayList<interface_0> alist = new ArrayList<>();
+    public ArrayList<DialogComponent> getItems() {
+        ArrayList<DialogComponent> alist = new ArrayList<>();
         for (ConfigurationSection section : config.getSections()) {
             for (ConfigurationOption<?> option : section.getChildren()) {
                 if (option instanceof BooleanOption) {

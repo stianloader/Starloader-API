@@ -11,9 +11,9 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
 
-import snoddasmannen.galimulator.class_10;
+import snoddasmannen.galimulator.Galemulator;
 
-@Mixin(class_10.class)
+@Mixin(Galemulator.class)
 public class ApplicationMixins {
 
     /**

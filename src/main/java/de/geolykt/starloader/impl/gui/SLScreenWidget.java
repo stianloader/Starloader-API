@@ -233,7 +233,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public void markDirty() {
-        this.a(WIDGET_MESSAGE.WIDGET_FORCE_REDRAW);
+        this.dispatchMessage(WIDGET_MESSAGE.WIDGET_FORCE_REDRAW);
     }
 
     @Override

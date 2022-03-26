@@ -76,7 +76,7 @@ public class TestRegistry {
         fis.close();
         reader.accept(clazzNode, 0);
 
-        JarFile galimulatorJar = new JarFile(new File("build/obftools/intermediary.jar"));
+        JarFile galimulatorJar = new JarFile(new File(".brachyura/.cache/galimulator-remapped.jar"));
         for (Enumeration<JarEntry> entries = galimulatorJar.entries(); entries.hasMoreElements();) {
             JarEntry entry = entries.nextElement();
             if (ENUMS.contains(entry.getName())) {
