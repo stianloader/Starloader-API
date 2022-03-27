@@ -12,9 +12,9 @@ import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.gui.modconf.NumberOption;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
-import snoddasmannen.galimulator.ppclass_170;
+import snoddasmannen.galimulator.dialog.LabeledStringChooserComponent;
 
-public class NamedIntegerChooserComponent extends ppclass_170 {
+public class NamedIntegerChooserComponent extends LabeledStringChooserComponent {
 
     protected static Vector<@NotNull Object> getOptions(@NotNull NumberOption<?> option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
@@ -28,8 +28,8 @@ public class NamedIntegerChooserComponent extends ppclass_170 {
     protected final @NotNull ModConfScreen parent;
 
     public NamedIntegerChooserComponent(@NotNull ModConfScreen parent, @NotNull NumberOption<? extends Number> option) {
-        // Irrelevant  / name / currentValue / options / category / Irrelevant
-        super(null, option.getName(), option.get().toString(), getOptions(option), option.getParent().getName(), null);
+        // name / currentValue / options / category
+        super(option.getName(), option.get().toString(), getOptions(option), option.getParent().getName());
         this.parent = NullUtils.requireNotNull(parent);
         this.option = option;
     }

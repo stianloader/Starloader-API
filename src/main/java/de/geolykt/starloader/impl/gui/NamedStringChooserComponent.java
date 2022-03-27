@@ -10,9 +10,9 @@ import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
 
-import snoddasmannen.galimulator.ppclass_170;
+import snoddasmannen.galimulator.dialog.LabeledStringChooserComponent;
 
-public class NamedStringChooserComponent extends ppclass_170 {
+public class NamedStringChooserComponent extends LabeledStringChooserComponent {
 
     protected static Vector<@NotNull Object> getOptions(StringOption option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
@@ -21,13 +21,16 @@ public class NamedStringChooserComponent extends ppclass_170 {
         }
         return options;
     }
-    protected final @NotNull StringOption option;
 
-    protected final @NotNull ModConfScreen parent;
+    @NotNull
+    protected final StringOption option;
+
+    @NotNull
+    protected final ModConfScreen parent;
 
     public NamedStringChooserComponent(@NotNull ModConfScreen parent, @NotNull StringOption option) {
-        // Irrelevant  / name / currentValue / options / category / Irrelevant
-        super(null, option.getName(), option.get(), getOptions(option), option.getParent().getName(), null);
+        // name / currentValue / options / category
+        super(option.getName(), option.get(), getOptions(option), option.getParent().getName());
         this.parent = NullUtils.requireNotNull(parent);
         this.option = option;
     }
