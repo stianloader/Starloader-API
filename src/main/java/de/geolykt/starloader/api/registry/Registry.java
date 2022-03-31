@@ -66,6 +66,7 @@ public abstract class Registry<T> {
      * Internal values array which seeks to replace the synthetic values array
      * produced by compilers for the values() call on enums.
      */
+    @NotNull
     protected T[] values;
 
     /**
@@ -110,6 +111,36 @@ public abstract class Registry<T> {
             throw new IllegalStateException("Registry not initialised!");
         }
         return val.clone();
+    }
+
+    /**
+     * Obtains the next value from the ordinal order of the values in the registry.
+     * While this method avoids a clone, it may be ultimately more of a performance waste if the underlying
+     * structure does not make use of an ordinal-based structuring. By default this method
+     * searches for the value in the internal values array and if it found it the method returns the value
+     * that is next to the returned value. If there is no next value it returns the first value.
+     * Should the value array be empty or uninitialised, an {@link IllegalStateException} will be thrown.
+     * If the value does not exist in the values array an {@link IllegalArgumentException} is thrown.
+     *
+     * @param value The current value
+     * @return The next value
+     * @since 1.6
+     */
+    @NotNull
+    public T nextValue(@NotNull T value) {
+        if (values == null || values.length == 0) {
+            throw new IllegalStateException("Registry not intialized or empty.");
+        }
+
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] == value) {
+                if (++i == values.length) {
+                    i = 0;
+                }
+                return values[i];
+            }
+        }
+        throw new IllegalArgumentException("Value not in values array. (Did you register the value?)");
     }
 
     /**

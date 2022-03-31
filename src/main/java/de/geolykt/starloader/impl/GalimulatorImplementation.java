@@ -105,7 +105,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("null")
     @Override
     public @NotNull MapMode getActiveMapmode() {
-        return toSLMode(snoddasmannen.galimulator.MapMode.get_a());
+        return toSLMode(snoddasmannen.galimulator.MapMode.getCurrentMode());
     }
 
     @SuppressWarnings("rawtypes")
@@ -509,7 +509,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void setActiveMapmode(@NotNull MapMode mode) {
-        snoddasmannen.galimulator.MapMode.a(ExpectedObfuscatedValueException.requireMapMode(mode));
+        snoddasmannen.galimulator.MapMode.setCurrentMode(ExpectedObfuscatedValueException.requireMapMode(mode));
     }
 
     @SuppressWarnings("rawtypes")

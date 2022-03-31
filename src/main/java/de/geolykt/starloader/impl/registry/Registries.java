@@ -116,7 +116,7 @@ public final class Registries {
                         RegistryKeys.GALIMULATOR_DEGENERATING, RegistryKeys.GALIMULATOR_TRANSCENDING,
                         RegistryKeys.GALIMULATOR_ALL_WILL_BE_ASHES, RegistryKeys.GALIMULATOR_RIOTING,
                         RegistryKeys.GALIMULATOR_CRUSADING, RegistryKeys.GALIMULATOR_BLOOD_PURGE },
-                new EmpireState[] { EmpireState.EXPANDING, EmpireState.FORTIFYING, EmpireState.DEGENERATING,
+                new @NotNull EmpireState[] { EmpireState.EXPANDING, EmpireState.FORTIFYING, EmpireState.DEGENERATING,
                         EmpireState.TRANSCENDING, EmpireState.ALL_WILL_BE_ASHES,
                         EmpireState.RIOTING, EmpireState.CRUSADING, EmpireState.BLOOD_PURGE },
                 new EmpireStateMetadataEntry[] { new EmpireStateMetadataEntry(true, false),
@@ -135,6 +135,7 @@ public final class Registries {
     public static void initFlagSymbols() {
         LOGGER.info("Registering flag symbols");
         SimpleEnumRegistry<BuiltinSymbols> symbolRegistry = new SimpleEnumRegistry<>(BuiltinSymbols.class);
+        @SuppressWarnings("null")
         @NotNull BuiltinSymbols[] symbols = new @NotNull BuiltinSymbols[] {
             BuiltinSymbols.CIRCLE,
             BuiltinSymbols.SQUARE,

@@ -1,7 +1,5 @@
 package de.geolykt.starloader.impl.registry;
 
-import java.lang.reflect.Constructor;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Color;
@@ -39,13 +37,8 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
         if (registry == null) {
             throw new IllegalStateException("The FLAG_SYMBOLS registry is not yet set up. (Protip: use the RegistryRegistrationEvent to register your symbol lazily.)");
         }
-        try {
-            Constructor<@NotNull BuiltinSymbols> constructor = BuiltinSymbols.class.getConstructor(String.class, int.class, String.class, boolean.class, int.class, int.class);
-            BuiltinSymbols symbol = constructor.newInstance(enumName, registry.getValues().length, sprite, mustBeSquare, width, height);
-            registry.register(key, symbol);
-            return (FlagSymbol) (Object) symbol;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create or register symbol.", e);
-        }
+        SLSymbol symbol = new SLSymbol(enumName, registry.getValues().length, sprite, mustBeSquare, width, height);
+        registry.register(key, symbol);
+        return (FlagSymbol) (Object) symbol;
     }
 }

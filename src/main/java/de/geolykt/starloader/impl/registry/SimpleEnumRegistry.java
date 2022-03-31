@@ -32,8 +32,22 @@ public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
      * @param object The object to cast.
      * @return The casted object
      */
-    private static @NotNull RegistryKeyed toRegistryKeyed(@NotNull Object object) {
+    @NotNull
+    private static RegistryKeyed toRegistryKeyed(@NotNull Object object) {
         return (RegistryKeyed) object;
+    }
+
+    @Override
+    @NotNull
+    public T nextValue(@NotNull T value) {
+        if (values == null) {
+            throw new IllegalStateException("Registry not yet initalized");
+        }
+        int i = value.ordinal() + 1;
+        if (i == this.values.length) {
+            i = 0;
+        }
+        return this.values[i];
     }
 
     /**
@@ -58,7 +72,8 @@ public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
         int expectedOrdinal = super.values == null ? 0 : super.values.length;
 
         @SuppressWarnings("unchecked") // It is checked
-        T[] temp = (T[]) Array.newInstance(clazz, expectedOrdinal + length);
+        @NotNull
+        T[] temp = (@NotNull T[]) Array.newInstance(clazz, expectedOrdinal + length);
         if (expectedOrdinal != 0) {
             System.arraycopy(super.values, 0, temp, 0, expectedOrdinal);
         }
@@ -94,7 +109,8 @@ public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
         }
         toRegistryKeyed(value).setRegistryKey(key);
         @SuppressWarnings("unchecked") // It is checked
-        T[] temp = (T[]) Array.newInstance(clazz, valueslen + 1);
+        @NotNull
+        T[] temp = (@NotNull T[]) Array.newInstance(clazz, valueslen + 1);
         if (valueslen != 0) {
             System.arraycopy(super.values, 0, temp, 0, valueslen);
         }

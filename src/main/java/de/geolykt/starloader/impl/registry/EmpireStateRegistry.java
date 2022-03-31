@@ -36,7 +36,8 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
             throw new IllegalStateException("The ordinal of the registering enum does not match the registration order!");
         }
         ((RegistryKeyed) (Object) value).setRegistryKey(key);
-        EmpireState[] temp = new EmpireState[values.length + 1];
+        @NotNull
+        EmpireState[] temp = new @NotNull EmpireState[values.length + 1];
         System.arraycopy(values, 0, temp, 0, values.length);
         temp[values.length] = value;
         values = temp;
@@ -53,7 +54,7 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
      * @param values   The values to register
      * @param metadata The metadata of the corresponding keys to register
      */
-    protected void registerAll(@NotNull NamespacedKey[] keys, EmpireState[] values, EmpireStateMetadataEntry[] metadata) {
+    protected void registerAll(@NotNull NamespacedKey[] keys, @NotNull EmpireState[] values, EmpireStateMetadataEntry[] metadata) {
         if (keys.length != values.length || keys.length != metadata.length) {
             throw new IllegalArgumentException("Input arrays have different sizes!");
         }

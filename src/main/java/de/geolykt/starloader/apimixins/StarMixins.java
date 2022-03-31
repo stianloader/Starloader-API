@@ -89,7 +89,7 @@ public class StarMixins implements Star {
 
     @Shadow
     @NotNull
-    public snoddasmannen.galimulator.Empire a() { // getEmpire
+    public snoddasmannen.galimulator.Empire getOwningEmpire() { // getEmpire
         return (Empire) Galimulator.getNeutralEmpire();
     }
 
@@ -158,7 +158,7 @@ public class StarMixins implements Star {
 
     @Override
     public @NotNull ActiveEmpire getAssignedEmpire() {
-        return NullUtils.requireNotNull((ActiveEmpire) a());
+        return NullUtils.requireNotNull((ActiveEmpire) getOwningEmpire());
     }
 
     @Override

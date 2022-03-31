@@ -55,7 +55,8 @@ public class MapModesMixins implements MapMode {
     private boolean showsActors;
 
     @Override
-    public @NotNull TextureRegion getIcon() {
+    @NotNull
+    public TextureRegion getIcon() {
         TextureRegion tr = ((MapModes) (Object) this).icon;
         if (tr == null) {
             throw new IllegalStateException("Internal error");
@@ -64,7 +65,8 @@ public class MapModesMixins implements MapMode {
     }
 
     @Override
-    public @NotNull NamespacedKey getRegistryKey() {
+    @NotNull
+    public NamespacedKey getRegistryKey() {
         NamespacedKey key = registryKey;
         if (key == null) {
             throw new IllegalStateException("Registry key not yet set.");
