@@ -20,9 +20,18 @@ import de.geolykt.starloader.api.registry.RegistryKeyed;
 public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
 
     protected final @NotNull Class<T> clazz;
+    private boolean frozen = false;
 
     public SimpleEnumRegistry(@NotNull Class<@NotNull T> clazz) {
         this.clazz = Objects.requireNonNull(clazz);
+    }
+
+    /**
+     * "Freezes" the registry, preventing any modifications to it.
+     * A registry cannot be unfrozen after being frozen.
+     */
+    void freeze() {
+        frozen = true;
     }
 
     /**
@@ -65,6 +74,9 @@ public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
      * @throws IllegalArgumentException If the size of the input arrays are different.
      */
     void registerBulk(@NotNull NamespacedKey[] keys, @NotNull T[] values) {
+        if (this.frozen) {
+            throw new IllegalStateException("Registry is frozen! No modifications can be performed to this registry");
+        }
         int length = keys.length;
         if (length != values.length) {
             throw new IllegalArgumentException("The length of the two input arrays are different, even though they have to be the same.");
@@ -97,6 +109,9 @@ public class SimpleEnumRegistry<T extends Enum> extends Registry<T> {
 
     @Override
     public void register(@NotNull NamespacedKey key, @NotNull T value) {
+        if (this.frozen) {
+            throw new IllegalStateException("Registry is frozen! No modifications can be performed to this registry");
+        }
         if (super.keyedValues.containsKey(Objects.requireNonNull(key, "parameter 'key' is null"))) {
             throw new IllegalStateException("The namespaced key is already asociated!");
         }

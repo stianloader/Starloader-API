@@ -11,6 +11,7 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.registry.RegistryExpander;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
@@ -183,17 +184,40 @@ public final class Registries {
     public static void initMapModes() {
         LOGGER.info("Registering map modes");
         SimpleEnumRegistry<MapModes> mapModeRegistry = new SimpleEnumRegistry<>(MapModes.class);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_DEFAULT_MAPMODE, MapModes.NORMAL);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_WEALTH_MAPMODE, MapModes.WEALTH);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_HEAT_MAPMODE, MapModes.HEAT);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_RELIGION_MAPMODE, MapModes.RELIGION);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_CULTURE_MAPMODE, MapModes.CULTURE);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_ALLIANCES_MAPMODE, MapModes.ALLIANCES);
-        mapModeRegistry.register(RegistryKeys.GALIMULATOR_FACTIONS_MAPMODE, MapModes.FACTIONS);
+        @SuppressWarnings("null")
+        @NotNull MapModes[] modes = new MapModes[] {
+            MapModes.NORMAL,
+            MapModes.WEALTH,
+            MapModes.HEAT,
+            MapModes.RELIGION,
+            MapModes.CULTURE,
+            MapModes.ALLIANCES,
+            MapModes.FACTIONS
+        };
+        mapModeRegistry.registerBulk(new @NotNull NamespacedKey[] {
+                RegistryKeys.GALIMULATOR_DEFAULT_MAPMODE,
+                RegistryKeys.GALIMULATOR_WEALTH_MAPMODE,
+                RegistryKeys.GALIMULATOR_HEAT_MAPMODE,
+                RegistryKeys.GALIMULATOR_RELIGION_MAPMODE,
+                RegistryKeys.GALIMULATOR_CULTURE_MAPMODE,
+                RegistryKeys.GALIMULATOR_ALLIANCES_MAPMODE,
+                RegistryKeys.GALIMULATOR_FACTIONS_MAPMODE
+        }, modes);
+        SLRegistryExpander expander = (SLRegistryExpander) RegistryExpander.requireImplementation();
+        expander.mapModePrototypes.removeIf(prototype -> {
+            mapModeRegistry.register(prototype.key, new SLMapMode(mapModeRegistry.getSize(), prototype));
+            return true;
+        });
         Registry.MAP_MODES = mapModeRegistry;
         @SuppressWarnings("all")
         Event e = new de.geolykt.starloader.api.event.lifecycle.MapModeRegistrationEvent(mapModeRegistry);
         EventManager.handleEvent(e);
+        expander.frozenMapModeRegistry = true;
+        expander.mapModePrototypes.removeIf(prototype -> {
+            mapModeRegistry.register(prototype.key, new SLMapMode(mapModeRegistry.getSize(), prototype));
+            return true;
+        });
+        mapModeRegistry.freeze();
     }
 
     /**

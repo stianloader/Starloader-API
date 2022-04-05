@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -20,8 +21,6 @@ import org.objectweb.asm.tree.VarInsnNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minestom.server.extras.selfmodification.CodeModifier;
-
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
@@ -34,6 +33,7 @@ import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
+import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
 
 import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
@@ -43,7 +43,7 @@ import snoddasmannen.galimulator.interface_9;
  * Transformers targeting the Space class.
  * Also transforms other classes because we shouldn't have 200 highly specialised ASM transformers.
  */
-public class SpaceASMTransformer extends CodeModifier {
+public class SpaceASMTransformer extends net.minestom.server.extras.selfmodification.CodeModifier {
 
     /**
      * The internal name of the {@link ActiveEmpire} class.
@@ -59,6 +59,10 @@ public class SpaceASMTransformer extends CodeModifier {
      * The internal name of the class that this transformer seeks to modify.
      */
     private static final String SPACE_CLASS = "snoddasmannen/galimulator/Space";
+
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
 
     /**
      * The internal name of the class you are viewing right now right here.
@@ -252,6 +256,57 @@ public class SpaceASMTransformer extends CodeModifier {
                 }
             }
             return true;
+        } else if (source.name.equals("snoddasmannen/galimulator/Star")) {
+            String methodName = starRenderOverlayMethod.split("[\\.\\(]", 3)[1];
+            boolean transformed = false;
+            for (MethodNode method : source.methods) {
+                if (method.desc.equals("()V") && method.name.equals(methodName)) {
+                    if (transformed) {
+                        DebugNagException.nag("Duplicate method?");
+                        throw new IllegalStateException("Unexpected error while transforming class: Duplicate method");
+                    }
+                    LabelNode jumpTarget = null;
+                    for (AbstractInsnNode insn : method.instructions) {
+                        if (insn.getOpcode() == Opcodes.GOTO) {
+                            JumpInsnNode jump = (JumpInsnNode) insn;
+                            jumpTarget = jump.label;
+                            break;
+                        }
+                    }
+                    if (jumpTarget == null) {
+                        throw new NullPointerException(); // Not going to happen
+                    }
+                    LabelNode lastLabelNode = null;
+                    for (AbstractInsnNode insn : method.instructions) {
+                        if (insn.getOpcode() == Opcodes.INVOKESTATIC) {
+                            MethodInsnNode methodInsn = (MethodInsnNode) insn;
+                            if (methodInsn.owner.equals("snoddasmannen/galimulator/MapMode")
+                                    && methodInsn.desc.equals("()Lsnoddasmannen/galimulator/MapMode$MapModes;")) {
+                                // Probably getCurrentMode
+                                MethodInsnNode insertedInsn = new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/impl/asm/StarCallbacks", "setPolygonColor", "(Lsnoddasmannen/galimulator/Star;)Z");
+                                if (lastLabelNode == null) {
+                                    throw new IllegalStateException("No last label node?");
+                                }
+                                method.instructions.insertBefore(lastLabelNode, new VarInsnNode(Opcodes.ALOAD, 0));
+                                method.instructions.insertBefore(lastLabelNode, insertedInsn);
+                                method.instructions.insertBefore(lastLabelNode, new JumpInsnNode(Opcodes.IFNE, jumpTarget));
+                                transformed = true;
+                                break;
+                            }
+                        } else if (insn instanceof LabelNode) {
+                            lastLabelNode = (LabelNode) insn;
+                        }
+                    }
+                    if (!transformed) {
+                        DebugNagException.nag("Cannot resolve instruction.");
+                        throw new IllegalStateException("Unexpected error while transforming class: Cannot resolve instruction");
+                    }
+                }
+            }
+            if (!transformed) {
+                DebugNagException.nag("Cannot resolve method: " + methodName + " (" + starRenderOverlayMethod + ")");
+                throw new IllegalStateException("Unexpected error while transforming class: Cannot resolve method");
+            }
         }
         return false;
     }

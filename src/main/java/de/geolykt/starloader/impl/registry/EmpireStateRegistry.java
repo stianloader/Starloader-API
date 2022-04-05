@@ -23,6 +23,19 @@ public class EmpireStateRegistry extends MetadatableRegistry<EmpireState, Empire
     }
 
     @Override
+    @NotNull
+    public EmpireState nextValue(@NotNull EmpireState value) {
+        if (values == null) {
+            throw new IllegalStateException("Registry not yet initalized");
+        }
+        int i = value.ordinal() + 1;
+        if (i == this.values.length) {
+            i = 0;
+        }
+        return this.values[i];
+    }
+
+    @Override
     public void register(@NotNull NamespacedKey key, @NotNull EmpireState value,
             @NotNull EmpireStateMetadataEntry metadata) {
         if (super.keyedValues.containsKey(key)) {

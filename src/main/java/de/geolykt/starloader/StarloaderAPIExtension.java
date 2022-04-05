@@ -16,16 +16,17 @@ import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
+import de.geolykt.starloader.api.registry.RegistryExpander;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.impl.DrawingManager;
 import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
-import de.geolykt.starloader.impl.asm.RuntimeReenumeriser;
 import de.geolykt.starloader.impl.asm.SpaceASMTransformer;
 import de.geolykt.starloader.impl.asm.UIASMTransformer;
 import de.geolykt.starloader.impl.gui.SLComponentCreator;
 import de.geolykt.starloader.impl.gui.SLScreenBuilder;
+import de.geolykt.starloader.impl.registry.SLRegistryExpander;
 import de.geolykt.starloader.mod.Extension;
 
 /**
@@ -57,12 +58,12 @@ public class StarloaderAPIExtension extends Extension {
         DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), NullUtils.requireNotNull(dataFolder.toPath())));
         MinestomRootClassLoader.getInstance().addCodeModifier(new UIASMTransformer());
         MinestomRootClassLoader.getInstance().addCodeModifier(new SpaceASMTransformer());
-        MinestomRootClassLoader.getInstance().addCodeModifier(new RuntimeReenumeriser());
         Galimulator.setImplementation(new GalimulatorImplementation());
         Galimulator.setConfiguration(new GalimulatorConfiguration());
         Drawing.setImplementation(new DrawingManager());
         SidebarInjector.setImplementation(new SLSidebarInjector());
         ScreenBuilder.setFactory(SLScreenBuilder::new);
         ScreenBuilder.setComponentCreator(new SLComponentCreator());
+        RegistryExpander.setImplementation(new SLRegistryExpander());
     }
 }

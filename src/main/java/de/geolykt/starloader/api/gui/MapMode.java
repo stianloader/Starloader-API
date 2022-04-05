@@ -5,19 +5,23 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.geolykt.starloader.api.registry.RegistryKeyed;
+import de.geolykt.starloader.impl.registry.SLRegistryExpander;
 
 /**
  * Interface that represents a map mode. These map modes are a sort of overlays over the map. They may optionally
  * disable actor rendering.
+ *
+ * <p>Note: this interface must not be implemented directly. Instead the {@link SLRegistryExpander} should be used.
  */
 public interface MapMode extends RegistryKeyed {
 
     /**
-     * Obtains the texture region used for the icon of the mapmode.
+     * Obtains the texture region used for the icon of the map mode.
      *
      * @return The icon
      */
-    public @NotNull TextureRegion getIcon();
+    @NotNull
+    public TextureRegion getIcon();
 
     /**
      * Whether actors should be rendered.

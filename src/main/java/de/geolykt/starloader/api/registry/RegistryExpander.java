@@ -1,15 +1,23 @@
 package de.geolykt.starloader.api.registry;
 
+import java.util.Objects;
+import java.util.function.Function;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
 import de.geolykt.starloader.api.gui.FlagSymbol;
+import de.geolykt.starloader.api.gui.MapMode;
 
 /**
  * The registry expander takes care or adding new items to registries without requiring the presence of the galimulator jar.
+ *
+ * <p>Note: While introduced in 1.5.0, this class is not functional before 1.6.0
  *
  * @since 1.5.0
  */
@@ -53,6 +61,50 @@ public final class RegistryExpander {
          */
         public @NotNull FlagSymbol addFlagSymbol(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite,
                 boolean mustBeSquare, int width, int height);
+
+        /**
+         * Registers a map mode to the map mode registry without the need of binding into galimulator directly.
+         * This method cannot be called after the {@link RegistryRegistrationEvent} was called for {@link Registry#MAP_MODES}.
+         * If it is done anyways, an {@link IllegalStateException} will be thrown. It still can be called while the event
+         * is processed, but it is highly recommended to call it before the event is run, ideally in the extension's initialiser.
+         *
+         * <p>More specifically, unlike
+         * {@link #addEmpireSpecial(NamespacedKey, String, String, String, String, Color, float, float, float, float, boolean) addEmpireSpecial} and
+         * {@link #addFlagSymbol(NamespacedKey, String, String, boolean, int, int) addFlagSymbol}, this method explicitly
+         * supports getting called early. Due to this characteristic the created {@link MapMode} instance is not returned
+         * and should not be immediately obtained. It is best to determine Map modes based on comparison of {@link MapMode#getRegistryKey()}
+         * and not instance comparison.
+         *
+         * <p>The map mode on it's own will do nothing unless starOverlayRegionColorFunction is set.
+         * As such it is up to the extension to create the needed drawing logic for the map mode.
+         * That being said the extension does not need to reinvent the wheel - galimulator will still do most drawing
+         * logic even when a non-vanilla map mode is being used.
+         *
+         * <p>The map mode will always be accessible by the player in the map mode choosing menu. Should that not be the desired
+         * behaviour ASM logic or a PR to SLAPI may be needed.
+         *
+         * <ul>
+         * <li>"starOverlayRegionColorFunction" is the function that assigns the overlay region of a star to a color.
+         * These regions are not rendered if the star region rendering setting is disabled. This  function may be called very often
+         * so caching might be needed on the function's side. This parameter is there to reduce the burden of extensions
+         * when it comes to actually making the map mode useful and such functionality is the most needed type of map modes</li>
+         *
+         * <ul>
+         * <li>Parameter is null if there should be no obvious colouring of star regions.</li>
+         * <li>The function will return null for any non-null star if the star's overlaid region should not be painted
+         * in any obvious color. The function may throw an exception if it is fed in a null star.</li>
+         * <li>If neither of the above conditions apply, the function must return a non-null color which should be used to
+         * paint the overlaying region in a certain color.</li>
+         * </ul></ul>
+         * @param key The registry key of the enum to register
+         * @param enumName The unique enum-like name of the map mode. Used for {@link Enum#name()} along other methods
+         * @param sprite The sprite to use for the map mode in the map mode selection menu.
+         * @param showActors True if actors (ships) should be shown, false if they should be hidden
+         * @param starOverlayRegionColorFunction The overlaying function to use to color the star regions while the map mode is active
+         * @since 1.6.0
+         */
+        public void addMapMode(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
+                @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction);
     }
 
     /**
@@ -120,6 +172,21 @@ public final class RegistryExpander {
             throw new IllegalStateException("Implementation not set.");
         }
         return impl;
+    }
+
+    /**
+     * Sets the implementation to use for the registry expander.
+     * Throws an exception if the implementation is already set - as such this method should really only be called
+     * by the implementation of the API (right now only the SLAPI extension).
+     *
+     * @param implementation The newly used implementation
+     * @since 1.6.0
+     */
+    public static void setImplementation(@NotNull Implementation implementation) {
+        if (impl != null) {
+            throw new IllegalStateException("Implementation already set.");
+        }
+        impl = Objects.requireNonNull(implementation, "implementation may not be null");
     }
 
     /**

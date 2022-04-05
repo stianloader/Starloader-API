@@ -13,8 +13,6 @@ import org.objectweb.asm.tree.VarInsnNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.minestom.server.extras.selfmodification.CodeModifier;
-
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.SidebarInjector.Orientation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
@@ -23,11 +21,17 @@ import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
 import snoddasmannen.galimulator.ui.Widget;
 
 /**
- * Code transformer that applies to the UI package.
+ * Code transformer that applies to the UI package and various other UI-related calls.
  */
-public final class UIASMTransformer extends CodeModifier {
+public final class UIASMTransformer extends net.minestom.server.extras.selfmodification.CodeModifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UIASMTransformer.class);
+
+    /**
+     * The bytecode name of the class you are currently reading.
+     */
+    @NotNull
+    public static final String THIS_CLASS = "de/geolykt/starloader/impl/asm/UIASMTransformer";
 
     /**
      * The fully classified name of the class that is responsible for
@@ -35,13 +39,7 @@ public final class UIASMTransformer extends CodeModifier {
      */
     @StarplaneReobfuscateReference
     @NotNull
-    public final String mainSidebarClass = "snoddasmannen/galimulator/ui/SidebarWidget";
-
-    /**
-     * The bytecode name of the class you are currently reading.
-     */
-    @NotNull
-    public static final String THIS_CLASS = "de/geolykt/starloader/impl/asm/UIASMTransformer";
+    public static String mainSidebarClass = "snoddasmannen/galimulator/ui/SidebarWidget";
 
     public static final void sideBarBottom(Object widget) {
         if (widget instanceof Widget && SidebarInjector.getImplementation() instanceof SLSidebarInjector) {
@@ -91,7 +89,7 @@ public final class UIASMTransformer extends CodeModifier {
                     popNode = true;
                 }
             } else {
-                // we have to trust our intuitin
+                // we have to trust our intuition
                 if (currentInstruction instanceof VarInsnNode && currentInstruction.getOpcode() == Opcodes.ALOAD) {
                     if (aloadThis1) {
                         VarInsnNode aloadCall = new VarInsnNode(Opcodes.ALOAD, 0); // 0 should be the `this` reference
