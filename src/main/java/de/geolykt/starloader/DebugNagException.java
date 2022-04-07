@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * On a sidenote, if you only wish to print a stacktrace while debugging,
  * {@link Thread#dumpStack()} is equally viable.
  */
-public class DebugNagException extends RuntimeException {
+public class DebugNagException extends Exception {
 
     private static final long serialVersionUID = 6360952186245490555L;
 

@@ -2,8 +2,10 @@ package de.geolykt.starloader.impl.registry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +14,8 @@ import com.badlogic.gdx.graphics.Color;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.FlagSymbol;
+import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.registry.MapModeRegistryPrototype;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryExpander;
 
@@ -25,18 +29,23 @@ import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
  */
 public class SLRegistryExpander implements RegistryExpander.Implementation {
 
-    static class MapModePrototype {
+    static class SLMapModePrototype implements MapModeRegistryPrototype {
         @NotNull
-        final NamespacedKey key;
+        Function<@NotNull Star, @NotNull ClickInteractionResponse> clickAction = star -> ClickInteractionResponse.PERFORM_DEFAULT;
         @NotNull
         final String enumName;
         @NotNull
-        final String sprite;
+        final NamespacedKey key;
+        @Nullable
+        MapMode mapMode;
         final boolean showActors;
+        @NotNull
+        final String sprite;
+
         @Nullable
         final Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction;
 
-        public MapModePrototype(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
+        public SLMapModePrototype(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
                 @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction) {
             this.key = key;
             this.enumName = enumName;
@@ -44,12 +53,34 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
             this.showActors = showActors;
             this.starOverlayRegionColorFunction = starOverlayRegionColorFunction;
         }
+
+        @Override
+        @Nullable
+        public MapMode asMapMode() {
+            return mapMode;
+        }
+
+        @Override
+        @Nullable
+        public Function<@NotNull Star, @Nullable Color> getStarOverlayRegionColorFunction() {
+            return starOverlayRegionColorFunction;
+        }
+
+        @Override
+        @NotNull
+        @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+        public MapModeRegistryPrototype withClickAction(
+                @NotNull Function<@NotNull Star, @NotNull ClickInteractionResponse> clickAction) {
+            Objects.requireNonNull(clickAction, "clickAction may not be null");
+            this.clickAction = clickAction;
+            return this;
+        }
     }
 
     boolean frozenMapModeRegistry = false;
 
     @NotNull
-    final List<MapModePrototype> mapModePrototypes = new ArrayList<>();
+    final List<SLMapModePrototype> mapModePrototypes = new ArrayList<>();
 
     @Override
     public void addEmpireSpecial(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String name,
@@ -75,13 +106,16 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
     }
 
     @Override
-    public void addMapMode(@NotNull NamespacedKey key, @NotNull String enumName,
+    @NotNull
+    public MapModeRegistryPrototype addMapMode(@NotNull NamespacedKey key, @NotNull String enumName,
             @NotNull String sprite, boolean showActors,
             @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction) {
         if (frozenMapModeRegistry) {
             throw new IllegalStateException("The MapMode registry is already frozen."
                     + " The MapModes class might've loaded too early - whatever the cause - the registry cannot be mutated.");
         }
-        this.mapModePrototypes.add(new MapModePrototype(key, enumName, sprite, showActors, starOverlayRegionColorFunction));
+        SLMapModePrototype prototype = new SLMapModePrototype(key, enumName, sprite, showActors, starOverlayRegionColorFunction);
+        this.mapModePrototypes.add(prototype);
+        return prototype;
     }
 }

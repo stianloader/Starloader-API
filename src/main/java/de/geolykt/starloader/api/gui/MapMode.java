@@ -11,7 +11,8 @@ import de.geolykt.starloader.impl.registry.SLRegistryExpander;
  * Interface that represents a map mode. These map modes are a sort of overlays over the map. They may optionally
  * disable actor rendering.
  *
- * <p>Note: this interface must not be implemented directly. Instead the {@link SLRegistryExpander} should be used.
+ * <p>Note: this interface must not be implemented directly.
+ * Instead {@link SLRegistryExpander#addMapMode(de.geolykt.starloader.api.NamespacedKey, String, String, boolean, java.util.function.Function)} should be used.
  */
 public interface MapMode extends RegistryKeyed {
 

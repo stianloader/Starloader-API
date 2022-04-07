@@ -101,9 +101,11 @@ public final class RegistryExpander {
          * @param sprite The sprite to use for the map mode in the map mode selection menu.
          * @param showActors True if actors (ships) should be shown, false if they should be hidden
          * @param starOverlayRegionColorFunction The overlaying function to use to color the star regions while the map mode is active
+         * @return The {@link MapModeRegistryPrototype} that was created through this method
          * @since 1.6.0
          */
-        public void addMapMode(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
+        @NotNull
+        public MapModeRegistryPrototype addMapMode(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
                 @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction);
     }
 

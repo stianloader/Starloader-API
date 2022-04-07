@@ -14,6 +14,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
@@ -42,6 +43,8 @@ import snoddasmannen.galimulator.interface_9;
 /**
  * Transformers targeting the Space class.
  * Also transforms other classes because we shouldn't have 200 highly specialised ASM transformers.
+ * This might be changed once we move to the actual ASM Transformer class instead of the out-dated and deprecated
+ * CodeModifier class which is less performant for higher numbers due to it never getting purged
  */
 public class SpaceASMTransformer extends net.minestom.server.extras.selfmodification.CodeModifier {
 
@@ -50,10 +53,18 @@ public class SpaceASMTransformer extends net.minestom.server.extras.selfmodifica
      */
     private static final String ACTIVE_EMPIRE_CLASS = "de/geolykt/starloader/api/empire/ActiveEmpire";
 
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String gestureListenerClass = "snoddasmannen/galimulator/GalimulatorGestureListener";
+
     /**
      * The logger object that should be used used throughout this class.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SpaceASMTransformer.class);
+
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String mapModeShowsActorsMethod = "snoddasmannen/galimulator/MapMode$MapModes.getShowsActors()Z";
 
     /**
      * The internal name of the class that this transformer seeks to modify.
@@ -306,6 +317,59 @@ public class SpaceASMTransformer extends net.minestom.server.extras.selfmodifica
             if (!transformed) {
                 DebugNagException.nag("Cannot resolve method: " + methodName + " (" + starRenderOverlayMethod + ")");
                 throw new IllegalStateException("Unexpected error while transforming class: Cannot resolve method");
+            }
+        } else if (source.name.equals(gestureListenerClass)) {
+            boolean transformed = false;
+            for (MethodNode method : source.methods) {
+                if (!method.name.equals("tap") || !method.desc.equals("(FFII)Z")) {
+                    continue;
+                }
+                String showActorsMethodname = mapModeShowsActorsMethod.split("[\\.\\(]", 3)[1];
+                MethodInsnNode getActorsCall = null;
+                for (AbstractInsnNode insn : method.instructions) {
+                    if (insn.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                        MethodInsnNode methodInsn = (MethodInsnNode) insn;
+                        if (!methodInsn.name.equals(showActorsMethodname) || !methodInsn.owner.equals("snoddasmannen/galimulator/MapMode$MapModes")) {
+                            continue;
+                        }
+                        getActorsCall = methodInsn;
+                    }
+                }
+                if (getActorsCall == null) {
+                    DebugNagException.nag("Ex2");
+                    throw new IllegalStateException("Ex2");
+                }
+                AbstractInsnNode nextInsn = getActorsCall.getNext();
+                VarInsnNode lastLoad = null;
+                LineNumberNode lastLineInsn = null;
+                while (nextInsn != null && (nextInsn.getOpcode() != Opcodes.INVOKESTATIC || !((MethodInsnNode) nextInsn).desc.equals("(FFDLsnoddasmannen/galimulator/Empire;)Lsnoddasmannen/galimulator/Star;"))) {
+                    if (nextInsn.getOpcode() == Opcodes.ALOAD) {
+                        lastLoad = (VarInsnNode) nextInsn;
+                    } else if (nextInsn instanceof LineNumberNode) {
+                        lastLineInsn = (LineNumberNode) nextInsn;
+                    }
+                    nextInsn = nextInsn.getNext();
+                }
+                if (nextInsn == null || lastLoad == null) {
+                    DebugNagException.nag("Ex1");
+                    throw new IllegalStateException("Ex1");
+                }
+                InsnList insnList = new InsnList();
+                insnList.add(new VarInsnNode(Opcodes.ALOAD, lastLoad.var));
+                insnList.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/impl/asm/StarCallbacks", "onLeftClick", "(Lcom/badlogic/gdx/math/Vector3;)Z"));
+                LabelNode label = new LabelNode();
+                insnList.add(new JumpInsnNode(Opcodes.IFEQ, label));
+                insnList.add(new InsnNode(Opcodes.ICONST_1));
+                insnList.add(new InsnNode(Opcodes.IRETURN));
+                insnList.add(label);
+                method.instructions.insert(lastLineInsn, insnList);
+                transformed = true;
+            }
+            if (!transformed) {
+                DebugNagException.nag();
+                throw new IllegalStateException("Cannot transform method for some reason");
+            } else {
+                return true;
             }
         }
         return false;

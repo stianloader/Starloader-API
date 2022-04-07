@@ -8,25 +8,31 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.empire.Star;
-import de.geolykt.starloader.impl.registry.SLRegistryExpander.MapModePrototype;
+import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.registry.MapModeRegistryPrototype.ClickInteractionResponse;
+import de.geolykt.starloader.impl.registry.SLRegistryExpander.SLMapModePrototype;
 
 import snoddasmannen.galimulator.MapMode.MapModes;
 
 public class SLMapMode extends MapModes {
 
-    private static final long serialVersionUID = 6496292689825014471L;
+    private static final long serialVersionUID = 2933475588625470265L;
 
-    @Nullable
-    private final Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction;
+    @NotNull
+    private final SLMapModePrototype prototype;
 
-    public SLMapMode(@NotNull String enumName, int ordinal, @NotNull String spriteName, boolean drawActors,
-            @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction) {
-        super(enumName, ordinal, spriteName, drawActors);
-        this.starOverlayRegionColorFunction = starOverlayRegionColorFunction;
+    SLMapMode(int ordinal, @NotNull SLMapModePrototype prototype) {
+        super(prototype.enumName, ordinal, prototype.sprite, prototype.showActors);
+        if (prototype.mapMode != null) {
+            throw new IllegalStateException("Prototype already assigned to a map mode");
+        }
+        prototype.mapMode = (MapMode) (Object) this;
+        this.prototype = prototype;
     }
 
-    SLMapMode(int ordinal, @NotNull MapModePrototype prototype) {
-        this(prototype.enumName, ordinal, prototype.sprite, prototype.showActors, prototype.starOverlayRegionColorFunction);
+    @NotNull
+    public Function<@NotNull Star, @NotNull ClickInteractionResponse> getClickAction() {
+        return prototype.clickAction;
     }
 
     /**
@@ -40,11 +46,11 @@ public class SLMapMode extends MapModes {
      * <p>If neither of the above conditions apply, the returned function must return a non-null color which should be used to
      * paint the overlaying region in a certain color.
      *
-     * @return The function that is used for the metadata entry.
+     * @return The function that is used for the map mode.
      * @since 1.6.0
      */
     @Nullable
     public Function<@NotNull Star, @Nullable Color> getStarOverlayRegionColorFunction() {
-        return starOverlayRegionColorFunction;
+        return prototype.starOverlayRegionColorFunction;
     }
 }
