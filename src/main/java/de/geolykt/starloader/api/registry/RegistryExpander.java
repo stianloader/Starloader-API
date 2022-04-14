@@ -88,14 +88,14 @@ public final class RegistryExpander {
          * These regions are not rendered if the star region rendering setting is disabled. This  function may be called very often
          * so caching might be needed on the function's side. This parameter is there to reduce the burden of extensions
          * when it comes to actually making the map mode useful and such functionality is the most needed type of map modes</li>
-         *
+         * </ul>
          * <ul>
-         * <li>Parameter is null if there should be no obvious colouring of star regions.</li>
+         * <li>The parameter is null if there should be no obvious colouring of star regions.</li>
          * <li>The function will return null for any non-null star if the star's overlaid region should not be painted
          * in any obvious color. The function may throw an exception if it is fed in a null star.</li>
          * <li>If neither of the above conditions apply, the function must return a non-null color which should be used to
          * paint the overlaying region in a certain color.</li>
-         * </ul></ul>
+         * </ul>
          * @param key The registry key of the enum to register
          * @param enumName The unique enum-like name of the map mode. Used for {@link Enum#name()} along other methods
          * @param sprite The sprite to use for the map mode in the map mode selection menu.

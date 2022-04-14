@@ -183,7 +183,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * the Empire is currently owned by the player.
      *
      * @return The {@link Flagship} owned by the Empire
+     * @deprecated Exposes galimulator internals directly. Generally stupid API
      */
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public @Nullable Flagship getFlagship();
 
     /**
@@ -192,7 +194,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * directly.
      *
      * @return An {@link ArrayList} of {@link Fleet} that are assigned to the empire
+     * @deprecated Exposes galimulator internals directly. Generally stupid API
      */
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public @NotNull ArrayList<Fleet> getFleets();
 
     /**

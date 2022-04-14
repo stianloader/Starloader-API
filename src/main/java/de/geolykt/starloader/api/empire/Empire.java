@@ -62,7 +62,9 @@ public interface Empire extends Dateable, Identifiable {
      * change without reason to not confuse the user.
      *
      * @return The GalColor assigned to the empire
+     * @deprecated snoddasmannen.galimulator.GalColor getters and setters are scheduled for purging in a future version
      */
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public @NotNull GalColor getColor();
 
     /**

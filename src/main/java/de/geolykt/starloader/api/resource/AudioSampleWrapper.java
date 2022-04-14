@@ -14,24 +14,24 @@ import com.badlogic.gdx.audio.Sound;
  */
 public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
 
-    public static AudioSampleWrapper ACTOR_ORDERED = null;
-    public static AudioSampleWrapper ACTOR_SELECTED = null;
-    public static AudioSampleWrapper ALARM = null;
-    public static AudioSampleWrapper BAD_MINI = null;
-    public static AudioSampleWrapper BIG_LASER = null;
-    public static AudioSampleWrapper BIGBOOM_1 = null;
-    public static AudioSampleWrapper BIGBOOM_2 = null;
-    public static AudioSampleWrapper CLONE = null;
-    public static AudioSampleWrapper GOOD_MINI = null;
-    public static AudioSampleWrapper HEALRAY = null;
-    public static AudioSampleWrapper HIT_1 = null;
-    public static AudioSampleWrapper HIT_2 = null;
-    public static AudioSampleWrapper HIT_3 = null;
-    public static AudioSampleWrapper MISSILE = null;
-    public static AudioSampleWrapper SMALL_LASER = null;
-    public static AudioSampleWrapper UI_BIG_SELECT = null;
-    public static AudioSampleWrapper UI_ERROR = null;
-    public static AudioSampleWrapper UI_SMALL_SELECT = null;
+    public static AudioSampleWrapper ACTOR_ORDERED;
+    public static AudioSampleWrapper ACTOR_SELECTED;
+    public static AudioSampleWrapper ALARM;
+    public static AudioSampleWrapper BAD_MINI;
+    public static AudioSampleWrapper BIG_LASER;
+    public static AudioSampleWrapper BIGBOOM_1;
+    public static AudioSampleWrapper BIGBOOM_2;
+    public static AudioSampleWrapper CLONE;
+    public static AudioSampleWrapper GOOD_MINI;
+    public static AudioSampleWrapper HEALRAY;
+    public static AudioSampleWrapper HIT_1;
+    public static AudioSampleWrapper HIT_2;
+    public static AudioSampleWrapper HIT_3;
+    public static AudioSampleWrapper MISSILE;
+    public static AudioSampleWrapper SMALL_LASER;
+    public static AudioSampleWrapper UI_BIG_SELECT;
+    public static AudioSampleWrapper UI_ERROR;
+    public static AudioSampleWrapper UI_SMALL_SELECT;
 
     /**
      * The location of the resource within the respective data folder.
