@@ -1,3 +1,4 @@
+import de.geolykt.starplane.StarloaderStarplaneProject;
 import de.geolykt.starplane.StarplaneProject;
 
 import org.jetbrains.annotations.Contract;
@@ -6,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import io.github.coolcrabs.brachyura.maven.MavenId;
 import io.github.coolcrabs.brachyura.project.DescriptiveBuildscriptName;
 
-public class Buildscript extends StarplaneProject implements DescriptiveBuildscriptName {
+public class Buildscript extends StarloaderStarplaneProject implements DescriptiveBuildscriptName {
 
     public Buildscript() {
         super(new MavenId("de.geolykt", "starloader-api", "1.6.0"),
@@ -33,5 +34,9 @@ public class Buildscript extends StarplaneProject implements DescriptiveBuildscr
     @Contract(pure = true)
     public String getBuildscriptName() {
         return "slapiBuildscript";
+    }
+
+    static {
+        System.setProperty("de.geolykt.starplane.nocache", "true");
     }
 }

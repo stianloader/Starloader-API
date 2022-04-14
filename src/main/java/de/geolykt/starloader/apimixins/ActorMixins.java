@@ -13,10 +13,8 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.actor.ActorSpec;
 import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
-import de.geolykt.starloader.impl.Pseudo;
 
 import snoddasmannen.galimulator.Empire;
-import snoddasmannen.galimulator.Item;
 import snoddasmannen.galimulator.actors.Actor;
 import snoddasmannen.galimulator.actors.StateActor;
 
@@ -24,7 +22,7 @@ import snoddasmannen.galimulator.actors.StateActor;
  * Mixins targeting the galimulator Actor class.
  */
 @Mixin(Actor.class)
-public class ActorMixins implements ActorSpec {
+public abstract class ActorMixins implements ActorSpec {
 
     @Shadow
     protected int birthMilliYear;
@@ -110,12 +108,13 @@ public class ActorMixins implements ActorSpec {
         return new ArrayList<>();
     }
 
+    /*
     @Override
     @Pseudo
     // FIXME Mixin does not allow for @Shadow, I guess that this is likely a bug and should be reported to the library!
     public float getX() {
         return ((Item) (Object) this).getX();
-    }
+    }*/
 
     @Override
     @Shadow // Already implemented, no need to override
@@ -131,12 +130,6 @@ public class ActorMixins implements ActorSpec {
     @Override
     public int getXPWorth() {
         return getXPValue();
-    }
-
-    @Override
-    @Pseudo
-    public float getY() {
-        return ((Item) (Object) this).getY();
     }
 
     @Override

@@ -7,5 +7,5 @@ import de.geolykt.starloader.api.actor.spacecrafts.HealshipSpec;
 import snoddasmannen.galimulator.actors.Healship;
 
 @Mixin(Healship.class)
-public class HealshipMixins extends StateActorMixins implements HealshipSpec {
+public abstract class HealshipMixins extends StateActorMixins implements HealshipSpec {
 }

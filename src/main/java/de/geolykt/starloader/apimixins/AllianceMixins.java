@@ -22,6 +22,9 @@ import snoddasmannen.galimulator.GalColor;
 @Mixin(value = snoddasmannen.galimulator.Alliance.class)
 public class AllianceMixins implements Alliance {
 
+    @Shadow
+    private GalColor color;
+
     @SuppressWarnings("rawtypes")
     @Shadow
     private ArrayList members;
@@ -75,8 +78,9 @@ public class AllianceMixins implements Alliance {
     @SuppressWarnings("null")
     @Override
     @NotNull
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public GalColor getColor() {
-        return ((snoddasmannen.galimulator.Alliance) (Object) this).getColor();
+        return color;
     }
 
     @Override

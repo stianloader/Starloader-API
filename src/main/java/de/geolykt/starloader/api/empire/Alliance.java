@@ -49,7 +49,9 @@ public interface Alliance extends Dateable {
      * Obtains the Color of the Alliance used for UI.
      *
      * @return The {@link GalColor} of the alliance
+     * @deprecated The GalColor class is not distributed publicly
      */
+    @Deprecated(forRemoval = true, since = "1.6.0")
     public @NotNull GalColor getColor();
 
     /**

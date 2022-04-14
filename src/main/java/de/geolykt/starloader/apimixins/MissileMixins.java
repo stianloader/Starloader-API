@@ -21,7 +21,7 @@ import snoddasmannen.galimulator.actors.Missile;
 import snoddasmannen.galimulator.actors.StateActor;
 
 @Mixin(Missile.class)
-public class MissileMixins extends ActorMixins implements MissileSpec {
+public abstract class MissileMixins extends ActorMixins implements MissileSpec {
 
     @Shadow
     float maxSpeed;

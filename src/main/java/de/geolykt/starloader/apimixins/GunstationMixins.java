@@ -10,5 +10,5 @@ import snoddasmannen.galimulator.actors.GunStation;
  * Mixins that are applied into the Gunstation class.
  */
 @Mixin(GunStation.class)
-public class GunstationMixins extends StateActorMixins implements GunstationSpec {
+public abstract class GunstationMixins extends StateActorMixins implements GunstationSpec {
 }

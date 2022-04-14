@@ -10,5 +10,5 @@ import snoddasmannen.galimulator.actors.Fighter;
  * Mixins targeting the Fighter class.
  */
 @Mixin(Fighter.class)
-public class FighterMixins extends StateActorMixins implements FighterSpec {
+public abstract class FighterMixins extends StateActorMixins implements FighterSpec {
 }

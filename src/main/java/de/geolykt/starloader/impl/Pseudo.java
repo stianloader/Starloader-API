@@ -14,8 +14,11 @@ import java.lang.annotation.Target;
  * but you certainly do.
  *<br/>
  * <b>DO NOT USE THIS OUTSIDE OF THIS IMPLEMENTATION</b>
+ *
+ * @deprecated Usage of this annotation suggests bad design
  */
 @Documented
 @Retention(CLASS)
 @Target(METHOD)
+@Deprecated(forRemoval = true)
 public @interface Pseudo { }

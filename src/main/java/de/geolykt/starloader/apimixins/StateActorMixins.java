@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import snoddasmannen.galimulator.actors.StateActor;
 
 @Mixin(StateActor.class)
-public class StateActorMixins extends ActorMixins {
+public abstract class StateActorMixins extends ActorMixins {
 
     @Shadow
     protected float maxSpeed;

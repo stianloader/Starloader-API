@@ -10,5 +10,5 @@ import snoddasmannen.galimulator.actors.DropShip;
  * Mixins targeting the Dropship class.
  */
 @Mixin(DropShip.class)
-public class DropshipMixins extends StateActorMixins implements DropshipSpec {
+public abstract  class DropshipMixins extends StateActorMixins implements DropshipSpec {
 }

@@ -10,5 +10,5 @@ import snoddasmannen.galimulator.actors.Battleship;
  * Mixins targeting the Battleship class.
  */
 @Mixin(Battleship.class)
-public class BattleshipMixins extends StateActorMixins implements BattleshipSpec {
+public abstract class BattleshipMixins extends StateActorMixins implements BattleshipSpec {
 }

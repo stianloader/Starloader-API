@@ -10,5 +10,5 @@ import snoddasmannen.galimulator.actors.Destroyer;
  * Mixins into the destroyer class implementing the destroyer actor specification.
  */
 @Mixin(Destroyer.class)
-public class DestroyerMixins extends StateActorMixins implements DestroyerSpec {
+public abstract class DestroyerMixins extends StateActorMixins implements DestroyerSpec {
 }

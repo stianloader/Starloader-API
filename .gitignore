@@ -7,3 +7,9 @@ galimulator-desktop.jar
 #Ignore hidden folders and files, they usually are for settings and other temporary stuff, so they are not needed
 .*
 *.launch
+
+# Ignore files and folders produced by runExtensions
+run/
+data
+# Galimulator savegames
+*.dat
