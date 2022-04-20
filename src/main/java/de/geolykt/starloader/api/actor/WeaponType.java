@@ -14,15 +14,15 @@ public interface WeaponType extends RegistryKeyed {
     /**
      * Creates an instance of the weapon on a given actor.
      * The actor has to be a StateActor, which means that it cannot be a particle.
-     * It is equilavent to calling {@link #build(ActorSpec, Object)} with the {@code arg} argument
+     * It is equilavent to calling {@link #build(Actor, Object)} with the {@code arg} argument
      * being null.
      *
      * @param actor The actor that uses this weapon
      * @return The created instance of the weapon
-     * @see ActorSpec#isParticle()
+     * @see Actor#isStateActor()
      */
-    public default @NotNull Weapon build(@NotNull ActorSpec actor) {
-        if (actor.isParticle()) {
+    public default @NotNull Weapon build(@NotNull Actor actor) {
+        if (actor.isStateActor()) {
             throw new IllegalStateException("Actor cannot be a particle.");
         }
         return build(actor, null);
@@ -38,9 +38,9 @@ public interface WeaponType extends RegistryKeyed {
      * @param actor The actor that uses this weapon
      * @param arg The argument, can most often be null
      * @return The created instance of the weapon
-     * @see ActorSpec#isParticle()
+     * @see Actor#isStateActor()
      */
-    public @NotNull Weapon build(@NotNull ActorSpec actor, @Nullable Object arg);
+    public @NotNull Weapon build(@NotNull Actor actor, @Nullable Object arg);
 
     /**
      * Obtains the name of the weapon. This is semi-user friendly and should be the one that is used in the JSON

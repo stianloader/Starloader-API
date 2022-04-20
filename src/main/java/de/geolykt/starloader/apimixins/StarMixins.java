@@ -29,6 +29,8 @@ import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.event.empire.factions.FactionLooseControlEvent;
 import de.geolykt.starloader.api.event.empire.factions.FactionTakeStarEvent;
 import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
+import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.registry.RegistryKeyed;
 
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.Religion;
@@ -185,8 +187,9 @@ public class StarMixins implements Star {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull Religion getMajorityFaith() {
-        return faith;
+    @NotNull
+    public NamespacedKey getMajorityFaith() {
+        return ((RegistryKeyed) faith).getRegistryKey();
     }
 
     @Override
@@ -198,8 +201,13 @@ public class StarMixins implements Star {
     }
 
     @Override
-    public @Nullable Religion getMinorityFaith() {
-        return minorityFaith;
+    @Nullable
+    public NamespacedKey getMinorityFaith() {
+        Religion minorityFaith = this.minorityFaith;
+        if (minorityFaith == null) {
+            return null;
+        }
+        return ((RegistryKeyed) minorityFaith).getRegistryKey();
     }
 
     @Override
@@ -313,8 +321,12 @@ public class StarMixins implements Star {
     }
 
     @Override
-    public void setMajorityFaith(@NotNull Religion religion) {
-        faith = religion;
+    public void setMajorityFaith(@NotNull NamespacedKey religion) {
+        Religion rel = (Religion) Registry.RELIGIONS.get(religion);
+        if (rel == null) {
+            throw new IllegalStateException("Cannot resolve registered religion for key: " + religion);
+        }
+        faith = rel;
         if (faith == minorityFaith) {
             minorityFaith = null;
         }
@@ -333,11 +345,19 @@ public class StarMixins implements Star {
     }
 
     @Override
-    public void setMinorityFaith(@Nullable Religion religion) {
-        if (religion == faith) {
+    public void setMinorityFaith(@Nullable NamespacedKey religion) {
+        if (religion == null) {
+            minorityFaith = null;
+            return;
+        }
+        Religion rel = (Religion) Registry.RELIGIONS.get(religion);
+        if (rel == null) {
+            throw new IllegalStateException("Cannot resolve registered religion for key: " + religion);
+        }
+        if (rel == faith) {
             minorityFaith = null;
         } else {
-            minorityFaith = religion;
+            minorityFaith = rel;
         }
     }
 

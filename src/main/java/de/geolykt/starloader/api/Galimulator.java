@@ -10,7 +10,7 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
@@ -375,7 +375,7 @@ public final class Galimulator {
          *
          * @return The actors currently active
          */
-        public Vector<ActorSpec> getActorsUnsafe();
+        public Vector<Actor> getActorsUnsafe();
 
         /**
          * Obtains the internal list of alliances without cloning it.
@@ -460,7 +460,7 @@ public final class Galimulator {
          *
          * @param actors The actors currently active
          */
-        public void setActorsUnsafe(Vector<ActorSpec> actors);
+        public void setActorsUnsafe(Vector<Actor> actors);
 
         /**
          * Sets the internal list of alliances without cloning it.

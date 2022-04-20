@@ -2,10 +2,10 @@ package de.geolykt.starloader.api.gui.text;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Color;
+
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.Drawing.TextSize;
-
-import snoddasmannen.galimulator.GalColor;
 
 public interface ComponentBuilder {
 
@@ -17,33 +17,7 @@ public interface ComponentBuilder {
      * @param intensity The intensity of the jitter
      * @return The builder reference
      */
-    public default @NotNull ComponentBuilder addColoredJitter(@NotNull TextColor color, double intensity) {
-        return this.addJitter(color.galColor, intensity);
-    }
-
-    /**
-     * Add a jitter sub-component to the component This is for example used in the
-     * Space oddity bulletin. The jitter there is 10.0D.
-     *
-     * @param color     The color of the jitter
-     * @param intensity The intensity of the jitter
-     * @return The builder reference
-     */
-    public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity);
-
-    /**
-     * Add a jitter sub-component to the component This is for example used in the
-     * Space oddity bulletin. The jitter there is 10.0D.
-     *
-     * @param color     The color of the jitter
-     * @param intensity The intensity of the jitter
-     * @return The builder reference
-     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
-     */
-    @Deprecated(forRemoval = true)
-    public default @NotNull ComponentBuilder addJitter(@NotNull TextColor color, double intensity) {
-        return this.addJitter(color.galColor, intensity);
-    }
+    public @NotNull ComponentBuilder addJitter(@NotNull Color color, double intensity);
 
     /**
      * Builds the component.
@@ -57,20 +31,9 @@ public interface ComponentBuilder {
      *
      * @param color The color of the component
      * @return The builder reference
+     * @since 2.0.0
      */
-    public @NotNull ComponentBuilder setColor(@NotNull GalColor color);
-
-    /**
-     * Sets the color of the component.
-     *
-     * @param color The color of the component
-     * @return The builder reference
-     * @deprecated Cannot link without galimulator jar, which was the main purpose of this method
-     */
-    @Deprecated(forRemoval = true)
-    public default @NotNull ComponentBuilder setColor(@NotNull TextColor color) {
-        return this.setColor(color.galColor);
-    }
+    public @NotNull ComponentBuilder setColor(@NotNull Color color);
 
     /**
      * Sets the size of this component.
@@ -88,14 +51,4 @@ public interface ComponentBuilder {
      * @return The builder reference
      */
     public @NotNull ComponentBuilder setText(@NotNull String text);
-
-    /**
-     * Sets the {@link TextColor} of the component.
-     *
-     * @param color The color of the component
-     * @return The builder reference
-     */
-    public default @NotNull ComponentBuilder setTextColor(@NotNull TextColor color) {
-        return this.setColor(color.galColor);
-    }
 }

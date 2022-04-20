@@ -6,20 +6,19 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.gui.Drawing;
-
-import snoddasmannen.galimulator.GalColor;
 
 public class JitterTextComponent extends ColoredTextComponent {
 
     protected final float intensity;
 
-    public JitterTextComponent(@NotNull String text, @NotNull GalColor color, double intensity) {
+    public JitterTextComponent(@NotNull String text, @NotNull Color color, double intensity) {
         this(text, color, intensity, Drawing.TextSize.SMALL);
     }
 
-    public JitterTextComponent(@NotNull String text, @NotNull GalColor color, double intensity, Drawing.@NotNull TextSize size) {
+    public JitterTextComponent(@NotNull String text, @NotNull Color color, double intensity, Drawing.@NotNull TextSize size) {
         super(text, color, Objects.requireNonNull(size));
         this.intensity = (float) intensity;
     }

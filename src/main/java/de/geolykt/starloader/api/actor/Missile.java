@@ -1,42 +1,35 @@
-package de.geolykt.starloader.api.actor.spacecrafts;
+package de.geolykt.starloader.api.actor;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.geolykt.starloader.api.actor.ActorSpec;
-import de.geolykt.starloader.api.actor.Spacecraft;
 import de.geolykt.starloader.api.empire.Star;
 
 /**
- * Base missile specification.
+ * Base missile. A missile is a projectiles that is generally shot by an actor or artifact
+ * and is targeting either a star or another actor. While in practice a missile can often be
+ * traced to an empire a missile is not considered a state actor.
+ *
+ * @since 2.0.0
  */
-public interface MissileSpec extends Spacecraft {
+public interface Missile extends Actor {
 
     /**
      * Obtains the actor that has fired the missile.
-     * For some missiles (i. e. those fired by artifacts) this operation is inapplicable,
+     * For some missiles (i. e. those fired by artifacts) this operation is not applicable,
      * in which case it'll return null.
      *
      * @return The actor that shot the missile.
      */
-    public @Nullable ActorSpec getShooter();
-
-    @Override
-    public default boolean isEmperorBuildable() {
-        return false; // Missiles are usually fired by a secondary actor.
-    }
-
-    @Override
-    public default boolean isSandboxBuildable() {
-        return false;
-    }
+    @Nullable
+    public Actor getShooter();
 
     /**
      * Called whenever the Missile hits an actor, at which point it dissolves.
      *
      * @param actor The actor that got hit by the missile.
      */
-    public void onHitActor(@NotNull ActorSpec actor);
+    public void onHitActor(@NotNull Actor actor);
 
     /**
      * Called whenever the Missile hits a star, at which point it dissolves.
@@ -44,4 +37,9 @@ public interface MissileSpec extends Spacecraft {
      * @param star The star that got hit by the missile.
      */
     public void onHitStar(@NotNull Star star);
+
+    @Override
+    public default boolean isThreat() {
+        return false;
+    }
 }

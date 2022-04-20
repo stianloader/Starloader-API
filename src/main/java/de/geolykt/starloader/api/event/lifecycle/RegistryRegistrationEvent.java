@@ -17,6 +17,13 @@ public class RegistryRegistrationEvent extends Event {
     public static final String REGISTRY_MAP_MODE = "MAPMODES";
     public static final String REGISTRY_WEAPONS_TYPE = "WEAPONSFACTORY";
 
+    /**
+     * The name of the registry corresponding to {@link Registry#RELIGIONS}.
+     *
+     * @since 2.0.0
+     */
+    public static final String REGISTRY_RELIGION = "RELIGION";
+
     protected final Class<?> clazz;
     protected final String name;
     protected final Registry<?> registry;
@@ -56,6 +63,7 @@ public class RegistryRegistrationEvent extends Event {
      * Obtains the class that is subject to the registration.
      * Caution is advised when using this method to NOT accidentally load a class.
      * I. e. "<code>if (getRegistryClass() == MapModes.class) {</code>" should NOT be used.
+     * It is generally preferable to use {@link #getName()} instead.
      *
      * @return See above
      */

@@ -13,10 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
-import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
-
-import snoddasmannen.galimulator.GalColor;
 
 /**
  * Abstract interface for the implementation of the {@link Drawing} class.
@@ -66,7 +63,7 @@ public interface DrawingImpl {
      * @param color   The color of the message
      * @return The width of the text that was just drawn
      */
-    public default float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
+    public default float drawText(@NotNull String message, float x, float y, @NotNull Color color) {
         return this.drawText(message, x, y, color, Drawing.TextSize.SMALL);
     }
 
@@ -83,7 +80,7 @@ public interface DrawingImpl {
      * @param size    The font size.
      * @return The width of the text that was just drawn
      */
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size);
+    public float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size);
 
     /**
      * Draws text at the given location. The specified color should be used.
@@ -99,21 +96,7 @@ public interface DrawingImpl {
      * @param camera  The camera to use (used for internal unprojecting)
      * @return The width of the text that was just drawn
      */
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size, @NotNull Camera camera);
-
-    /**
-     * Draws text at the given location. The specified color should be used.
-     * Additionally the font shall be left unspecified.
-     *
-     * @param message The message to write
-     * @param x       The X-location of the text
-     * @param y       The Y-location of the text
-     * @param color   The color of the message
-     * @return The width of the text that was just drawn
-     */
-    public default float drawText(@NotNull String message, float x, float y, @NotNull TextColor color) {
-        return this.drawText(message, x, y, color.toGalimulatorColor());
-    }
+    public float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size, @NotNull Camera camera);
 
     /**
      * Fills a rectangle on the main drawing batch (as provided by {@link #getMainDrawingBatch()})

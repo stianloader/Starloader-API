@@ -6,12 +6,11 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
-
-import snoddasmannen.galimulator.GalColor;
 
 public class SingletonFormattedText implements FormattedText {
 
@@ -25,7 +24,7 @@ public class SingletonFormattedText implements FormattedText {
         this(new SingletonTextComponent(s));
     }
 
-    public SingletonFormattedText(@NotNull String s, @NotNull GalColor color) {
+    public SingletonFormattedText(@NotNull String s, @NotNull Color color) {
         this(new SingletonTextComponent(s, color));
     }
 

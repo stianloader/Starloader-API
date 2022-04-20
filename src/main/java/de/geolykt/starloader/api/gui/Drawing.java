@@ -15,10 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
-import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
-
-import snoddasmannen.galimulator.GalColor;
 
 /**
  * Direct drawing and rendering class.
@@ -99,7 +96,7 @@ public final class Drawing {
      * @param color   The color of the message
      * @return The width of the text that was just drawn
      */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
+    public static float drawText(@NotNull String message, float x, float y, @NotNull Color color) {
         return implementation.drawText(message, x, y, color);
     }
 
@@ -116,7 +113,7 @@ public final class Drawing {
      * @param size    The font size.
      * @return The width of the text that was just drawn
      */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size) {
+    public static float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size) {
         return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"));
     }
 
@@ -134,23 +131,8 @@ public final class Drawing {
      * @param camera  The camera to use (used for internal unprojecting)
      * @return The width of the text that was just drawn
      */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull GalColor color, Drawing.@NotNull TextSize size, @NotNull Camera camera) {
+    public static float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size, @NotNull Camera camera) {
         return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"), Objects.requireNonNull(camera, "Camera cannot be null."));
-    }
-
-    /**
-     * Draws text at the given location. The specified color should be used.
-     * Additionally the font shall be left unspecified. The text may not persist
-     * across frames.
-     *
-     * @param message The message to write
-     * @param x       The X-location of the text
-     * @param y       The Y-location of the text
-     * @param color   The color of the message
-     * @return The width of the text that was just drawn
-     */
-    public static float drawText(@NotNull String message, float x, float y, @NotNull TextColor color) {
-        return implementation.drawText(message, x, y, color);
     }
 
     /**

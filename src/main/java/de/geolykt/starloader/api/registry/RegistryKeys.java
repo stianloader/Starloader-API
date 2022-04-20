@@ -96,6 +96,41 @@ public final class RegistryKeys {
     public static final @NotNull NamespacedKey GALIMULATOR_WT_DRAGONS_BREATH = new GalimulatorResourceKey("WEAPONTYPE_DRAGONS_BREATH");
     public static final @NotNull NamespacedKey GALIMULATOR_WT_CHAIN_MISSILE = new GalimulatorResourceKey("WEAPONTYPE_CHAIN_MISSILE");
     public static final @NotNull NamespacedKey GALIMULATOR_WT_RAILGUN = new GalimulatorResourceKey("WEAPONTYPE_RAILGUN");
+
+    // Religions
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_SKERCZISM = new GalimulatorResourceKey("RELIGION_SKERCZISM");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_PAVELS = new GalimulatorResourceKey("RELIGION_PAVELS");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_SKIVX = new GalimulatorResourceKey("RELIGION_SKIVX");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_PURPLE_STONES = new GalimulatorResourceKey("RELIGION_PURPLE_STONES");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_PINGOISM = new GalimulatorResourceKey("RELIGION_PINGOISM");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_KOZZMOSISOLOGY = new GalimulatorResourceKey("RELIGION_KOZZMOSISOLOGY");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_RATIONIS_LUMINE = new GalimulatorResourceKey("RELIGION_RATIONIS_LUMINE");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_WHEELISM = new GalimulatorResourceKey("RELIGION_WHEELISM");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_ULTRIMAR = new GalimulatorResourceKey("RELIGION_ULTRIMAR");
+
+    /**
+     * The registry key for the "Stian" religion. Most people will probably know the religion as "Someism", fewer will know it
+     * as "Holding of the sacred place". The name "Stian" apparently came from a random number generator as from what I can assume
+     * all religions were originally meant to be called after words from the random number generator. In the end however names
+     * could be chosen by patrons of a faith. With this religion not getting a name, it was called "Holding of the sacred place".
+     * Eventually however the religion found a patron and was called "Someism".
+     *
+     * @since 2.0.0
+     * @see RegistryKeys#GALIMULATOR_REL_SOMEISM
+     */
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_STIAN = new GalimulatorResourceKey("RELIGION_STIAN");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_SIMULACRUM = new GalimulatorResourceKey("RELIGION_SIMULACRUM");
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_IMMERSION = new GalimulatorResourceKey("RELIGION_IMMERSION");
+
+    /**
+     * The registry key for the "Someism" religion. This registry key actually is identical identity-wise to
+     * {@link RegistryKeys#GALIMULATOR_REL_STIAN} as that is the internal name of the religion. This field only
+     * exists as only a really small circle of people will know the internal name of the religion. Due to SLAPI
+     * Mirroring such naming choices, the {@link NamespacedKey#getKey() key's name} of the key is "RELIGION_STIAN".
+     *
+     * @since 2.0.0
+     */
+    public static final @NotNull NamespacedKey GALIMULATOR_REL_SOMEISM = GALIMULATOR_REL_STIAN;
 }
 
 /**

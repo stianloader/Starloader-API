@@ -34,6 +34,7 @@ public class TestRegistry {
             add("snoddasmannen/galimulator/MapMode$MapModes.class");
             add("snoddasmannen/galimulator/weapons/WeaponsFactory.class");
             add("snoddasmannen/galimulator/FlagItem$BuiltinSymbols.class");
+            add("snoddasmannen/galimulator/Religion.class");
         }
     };
 

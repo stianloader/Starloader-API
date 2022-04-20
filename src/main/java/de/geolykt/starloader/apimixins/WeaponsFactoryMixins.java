@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.registry.Registry;
@@ -58,7 +58,7 @@ public class WeaponsFactoryMixins implements WeaponType {
     private NamespacedKey registryKey = null;
 
     @Override
-    public @NotNull Weapon build(@NotNull ActorSpec actor, @Nullable Object arg) {
+    public @NotNull Weapon build(@NotNull Actor actor, @Nullable Object arg) {
         return NullUtils.requireNotNull((Weapon) ((WeaponsFactory) (Object) this).a(ExpectedObfuscatedValueException.requireNullableStateActor(actor), arg));
     }
 

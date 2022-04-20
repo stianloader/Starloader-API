@@ -1,6 +1,5 @@
 package de.geolykt.starloader.impl.gui;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,11 +9,12 @@ import java.util.function.IntSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Color;
+
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
-import de.geolykt.starloader.api.gui.text.TextColor;
 
 import snoddasmannen.galimulator.GalColor;
 
@@ -74,15 +74,9 @@ public class SLScreenBuilder extends ScreenBuilder {
     }
 
     @Override
-    public void setHeaderColor(@NotNull Color awtColor) {
-        Objects.requireNonNull(awtColor, "awtColor may not be null.");
-        headerColor = new GalColor(awtColor.getRed() / 255.0F, awtColor.getGreen() / 255.0F, awtColor.getBlue() / 255.0F, awtColor.getAlpha() / 255.0F);
-    }
-
-    @Override
-    public void setHeaderColor(@NotNull TextColor textColor) {
-        Objects.requireNonNull(textColor, "textColor may not be null.");
-        headerColor = textColor.toGalimulatorColor();
+    public void setHeaderColor(@NotNull Color gdxColor) {
+        Objects.requireNonNull(gdxColor, "gdxColor may not be null.");
+        headerColor = new GalColor(gdxColor);
     }
 
     @Override

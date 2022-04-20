@@ -9,19 +9,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
-import de.geolykt.starloader.api.actor.ActorSpec;
-import de.geolykt.starloader.api.actor.spacecrafts.MissileSpec;
+import de.geolykt.starloader.api.actor.Actor;
+import de.geolykt.starloader.api.actor.Missile;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.actor.MissileHitActorEvent;
 import de.geolykt.starloader.api.event.actor.MissileHitStarEvent;
 
-import snoddasmannen.galimulator.actors.Actor;
-import snoddasmannen.galimulator.actors.Missile;
 import snoddasmannen.galimulator.actors.StateActor;
 
-@Mixin(Missile.class)
-public abstract class MissileMixins extends ActorMixins implements MissileSpec {
+@Mixin(snoddasmannen.galimulator.actors.Missile.class)
+public abstract class MissileMixins extends ActorMixins implements Missile {
 
     @Shadow
     float maxSpeed;
@@ -38,8 +36,9 @@ public abstract class MissileMixins extends ActorMixins implements MissileSpec {
     }
 
     @Override
-    public @Nullable ActorSpec getShooter() {
-        return (ActorSpec) shooter;
+    @Nullable
+    public Actor getShooter() {
+        return (Actor) shooter;
     }
 
     @Override
@@ -48,13 +47,13 @@ public abstract class MissileMixins extends ActorMixins implements MissileSpec {
     }
 
     @Shadow
-    protected void hitActor(final Actor actor) {
+    protected void hitActor(final snoddasmannen.galimulator.actors.Actor actor) {
         actor.toString();
     }
 
     @Inject(method = "hitActor", at = @At("HEAD"), cancellable = true)
-    public void hitActor(Actor actor, CallbackInfo ci) {
-        MissileHitActorEvent evt = new MissileHitActorEvent(this, actor);
+    public void hitActor(snoddasmannen.galimulator.actors.Actor actor, CallbackInfo ci) {
+        MissileHitActorEvent evt = new MissileHitActorEvent(this, (Actor) actor);
         EventManager.handleEvent(evt);
         if (evt.isCancelled()) {
             ci.cancel();
@@ -78,9 +77,19 @@ public abstract class MissileMixins extends ActorMixins implements MissileSpec {
     }
 
     @Override
-    public void onHitActor(@NotNull ActorSpec actor) {
-        if (actor instanceof Actor) {
-            hitActor((Actor) actor);
+    public boolean isEmperorBuildable() {
+        return false; // Missiles are usually fired by a secondary actor.
+    }
+
+    @Override
+    public boolean isSandboxBuildable() {
+        return false;
+    }
+
+    @Override
+    public void onHitActor(@NotNull Actor actor) {
+        if (actor instanceof snoddasmannen.galimulator.actors.Actor) {
+            hitActor((snoddasmannen.galimulator.actors.Actor) actor);
         } else {
             throw new UnsupportedOperationException("The actor specification does not match the expected type signature!");
         }

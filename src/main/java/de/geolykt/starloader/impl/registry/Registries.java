@@ -18,6 +18,7 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 import snoddasmannen.galimulator.AudioManager.AudioSample;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
+import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
@@ -209,8 +210,7 @@ public final class Registries {
             return true;
         });
         Registry.MAP_MODES = mapModeRegistry;
-        @SuppressWarnings("all")
-        Event e = new de.geolykt.starloader.api.event.lifecycle.MapModeRegistrationEvent(mapModeRegistry);
+        Event e = new RegistryRegistrationEvent(mapModeRegistry, MapModes.class, RegistryRegistrationEvent.REGISTRY_MAP_MODE);
         EventManager.handleEvent(e);
         expander.frozenMapModeRegistry = true;
         expander.mapModePrototypes.removeIf(prototype -> {
@@ -218,6 +218,50 @@ public final class Registries {
             return true;
         });
         mapModeRegistry.freeze();
+    }
+
+    /**
+     * Creates, assigns and initializes the religions registry.
+     * It also emits the required events.
+     *
+     * @since 2.0.0
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static void initReligions() {
+        LOGGER.info("Registering religions");
+        SimpleEnumRegistry<Religion> religionRegistry = new SimpleEnumRegistry<>(Religion.class);
+        @SuppressWarnings("null")
+        @NotNull Religion[] religions = new Religion[] {
+                Religion.SKERCZISM,
+                Religion.PAVELS,
+                Religion.SKIVX,
+                Religion.PURPLE_STONES,
+                Religion.PINGOISM,
+                Religion.KOZZMOSISOLOGY,
+                Religion.RATIONIS_LUMINE,
+                Religion.WHEELISM,
+                Religion.ULTRIMAR,
+                Religion.STIAN,
+                Religion.SIMULACRUM,
+                Religion.IMMERSION
+        };
+        religionRegistry.registerBulk(new @NotNull NamespacedKey[] {
+                RegistryKeys.GALIMULATOR_REL_SKERCZISM,
+                RegistryKeys.GALIMULATOR_REL_PAVELS,
+                RegistryKeys.GALIMULATOR_REL_SKIVX,
+                RegistryKeys.GALIMULATOR_REL_PURPLE_STONES,
+                RegistryKeys.GALIMULATOR_REL_PINGOISM,
+                RegistryKeys.GALIMULATOR_REL_KOZZMOSISOLOGY,
+                RegistryKeys.GALIMULATOR_REL_RATIONIS_LUMINE,
+                RegistryKeys.GALIMULATOR_REL_WHEELISM,
+                RegistryKeys.GALIMULATOR_REL_ULTRIMAR,
+                RegistryKeys.GALIMULATOR_REL_STIAN,
+                RegistryKeys.GALIMULATOR_REL_SIMULACRUM,
+                RegistryKeys.GALIMULATOR_REL_IMMERSION
+        }, religions);
+        Registry.RELIGIONS = (Registry<? extends Enum<?>>) (Registry) religionRegistry;
+        EventManager.handleEvent(new RegistryRegistrationEvent(religionRegistry, Religion.class, RegistryRegistrationEvent.REGISTRY_RELIGION));
+        religionRegistry.freeze();
     }
 
     /**

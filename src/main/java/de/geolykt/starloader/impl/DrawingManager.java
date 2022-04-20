@@ -58,36 +58,38 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     }
 
     @Override
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color) {
-        return GalFX.a(x, y, message, color);
+    public float drawText(@NotNull String message, float x, float y, @NotNull Color color) {
+        return GalFX.a(x, y, message, new GalColor(color));
     }
 
     @Override
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color,
+    public float drawText(@NotNull String message, float x, float y, @NotNull Color color,
             Drawing.@NotNull TextSize size) {
+        GalColor galColor = new GalColor(color);
         switch (size) {
         case LARGE:
-            return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG);
+            return GalFX.a(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_BIG);
         case MEDIUM:
-            return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_DEFAULT);
+            return GalFX.a(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_DEFAULT);
         case SMALL:
         default:
-            return GalFX.a(x, y, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL);
+            return GalFX.a(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_SMALL);
         }
     }
 
     @Override
-    public float drawText(@NotNull String message, float x, float y, @NotNull GalColor color,
+    public float drawText(@NotNull String message, float x, float y, @NotNull Color color,
             Drawing.@NotNull TextSize size, @NotNull Camera camera) {
+        GalColor galColor = new GalColor(color);
         // x, y, rotation, pivot, text, color, font, camera
         switch (size) {
         case LARGE:
-            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_BIG, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_BIG, camera);
         case MEDIUM:
-            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, camera);
         case SMALL:
         default:
-            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, color, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
         }
     }
 

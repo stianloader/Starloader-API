@@ -1,6 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,7 +25,10 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.GameConfiguration;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
+import de.geolykt.starloader.api.actor.ActorFleet;
+import de.geolykt.starloader.api.actor.Flagship;
+import de.geolykt.starloader.api.actor.StateActor;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.ShipCapacityModifier;
@@ -61,8 +63,6 @@ import snoddasmannen.galimulator.Government;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.class_41;
-import snoddasmannen.galimulator.actors.Flagship;
-import snoddasmannen.galimulator.actors.StateActor;
 
 @Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
@@ -113,7 +113,7 @@ public class EmpireMixins implements ActiveEmpire {
     private transient boolean flagNoModdedShipCapacity;
 
     @Shadow
-    private Flagship flagship; // flagship
+    private snoddasmannen.galimulator.actors.Flagship flagship; // flagship
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -177,7 +177,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public void a(@NotNull Religion var0) { // setReligion
+    public void a(@Nullable Religion var0) { // setReligion
         religion = var0;
     }
 
@@ -185,7 +185,7 @@ public class EmpireMixins implements ActiveEmpire {
      * @param var0  dummy doc
      */
     @Shadow
-    public void a(StateActor var0) { // addActor
+    public void a(snoddasmannen.galimulator.actors.StateActor var0) { // addActor
     }
 
     @Overwrite
@@ -194,17 +194,8 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void addActor(@NotNull ActorSpec actor) {
-        if (actor instanceof StateActor) {
-            a((StateActor) actor);
-        } else {
-            throw new UnsupportedOperationException("Currently can only assign State Actors to empires.");
-        }
-    }
-
-    @Override
     public void addActor(@NotNull StateActor actor) {
-        a(actor);
+        a((snoddasmannen.galimulator.actors.StateActor) actor);
     }
 
     @Override
@@ -315,7 +306,7 @@ public class EmpireMixins implements ActiveEmpire {
      * @param var0  dummy doc
      */
     @Shadow
-    public void b(StateActor var0) { // removeActor
+    public void b(snoddasmannen.galimulator.actors.StateActor var0) { // removeActor
     }
 
     /**
@@ -327,7 +318,7 @@ public class EmpireMixins implements ActiveEmpire {
     private void broadcastNews(String news) {
         if (this.Z()) {
             TextFactory factory = Drawing.getTextFactory();
-            var name = factory.componentBuilder(getEmpireName()).setColor(getColor()).setSize(TextSize.MEDIUM).build();
+            var name = factory.componentBuilder(getEmpireName()).setColor(getGDXColor()).setSize(TextSize.MEDIUM).build();
             var newsComp = factory.componentBuilder(": " + news).setSize(TextSize.MEDIUM).build();
             Drawing.sendBulletin(factory.aggregateComponents(name, newsComp));
         }
@@ -392,19 +383,14 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public @NotNull Vector<StateActor> getActors() {
-        return agents;
+    @NotNull
+    public Collection<StateActor> getActors() {
+        return Collections.unmodifiableCollection(agents);
     }
 
     @Override
     public Alliance getAlliance() {
         return (Alliance) h;
-    }
-
-    @Override
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public @NotNull Color getAWTColor() {
-        return ((de.geolykt.starloader.impl.AWTColorAccesor) getColor()).asAWTColor();
     }
 
     @Override
@@ -414,7 +400,8 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public @NotNull List<ShipCapacityModifier> getCapcityModifiers() {
+    @NotNull
+    public List<ShipCapacityModifier> getCapcityModifiers() {
         if (capModifiers == null) {
             return new ArrayList<>();
         }
@@ -438,12 +425,6 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull GalColor getColor() {
-        return color;
-    }
-
-    @SuppressWarnings("null")
-    @Override
     public @NotNull String getEmpireName() {
         return name;
     }
@@ -457,13 +438,14 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public Flagship getFlagship() {
-        return flagship;
+        return (Flagship) flagship;
     }
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public @NotNull ArrayList<snoddasmannen.galimulator.Fleet> getFleets() {
-        return fleets;
+    @NotNull
+    public Collection<ActorFleet> getFleets() {
+        return Collections.unmodifiableCollection(fleets);
     }
 
     @Override
@@ -474,7 +456,7 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("null")
     @Override
     public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
-        return getColor().getGDXColor();
+        return color.getGDXColor();
     }
 
     @SuppressWarnings("null")
@@ -504,8 +486,11 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull Religion getReligion() {
-        return religion;
+    public NamespacedKey getReligion() {
+        if (religion == null) {
+            return null;
+        }
+        return ((RegistryKeyed) religion).getRegistryKey();
     }
 
     @Override
@@ -515,7 +500,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public @NotNull Vector<ActorSpec> getSLActors() {
+    public @NotNull Vector<Actor> getSLActors() {
         return agents;
     }
 
@@ -604,17 +589,8 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void removeActor(@NotNull ActorSpec actor) {
-        if (actor instanceof StateActor) {
-            b((StateActor) actor);
-        } else {
-            return; // The actor cannot be assigned to the agents list, which we can skip this removal.
-        }
-    }
-
-    @Override
     public void removeActor(@NotNull StateActor actor) {
-        b(actor);
+        b((snoddasmannen.galimulator.actors.StateActor) actor);
     }
 
     @Override
@@ -674,11 +650,20 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public void setReligion(@NotNull Religion religion) {
-        if (Objects.isNull(religion) && this != Galimulator.getNeutralEmpire()) {
-            throw new NullPointerException("religion cannot be null.");
+    public void setReligion(@Nullable NamespacedKey religion) {
+        if (religion == null) {
+            if (this == Galimulator.getNeutralEmpire()) {
+                a((Religion) null);
+                return;
+            } else {
+                throw new NullPointerException("religion cannot be null for non-neutral empires.");
+            }
         }
-        a(religion);
+        Religion rel = (Religion) Registry.RELIGIONS.get(religion);
+        if (rel == null) {
+            throw new IllegalStateException("Cannot resolve registered religion for key: " + religion);
+        }
+        a(rel);
     }
 
     @Override

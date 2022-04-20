@@ -3,28 +3,27 @@ package de.geolykt.starloader.impl.text;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
-import snoddasmannen.galimulator.GalColor;
-
 public class ColoredTextComponent implements TextComponent {
 
-    protected final @NotNull GalColor color;
+    protected final @NotNull Color color;
     protected final Drawing.@NotNull TextSize size;
     protected final @NotNull String text;
 
     public ColoredTextComponent(@NotNull String s) {
-        this(s, NullUtils.requireNotNull(GalColor.WHITE), Drawing.TextSize.SMALL);
+        this(s, NullUtils.requireNotNull(Color.WHITE), Drawing.TextSize.SMALL);
     }
 
-    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color) {
+    public ColoredTextComponent(@NotNull String s, @NotNull Color color) {
         this(s, color, Drawing.TextSize.SMALL);
     }
 
-    public ColoredTextComponent(@NotNull String s, @NotNull GalColor color, Drawing.@NotNull TextSize size) {
+    public ColoredTextComponent(@NotNull String s, @NotNull Color color, Drawing.@NotNull TextSize size) {
         this.text = s;
         this.color = color;
         this.size = NullUtils.requireNotNull(size);

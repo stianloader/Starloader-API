@@ -1,7 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import java.awt.Color;
-
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,13 +41,6 @@ public class FlagItemMixins implements FlagComponent {
 
     @Shadow
     float y;
-
-    @Override
-    @NotNull
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public Color getAWTColor() {
-        return ((de.geolykt.starloader.impl.AWTColorAccesor) color).asAWTColor();
-    }
 
     @Override
     public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {

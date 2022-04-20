@@ -28,7 +28,7 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
@@ -49,7 +49,6 @@ import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Player;
-import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
@@ -110,7 +109,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Vector<ActorSpec> getActorsUnsafe() {
+    public Vector<Actor> getActorsUnsafe() {
         return NullUtils.requireNotNull((Vector) Space.actors);
     }
 
@@ -345,7 +344,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         getNeutralEmpire().setRecentlyLostStars(new ArrayDeque<>());
         @SuppressWarnings("null")
         @NotNull
-        final Religion nullReligion = (Religion) NullUtils.provideNull();
+        final NamespacedKey nullReligion = NullUtils.provideNull();
         getNeutralEmpire().setReligion(nullReligion);
         Space.ar(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
         Space.getMapData().getGenerator().i(); // Change the xmax and ymax of the generator area
@@ -469,7 +468,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 getTranscendedEmpires(),
                 getVanityHolder(),
                 (Vector) getQuestsUnsafe(),
-                getPlayer(), 
+                getPlayer(),
                 Space.getMapData(),
                 hasUsedSandbox(),
                 snoddasmannen.galimulator.EmploymentAgency.a(),
@@ -514,7 +513,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void setActorsUnsafe(Vector<ActorSpec> actors) {
+    public void setActorsUnsafe(Vector<Actor> actors) {
         Space.actors = NullUtils.requireNotNull((Vector) actors);
     }
 

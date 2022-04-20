@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * the assignment may not happen in the static block or anywhere else. Failure doing so will result in a compile
  * time error
  *
- *<p> The format of the value of the string must be:
+ *<p>The format of the value of the string must be:
  * <br> {@literal "org/example/Example"} for classes
  * <br> {@literal "org/example/Example.field"} for fields
  * <br> {@literal "org/example/Example.method(Lorg/example/Parameter;)Lorg/example/ReturnType;"} for methods
@@ -21,4 +21,5 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(CLASS)
 @Target(FIELD)
-public @interface StarplaneReobfuscateReference {}
+public @interface StarplaneReobfuscateReference {
+}

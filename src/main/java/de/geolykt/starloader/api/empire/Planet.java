@@ -19,7 +19,8 @@ public interface Planet {
      *
      * @return A clone of the keyword list
      */
-    public @NotNull List<@NotNull String> getKeywords();
+    @NotNull
+    public List<@NotNull String> getKeywords();
 
     /**
      * Obtains the name of the planet.
@@ -28,14 +29,16 @@ public interface Planet {
      *
      * @return The name of the planet.
      */
-    public @NotNull String getName();
+    @NotNull
+    public String getName();
 
     /**
      * Obtains the star system that owns this planet.
      *
      * @return The parent star
      */
-    public @NotNull Star getParentSystem();
+    @NotNull
+    public Star getParentSystem();
 
     /**
      * Obtains the population count of this planet.
@@ -52,7 +55,8 @@ public interface Planet {
      *
      * @return The type of the celestial body.
      */
-    public @NotNull PlanetType getType();
+    @NotNull
+    public PlanetType getType();
 
     /**
      * Obtains the ordinal of the planet.

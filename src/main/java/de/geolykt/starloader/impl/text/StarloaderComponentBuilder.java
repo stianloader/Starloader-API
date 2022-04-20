@@ -7,43 +7,52 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Color;
+
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
-import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextComponent;
-
-import snoddasmannen.galimulator.GalColor;
 
 public class StarloaderComponentBuilder implements ComponentBuilder {
 
-    protected @NotNull GalColor color = TextColor.WHITE.toGalimulatorColor();
-    protected @NotNull List<Map.Entry<@NotNull GalColor, @NotNull Double>> jitter = new ArrayList<>(1);
+    @SuppressWarnings("null")
+    @NotNull
+    protected Color color = Color.WHITE;
+
+    @NotNull
+    protected List<Map.Entry<@NotNull Color, @NotNull Double>> jitter = new ArrayList<>(1);
+
     protected Drawing.@NotNull TextSize size = Drawing.TextSize.SMALL;
-    protected @NotNull String text;
+
+    @NotNull
+    protected String text;
 
     public StarloaderComponentBuilder(@NotNull String text) {
         this.text = text;
     }
 
     @Override
-    public @NotNull ComponentBuilder addJitter(@NotNull GalColor color, double intensity) {
+    @NotNull
+    public ComponentBuilder addJitter(@NotNull Color color, double intensity) {
         jitter.add(Map.entry(color, intensity));
         return this;
     }
 
     @Override
-    public @NotNull FormattedTextComponent build() {
+    @NotNull
+    public FormattedTextComponent build() {
         TextComponent main = new ColoredTextComponent(text, color, Objects.requireNonNull(size));
         ArrayList<@NotNull TextComponent> components = new ArrayList<>(jitter.size());
-        for (Map.Entry<@NotNull GalColor, @NotNull Double> entry : jitter) {
+        for (Map.Entry<@NotNull Color, @NotNull Double> entry : jitter) {
             components.add(new JitterTextComponent(text, entry.getKey(), entry.getValue(), size));
         }
         return new BaseFormattedTextComponent(main, components);
     }
 
     @Override
-    public @NotNull ComponentBuilder setColor(@NotNull GalColor color) {
+    @NotNull
+    public ComponentBuilder setColor(@NotNull Color color) {
         this.color = color;
         return this;
     }

@@ -1,6 +1,5 @@
 package de.geolykt.starloader.api.gui.screen;
 
-import java.awt.Color;
 import java.util.Objects;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
@@ -8,8 +7,9 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Color;
+
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.gui.text.TextColor;
 
 /**
  * Builder class to create {@link Screen} objects.
@@ -110,22 +110,11 @@ public abstract class ScreenBuilder {
 
     /**
      * Sets the background color of the header.
-     * All RGBA channels will be used and the default value is an Orange-ish color.
+     * All RGBA channels will be used and the default value is {@link Color#ORANGE}.
      *
-     * @param awtColor The color to use as an Java AWT Color. It will get transformed into Galimulator's internal Color type later on.
-     *
-     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
+     * @param gdxColor The color to use as an GDX Color. It will get transformed into Galimulator's internal Color type later on.
      */
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public abstract void setHeaderColor(@NotNull Color awtColor);
-
-    /**
-     * Sets the background color of the header.
-     * The default value is {@link TextColor#ORANGE}.
-     *
-     * @param textColor The color to use as an Starloader text TextColor. It will get transformed into Galimulator's internal Color type later on.
-     */
-    public abstract void setHeaderColor(@NotNull TextColor textColor);
+    public abstract void setHeaderColor(@NotNull Color gdxColor);
 
     /**
      * Enables or Disables the header. By default it is true.

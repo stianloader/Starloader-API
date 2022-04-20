@@ -10,19 +10,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 
 import snoddasmannen.galimulator.Empire;
-import snoddasmannen.galimulator.actors.Actor;
 import snoddasmannen.galimulator.actors.StateActor;
 
 /**
  * Mixins targeting the galimulator Actor class.
  */
-@Mixin(Actor.class)
-public abstract class ActorMixins implements ActorSpec {
+@Mixin(snoddasmannen.galimulator.actors.Actor.class)
+public abstract class ActorMixins implements Actor {
 
     @Shadow
     protected int birthMilliYear;
@@ -79,7 +78,7 @@ public abstract class ActorMixins implements ActorSpec {
     }
 
     @Override
-    public @NotNull ActiveEmpire getOwningempire() {
+    public @NotNull ActiveEmpire getOwningEmpire() {
         return (ActiveEmpire) getOwner(); // Only state actors can be owned by non-neutral empires.
     }
 
@@ -96,25 +95,17 @@ public abstract class ActorMixins implements ActorSpec {
 
     @Override
     public float getVelocity() {
-        return 0;
+        return Float.NaN; // This is intended
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public @NotNull List<Weapon> getWeapons() {
-        if (!isParticle()) {
+        if (!isStateActor()) {
             return new ArrayList<>((Collection) ((StateActor) (Object) this).weapons);
         }
         return new ArrayList<>();
     }
-
-    /*
-    @Override
-    @Pseudo
-    // FIXME Mixin does not allow for @Shadow, I guess that this is likely a bug and should be reported to the library!
-    public float getX() {
-        return ((Item) (Object) this).getX();
-    }*/
 
     @Override
     @Shadow // Already implemented, no need to override
@@ -133,11 +124,6 @@ public abstract class ActorMixins implements ActorSpec {
     }
 
     @Override
-    public boolean isBuilt() {
-        return true;
-    }
-
-    @Override
     public boolean isInvulnerable() {
         return isUntouchable();
     }
@@ -145,12 +131,6 @@ public abstract class ActorMixins implements ActorSpec {
     @Shadow
     public boolean isMonster() {
         return false;
-    }
-
-    @SuppressWarnings("cast")
-    @Override
-    public boolean isParticle() {
-        return !((Object) this instanceof StateActor);
     }
 
     @Override

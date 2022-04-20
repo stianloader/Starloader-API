@@ -10,7 +10,7 @@ import io.github.coolcrabs.brachyura.project.DescriptiveBuildscriptName;
 public class Buildscript extends StarloaderStarplaneProject implements DescriptiveBuildscriptName {
 
     public Buildscript() {
-        super(new MavenId("de.geolykt", "starloader-api", "1.6.0"),
+        super(new MavenId("de.geolykt", "starloader-api", "2.0.0"),
                 StarplaneProject.newProjectConfig()
                     .removeTransitiveDependency("com.google.code.findbugs", "jsr305")
                     .removeTransitiveDependency("com.google.errorprone", "error_prone_annotations")
@@ -45,6 +45,6 @@ public class Buildscript extends StarloaderStarplaneProject implements Descripti
     }
 
     static {
-        //System.setProperty("de.geolykt.starplane.nocache", "true");
+        System.setProperty("de.geolykt.starplane.nocache", "true");
     }
 }

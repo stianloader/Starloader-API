@@ -16,7 +16,7 @@ import de.geolykt.starloader.api.resource.ColorTextured;
  * jar being within the compiler classpath.
  * It might also be useful for any projects that try to implement a Galimulator clone (please don't do it, you would be insane otherwise)
  */
-public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorTextured {
+public interface Actor extends Identifiable, Dateable, Locateable, ColorTextured {
 
     /**
      * Adds a certain amount of experience points to the actor.
@@ -52,7 +52,8 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
      *
      * @return the name that was assigned to the actor.
      */
-    public @NotNull String getName();
+    @NotNull
+    public String getName();
 
     /**
      * Obtains the empire that "owns" the actor; this state may change with time as actors
@@ -60,7 +61,8 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
      *
      * @return The host empire.
      */
-    public @NotNull ActiveEmpire getOwningempire();
+    @NotNull
+    public ActiveEmpire getOwningEmpire();
 
     /**
      * Alias for {@link Dateable#getFoundationYear()};
@@ -75,7 +77,7 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
     /**
      * Obtains the current velocity of the actor.
      * If for some reason or another this is not applicable to the actor, then
-     * 0.0 needs to be returned.
+     * {@link Float#NaN} needs to be returned.
      *
      * @return The current speed of the actor.
      */
@@ -106,12 +108,14 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
     public int getXPWorth();
 
     /**
-     * Obtains whether this specification was implemented fully or is only abstract.
-     * The method may only return true if the class extends Actor.
+     * Designates whether the craft can be manually built in emperor mode.
      *
-     * @return True if the current instance can be cast to Actor.
+     * @return Whether the actor can be built by the player
+     * @deprecated This method will be offloaded to an enum or something comparable as the implementation of this method
+     * is very poorly maintained
      */
-    public boolean isBuilt();
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public boolean isEmperorBuildable();
 
     /**
      * Obtains whether the actor can be damaged, used for actors like Trading ships.
@@ -121,23 +125,34 @@ public interface ActorSpec extends Identifiable, Dateable, Locateable, ColorText
     public boolean isInvulnerable();
 
     /**
-     * Checks whether the actor is a particle. If it is not a particle, then it can be assumed that it is a "StateActor",
-     * which allows the usage of this instance in a greater amount of areas. Such state actors can be owned by empires,
-     * where as particles cannot be owned by empires. It is an interesting design decision on the game's part and an even
-     * more interesting decision that SLAPI is actively hiding this from you only for you to be confused to why as something
-     * does not work as intended. Some things such as Missiles may also be particles
+     * Designates whether the craft can be manually spawned within sandbox mode's spawning interface.
+     * While this is usually true it might also be false in certain instances like (but not limited to) Missiles.
      *
-     * @return False if the actor is a "StateActor"
+     * @return Whether it can spawned in sandbox mode
+     * @deprecated This method will be offloaded to an enum or something comparable as the implementation of this method
+     * is very poorly maintained
      */
-    // FIXME This idea may be completely wrong
-    public boolean isParticle();
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public boolean isSandboxBuildable();
 
     /**
-     * Obtains whether the actor is a threat to the wider interstellar community.
+     * Returns whether the actor is a so-called "state actor". Actors which are state actors, i.e. instances of classes that extend
+     * galimulator's StateActor class can be owned by an empire other than the neutral empire.
+     * Ammunitions like Bullets or Missiles are not state actors.
+     * If this method returns true, the instance must be an instance of {@link StateActor}.
+     *
+     * @return True if this actor is a state actor, false otherwise
+     */
+    public default boolean isStateActor() {
+        return this instanceof StateActor;
+    }
+
+    /**
+     * Obtains whether the actor is a threat to the galaxy.
      * All Monster-type actors fall under this category.
      *
      * @return The threat state of the actor.
-     * @see #isParticle()
+     * @see #isStateActor()
      */
     public boolean isThreat();
 

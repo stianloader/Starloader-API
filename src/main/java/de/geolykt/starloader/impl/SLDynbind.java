@@ -7,7 +7,7 @@ import de.geolykt.starloader.api.gui.Dynbind;
 
 import snoddasmannen.galimulator.Shortcut;
 
-public class SLDynbind extends Shortcut  {
+public class SLDynbind extends Shortcut {
 
     private final Dynbind bind;
 

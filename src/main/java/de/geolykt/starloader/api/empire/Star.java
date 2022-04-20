@@ -2,6 +2,7 @@ package de.geolykt.starloader.api.empire;
 
 import java.util.Vector;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,9 +13,8 @@ import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Locateable;
 import de.geolykt.starloader.api.Metadatable;
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.event.TickCallback;
-
-import snoddasmannen.galimulator.Religion;
 
 /**
  * Wrapper interface for Stars. This should not be extended by any other
@@ -97,19 +97,25 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     public @Nullable Faction getFaction();
 
     /**
-     * Obtains the majority faith within the starsystem. Should not be null.
+     * Obtains the majority faith within the star's borders. May not be null.
      *
-     * @return The {@link Religion} that is prevalent in this system
+     * @return The registry key of the Religion that is prevalent in this system
+     * @since 2.0.0
      */
-    public @NotNull Religion getMajorityFaith();
+    @NotNull
+    @Contract(pure = true, value = "-> !null")
+    public NamespacedKey getMajorityFaith();
 
     /**
-     * Obtains the minority faith within the system. May be null. In that case it
-     * should be interpretated as that the Majority faith has near 100% support.
+     * Obtains the minority faith within the system. May be null. In the case it
+     * it is null it means that the majority faith has near 100% support.
      *
-     * @return The {@link Religion} that is less prevalent in this system
+     * @return The registry key of religion that is less prevalent in this system or null
+     * @since 2.0.0
      */
-    public @Nullable Religion getMinorityFaith();
+    @Nullable
+    @Contract(pure = true, value = "-> _")
+    public NamespacedKey getMinorityFaith();
 
     /**
      * The name of the star. Should not change throughout the object's lifecycle,
@@ -117,7 +123,8 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      *
      * @return A String representing the name of the empire
      */
-    public @NotNull String getName();
+    @NotNull
+    public String getName();
 
     /**
      * Similar to {@link #getNeighbours()}, but the star UIDs are used instead of
@@ -204,17 +211,21 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     /**
      * Sets the majority religion of the system.
      *
-     * @param religion The {@link Religion} that is prevalent in this system
+     * @param religion The registry key of the religion that should now be prevalent in this system
+     * @since 2.0.0
      */
-    public void setMajorityFaith(@NotNull Religion religion);
+    @Contract(mutates = "this", pure = false)
+    public void setMajorityFaith(@NotNull NamespacedKey religion);
 
     /**
      * Sets the minority religion of the system. May be null. In that case it should
      * be interpretated as that the Majority faith has near 100% support.
      *
-     * @param religion The {@link Religion} that is less prevalent in this system
+     * @param religion The registry key of the religion that should now be less prevalent in this system
+     * @since 2.0.0
      */
-    public void setMinorityFaith(@Nullable Religion religion);
+    @Contract(mutates = "this", pure = false)
+    public void setMinorityFaith(@Nullable NamespacedKey religion);
 
     /**
      * Sets the direct neighbours of the star.

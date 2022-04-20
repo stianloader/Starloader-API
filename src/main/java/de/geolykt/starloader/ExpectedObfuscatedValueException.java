@@ -3,7 +3,7 @@ package de.geolykt.starloader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.gui.MapMode;
 
@@ -44,7 +44,7 @@ public class ExpectedObfuscatedValueException extends IllegalArgumentException {
         return (MapModes) (Object) mode;
     }
 
-    public static @Nullable StateActor requireNullableStateActor(@Nullable ActorSpec actor) {
+    public static @Nullable StateActor requireNullableStateActor(@Nullable Actor actor) {
         if (actor == null) {
             return null;
         }

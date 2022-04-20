@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
 
-import snoddasmannen.galimulator.GalColor;
-
 /**
  * Base interface for any empires that exist in the game, whether collapsed or
  * not.
@@ -30,19 +28,6 @@ public interface Empire extends Dateable, Identifiable {
      * The empire color is used for multiple interfaces as well as to paint the
      * territory of an empire to a constant color, the color as such should not
      * change without reason to not confuse the user.
-     * This method can be preferable over {@link #getColor()} as latter is only present within Galimulator proper
-     * while this component is provided by the JVM
-     *
-     * @return The AWT {@link java.awt.Color} assigned to the empire
-     * @deprecated java.awt.Color getters and setters are scheduled for purging in a future version
-     */
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public @NotNull java.awt.Color getAWTColor();
-
-    /**
-     * The empire color is used for multiple interfaces as well as to paint the
-     * territory of an empire to a constant color, the color as such should not
-     * change without reason to not confuse the user.
      *
      * @return The GDX {@link Color} assigned to the empire
      */
@@ -55,17 +40,6 @@ public interface Empire extends Dateable, Identifiable {
      * @return the year of collapse
      */
     public int getCollapseYear();
-
-    /**
-     * The empire color is used for multiple interfaces as well as to paint the
-     * territory of an empire to a constant color, the color as such should not
-     * change without reason to not confuse the user.
-     *
-     * @return The GalColor assigned to the empire
-     * @deprecated snoddasmannen.galimulator.GalColor getters and setters are scheduled for purging in a future version
-     */
-    @Deprecated(forRemoval = true, since = "1.6.0")
-    public @NotNull GalColor getColor();
 
     /**
      * The name of the empire without any colors.

@@ -9,19 +9,18 @@ import java.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Color;
+
 import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.actor.ActorSpec;
+import de.geolykt.starloader.api.actor.Actor;
+import de.geolykt.starloader.api.actor.ActorFleet;
+import de.geolykt.starloader.api.actor.Flagship;
+import de.geolykt.starloader.api.actor.StateActor;
 import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.gui.FlagComponent;
-
-import snoddasmannen.galimulator.Fleet;
-import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.Religion;
-import snoddasmannen.galimulator.actors.Flagship;
-import snoddasmannen.galimulator.actors.StateActor;
 
 /**
  * Interface for any empire that is still in the game.
@@ -29,19 +28,11 @@ import snoddasmannen.galimulator.actors.StateActor;
 public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
 
     /**
-     * Assigns an {@link ActorSpec Actor} to the empire.
-     *
-     * @param actor The actor to assign
-     */
-    public void addActor(@NotNull ActorSpec actor);
-
-    /**
      * Assigns a {@link StateActor} to the empire.
      *
      * @param actor The StateActor to assign
-     * @deprecated The direct use of Galimulator Actor API is bound for removal
+     * @since 2.0.0
      */
-    @Deprecated(since = "1.2", forRemoval = true)
     public void addActor(@NotNull StateActor actor);
 
     /**
@@ -53,16 +44,6 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @param modifier The modifier to add
      */
     public void addCapacityModifier(@NotNull ShipCapacityModifier modifier);
-
-    /**
-     * Assigns an {@link ActorSpec Actor} to the empire.
-     * Workaround through javac binding issues.
-     *
-     * @param actor The actor to assign
-     */
-    public default void addSLActor(@NotNull ActorSpec actor) {
-        addActor(actor);
-    }
 
     /**
      * Adds a special to the empire. The implementation of the method should throw a
@@ -103,17 +84,18 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public boolean decreaseTechnologyLevel(boolean notify, boolean force);
 
     /**
-     * Obtains the {@link Vector} of the {@link StateActor StateActors} that are
+     * Obtains a collection of the {@link StateActor StateActors} that are
      * currently assigned to the empire. The list is backing the internal actor
-     * list, which is why it should NOT be modified. Use
-     * {@link #addActor(StateActor)} or {@link #removeActor(StateActor)} instead.
+     * list, but cannot be modified. Use {@link #addActor(StateActor)} or
+     * {@link #removeActor(StateActor)} for modification and use
+     * {@link ArrayList#ArrayList(Collection)} for comparable for immutable snapshots.
      *
-     * @return A {@link Vector} of the {@link StateActor StateActors} that are
+     * @return A {@link Collection} of the {@link StateActor StateActors} that are
      *         assigned to the empire.
-     * @deprecated The direct use of Galimulator Actor API is subject to removal
+     * @since 2.0.0
      */
-    @Deprecated
-    public @NotNull Vector<StateActor> getActors();
+    @NotNull
+    public Collection<StateActor> getActors();
 
     /**
      * Obtains the wrapper representation of the Alliance the empire currently is
@@ -121,7 +103,8 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return The Alliance the empire currently is in, or null if not applicable
      */
-    public @Nullable Alliance getAlliance();
+    @Nullable
+    public Alliance getAlliance();
 
     /**
      * Obtains the amount of ships this empire is allowed to build at maximum.
@@ -163,7 +146,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @return A formatted string the is the colored name of the empire
      */
     public default @NotNull String getColoredName() {
-        GalColor c = getColor();
+        Color c = getGDXColor();
         // The * 255 is intended, as the range of `%02X` is 0 - 255 (both inclusive)
         return NullUtils.format("[#%02X%02X%02X]%s[]", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName());
     }
@@ -183,21 +166,20 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * the Empire is currently owned by the player.
      *
      * @return The {@link Flagship} owned by the Empire
-     * @deprecated Exposes galimulator internals directly. Generally stupid API
+     * @since 2.0.0
      */
-    @Deprecated(forRemoval = true, since = "1.6.0")
-    public @Nullable Flagship getFlagship();
+    @Nullable
+    public Flagship getFlagship();
 
     /**
-     * Obtains the {@link Fleet fleets} that are assigned to the empire. The list is
-     * backing the internal fleet list, which is why it should NOT be modified
-     * directly.
+     * Obtains the {@link ActorFleet fleets} that are assigned to the empire. The list is
+     * backing the internal fleet list but cannot be modified directly.
      *
-     * @return An {@link ArrayList} of {@link Fleet} that are assigned to the empire
-     * @deprecated Exposes galimulator internals directly. Generally stupid API
+     * @return An {@link ArrayList} of {@link ActorFleet} that are assigned to the empire
+     * @since 2.0.0
      */
-    @Deprecated(forRemoval = true, since = "1.6.0")
-    public @NotNull ArrayList<Fleet> getFleets();
+    @NotNull
+    public Collection<ActorFleet> getFleets();
 
     /**
      * Obtains the motto of the empire. This is purely something for the User and
@@ -221,9 +203,13 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * The religion of an empire. It may change after an empire has been founded so
      * it should not be assumed to be a constant.
      *
+     * <p>It may return null for the neutral empire, which does not have a religion.
+     *
      * @return The religion that is the most common in the empire
+     * @since 2.0.0
      */
-    public @NotNull Religion getReligion();
+    @Nullable
+    public NamespacedKey getReligion();
 
     /**
      * Obtains the amount of ships this empire is allowed to build at maximum.
@@ -234,15 +220,15 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public double getShipCapacity();
 
     /**
-     * Obtains the {@link Vector} of the {@link ActorSpec Actors} that are
+     * Obtains the {@link Vector} of the {@link Actor Actors} that are
      * currently assigned to the empire. The list is backing the internal actor
      * list, which is why it should NOT be modified directly. Use
-     * {@link #addActor(ActorSpec)} or {@link #removeActor(ActorSpec)} instead.
+     * {@link #addActor(Actor)} or {@link #removeActor(Actor)} instead.
      *
-     * @return A {@link Vector} of the {@link ActorSpec Actors} that are
+     * @return A {@link Vector} of the {@link Actor Actors} that are
      *         assigned to the empire.
      */
-    public @NotNull Vector<ActorSpec> getSLActors();
+    public @NotNull Vector<Actor> getSLActors();
 
     /**
      * Obtains the registry key of the current state of the empire. To obtain the
@@ -293,19 +279,11 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public boolean increaseTechnologyLevel(boolean notify, boolean force);
 
     /**
-     * Unassign a {@link ActorSpec} from the empire.
-     *
-     * @param actor The ActorSpec to unassign
-     */
-    public void removeActor(@NotNull ActorSpec actor);
-
-    /**
      * Unassign a {@link StateActor} from the empire.
      *
      * @param actor The StateActor to unassign
-     * @deprecated The direct use of Galimulator Actor API is not recommended and bound for removal.
+     * @since 2.0.0
      */
-    @Deprecated(since = "1.2", forRemoval = true)
     public void removeActor(@NotNull StateActor actor);
 
     /**
@@ -316,16 +294,6 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @param modifier The modifier to remove
      */
     public void removeCapacityModifier(@NotNull ShipCapacityModifier modifier);
-
-    /**
-     * Unassign a {@link ActorSpec} from the empire.
-     * Workaround through javac binding issues.
-     *
-     * @param actor The ActorSpec to unassign
-     */
-    public default void removeSLActor(@NotNull ActorSpec actor) {
-        removeActor(actor);
-    }
 
     /**
      * Removes a special to the empire. The implementation of the method may throw a
@@ -375,8 +343,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @param religion The new religion to preach
      * @implSpec The implementation has to allow null religions only on the neutral empire.
+     * @since 2.0.0
      */
-    public void setReligion(@NotNull Religion religion);
+    public void setReligion(@NotNull NamespacedKey religion);
 
     /**
      * Sets the state of the empire via a registry key that corresponds to the

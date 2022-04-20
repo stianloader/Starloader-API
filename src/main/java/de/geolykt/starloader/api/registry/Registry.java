@@ -52,6 +52,11 @@ public abstract class Registry<T> {
     public static Registry<WeaponsFactory> WEAPON_TYPES;
 
     /**
+     * Enum registry for the weapon types that can be used within the JSON actor definitions.
+     */
+    public static Registry<? extends Enum<?>> RELIGIONS;
+
+    /**
      * Internal map containing the key-value pairs of the registry for lookup.
      */
     protected final @NotNull Map<NamespacedKey, T> keyedValues = new HashMap<>();

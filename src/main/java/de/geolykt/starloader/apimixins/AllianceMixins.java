@@ -1,6 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +8,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
@@ -70,20 +71,6 @@ public class AllianceMixins implements Alliance {
     }
 
     @Override
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public @NotNull Color getAWTColor() {
-        return ((de.geolykt.starloader.impl.AWTColorAccesor) getColor()).asAWTColor();
-    }
-
-    @SuppressWarnings("null")
-    @Override
-    @NotNull
-    @Deprecated(forRemoval = true, since = "1.6.0")
-    public GalColor getColor() {
-        return color;
-    }
-
-    @Override
     public int getFoundationYear() {
         return startDate;
     }
@@ -96,8 +83,9 @@ public class AllianceMixins implements Alliance {
 
     @SuppressWarnings("null")
     @Override
-    public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
-        return getColor().getGDXColor();
+    @NotNull
+    public Color getGDXColor() {
+        return color.getGDXColor();
     }
 
     @SuppressWarnings({ "unchecked", "null" })

@@ -1,7 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import java.awt.Color;
-
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,6 +8,7 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 
+import snoddasmannen.galimulator.EmpireAnnals;
 import snoddasmannen.galimulator.GalColor;
 
 @Mixin(snoddasmannen.galimulator.EmpireAnnals.class)
@@ -34,20 +33,8 @@ public class EmpireAnnalsMixins implements Empire {
     public String nameIdentifier;
 
     @Override
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public @NotNull Color getAWTColor() {
-        return ((de.geolykt.starloader.impl.AWTColorAccesor) getColor()).asAWTColor();
-    }
-
-    @Override
     public int getCollapseYear() {
         return deathYear;
-    }
-
-    @SuppressWarnings("null")
-    @Override
-    public @NotNull GalColor getColor() {
-        return color;
     }
 
     @SuppressWarnings("null")
@@ -64,7 +51,7 @@ public class EmpireAnnalsMixins implements Empire {
     @SuppressWarnings("null")
     @Override
     public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
-        return getColor().getGDXColor();
+        return ((EmpireAnnals) (Object) this).getColor().getGDXColor();
     }
 
     @Override

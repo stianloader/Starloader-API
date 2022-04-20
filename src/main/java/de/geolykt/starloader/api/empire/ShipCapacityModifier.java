@@ -8,8 +8,9 @@ import de.geolykt.starloader.api.GameConfiguration;
 /**
  * A modifier that can be applied on an empire to modify the maximum amount of ships the empire can build.
  * Note that this modifier is not directly influenced by {@link GameConfiguration#getShipMultiplier()},
- * however it can be easily worked around as unlike the {@link de.geolykt.starloader.api.gui.Keybind} class the methods of the implementation
- * are polled whenever needed instead of only once, so the implementation can act however it chooses here.
+ * however it can be easily worked around as unlike the {@link de.geolykt.starloader.api.gui.Keybind} class
+ * the methods of the implementation are polled whenever needed instead of only once, so the implementation
+ * can act however it chooses here.
  *<br/><br/>
  * Note: this interface has a natural ordering that may be inconsistent with equals.
  */
@@ -38,7 +39,8 @@ public interface ShipCapacityModifier {
      *
      * @return The full description, if required
      */
-    public @Nullable String getDescription();
+    @Nullable
+    public String getDescription();
 
     /**
      * Obtains the title of the modifier, which should be a very brief description of the modifier.
@@ -48,14 +50,16 @@ public interface ShipCapacityModifier {
      *
      * @return A user-friendly String describing the modifier
      */
-    public @NotNull String getTitle();
+    @NotNull
+    public String getTitle();
 
     /**
      * Obtains the type of the modifier which dictates how {@link #getValue()} should be treated.
      *
      * @return The modifier type
      */
-    public @NotNull Type getType();
+    @NotNull
+    public Type getType();
 
     /**
      * The value of the modifier, what exactly it does depends on the type of the modifier as specified by {@link #getType()}.

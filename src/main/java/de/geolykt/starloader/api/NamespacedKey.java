@@ -9,12 +9,16 @@ import de.geolykt.starloader.mod.Extension;
 
 public class NamespacedKey {
 
-    private final @NotNull String keyString;
-    private final @Nullable Extension nameSpaceNamesake;
+    @NotNull
+    private final String keyString;
+
+    @Nullable
+    private final Extension namespaceNamesake;
+
     private String namespaceString; // initialised in a lazy manner
 
     public NamespacedKey(@NotNull Extension namespace, @NotNull String key) {
-        nameSpaceNamesake = namespace;
+        namespaceNamesake = namespace;
         namespaceString = null; // this is lazy as the empire description is only provided later on after a plugin was made.
         keyString = key;
     }
@@ -22,7 +26,7 @@ public class NamespacedKey {
     protected NamespacedKey(@NotNull String namespace, @NotNull String key) {
         namespaceString = namespace;
         keyString = key;
-        nameSpaceNamesake = null;
+        namespaceNamesake = null;
     }
 
     /**
@@ -30,7 +34,7 @@ public class NamespacedKey {
      * This is a workaround to a flaw within the starloader extensions structure.
      */
     private void calculateNamespace() {
-        Extension a = nameSpaceNamesake;
+        Extension a = namespaceNamesake;
         if (a == null) {
             throw new IllegalStateException("Both namespace and it's namesake is null.");
         }
@@ -61,12 +65,14 @@ public class NamespacedKey {
      *
      * @return The key of this key
      */
-    public @NotNull String getKey() {
+    @NotNull
+    public String getKey() {
         return keyString;
     }
 
     @SuppressWarnings("null")
-    public @NotNull String getNamespace() {
+    @NotNull
+    public String getNamespace() {
         if (namespaceString == null) {
             calculateNamespace();
         }

@@ -57,8 +57,10 @@ public interface MapModeRegistryPrototype {
      * might be needed on the function's side.
      *
      * <p>This method returns null if there should be no obvious colouring of star regions.
+     *
      * <p>The returned function will in turn return null for any non-null star if the star's overlaid region should not be painted
      * in any obvious color. The function may throw an exception if it is fed in a null star.
+     *
      * <p>If neither of the above conditions apply, the returned function must return a non-null color which should be used to
      * paint the overlaying region in a certain color.
      *

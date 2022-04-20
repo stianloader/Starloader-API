@@ -104,8 +104,9 @@ public final class NullUtils {
      *
      * @return null
      */
-    public static Object provideNull() {
-        return null;
+    @SuppressWarnings("null")
+    public static <T> T provideNull() {
+        return (T) null;
     }
 
     /**

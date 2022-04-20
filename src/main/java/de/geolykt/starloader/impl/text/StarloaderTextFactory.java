@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.graphics.Color;
+
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
-import de.geolykt.starloader.api.gui.text.TextColor;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 
-import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 
 public class StarloaderTextFactory implements TextFactory {
@@ -32,7 +32,7 @@ public class StarloaderTextFactory implements TextFactory {
     }
 
     @Override
-    public @NotNull FormattedText asFormattedText(@NotNull String text, @NotNull GalColor color) {
+    public @NotNull FormattedText asFormattedText(@NotNull String text, @NotNull Color color) {
         return new SingletonFormattedText(text, color);
     }
 
@@ -42,7 +42,7 @@ public class StarloaderTextFactory implements TextFactory {
     }
 
     @Override
-    public @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text, @NotNull GalColor color) {
+    public @NotNull FormattedTextComponent asFormattedTextComponent(@NotNull String text, @NotNull Color color) {
         return new SingletonTextComponent(text, color);
     }
 
@@ -51,10 +51,12 @@ public class StarloaderTextFactory implements TextFactory {
         return new StarloaderComponentBuilder(text);
     }
 
+    @SuppressWarnings("null")
     @Override
-    public @NotNull FormattedText asDefaultFormattedText(@NotNull String text) {
+    @NotNull
+    public FormattedText asDefaultFormattedText(@NotNull String text) {
         return new SingletonFormattedText(new SingletonTextComponent(
-                new ColoredFontspecificTextComponent(text, TextColor.WHITE.toGalimulatorColor(),
+                new ColoredFontspecificTextComponent(text, Color.WHITE,
                         NullUtils.requireNotNull(GalFX.FONT_TYPE.MONOTYPE_DEFAULT))));
     }
 }
