@@ -10,6 +10,7 @@ import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
 
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.ui.Widget;
 import snoddasmannen.galimulator.ui.class_13;
 
 /**
@@ -18,6 +19,7 @@ import snoddasmannen.galimulator.ui.class_13;
 public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
 
     protected final class_13 dialog;
+    private boolean closed = false;
 
     /**
      * Creates and displays a dialog.
@@ -35,6 +37,14 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
             @NotNull ArrayList<@NotNull BasicDialogCloseListener> closeListeners,
             @NotNull ArrayList<@NotNull WidgetActionListener> actionListeners, int duration, boolean playSFX) {
         dialog = Space.a(title, description, choices, duration, null, true);
+        dialog.a((Widget.WIDGET_MESSAGE msg) -> {
+            if (msg == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
+                closed = true;
+            }
+        });
+        dialog.a((Object obj) -> {
+            closed = true;
+        });
         dialog.a(new DialogCloseListenerWrapper(closeListeners, playSFX));
         dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));
     }
@@ -52,5 +62,10 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
     @Override
     public void close(@Nullable Object buttonPressed) {
         dialog.a(buttonPressed);
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
     }
 }

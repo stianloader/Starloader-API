@@ -10,6 +10,7 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
 import snoddasmannen.galimulator.ui.interface_0;
 
+// TODO interface_0 = OptionChooseListener
 public class DialogCloseListenerWrapper implements interface_0 {
 
     private final ArrayList<@NotNull BasicDialogCloseListener> listeners;

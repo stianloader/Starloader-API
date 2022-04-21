@@ -1,5 +1,7 @@
 package de.geolykt.starloader.impl;
 
+import java.util.Objects;
+
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 
@@ -17,9 +19,9 @@ public class EmperorOption extends class_42 {
     protected final Job job;
     protected final DynastyMember person;
 
-    public EmperorOption(EmploymentAgency parentClass, DynastyMember a, Job b, boolean c) {
-        super((Person) a, b, c);
-        person = a;
+    public EmperorOption(EmploymentAgency parentClass, DynastyMember person, Job b, boolean c) {
+        super((Person) Objects.requireNonNull(person, "The person may not be null!"), b, c);
+        this.person = person;
         job = b;
         agency = parentClass;
     }
