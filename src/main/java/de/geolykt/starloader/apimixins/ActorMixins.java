@@ -101,7 +101,7 @@ public abstract class ActorMixins implements Actor {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public @NotNull List<Weapon> getWeapons() {
-        if (!isStateActor()) {
+        if (isStateActor()) {
             return new ArrayList<>((Collection) ((StateActor) (Object) this).weapons);
         }
         return new ArrayList<>();

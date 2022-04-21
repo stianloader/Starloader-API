@@ -22,7 +22,7 @@ public interface WeaponType extends RegistryKeyed {
      * @see Actor#isStateActor()
      */
     public default @NotNull Weapon build(@NotNull Actor actor) {
-        if (actor.isStateActor()) {
+        if (!actor.isStateActor()) {
             throw new IllegalStateException("Actor cannot be a particle.");
         }
         return build(actor, null);

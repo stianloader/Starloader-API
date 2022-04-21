@@ -23,6 +23,7 @@ import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.sound.SoundHandler;
+import de.geolykt.starloader.api.utils.NoiseProvider;
 
 /**
  * Class to redirect to instance-wide constants or other static
@@ -516,6 +517,14 @@ public final class Galimulator {
     private static GameImplementation impl;
 
     /**
+     * The implementation of the {@link NoiseProvider} interface that should be returned
+     * by the SLAPI.
+     *
+     * @since 2.0.0
+     */
+    private static NoiseProvider noiseImpl;
+
+    /**
      * Connect two stars with each other. The preferred way of connecting two stars.
      *
      * @param starA the first Star to connect to the second star
@@ -636,6 +645,20 @@ public final class Galimulator {
      */
     public static @NotNull ActiveEmpire getNeutralEmpire() {
         return impl.getNeutralEmpire();
+    }
+
+    /**
+     * Obtains the currently active noise provider set by {@link #setNoiseProvider(NoiseProvider)}.
+     * Should there be no set noise provider, this method will return null but this can only occur if SLAPI
+     * was not initialized properly so this method is marked as NotNull anyways.
+     *
+     * @return The {@link NoiseProvider} that is currently exposed to API consumers.
+     * @since 2.0.0
+     */
+    @SuppressWarnings("null")
+    @NotNull
+    public static NoiseProvider getNoiseProvider() {
+        return noiseImpl;
     }
 
     /**
@@ -865,6 +888,17 @@ public final class Galimulator {
      */
     public static void setMap(@NotNull Map map) {
         impl.setMap(map);
+    }
+
+    /**
+     * Sets the {@link NoiseProvider} that should be used by the SLAPI and be supplied to consumers of the API.
+     *
+     * @param provider The provider to make use of
+     * @since 2.0.0
+     */
+    public static void setNoiseProvider(@NotNull NoiseProvider provider) {
+        NullUtils.requireNotNull(provider);
+        Galimulator.noiseImpl = provider;
     }
 
     /**

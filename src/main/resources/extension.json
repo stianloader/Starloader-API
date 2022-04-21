@@ -1,7 +1,8 @@
 {
   "entrypoint": "de.geolykt.starloader.StarloaderAPIExtension",
   "name": "StarloaderAPI",
-  "version": "1.6.0-SNAPSHOT",
+  "version": "2.0.0-SNAPSHOT",
   "mixinConfig": "api-mixins.json",
-  "accessWidener": "starloader-api.accesswidener"
+  "accessWidener": "starloader-api.accesswidener",
+  "dependencies": [ ]
 }
