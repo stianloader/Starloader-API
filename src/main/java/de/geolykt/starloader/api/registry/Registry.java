@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.gui.FlagSymbol;
+import de.geolykt.starloader.api.gui.MapMode;
 
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
-import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
-import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
 /**
@@ -39,12 +39,12 @@ public abstract class Registry<T> {
     /**
      * Enum registry for the symbols that can be used within the flags of empires.
      */
-    public static Registry<BuiltinSymbols> FLAG_SYMBOLS;
+    public static Registry<FlagSymbol> FLAG_SYMBOLS;
 
     /**
      * Enum registry for map modes.
      */
-    public static Registry<MapModes> MAP_MODES;
+    public static Registry<MapMode> MAP_MODES;
 
     /**
      * Enum registry for the weapon types that can be used within the JSON actor definitions.

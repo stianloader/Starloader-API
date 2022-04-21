@@ -9,6 +9,8 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
+import de.geolykt.starloader.api.gui.FlagSymbol;
+import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryExpander;
@@ -134,6 +136,7 @@ public final class Registries {
      * Creates, assigns and initializes the flag symbol registry.
      * It also emits the required events.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void initFlagSymbols() {
         LOGGER.info("Registering flag symbols");
         SimpleEnumRegistry<BuiltinSymbols> symbolRegistry = new SimpleEnumRegistry<>(BuiltinSymbols.class);
@@ -174,7 +177,7 @@ public final class Registries {
                 RegistryKeys.GALIMULATOR_FLAG_FUNNEL,
                 RegistryKeys.GALIMULATOR_FLAG_FRAME
         }, symbols);
-        Registry.FLAG_SYMBOLS = symbolRegistry;
+        Registry.FLAG_SYMBOLS = (Registry<FlagSymbol>) (Registry) symbolRegistry;
         EventManager.handleEvent(new RegistryRegistrationEvent(symbolRegistry, BuiltinSymbols.class, RegistryRegistrationEvent.REGISTRY_FLAG_SYMBOL));
     }
 
@@ -182,6 +185,7 @@ public final class Registries {
      * Creates, assigns and initializes the map modes registry.
      * It also emits the required events.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void initMapModes() {
         LOGGER.info("Registering map modes");
         SimpleEnumRegistry<MapModes> mapModeRegistry = new SimpleEnumRegistry<>(MapModes.class);
@@ -209,7 +213,7 @@ public final class Registries {
             mapModeRegistry.register(prototype.key, new SLMapMode(mapModeRegistry.getSize(), prototype));
             return true;
         });
-        Registry.MAP_MODES = mapModeRegistry;
+        Registry.MAP_MODES = (Registry<MapMode>) (Registry) mapModeRegistry;
         Event e = new RegistryRegistrationEvent(mapModeRegistry, MapModes.class, RegistryRegistrationEvent.REGISTRY_MAP_MODE);
         EventManager.handleEvent(e);
         expander.frozenMapModeRegistry = true;

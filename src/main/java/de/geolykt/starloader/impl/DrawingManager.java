@@ -35,7 +35,6 @@ import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.class_30;
 import snoddasmannen.galimulator.class_42;
 import snoddasmannen.galimulator.ui.Widget;
-import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
 
 public class DrawingManager implements DrawingImpl, TextureProvider {
 
@@ -213,7 +212,6 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     }
 
     @Override
-    @Deprecated(forRemoval = true, since = "1.6.0")
     public void showScreen(@NotNull Screen screen) {
         if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof Dialog) {
             LoggerFactory.getLogger(DrawingManager.class).warn("Tried to show a screen which uses galimulator's native dialog system. This operation will fail in the future.");
@@ -221,9 +219,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
             // We want to mimic this call:
             // arguments probably mean: screen, ???, type, closeOthers
             // Space.a((ck) screen, true, null, false);
-            var screenWrapper = new de.geolykt.starloader.impl.gui.SLScreenProjector(screen, true);
-            screenWrapper.a((WIDGET_ID) null);
-            Space.showWidget(screenWrapper);
+            throw new UnsupportedOperationException("Galimulator's native dialog API is no longer supported");
         } else if (screen instanceof Widget) {
             Space.showWidget((Widget) screen);
         } else {

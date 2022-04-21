@@ -59,7 +59,7 @@ public class EmpireAnnalsMixins implements Empire {
         if (deathYear != -1) {
             return 0;
         }
-        ActiveEmpire slempire = Galimulator.getEmpirePerUID(getUID());
+        ActiveEmpire slempire = Galimulator.getEmpireByUID(getUID());
         if (slempire == null) {
             throw new IllegalStateException("The empire no longer exists even though it should be existing");
         }

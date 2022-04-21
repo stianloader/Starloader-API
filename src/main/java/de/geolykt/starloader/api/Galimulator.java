@@ -79,21 +79,8 @@ public final class Galimulator {
          * @return The {@link ActiveEmpire} bound to the unique ID
          * @since 1.5.0
          */
-        public @Nullable ActiveEmpire getEmpireByUID(int uid);
-
-        /**
-         * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however
-         * there is no matching empire, the neutral empire is to be returned. Default
-         * implementation notice: The implementation of this method is very inefficient
-         * as it iterates over all known empires at worst. It is advisable that the extensions
-         * make use of caching.
-         *
-         * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
-         * @return The {@link ActiveEmpire} bound to the unique ID
-         * @deprecated The name of this method is a bit unconventional, use {@link #getEmpireByUID(int)} instead.
-         */
-        @Deprecated(forRemoval = true, since = "1.5.0")
-        public @Nullable ActiveEmpire getEmpirePerUID(int uid);
+        @Nullable
+        public ActiveEmpire getEmpireByUID(int uid);
 
         /**
          * Gets the currently registered active empires. Note that like many other
@@ -107,7 +94,8 @@ public final class Galimulator {
          *
          * @return A {@link List} of {@link ActiveEmpire empires} that are known
          */
-        public @NotNull List<@NotNull ActiveEmpire> getEmpires();
+        @NotNull
+        public List<@NotNull ActiveEmpire> getEmpires();
 
         /**
          * Get the year in-game. The year is rarely a negative number and should not get
@@ -126,22 +114,6 @@ public final class Galimulator {
          * @return The currently active map
          */
         public @NotNull Map getMap();
-
-        /**
-         * Obtains the mapmode that was registered to this key. If there is no map mode that is registered to it,
-         * then null should be returned
-         *
-         * @return The map mode bound to the key, or null if none were found
-         */
-        public @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key);
-
-        /**
-         * Obtains all currently registered map modes.
-         * Map modes cannot be unregistered, so chances are those will also be valid in the future.
-         *
-         * @return All valid map modes
-         */
-        public @NotNull MapMode[] getMapModes();
 
         /**
          * Convenience method to obtain the neutral empire. The neutral empire should
@@ -264,19 +236,6 @@ public final class Galimulator {
 
         /**
          * Registers the given keybind to the list of active keybinds.
-         * The keybind keycode and character will only be requested once and cannot
-         * be changed dynamically.
-         *
-         * @param bind The keybind to register.
-         * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} interface is deprecated for removal
-         */
-        @Deprecated(forRemoval = true, since = "1.3.0")
-        public void registerKeybind(de.geolykt.starloader.api.gui.@NotNull Keybind bind);
-
-        /**
-         * Registers the given keybind to the list of active keybinds.
-         * Unlike {@link #registerKeybind(de.geolykt.starloader.api.gui.Keybind)} this does actually change
-         * dynamically.
          *
          * @param bind The keybind to register.
          */
@@ -477,17 +436,18 @@ public final class Galimulator {
         public void setArtifactsUnsafe(Vector<?> artifacts);
 
         /**
-         * Sets the internal list of cooperations that are currently active.
+         * Sets the internal list of corporations that are currently active.
          * It is not exactly known whether this feature is implemented and usable
          * nor whether the feature will get implemented anytime soon. It may even get removed
          * without notice, though this will be announced as something like that would
-         * result in savegames to break.
+         * result in savegame to break.
          * SLAPI makes no effort in wrapping the underlying data structure until it is
          * implemented in a functional manner.
          *
          * @param cooperations The internal list of cooperations
+         * @since 2.0.0
          */
-        public void setCooperationsUnsafe(Vector<?> cooperations);
+        public void setCorporationsUnsafe(Vector<?> corporations);
 
         /**
          * Sets an internal list of disrupted stars.
@@ -609,8 +569,8 @@ public final class Galimulator {
      * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
      * @return The {@link ActiveEmpire} bound to the unique ID
      */
-    public static @Nullable ActiveEmpire getEmpirePerUID(int uid) {
-        return impl.getEmpirePerUID(uid);
+    public static @Nullable ActiveEmpire getEmpireByUID(int uid) {
+        return impl.getEmpireByUID(uid);
     }
 
     /**
@@ -667,26 +627,6 @@ public final class Galimulator {
     }
 
     /**
-     * Obtains the mapmode that was registered to this key. If there is no map mode that is registered to it,
-     * then null should be returned
-     *
-     * @return The map mode bound to the key, or null if none were found
-     */
-    public static @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key) {
-        return impl.getMapmodeByKey(Objects.requireNonNull(key, "Null registry key!"));
-    }
-
-    /**
-     * Obtains all currently registered map modes.
-     * Map modes cannot be unregistered, so chances are those will also be valid in the future.
-     *
-     * @return All valid map modes
-     */
-    public static @NotNull MapMode[] getMapModes() {
-        return impl.getMapModes();
-    }
-
-    /**
      * Convenience method to obtain the neutral empire. The neutral empire should
      * NOT be ticked as it may create serious side effects within the ticking
      * mechanism. Additionally merging or destroying the empire might have serious
@@ -709,47 +649,12 @@ public final class Galimulator {
     }
 
     /**
-     * Obtains the int code of the galimulator version; this int code is bumped for
-     * every beta release and is -1 for stable releases. Note that this int code
-     * isn't anything official and the sole authority over this code are the
-     * developers of the Starloader API; additionally there might be cases where
-     * this int code is out of place, this is because there is no serious way of
-     * getting which release this is, other than looking a the hashcode or last
-     * modification date of the executable.
-     *
-     * @return -1
-     * @deprecated The return value of this method is questionable
-     */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    public static int getReleaseCode() {
-        return -1;
-    }
-
-    /**
      * Obtains the currently active {@link SoundHandler}.
      *
      * @return The active {@link SoundHandler}.
      */
     public static @NotNull SoundHandler getSoundHandler() {
         return impl.getSoundHandler();
-    }
-
-    /**
-     * Obtains the version of galimulator the Starloader API was
-     * developed against. This sortof dictates what features are to be
-     * expected to be included within the API and was such can be used
-     * for cross-version applications.
-     * Alternatively it could be parsed from the "version" file in the data
-     * directory, which is also an excellent way of knowing that this version
-     * is supported or not given that the data directory is very important
-     * to the runtime of the game.
-     *
-     * @return "4.10"
-     * @deprecated This method is implemented in an inconsistent manner. The return value is questionable
-     */
-    @Deprecated(forRemoval = true, since = "1.6.0")
-    public static String getSourceVersion() {
-        return "4.10";
     }
 
     /**
@@ -859,21 +764,6 @@ public final class Galimulator {
 
     /**
      * Registers the given keybind to the list of active keybinds.
-     * The keybind keycode and character will only be requested once and cannot
-     * be changed dynamically.
-     *
-     * @param bind The keybind to register.
-     * @deprecated The {@link de.geolykt.starloader.api.gui.Keybind} class is deprecated for removal
-     */
-    @Deprecated(forRemoval = true, since = "1.3.0")
-    public static void registerKeybind(de.geolykt.starloader.api.gui.@NotNull Keybind bind) {
-        impl.registerKeybind(bind);
-    }
-
-    /**
-     * Registers the given keybind to the list of active keybinds.
-     * Unlike {@link #registerKeybind(de.geolykt.starloader.api.gui.Keybind)} this does actually change
-     * dynamically.
      *
      * @param bind The keybind to register.
      */

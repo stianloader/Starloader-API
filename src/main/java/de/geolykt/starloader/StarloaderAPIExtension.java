@@ -2,8 +2,6 @@ package de.geolykt.starloader;
 
 import java.io.File;
 
-import org.slf4j.Logger;
-
 import com.badlogic.gdx.files.FileHandle;
 
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
@@ -36,12 +34,8 @@ import de.geolykt.starloader.mod.Extension;
 @SuppressWarnings("resource")
 public class StarloaderAPIExtension extends Extension {
 
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public static Logger lggr;
-
     @Override
     public void preInitialize() {
-        lggr = this.getLogger();
         // We had to move this to preinit as some AWs are bork in SLL 2.0.0 and below, however
         // some of these versions are still supported by the current SLAPI version
         ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());
@@ -56,8 +50,8 @@ public class StarloaderAPIExtension extends Extension {
     static {
         File dataFolder = new File("data");
         DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), NullUtils.requireNotNull(dataFolder.toPath())));
-        MinestomRootClassLoader.getInstance().addCodeModifier(new UIASMTransformer());
-        MinestomRootClassLoader.getInstance().addCodeModifier(new SpaceASMTransformer());
+        MinestomRootClassLoader.getInstance().addTransformer(new UIASMTransformer());
+        MinestomRootClassLoader.getInstance().addTransformer(new SpaceASMTransformer());
         Galimulator.setImplementation(new GalimulatorImplementation());
         Galimulator.setConfiguration(new GalimulatorConfiguration());
         Drawing.setImplementation(new DrawingManager());

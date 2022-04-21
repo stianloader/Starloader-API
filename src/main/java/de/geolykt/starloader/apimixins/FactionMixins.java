@@ -81,7 +81,7 @@ public class FactionMixins implements Faction {
 
     @Override
     public @NotNull ActiveEmpire getHostEmpire() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(getHost()), "Unable to find empire " + getHost());
+        return NullUtils.requireNotNull(Galimulator.getEmpireByUID(getHost()), "Unable to find empire " + getHost());
     }
 
     @Override

@@ -10,20 +10,6 @@ public interface TextRenderable extends Renderable {
 
     /**
      * Renders the text on screen at the given coordinates. The view may get
-     * unprojected depending on the context
-     *
-     * @param x The X-Coordinate of the rendering position
-     * @param y The Y-Coordinate of the rendering position
-     * @deprecated It is highly recommended to make use of the camera
-     */
-    @Override
-    @Deprecated(forRemoval = true, since = "1.4.0")
-    public default void render(float x, float y) {
-        renderText(x, y);
-    }
-
-    /**
-     * Renders the text on screen at the given coordinates. The view may get
      * unprojected with the given camera.
      * It may be more useful to use {@link #renderTextAt(float, float, Camera)} instead
      * as it will print the width of the text.

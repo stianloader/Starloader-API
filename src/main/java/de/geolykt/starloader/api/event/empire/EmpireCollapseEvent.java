@@ -59,17 +59,6 @@ public class EmpireCollapseEvent extends EmpireEvent implements Cancellable {
     }
 
     /**
-     * Obtains the empire that collapsed.
-     *
-     * @return The collapsed empire
-     * @deprecated The method was replaced with {@link #getTargetEmpire()}.
-     */
-    @Deprecated(forRemoval = true, since = "1.1.0")
-    public @NotNull ActiveEmpire getCollapsedEmpire() {
-        return getTargetEmpire();
-    }
-
-    /**
      * Obtains the cause of the event.
      *
      * @return The {@link EmpireCollapseCause} that is assigned to this event

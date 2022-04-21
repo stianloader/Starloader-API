@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.GameConfiguration;
 import de.geolykt.starloader.api.NamespacedKey;
@@ -66,28 +65,6 @@ import snoddasmannen.galimulator.class_41;
 
 @Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
-
-    /**
-     * The last year in which the neutral empire was ticked.
-     *
-     * @deprecated This field only exist for redundancy checking for the {@link de.geolykt.starloader.api.event.TickEvent},
-     * which is a class that is deprecated for removal.
-     */
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    private static transient int lastTick = -1;
-
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    private static final void emitTick() {
-        // Two layers of redundancy should be enough
-        if (lastTick != Galimulator.getGameYear() && de.geolykt.starloader.api.event.TickEvent.tryAquireLock()) {
-            EventManager.handleEvent(new de.geolykt.starloader.api.event.TickEvent());
-            de.geolykt.starloader.api.event.TickEvent.releaseLock();
-            lastTick = Galimulator.getGameYear();
-        } else {
-            DebugNagException.nag("Invalid, nested or recursive tick detected, skipping tick!"
-                    + " This usually indicates a broken neutral empire");
-        }
-    }
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -757,9 +734,6 @@ public class EmpireMixins implements ActiveEmpire {
      */
     @Inject(method = "tickEmpire()V", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
-        if (this == Galimulator.getNeutralEmpire()) {
-            emitTick();
-        }
         if (tickCallbacks == null) {
             tickCallbacks = new ArrayList<>();
         }

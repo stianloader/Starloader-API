@@ -39,12 +39,12 @@ public class MapModesMixins implements MapMode {
         if (var0 == null) {
             return null;
         }
-        return Registry.MAP_MODES.getIntern(var0);
+        return (MapModes) Registry.MAP_MODES.getIntern(var0);
     }
 
     @Overwrite
     public static MapModes[] values() {
-        return Registry.MAP_MODES.getValues();
+        return (MapModes[]) Registry.MAP_MODES.getValues();
     }
 
     @Unique

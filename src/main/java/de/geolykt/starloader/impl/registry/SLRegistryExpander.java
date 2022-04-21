@@ -20,7 +20,6 @@ import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryExpander;
 
 import snoddasmannen.galimulator.EmpireSpecial;
-import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 
 /**
  * The default base implementation of {@link RegistryExpander.Implementation}.
@@ -96,13 +95,13 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
     @Override
     public @NotNull FlagSymbol addFlagSymbol(@NotNull NamespacedKey key, @NotNull String enumName,
             @NotNull String sprite, boolean mustBeSquare, int width, int height) {
-        Registry<BuiltinSymbols> registry = Registry.FLAG_SYMBOLS;
+        Registry<FlagSymbol> registry = Registry.FLAG_SYMBOLS;
         if (registry == null) {
             throw new IllegalStateException("The FLAG_SYMBOLS registry is not yet set up. (Protip: use the RegistryRegistrationEvent to register your symbol lazily.)");
         }
-        SLSymbol symbol = new SLSymbol(enumName, registry.getValues().length, sprite, mustBeSquare, width, height);
+        FlagSymbol symbol = (FlagSymbol) new SLSymbol(enumName, registry.getValues().length, sprite, mustBeSquare, width, height);
         registry.register(key, symbol);
-        return (FlagSymbol) (Object) symbol;
+        return symbol;
     }
 
     @Override

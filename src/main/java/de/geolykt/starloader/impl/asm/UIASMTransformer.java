@@ -1,7 +1,6 @@
 package de.geolykt.starloader.impl.asm;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -17,13 +16,14 @@ import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.SidebarInjector.Orientation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
 import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import de.geolykt.starloader.transformers.ASMTransformer;
 
 import snoddasmannen.galimulator.ui.Widget;
 
 /**
  * Code transformer that applies to the UI package and various other UI-related calls.
  */
-public final class UIASMTransformer extends net.minestom.server.extras.selfmodification.CodeModifier {
+public final class UIASMTransformer extends ASMTransformer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UIASMTransformer.class);
 
@@ -54,8 +54,17 @@ public final class UIASMTransformer extends net.minestom.server.extras.selfmodif
     }
 
     @Override
-    public @Nullable String getNamespace() {
-        return "snoddasmannen.galimulator.ui";
+    public boolean accept(@NotNull ClassNode node) {
+        if (node.name.equals(mainSidebarClass)) {
+            transformSidebarClass(node);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isValidTraget(@NotNull String internalName) {
+        return internalName.replace('/', '.').equals(mainSidebarClass);
     }
 
     private void sidebarInjectHelper(@NotNull String flag, @NotNull String methodName, @NotNull ClassNode source) {
@@ -106,27 +115,8 @@ public final class UIASMTransformer extends net.minestom.server.extras.selfmodif
         }
     }
 
-    @Override
-    public boolean transform(ClassNode source) {
-        if (source == null) {
-            throw new NullPointerException(); // As you can see, the API was designed brilliantly
-        }
-        if (source.name.equals(mainSidebarClass)) {
-            transformSidebarClass(source);
-            return true;
-        }
-        return false;
-    }
-
     public void transformSidebarClass(@NotNull ClassNode source) {
         sidebarInjectHelper("FileButton.png", "sideBarTop", source);
         sidebarInjectHelper("peoplebutton.png", "sideBarBottom", source);
-        /*ClassWriter cw = new ClassWriter(0);
-        source.accept(cw);
-        try (FileOutputStream fos = new FileOutputStream(new File("sidebar.class"))) {
-            fos.write(cw.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 }

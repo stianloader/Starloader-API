@@ -89,7 +89,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         this.widthProvider = null;
         this.width = width;
         this.headerColor = Objects.requireNonNull(headerColor, "Null header color");
-        this.components = new SimpleScreenChildList(this);
+        this.components = new ArrayList<>();
         for (ComponentSupplier provider : components2) {
             provider.supplyComponent(this, components);
         }
@@ -117,7 +117,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         this.widthProvider = Objects.requireNonNull(widthProvider, "The width provider may not be null.");
         this.width = -1;
         this.headerColor = Objects.requireNonNull(headerColor, "Null header color");
-        this.components = new SimpleScreenChildList(this);
+        this.components = new ArrayList<>();
         for (ComponentSupplier provider : Objects.requireNonNull(componentProviders, "Null component providers")) {
             provider.supplyComponent(this, components);
         }

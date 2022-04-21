@@ -28,7 +28,7 @@ public class BuiltinSymbolsMixins implements FlagSymbol {
 
     @Overwrite
     public static BuiltinSymbols b() {
-        BuiltinSymbols[] var0 = Registry.FLAG_SYMBOLS.getValues();
+        BuiltinSymbols[] var0 = (BuiltinSymbols[]) Registry.FLAG_SYMBOLS.getValues();
         return var0[ThreadLocalRandom.current().nextInt(var0.length)];
     }
 
@@ -49,12 +49,12 @@ public class BuiltinSymbolsMixins implements FlagSymbol {
         if (var0 == null) {
             return null;
         }
-        return Registry.FLAG_SYMBOLS.getIntern(var0);
+        return (BuiltinSymbols) Registry.FLAG_SYMBOLS.getIntern(var0);
     }
 
     @Overwrite
     public static BuiltinSymbols[] values() {
-        return Registry.FLAG_SYMBOLS.getValues();
+        return (BuiltinSymbols[]) Registry.FLAG_SYMBOLS.getValues();
     }
 
     @Shadow

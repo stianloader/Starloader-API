@@ -33,18 +33,6 @@ public class GalaxySavingEvent extends Event {
      * Constructor.
      *
      * @param reason the reason why the event was fired.
-     *
-     * @deprecated The event now supplies the location of the save game, which is not provided by the constructor.
-     */
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public GalaxySavingEvent(String reason) {
-        this(reason == null ? "unknown" : reason, "unknown", false);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param reason the reason why the event was fired.
      * @param location The location where the game state was saved to
      * @param natural Whether the event was not (indirectly or directly) caused by another mod
      */

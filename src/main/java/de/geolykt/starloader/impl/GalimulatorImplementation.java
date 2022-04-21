@@ -40,7 +40,6 @@ import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
-import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.api.sound.SoundHandler;
 
@@ -74,18 +73,6 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @return The converted map mode
      */
     private static @NotNull MapMode toSLMode(@NotNull MapModes mode) {
-        return (MapMode) (Object) mode;
-    }
-
-    /**
-     * Converts a Galimulator map mode into a starloader API map mode.
-     * This is a clean cast and should never throw exception, except if there is an issue unrelated to this method.
-     * This is the nullable alternative to {@link #toSLMode(MapModes)} and only the annotations have changed.
-     *
-     * @param mode The map mode to convert
-     * @return The converted map mode
-     */
-    private static @Nullable MapMode toSLModeNullable(@Nullable MapModes mode) {
         return (MapMode) (Object) mode;
     }
 
@@ -141,12 +128,6 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return (ActiveEmpire) Space.e(uid);
     }
 
-    @Override
-    @Deprecated(forRemoval = true, since = "1.5.0")
-    public @Nullable ActiveEmpire getEmpirePerUID(int uid) {
-        return getEmpireByUID(uid);
-    }
-
     @SuppressWarnings({ "null" })
     @Override
     public @NotNull List<@NotNull ActiveEmpire> getEmpires() {
@@ -175,17 +156,6 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public @NotNull Map getMap() {
         return (Map) Space.getMapData();
-    }
-
-    @Override
-    public @Nullable MapMode getMapmodeByKey(@NotNull NamespacedKey key) {
-        return toSLModeNullable(Registry.MAP_MODES.get(key));
-    }
-
-    @SuppressWarnings("null")
-    @Override
-    public @NotNull MapMode[] getMapModes() {
-        return (MapMode[]) (Object[]) Registry.MAP_MODES.getValues();
     }
 
     @SuppressWarnings("null")
@@ -313,7 +283,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         setActorsUnsafe(NullUtils.requireNotNull((Vector) spaceState.actors));
         setAlliancesUnsafe(NullUtils.requireNotNull((Vector) spaceState.alliances));
         setArtifactsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.artifacts));
-        setCooperationsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.corporations));
+        setCorporationsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.corporations));
         setDisruptedStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.disruptedStars));
         setEmpiresUnsafe(NullUtils.requireNotNull((Vector) spaceState.empires));
         setPeopleUnsafe(NullUtils.requireNotNull((Vector) spaceState.persons));
@@ -400,21 +370,6 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void recalculateVoronoiGraphs() {
         Space.ao();
-    }
-
-    @Override
-    @Deprecated(forRemoval = true, since = "1.3.0")
-    public void registerKeybind(de.geolykt.starloader.api.gui.@NotNull Keybind bind) {
-        Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
-        if (bind.getCharacter() != '\0') {
-            Main.shortcuts.add(new SLKeybind(bind, bind.getCharacter()));
-        } else {
-            String desc = bind.getKeycodeDescription();
-            if (desc == null) {
-                throw new IllegalArgumentException("The keycode description of the argument is null!");
-            }
-            Main.shortcuts.add(new SLKeybind(bind, desc, bind.getKeycode()));
-        }
     }
 
     @Override
@@ -531,9 +486,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("rawtypes")
     @Override
-    // TODO rename to corporations - old name is a typo
-    public void setCooperationsUnsafe(Vector<?> cooperations) {
-        Space.corporations = NullUtils.requireNotNull((Vector) cooperations);
+    public void setCorporationsUnsafe(Vector<?> corporations) {
+        Space.corporations = NullUtils.requireNotNull((Vector) corporations);
     }
 
     @Override

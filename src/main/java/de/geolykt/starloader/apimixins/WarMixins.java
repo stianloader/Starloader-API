@@ -36,12 +36,12 @@ public class WarMixins implements War {
 
     @Override
     public @NotNull Empire getEmpireA() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e1.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
+        return NullUtils.requireNotNull(Galimulator.getEmpireByUID(((snoddasmannen.galimulator.War) (Object) this).e1.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override
     public @NotNull Empire getEmpireB() {
-        return NullUtils.requireNotNull(Galimulator.getEmpirePerUID(((snoddasmannen.galimulator.War) (Object) this).e2.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
+        return NullUtils.requireNotNull(Galimulator.getEmpireByUID(((snoddasmannen.galimulator.War) (Object) this).e2.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override

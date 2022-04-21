@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -35,6 +34,7 @@ import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import de.geolykt.starloader.transformers.ASMTransformer;
 
 import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
@@ -46,7 +46,7 @@ import snoddasmannen.galimulator.interface_9;
  * This might be changed once we move to the actual ASM Transformer class instead of the out-dated and deprecated
  * CodeModifier class which is less performant for higher numbers due to it never getting purged
  */
-public class SpaceASMTransformer extends net.minestom.server.extras.selfmodification.CodeModifier {
+public class SpaceASMTransformer extends ASMTransformer {
 
     /**
      * The internal name of the {@link ActiveEmpire} class.
@@ -220,12 +220,7 @@ public class SpaceASMTransformer extends net.minestom.server.extras.selfmodifica
     }
 
     @Override
-    public @Nullable String getNamespace() {
-        return "snoddasmannen.galimulator";
-    }
-
-    @Override
-    public boolean transform(ClassNode source) {
+    public boolean accept(@NotNull ClassNode source) {
         if (source.name.equals(SPACE_CLASS)) {
             for (MethodNode method : source.methods) {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
@@ -373,5 +368,17 @@ public class SpaceASMTransformer extends net.minestom.server.extras.selfmodifica
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isValidTraget(@NotNull String internalName) {
+        if (!internalName.startsWith("sno")) {
+            return false;
+        }
+        String fqn = internalName.replace('.', '/');
+        return fqn.equals(SPACE_CLASS)
+                || fqn.equals("snoddasmannen/galimulator/factions/Faction")
+                || fqn.equals("snoddasmannen/galimulator/Star")
+                || fqn.equals(gestureListenerClass);
     }
 }

@@ -14,15 +14,11 @@ import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.screen.TextScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
-import de.geolykt.starloader.impl.gui.SLAbstractWidget;
-
-import snoddasmannen.galimulator.dialog.DialogComponent;
-import snoddasmannen.galimulator.ui.Widget;
 
 /**
  * The default implementation of {@link TextScreenComponent}.
  */
-public class SLTextScreenComponent implements TextScreenComponent, SLScreenComponent, DialogComponent {
+public class SLTextScreenComponent implements TextScreenComponent {
 
     protected FormattedText currentText;
     protected Screen parent;
@@ -35,37 +31,6 @@ public class SLTextScreenComponent implements TextScreenComponent, SLScreenCompo
 
     public SLTextScreenComponent(@NotNull Supplier<@NotNull FormattedText> textSupplier) {
         this.textSupplier = Objects.requireNonNull(textSupplier, "Tried to create object with null text supplier.");
-    }
-
-    @Override
-    public Widget b(boolean boolean1) {
-        return new SLAbstractWidget() {
-
-            @Override
-            public int getHeight() { // height
-                return Galimulator.getConfiguration().getMinimumComponentHeight();
-            }
-
-            @Override
-            public int getWidth() { // width (I assume)
-                return getParentScreen().getInnerWidth();
-            }
-
-            @Override
-            public void onRender() {
-                // TODO galimulator is a lot more complicated than I expected with text drawing. Perhaps it is better to introduce even more drawing methods.
-                Camera camera = this.getCamera();
-                if (camera == null) {
-                    camera = getParentScreen().getCamera();
-                }
-                getText().renderAt(4.0F, this.getHeight(), NullUtils.requireNotNull(camera, "The camera is null, strange isn't it? Not that I fully expect this to happen or anything. But it will be the future me to resolve this either way, so fuck it."));
-            }
-        };
-    }
-
-    @Override
-    public String e() {
-        return null; // Not entirely sure what this does, perhaps it is for categories?
     }
 
     @Override
@@ -98,11 +63,6 @@ public class SLTextScreenComponent implements TextScreenComponent, SLScreenCompo
     }
 
     @Override
-    public boolean hasParentScreen() {
-        return parent != null;
-    }
-
-    @Override
     public boolean isDynamic() {
         return textSupplier != null;
     }
@@ -110,11 +70,6 @@ public class SLTextScreenComponent implements TextScreenComponent, SLScreenCompo
     @Override
     public boolean isSameType(@NotNull ScreenComponent component) {
         return component instanceof SLTextScreenComponent;
-    }
-
-    @Override
-    public void setParentScreen(@NotNull Screen parent) {
-        this.parent = Objects.requireNonNull(parent, "Tried to set parent screen to null.");
     }
 
     @Override

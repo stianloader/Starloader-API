@@ -18,6 +18,6 @@ public class MapModeMixins {
     @SuppressWarnings("null")
     @Overwrite
     public void rotateCurrentMode() {
-        currentMode = Registry.MAP_MODES.nextValue(currentMode);
+        currentMode = (MapModes) Registry.MAP_MODES.nextValue((de.geolykt.starloader.api.gui.MapMode) currentMode);
     }
 }

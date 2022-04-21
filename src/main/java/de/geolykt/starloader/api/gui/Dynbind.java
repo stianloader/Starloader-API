@@ -5,11 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.Input;
 
 /**
- * Dynamic Keybind - short Dynbind. They are functionally similar to the regular keybind with the
- * added difference that the Starloader API implementation <b>has</b> to always query the methods described
- * by the interface, where as for the regular {@link Keybind} class this is only done once and cached afterwards.
+ * Dynamic Keybind - short Dynbind.
+ * The Starloader API implementation <b>has</b> to always query the methods described
+ * by the interface, without caching.
  * Due to this, implementations of this interface (theoretically) allow for handling multiple keys at once, but the
  * implementation will hardly differentiate between them.
+ *
+ * <p>This interface does not allow for remapping keys, which is something that may be desirable later on.
+ * However, such a change will likely result in yet another version of a hotkey interface.
  */
 public interface Dynbind {
 
@@ -19,7 +22,8 @@ public interface Dynbind {
      *
      * @return The description of this keybind
      */
-    public @NotNull String getDescription();
+    @NotNull
+    public String getDescription();
 
     /**
      * The description of the key. This is exposed to the user, so it should be user friendly.
@@ -28,7 +32,8 @@ public interface Dynbind {
      *
      * @return The description of the key(s) used by this keybind
      */
-    public @NotNull String getKeyDescription();
+    @NotNull
+    public String getKeyDescription();
 
     /**
      * Checks whether the character is valid for this keybind at this moment.

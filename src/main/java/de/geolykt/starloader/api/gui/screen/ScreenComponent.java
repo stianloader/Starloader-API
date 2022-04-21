@@ -77,10 +77,4 @@ public interface ScreenComponent extends Renderable {
      * @return Whether this component is of a similar type to the other component
      */
     public boolean isSameType(@NotNull ScreenComponent component);
-
-    @Override
-    @Deprecated(forRemoval = true, since = "1.4.0")
-    public default void render(float x, float y) {
-        throw new UnsupportedOperationException("The camera of the parent object needs to be known in order to render the component.");
-    }
 }
