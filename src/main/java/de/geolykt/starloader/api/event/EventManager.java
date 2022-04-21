@@ -2,7 +2,6 @@ package de.geolykt.starloader.api.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,8 +45,8 @@ public final class EventManager {
                     DebugNagException.nag("Invalid parameter count for event handler within listener!");
                     continue;
                 }
-                if (!Modifier.isPublic(method.getModifiers())) {
-                    DebugNagException.nag("Inaccessible EventHandler within listener!");
+                if (!method.canAccess(listener) && !method.trySetAccessible()) {
+                    DebugNagException.nag("Cannot make method " + method + " accessible!");
                     continue;
                 }
                 handlers.add(method);

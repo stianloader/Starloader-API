@@ -19,11 +19,11 @@ import snoddasmannen.galimulator.Space;
 public class InstanceMixins {
 
     @Overwrite
-    public static void h(final String j) {
+    public static void setBackgroundTaskDescription(final String j) {
         // this method is called to show the progress of things happening to the user
         // however we can exploit this behaviour to create events without having to overwrite large static methods
         // one day we will have a custom ASM injector for that, but that is something for later.
-        // Though I am confused on why the hell this method exists, it only performs a single, very easy to do operation
+        // Though I am confused on why the hell this method exists upstream, as it only performs few, rather easy to do operations
         Event evt = null;
         switch (j) {
         case "Generating galaxy":
@@ -39,6 +39,7 @@ public class InstanceMixins {
         if (evt != null) {
             EventManager.handleEvent(evt);
         }
-        Space.J = j;
+        Space.backgroundTaskDescription = j;
+        Space.K = null;
     }
 }

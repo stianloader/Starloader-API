@@ -45,6 +45,6 @@ public class Buildscript extends StarloaderStarplaneProject implements Descripti
     }
 
     static {
-        System.setProperty("de.geolykt.starplane.nocache", "true");
+        //System.setProperty("de.geolykt.starplane.nocache", "true");
     }
 }

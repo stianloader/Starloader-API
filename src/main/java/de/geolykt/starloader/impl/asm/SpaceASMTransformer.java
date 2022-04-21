@@ -28,6 +28,7 @@ import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
+import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratedEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
@@ -74,6 +75,16 @@ public class SpaceASMTransformer extends ASMTransformer {
     @StarplaneReobfuscateReference
     @NotNull
     public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
+
+    /**
+     * The remapped name of the "generateGalaxy" method.
+     *
+     * @since 2.0.0
+     * @see StarplaneReobfuscateReference
+     */
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String generateGalaxyMethod = "snoddasmannen/galimulator/Space.generateGalaxy(ILsnoddasmannen/galimulator/MapData;)V";
 
     /**
      * The internal name of the class you are viewing right now right here.
@@ -131,8 +142,17 @@ public class SpaceASMTransformer extends ASMTransformer {
         EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE_LOGICAL));
     }
 
+    public static final void generateGalaxy(boolean finished) {
+        if (finished) {
+            EventManager.handleEvent(new GalaxyGeneratedEvent());
+        } else {
+            DebugNagException.nag();
+        }
+        // TODO do
+    }
+
     public static final void save(String cause, String location) {
-        Space.J = "Saving galaxy: " + cause;
+        Space.backgroundTaskDescription = "Saving galaxy: " + cause;
         LOGGER.info("Saving state to disk.");
         GalimulatorImplementation.suppressSaveEvent = true;
         EventManager.handleEvent(new GalaxySavingEvent(NullUtils.requireNotNull(cause, "cause is null"), NullUtils.requireNotNull(location, "location is null"), true));
@@ -222,6 +242,7 @@ public class SpaceASMTransformer extends ASMTransformer {
     @Override
     public boolean accept(@NotNull ClassNode source) {
         if (source.name.equals(SPACE_CLASS)) {
+            String generateGalaxyMethodName = generateGalaxyMethod.split("[\\.\\(]", 3)[1];
             for (MethodNode method : source.methods) {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
                     addEmpireCollapseListener(method);
@@ -237,6 +258,22 @@ public class SpaceASMTransformer extends ASMTransformer {
                     method.instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "save", "(Ljava/lang/String;Ljava/lang/String;)V"));
                     method.instructions.add(new InsnNode(Opcodes.RETURN));
                     method.tryCatchBlocks.clear();
+                } else if (method.name.equals(generateGalaxyMethodName) && method.desc.equals("(ILsnoddasmannen/galimulator/MapData;)V")) {
+                    AbstractInsnNode returnInsn = null;
+                    for (AbstractInsnNode insn : method.instructions) {
+                        if (insn.getOpcode() == Opcodes.RETURN) {
+                            if (returnInsn != null) {
+                                throw new IllegalStateException("Bytecode is no longer laid out as expected");
+                            }
+                            returnInsn = insn;
+                        }
+                    }
+                    if (returnInsn == null) {
+                        throw new IllegalStateException("There is no return opcode in this method. Is this even valid java?");
+                    }
+                    MethodInsnNode insn = new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "generateGalaxy", "(Z)V");
+                    method.instructions.insertBefore(returnInsn, new InsnNode(Opcodes.ICONST_1)); // load true into the stack
+                    method.instructions.insertBefore(returnInsn, insn);
                 }
             }
             return true;
