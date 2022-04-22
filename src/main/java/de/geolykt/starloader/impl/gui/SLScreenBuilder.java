@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.IntSupplier;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,29 +75,44 @@ public class SLScreenBuilder extends ScreenBuilder {
     }
 
     @Override
-    public void setHeaderColor(@NotNull Color gdxColor) {
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public ScreenBuilder withHeaderColor(@NotNull Color gdxColor) {
         Objects.requireNonNull(gdxColor, "gdxColor may not be null.");
         headerColor = new GalColor(gdxColor);
+        return this;
     }
 
     @Override
-    public void setHeaderEnabled(boolean enabled) {
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "_ -> this")
+    public ScreenBuilder withHeaderEnabled(boolean enabled) {
         this.enableHeader = enabled;
+        return this;
     }
 
     @Override
-    public void setTitle(@NotNull String title) {
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public ScreenBuilder withTitle(@NotNull String title) {
         this.title = Objects.requireNonNull(title);
+        return this;
     }
 
     @Override
-    public void setWidth(int width) {
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "_ -> this")
+    public ScreenBuilder withWidth(int width) {
         this.width = width;
+        return this;
     }
 
     @Override
-    public void setWidthProvider(@Nullable IntSupplier width) {
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public ScreenBuilder withWidthProvider(@Nullable IntSupplier width) {
         this.widthProvider = width;
+        return this;
     }
 
     @Override

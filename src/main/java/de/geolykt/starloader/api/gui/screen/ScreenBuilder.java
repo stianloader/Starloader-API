@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,7 +78,8 @@ public abstract class ScreenBuilder {
      * @return The instance of the screen builder.
      * @since 1.5.0
      */
-    public abstract @NotNull ScreenBuilder addComponentSupplier(@NotNull ComponentSupplier supplier);
+    @NotNull
+    public abstract ScreenBuilder addComponentSupplier(@NotNull ComponentSupplier supplier);
 
     /**
      * Creates a {@link Screen} instance based on the current values of this builder.
@@ -92,15 +94,20 @@ public abstract class ScreenBuilder {
      *
      * @return The newly created screen instance
      */
-    public abstract @NotNull Screen build();
+    @NotNull
+    public abstract Screen build();
 
     /**
      * Sets the background color of the header.
      * All RGBA channels will be used and the default value is {@link Color#ORANGE}.
      *
      * @param gdxColor The color to use as an GDX Color. It will get transformed into Galimulator's internal Color type later on.
+     * @deprecated This method does not follow the proper builder pattern.
      */
-    public abstract void setHeaderColor(@NotNull Color gdxColor);
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void setHeaderColor(@NotNull Color gdxColor) {
+        withHeaderColor(gdxColor);
+    }
 
     /**
      * Enables or Disables the header. By default it is true.
@@ -110,8 +117,12 @@ public abstract class ScreenBuilder {
      * {@link #setTitle(String)} will be ignored, however will not throw an exception.
      *
      * @param enabled Whether to enable the header.
+     * @deprecated This method does not follow the proper builder pattern.
      */
-    public abstract void setHeaderEnabled(boolean enabled);
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void setHeaderEnabled(boolean enabled) {
+        withHeaderEnabled(enabled);
+    }
 
     /**
      * Sets the title of the screen as shown in the screen header.
@@ -120,8 +131,12 @@ public abstract class ScreenBuilder {
      * except if {@link #setHeaderEnabled(boolean)} was called with false as a parameter.
      *
      * @param title The title of the screen.
+     * @deprecated This method does not follow the proper builder pattern.
      */
-    public abstract void setTitle(@NotNull String title);
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void setTitle(@NotNull String title) {
+        withTitle(title);
+    }
 
     /**
      * Sets the fixed-sized width of the screen.
@@ -130,8 +145,12 @@ public abstract class ScreenBuilder {
      * Default is 450. I assume that the unit is pixels.
      *
      * @param width The width of the screen.
+     * @deprecated This method does not follow the proper builder pattern.
      */
-    public abstract void setWidth(int width);
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void setWidth(int width) {
+        withWidth(width);
+    }
 
     /**
      * <b>The Starloader API will not make any guarantees on when the width will update.</b>
@@ -143,6 +162,81 @@ public abstract class ScreenBuilder {
      * I assume that the width is in pixels.
      *
      * @param width The width of the screen.
+     * @deprecated This method does not follow the proper builder pattern.
      */
-    public abstract void setWidthProvider(@Nullable IntSupplier width);
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void setWidthProvider(@Nullable IntSupplier width) {
+        withWidthProvider(width);
+    }
+
+    /**
+     * Sets the background color of the header.
+     * All RGBA channels will be used and the default value is {@link Color#ORANGE}.
+     *
+     * @param gdxColor The color to use as an GDX Color. It will get transformed into Galimulator's internal Color type later on.
+     * @return The current instance of the screen builder
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public abstract ScreenBuilder withHeaderColor(@NotNull Color gdxColor);
+
+    /**
+     * Enables or Disables the header. By default it is true.
+     * Should this method be called with false as a parameter then
+     * the screen will show in headless mode and calls to
+     * {@link #setHeaderColor(Color)}, {@link #setHeaderColor(TextColor)} and
+     * {@link #setTitle(String)} will be ignored, however will not throw an exception.
+     *
+     * @param enabled Whether to enable the header.
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "_ -> this")
+    public abstract ScreenBuilder withHeaderEnabled(boolean enabled);
+
+    /**
+     * Sets the title of the screen as shown in the screen header.
+     * The default color of this title is white.
+     * This method is a required operation and otherwise {@link #build()} will fail,
+     * except if {@link #setHeaderEnabled(boolean)} was called with false as a parameter.
+     *
+     * @param title The title of the screen.
+     * @return The current instance of the screen builder
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public abstract ScreenBuilder withTitle(@NotNull String title);
+
+    /**
+     * Sets the fixed-sized width of the screen.
+     * The screen height will be determined based on this width and the elements
+     * within this screen.
+     * Default is 450. I assume that the unit is pixels.
+     *
+     * @param width The width of the screen.
+     * @return The current instance of the screen builder
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "_ -> this")
+    public abstract ScreenBuilder withWidth(int width);
+
+    /**
+     * <b>The Starloader API will not make any guarantees on when the width will update.</b>
+     *<br/>
+     * Sets the width as a dynamically changeable function.
+     * The screen height will be determined based on this width and the elements
+     * within this screen. Calling this method with a non-null value automatically voids
+     * any previous calls to {@link #setWidth(int)}. Calling it with a null value does the contrary.
+     * I assume that the width is in pixels.
+     *
+     * @param width An {@link IntSupplier} whose returned value will be the the width of the screen.
+     * @return The current instance of the screen builder
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public abstract ScreenBuilder withWidthProvider(@Nullable IntSupplier width);
 }

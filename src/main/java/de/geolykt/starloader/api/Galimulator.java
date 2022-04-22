@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +25,7 @@ import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.NoiseProvider;
+import de.geolykt.starloader.api.utils.RandomNameType;
 
 /**
  * Class to redirect to instance-wide constants or other static
@@ -60,6 +62,19 @@ public final class Galimulator {
          * @param starB the second Star to disconnect
          */
         public void disconnectStars(@NotNull Star starA, @NotNull Star starB);
+
+        /**
+         * Generates a random name through galimulator's name generator.
+         * From which dictionary the name is pulled from or which algorithm
+         * is used to generate the word is determined by the parameter.
+         *
+         * @param type The meaning the word should have
+         * @return The generated word (or sentence)
+         * @since 2.0.0
+         */
+        @NotNull
+        @Contract(pure = true, value = "null -> fail, !null -> new")
+        public String generateRandomName(@NotNull RandomNameType type);
 
         /**
          * Obtains the currently active map mode.
@@ -543,6 +558,21 @@ public final class Galimulator {
      */
     public static void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
         impl.disconnectStars(starA, starB);
+    }
+
+    /**
+     * Generates a random name through galimulator's name generator.
+     * From which dictionary the name is pulled from or which algorithm
+     * is used to generate the word is determined by the parameter.
+     *
+     * @param type The meaning the word should have
+     * @return The generated word (or sentence)
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = true, value = "null -> fail, !null -> new")
+    public static String generateRandomName(@NotNull RandomNameType type) {
+        return impl.generateRandomName(type);
     }
 
     /**

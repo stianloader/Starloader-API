@@ -42,6 +42,7 @@ import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.api.sound.SoundHandler;
+import de.geolykt.starloader.api.utils.RandomNameType;
 
 import snoddasmannen.galimulator.DeviceConfiguration;
 import snoddasmannen.galimulator.EmploymentAgency;
@@ -52,6 +53,7 @@ import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
 import snoddasmannen.galimulator.guides.class_0;
+import snoddasmannen.namegenerator.NameGenerator;
 
 public class GalimulatorImplementation implements Galimulator.GameImplementation, Galimulator.Unsafe {
 
@@ -86,6 +88,35 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     public void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
         starA.removeNeighbour(starB);
         starB.removeNeighbour(starA);
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public String generateRandomName(@NotNull RandomNameType type) {
+        switch (type) {
+        case ADJECTIVE:
+            return NameGenerator.getRandomAdjective();
+        case FACTION_NAME:
+            return NameGenerator.generateRandomFactionName();
+        case IDENTIFIER:
+            return NameGenerator.generateRandomIdentifier();
+        case QUEST_NAME:
+            return NameGenerator.generateRandomQuestName();
+        case QUEST_NOMINATOR:
+            return NameGenerator.getRandomQuestNominator();
+        case REVOLT_NAME:
+            return NameGenerator.getRandomRevoltName();
+        case SHIP_NAME:
+            return NameGenerator.generateRandomShipName();
+        case VANITY_NAME:
+            return NameGenerator.getRandomVanityName();
+        default:
+            if (Objects.isNull(type)) {
+                throw new NullPointerException("type may not be null");
+            }
+            throw new IllegalStateException("Unknown enum value: " + type.name());
+        }
     }
 
     @SuppressWarnings("null")
