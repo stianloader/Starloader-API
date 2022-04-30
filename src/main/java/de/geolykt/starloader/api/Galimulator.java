@@ -2,7 +2,6 @@ package de.geolykt.starloader.api;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -19,10 +18,10 @@ import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
-import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
-import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.serial.SavegameFormat;
+import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.NoiseProvider;
 import de.geolykt.starloader.api.utils.RandomNameType;
@@ -148,6 +147,28 @@ public final class Galimulator {
          * @return The {@link ActiveEmpire} owned by the player, or null
          */
         public @Nullable ActiveEmpire getPlayerEmpire();
+
+        /**
+         * Obtains the {@link SavegameFormat} instance that is implementing a certain {@link SupportedSavegameFormat}.
+         *
+         * @param format The format the should be implemented
+         * @return The {@link SavegameFormat} implementing the specified format
+         * @throws UnsupportedOperationException If for one reason or another the savegame format is not supported
+         * @since 2.0.0
+         */
+        @NotNull
+        @Contract(pure = true)
+        public SavegameFormat getSavegameFormat(@NotNull SupportedSavegameFormat format);
+
+        /**
+         * Obtains all supported savegame formats.
+         *
+         * @return The {@link SavegameFormat formats} that are supported.
+         * @since 2.0.0
+         */
+        @NotNull
+        @Contract(pure = true, value = "-> !null")
+        public Iterable<? extends SavegameFormat> getSavegameFormats();
 
         /**
          * Obtains the currently active {@link SoundHandler}.
@@ -280,19 +301,6 @@ public final class Galimulator {
          * @param data The data of the file.
          */
         public void saveFile(@NotNull String name, InputStream data);
-
-        /**
-         * Saves the current state of the game and dumps it into an output stream.
-         * Unless the event generation suppression flag is turned on (which it usually won't be)
-         * a {@link GalaxySavingEvent} and a {@link GalaxySavingEndEvent} will be emitted with the natural
-         * flag set to false. The location will be set to unspecified.
-         * Warning: the provided stream is closed during the operation.
-         * Additional warning: it is recommended to pause the game during the operation as otherwise
-         * it might corrupt the data
-         *
-         * @param out The output stream to dump the state into
-         */
-        public void saveGameState(@NotNull OutputStream out);
 
         /**
          * Changes the currently active map mode to a new value.
@@ -702,6 +710,32 @@ public final class Galimulator {
     }
 
     /**
+     * Obtains the {@link SavegameFormat} instance that is implementing a certain {@link SupportedSavegameFormat}.
+     *
+     * @param format The format the should be implemented
+     * @return The {@link SavegameFormat} implementing the specified format
+     * @throws UnsupportedOperationException If for one reason or another the savegame format is not supported
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = true)
+    public static SavegameFormat getSavegameFormat(@NotNull SupportedSavegameFormat format) {
+        return impl.getSavegameFormat(format);
+    }
+
+    /**
+     * Obtains all supported savegame formats.
+     *
+     * @return The {@link SavegameFormat formats} that are supported.
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = true, value = "-> !null")
+    public static Iterable<? extends SavegameFormat> getSavegameFormats() {
+        return impl.getSavegameFormats();
+    }
+
+    /**
      * Obtains the currently active {@link SoundHandler}.
      *
      * @return The active {@link SoundHandler}.
@@ -852,18 +886,6 @@ public final class Galimulator {
      */
     public static void saveFile(@NotNull String name, InputStream data) {
         impl.saveFile(name, data);
-    }
-
-    /**
-     * Saves the current state of the game and dumps it into an output stream.
-     * Warning: the provided stream is closed during the operation.
-     * Additional warning: it is recommended to pause the game during the operation as otherwise
-     * it might corrupt the data
-     *
-     * @param out The output stream to dump the state into
-     */
-    public static void saveGameState(@NotNull OutputStream out) {
-        impl.saveGameState(out);
     }
 
     /**

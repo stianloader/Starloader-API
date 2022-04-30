@@ -20,7 +20,7 @@ that may arise (for example overwriting static methods) via our Event API.
 
 ## Building
 
-Warning: **Building SLAPI requires Java 11 or above**
+Warning: **Building SLAPI requires Java 16 or above**
 
 The project must be built through our fork of brachyura. This can be easily done
 by calling `java -jar brachyura-bootstrap-0.jar build`. It will be located in the

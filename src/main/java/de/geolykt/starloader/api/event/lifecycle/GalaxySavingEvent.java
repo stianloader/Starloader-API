@@ -6,10 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.event.Event;
+import de.geolykt.starloader.api.serial.MetadataCollector;
 
 /**
  * Event that is fired when a Galaxy is about to save.
  * Note that this event may get fired outside of the main thread.
+ *
+ * @since 1.5.0
  */
 public class GalaxySavingEvent extends Event {
 
@@ -19,27 +22,30 @@ public class GalaxySavingEvent extends Event {
     protected final @NotNull String location;
 
     /**
-     * Whether the event was emitted due to natural reasons, i. e. the event would be emitted even
-     * with just SLAPI installed.
-     */
-    protected final boolean natural;
-
-    /**
      * The reason of why the event was fired.
      */
     private final @NotNull String reason;
 
     /**
+     * A {@link MetadataCollector} that is used to embed data from mods into the generated savegame.
+     *
+     * @since 2.0.0
+     */
+    @NotNull
+    private final MetadataCollector collector;
+
+    /**
      * Constructor.
      *
      * @param reason the reason why the event was fired.
-     * @param location The location where the game state was saved to
-     * @param natural Whether the event was not (indirectly or directly) caused by another mod
+     * @param location The location where the game state was saved to.
+     * @param collector The collector that is used to embed data from mods into the generated savegame.
+     * @since 2.0.0
      */
-    public GalaxySavingEvent(@NotNull String reason, @NotNull String location, boolean natural) {
+    public GalaxySavingEvent(@NotNull String reason, @NotNull String location, @NotNull MetadataCollector collector) {
         this.reason = Objects.requireNonNull(reason, "reason must not be null");
         this.location = Objects.requireNonNull(location, "location must not be null");
-        this.natural = natural;
+        this.collector = Objects.requireNonNull(collector, "collector must not be null");
     }
 
     /**
@@ -50,9 +56,24 @@ public class GalaxySavingEvent extends Event {
      * as the {@link Galimulator#saveGameState(java.io.OutputStream)} does not control what is done with the savegame.
      *
      * @return The location of the save game
+     * @since 1.5.0
      */
-    public @NotNull String getLocation() {
+    @NotNull
+    public String getLocation() {
         return location;
+    }
+
+    /**
+     * Obtains the metadata collector instance that is responsible of collecting metadata from mods so it can be embedded into the
+     * savegame file. Some savegame formats may not embed metadata, however even then it will not return null and mods should still
+     * behave as if the format supported metadata to not result in odd behaviour should the savegame format have strangely.
+     *
+     * @return The {@link MetadataCollector} to use.
+     * @since 2.0.0
+     */
+    @NotNull
+    public MetadataCollector getMetadataCollector() {
+        return collector;
     }
 
     /**
@@ -60,18 +81,10 @@ public class GalaxySavingEvent extends Event {
      * An example return value is "User triggered save".
      *
      * @return The reason of the event.
+     * @since 1.5.0
      */
-    public @NotNull String getReason() {
+    @NotNull
+    public String getReason() {
         return reason;
-    }
-
-    /**
-     * Whether the event was emitted due to natural reasons, i. e. the event would be emitted even
-     * with just SLAPI installed.
-     *
-     * @return A boolean that describes whether the event can be considered natural
-     */
-    public boolean isNatural() {
-        return natural;
     }
 }

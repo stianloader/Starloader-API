@@ -23,17 +23,14 @@ import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratedEvent;
-import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
-import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
+import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
 import de.geolykt.starloader.transformers.ASMTransformer;
 
@@ -54,10 +51,6 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     private static final String ACTIVE_EMPIRE_CLASS = "de/geolykt/starloader/api/empire/ActiveEmpire";
 
-    @StarplaneReobfuscateReference
-    @NotNull
-    public static String gestureListenerClass = "snoddasmannen/galimulator/GalimulatorGestureListener";
-
     /**
      * The logger object that should be used used throughout this class.
      */
@@ -67,14 +60,14 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String mapModeShowsActorsMethod = "snoddasmannen/galimulator/MapMode$MapModes.getShowsActors()Z";
 
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String gestureListenerClass = "snoddasmannen/galimulator/GalimulatorGestureListener";
+
     /**
      * The internal name of the class that this transformer seeks to modify.
      */
     private static final String SPACE_CLASS = "snoddasmannen/galimulator/Space";
-
-    @StarplaneReobfuscateReference
-    @NotNull
-    public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
 
     /**
      * The remapped name of the "generateGalaxy" method.
@@ -85,6 +78,20 @@ public class SpaceASMTransformer extends ASMTransformer {
     @StarplaneReobfuscateReference
     @NotNull
     public static String generateGalaxyMethod = "snoddasmannen/galimulator/Space.generateGalaxy(ILsnoddasmannen/galimulator/MapData;)V";
+
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
+
+    /**
+     * The remapped name of the "tick" method.
+     *
+     * @since 2.0.0
+     * @see StarplaneReobfuscateReference
+     */
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String tickMethod = "snoddasmannen/galimulator/Space.tick()V";
 
     /**
      * The internal name of the class you are viewing right now right here.
@@ -148,23 +155,25 @@ public class SpaceASMTransformer extends ASMTransformer {
         } else {
             DebugNagException.nag();
         }
-        // TODO do
     }
 
     public static final void save(String cause, String location) {
         Space.backgroundTaskDescription = "Saving galaxy: " + cause;
         LOGGER.info("Saving state to disk.");
-        GalimulatorImplementation.suppressSaveEvent = true;
-        EventManager.handleEvent(new GalaxySavingEvent(NullUtils.requireNotNull(cause, "cause is null"), NullUtils.requireNotNull(location, "location is null"), true));
+
         try (FileOutputStream fos = new FileOutputStream(new File(location))) {
-            Galimulator.saveGameState(fos);
+            Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).saveGameState(fos, cause, location);
         } catch (IOException e) {
             LOGGER.error("IO Error while saving the state of the game", e);
         } catch (Throwable e) {
+            if (e instanceof OutOfMemoryError) {
+                System.gc();
+            }
             LOGGER.error("Error while saving the state of the game", e);
+            if (e instanceof ThreadDeath) {
+                throw e;
+            }
         } finally {
-            EventManager.handleEvent(new GalaxySavingEndEvent(NullUtils.requireNotNull(location, "location is null"), true));
-            GalimulatorImplementation.suppressSaveEvent = false;
             Settings.b("StartedLoading", false);
         }
 
@@ -211,6 +220,8 @@ public class SpaceASMTransformer extends ASMTransformer {
             if (currentInsn instanceof FieldInsnNode) {
                 FieldInsnNode yField = (FieldInsnNode) currentInsn;
                 currentInsn = currentInsn.getNext();
+                // TODO starplane could deobf this too
+                // y is the first accessed field in Space.tick
                 if (!yField.owner.equals(SPACE_CLASS) || !yField.name.equals("y") || currentInsn.getOpcode() != Opcodes.ICONST_2) {
                     continue;
                 }
@@ -243,15 +254,18 @@ public class SpaceASMTransformer extends ASMTransformer {
     public boolean accept(@NotNull ClassNode source) {
         if (source.name.equals(SPACE_CLASS)) {
             String generateGalaxyMethodName = generateGalaxyMethod.split("[\\.\\(]", 3)[1];
+            String tickMethodName = tickMethod.split("[\\.\\(]", 3)[1];
+
             for (MethodNode method : source.methods) {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
                     addEmpireCollapseListener(method);
                 } else if (method.name.equals("u") && method.desc.equals("()V")) {
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPre", "()V"));
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPost", "()V"));
-                } else if (method.name.equals("B") && method.desc.equals("()V")) {
+                } else if (method.name.equals(tickMethodName) && method.desc.equals("()V")) {
                     addLogicalListener(method);
                 } else if (method.name.equals("b") && method.desc.equals("(Ljava/lang/String;Ljava/lang/String;)V")) {
+                    // TODO starplane could deobf the name pretty easily
                     method.instructions.clear();
                     method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
                     method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));

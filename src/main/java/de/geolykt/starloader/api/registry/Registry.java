@@ -27,6 +27,15 @@ import snoddasmannen.galimulator.weapons.WeaponsFactory;
 public abstract class Registry<T> {
 
     /**
+     * The registries for codec used for serialisation. The codec is chosen more or less automatically,
+     * this field is mostly there to register your own codec.
+     *
+     * @since 2.0.0
+     */
+    @NotNull
+    public static final CodecRegistry CODECS = new CodecRegistry();
+
+    /**
      * The empire specials registry.
      */
     public static Registry<EmpireSpecial> EMPIRE_SPECIALS;
@@ -59,12 +68,14 @@ public abstract class Registry<T> {
     /**
      * Internal map containing the key-value pairs of the registry for lookup.
      */
-    protected final @NotNull Map<NamespacedKey, T> keyedValues = new HashMap<>();
+    @NotNull
+    protected final Map<NamespacedKey, T> keyedValues = new HashMap<>();
 
     /**
      * Internal map containing the enum's name of the registry for lookup. Used to
      * "replace" {@link Enum#valueOf(Class, String)}
      */
+    @NotNull
     protected final Map<String, T> keyedValuesIntern = new HashMap<>();
 
     /**
@@ -174,6 +185,7 @@ public abstract class Registry<T> {
      *
      * @param key   The key of the entry to register
      * @param value The value of the entry
+     * @since 1.1.0
      */
     public abstract void register(@NotNull NamespacedKey key, @NotNull T value);
 }

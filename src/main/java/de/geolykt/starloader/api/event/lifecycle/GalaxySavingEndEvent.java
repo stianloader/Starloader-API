@@ -19,20 +19,13 @@ public class GalaxySavingEndEvent extends Event {
     protected final @NotNull String location;
 
     /**
-     * Whether the event was emitted due to natural reasons, i. e. the event would be emitted even
-     * with just SLAPI installed.
-     */
-    protected final boolean natural;
-
-    /**
      * Constructor.
      *
      * @param location The location where the game state was saved to
-     * @param natural Whether the event was not (indirectly or directly) caused by another mod
+     * @since 2.0.0
      */
-    public GalaxySavingEndEvent(@NotNull String location, boolean natural) {
+    public GalaxySavingEndEvent(@NotNull String location) {
         this.location = NullUtils.requireNotNull(location, "location must not be null");
-        this.natural = natural;
     }
 
     /**
@@ -46,15 +39,5 @@ public class GalaxySavingEndEvent extends Event {
      */
     public @NotNull String getLocation() {
         return location;
-    }
-
-    /**
-     * Whether the event was emitted due to natural reasons, i. e. the event would be emitted even
-     * with just SLAPI installed.
-     *
-     * @return A boolean that describes whether the event can be considered natural
-     */
-    public boolean isNatural() {
-        return natural;
     }
 }

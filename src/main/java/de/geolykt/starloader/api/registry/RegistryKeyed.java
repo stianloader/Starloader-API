@@ -25,7 +25,8 @@ public interface RegistryKeyed {
      *
      * @return The {@link NamespacedKey} that is assigned to this object
      */
-    public @NotNull NamespacedKey getRegistryKey();
+    @NotNull
+    public NamespacedKey getRegistryKey();
 
     /**
      * Sets the {@link NamespacedKey} that is used within the respective registries

@@ -9,6 +9,23 @@ import de.geolykt.starloader.mod.Extension;
 
 public class NamespacedKey {
 
+    /**
+     * Obtains a {@link NamespacedKey} from a string, practically undoing {@link NamespacedKey#toString()}.
+     * The string must be in the format of "namespace:key"
+     *
+     * @return The {@link NamespacedKey} that was parsed from the string.
+     * @since 2.0.0
+     */
+    @SuppressWarnings("null")
+    @NotNull
+    public static NamespacedKey fromString(String string) {
+        int colonIndex = string.indexOf(':');
+        if (colonIndex == -1) {
+            throw new IllegalArgumentException(string + " is not a valid namespaced key. Namespaced keys must contain a colon");
+        }
+        return new NamespacedKey(string.substring(0, colonIndex), string.substring(colonIndex + 1));
+    }
+
     @NotNull
     private final String keyString;
 
