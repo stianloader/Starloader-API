@@ -85,7 +85,8 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
     public void addEmpireSpecial(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String name,
             @NotNull String abbreviation, @NotNull String description, @NotNull Color color, float techMod,
             float indMod, float stabilityMod, float peaceMod, boolean bansAlliances) {
-        Registry<EmpireSpecial> specialsRegistry = Registry.EMPIRE_SPECIALS;
+        @SuppressWarnings("unchecked")
+        Registry<EmpireSpecial> specialsRegistry = (Registry<EmpireSpecial>) Registry.EMPIRE_SPECIALS;
         if (specialsRegistry == null) {
             throw new IllegalStateException("Empire specials registry is not yet set up. (Protip: use the RegistryRegistrationEvent to register your special lazily.)");
         }

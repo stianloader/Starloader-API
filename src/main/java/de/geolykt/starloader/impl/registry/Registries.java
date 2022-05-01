@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
@@ -20,9 +21,9 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 import snoddasmannen.galimulator.AudioManager.AudioSample;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
-import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 import snoddasmannen.galimulator.MapMode.MapModes;
+import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
 /**
@@ -272,6 +273,7 @@ public final class Registries {
      * Creates, assigns and initializes the weapons factory registry.
      * It also emits the required events.
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void initWeaponsTypes() {
         LOGGER.info("Registering weapon factories");
         SimpleEnumRegistry<WeaponsFactory> weaponTypes = new SimpleEnumRegistry<>(WeaponsFactory.class);
@@ -306,7 +308,7 @@ public final class Registries {
                 WeaponsFactory.RAILGUN, // FIXME I believe that the order of this entry might change in the near future
                 WeaponsFactory.CHAIN_MISSILE
         });
-        Registry.WEAPON_TYPES = weaponTypes;
+        Registry.WEAPON_TYPES = (Registry<? extends WeaponType>) (Registry) weaponTypes;
         EventManager.handleEvent(new RegistryRegistrationEvent(weaponTypes, WeaponsFactory.class, RegistryRegistrationEvent.REGISTRY_WEAPONS_TYPE));
     }
 

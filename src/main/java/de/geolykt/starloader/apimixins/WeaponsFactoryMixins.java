@@ -43,12 +43,12 @@ public class WeaponsFactoryMixins implements WeaponType {
     @Overwrite
     @SuppressWarnings("deprecation")
     public static WeaponsFactory valueOf(final String name) {
-        return Registry.WEAPON_TYPES.getIntern(NullUtils.requireNotNull(name));
+        return (WeaponsFactory) Registry.WEAPON_TYPES.getIntern(NullUtils.requireNotNull(name));
     }
 
     @Overwrite
     public static WeaponsFactory[] values() {
-        return Registry.WEAPON_TYPES.getValues();
+        return (WeaponsFactory[]) Registry.WEAPON_TYPES.getValues();
     }
 
     @Shadow

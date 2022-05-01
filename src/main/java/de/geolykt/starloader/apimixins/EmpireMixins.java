@@ -186,7 +186,7 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("unchecked")
     @Override
     public boolean addSpecial(@NotNull NamespacedKey empireSpecial, boolean force) {
-        EmpireSpecial special = Registry.EMPIRE_SPECIALS.get(empireSpecial);
+        EmpireSpecial special = (EmpireSpecial) Registry.EMPIRE_SPECIALS.get(empireSpecial);
         if (special == null) {
             throw new IllegalArgumentException("No special is registered under the given key!");
         }
@@ -521,7 +521,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public boolean hasSpecial(@NotNull NamespacedKey empireSpecial) {
-        EmpireSpecial special = Registry.EMPIRE_SPECIALS.get(empireSpecial);
+        EmpireSpecial special = (EmpireSpecial) Registry.EMPIRE_SPECIALS.get(empireSpecial);
         if (special == null) {
             return false; // For extension cooperation
         }
@@ -580,7 +580,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public boolean removeSpecial(@NotNull NamespacedKey empireSpecial, boolean force) {
-        EmpireSpecial special = Registry.EMPIRE_SPECIALS.get(empireSpecial);
+        EmpireSpecial special = (EmpireSpecial) Registry.EMPIRE_SPECIALS.get(empireSpecial);
         if (special == null) {
             throw new IllegalArgumentException("No special is registered under the given key!");
         }
@@ -645,7 +645,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public boolean setState(@NotNull NamespacedKey stateKey, boolean force) {
-        EmpireState state = Registry.EMPIRE_STATES.get(stateKey);
+        EmpireState state = (EmpireState) Registry.EMPIRE_STATES.get(stateKey);
         if (state == null) {
             throw new IllegalArgumentException("The given registry key is not valid!");
         }

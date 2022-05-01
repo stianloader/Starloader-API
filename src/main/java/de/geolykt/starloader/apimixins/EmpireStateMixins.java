@@ -35,12 +35,12 @@ public class EmpireStateMixins implements RegistryKeyed {
         if (var0 == null) {
             return null;
         }
-        return Registry.EMPIRE_STATES.getIntern(var0);
+        return (EmpireState) Registry.EMPIRE_STATES.getIntern(var0);
     }
 
     @Overwrite
     public static EmpireState[] values() {
-        return Registry.EMPIRE_STATES.getValues();
+        return (EmpireState[]) Registry.EMPIRE_STATES.getValues();
     }
 
     @Unique

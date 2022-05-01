@@ -8,12 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 import de.geolykt.starloader.api.gui.MapMode;
-
-import snoddasmannen.galimulator.EmpireSpecial;
-import snoddasmannen.galimulator.EmpireState;
-import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
 /**
  * Registry of enum and/or enum-like objects. This is added for extension
@@ -38,12 +35,14 @@ public abstract class Registry<T> {
     /**
      * The empire specials registry.
      */
-    public static Registry<EmpireSpecial> EMPIRE_SPECIALS;
+    @SuppressWarnings("rawtypes")
+    public static Registry<? extends Enum> EMPIRE_SPECIALS;
 
     /**
      * The empire state registry.
      */
-    public static MetadatableRegistry<EmpireState, EmpireStateMetadataEntry> EMPIRE_STATES;
+    @SuppressWarnings("rawtypes")
+    public static MetadatableRegistry<? extends Enum, EmpireStateMetadataEntry> EMPIRE_STATES;
 
     /**
      * Enum registry for the symbols that can be used within the flags of empires.
@@ -58,7 +57,7 @@ public abstract class Registry<T> {
     /**
      * Enum registry for the weapon types that can be used within the JSON actor definitions.
      */
-    public static Registry<WeaponsFactory> WEAPON_TYPES;
+    public static Registry<? extends WeaponType> WEAPON_TYPES;
 
     /**
      * Enum registry for the weapon types that can be used within the JSON actor definitions.

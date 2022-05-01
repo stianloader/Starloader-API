@@ -30,7 +30,7 @@ public class EmpireSpecialMixins implements RegistryKeyed {
 
     @Overwrite
     public static EmpireSpecial f() {
-        EmpireSpecial[] var0 = Registry.EMPIRE_SPECIALS.getValues();
+        EmpireSpecial[] var0 = (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues();
         return var0[ThreadLocalRandom.current().nextInt(var0.length)];
     }
 
@@ -38,7 +38,7 @@ public class EmpireSpecialMixins implements RegistryKeyed {
     private static void k() {
         // I do not even know if this is called, but better be safe than sorry
         HashMap<EmpireSpecial, class_39> maps = new HashMap<>();
-        EmpireSpecial[] var0 = Registry.EMPIRE_SPECIALS.getValues();
+        EmpireSpecial[] var0 = (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues();
         int var1 = var0.length;
 
         for (int var2 = 0; var2 < var1; ++var2) {
@@ -65,12 +65,12 @@ public class EmpireSpecialMixins implements RegistryKeyed {
         if (var0 == null) {
             return null;
         }
-        return Registry.EMPIRE_SPECIALS.getIntern(var0);
+        return (EmpireSpecial) Registry.EMPIRE_SPECIALS.getIntern(var0);
     }
 
     @Overwrite
     public static EmpireSpecial[] values() {
-        return Registry.EMPIRE_SPECIALS.getValues();
+        return (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues();
     }
 
     @Unique
