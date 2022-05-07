@@ -60,6 +60,16 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String mapModeShowsActorsMethod = "snoddasmannen/galimulator/MapMode$MapModes.getShowsActors()Z";
 
+    /**
+     * The remapped name of the "saveSync" method.
+     *
+     * @since 2.0.0
+     * @see StarplaneReobfuscateReference
+     */
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String saveSyncMethod = "snoddasmannen/galimulator/Space.saveSync(Ljava/lang/String;Ljava/lang/String;)V";
+
     @StarplaneReobfuscateReference
     @NotNull
     public static String gestureListenerClass = "snoddasmannen/galimulator/GalimulatorGestureListener";
@@ -79,9 +89,23 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String generateGalaxyMethod = "snoddasmannen/galimulator/Space.generateGalaxy(ILsnoddasmannen/galimulator/MapData;)V";
 
+    /**
+     * The remapped name of the "Space.draw" method.
+     *
+     * @since 2.0.0
+     * @see StarplaneReobfuscateReference
+     */
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String spaceDrawMethod = "snoddasmannen/galimulator/Space.draw()V";
+
     @StarplaneReobfuscateReference
     @NotNull
     public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
+
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String tickCountField = "snoddasmannen/galimulator/Space.tickCount I";
 
     /**
      * The remapped name of the "tick" method.
@@ -91,7 +115,7 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     @StarplaneReobfuscateReference
     @NotNull
-    public static String tickMethod = "snoddasmannen/galimulator/Space.tick()V";
+    public static String tickMethod = "snoddasmannen/galimulator/Space.tick()V";;
 
     /**
      * The internal name of the class you are viewing right now right here.
@@ -216,13 +240,12 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     private void addLogicalListener(MethodNode method) {
         AbstractInsnNode currentInsn = method.instructions.getFirst();
+        String tickCountFieldName = tickCountField.split("[\\. ]")[1];
         while (currentInsn != null) {
             if (currentInsn instanceof FieldInsnNode) {
                 FieldInsnNode yField = (FieldInsnNode) currentInsn;
                 currentInsn = currentInsn.getNext();
-                // TODO starplane could deobf this too
-                // y is the first accessed field in Space.tick
-                if (!yField.owner.equals(SPACE_CLASS) || !yField.name.equals("y") || currentInsn.getOpcode() != Opcodes.ICONST_2) {
+                if (!yField.owner.equals(SPACE_CLASS) || !yField.name.equals(tickCountFieldName) || currentInsn.getOpcode() != Opcodes.ICONST_2) {
                     continue;
                 }
                 currentInsn = currentInsn.getNext();
@@ -255,17 +278,18 @@ public class SpaceASMTransformer extends ASMTransformer {
         if (source.name.equals(SPACE_CLASS)) {
             String generateGalaxyMethodName = generateGalaxyMethod.split("[\\.\\(]", 3)[1];
             String tickMethodName = tickMethod.split("[\\.\\(]", 3)[1];
+            String saveSyncMethodName = saveSyncMethod.split("[\\.\\(]", 3)[1];
+            String spaceDrawMethodName = spaceDrawMethod.split("[\\.\\(]", 3)[1];
 
             for (MethodNode method : source.methods) {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
                     addEmpireCollapseListener(method);
-                } else if (method.name.equals("u") && method.desc.equals("()V")) {
+                } else if (method.name.equals(spaceDrawMethodName) && method.desc.equals("()V")) {
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPre", "()V"));
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPost", "()V"));
                 } else if (method.name.equals(tickMethodName) && method.desc.equals("()V")) {
                     addLogicalListener(method);
-                } else if (method.name.equals("b") && method.desc.equals("(Ljava/lang/String;Ljava/lang/String;)V")) {
-                    // TODO starplane could deobf the name pretty easily
+                } else if (method.name.equals(saveSyncMethodName) && method.desc.equals("(Ljava/lang/String;Ljava/lang/String;)V")) {
                     method.instructions.clear();
                     method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
                     method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));

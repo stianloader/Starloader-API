@@ -367,7 +367,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 getPlayer(),
                 Space.getMapData(),
                 hasUsedSandbox(),
-                snoddasmannen.galimulator.EmploymentAgency.a(),
+                snoddasmannen.galimulator.EmploymentAgency.getInstance(),
                 (Vector) getPeopleUnsafe(),
                 Space.history,
                 (List) null,

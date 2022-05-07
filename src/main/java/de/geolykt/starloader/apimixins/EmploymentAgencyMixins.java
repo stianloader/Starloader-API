@@ -64,7 +64,7 @@ public class EmploymentAgencyMixins {
     @Overwrite
     private Person a(final Job job, final int n) {
         List<Person> potentialCandidates;
-        if (job.getType() == JobType.EMPEROR && (job.getEmployer() == Galimulator.getNeutralEmpire() || job.get_b() != null)) {
+        if (job.getType() == JobType.EMPEROR && (job.getEmployer() == Galimulator.getNeutralEmpire() || job.getPreviousHolder() != null)) {
             potentialCandidates = job.n();
             if (potentialCandidates.isEmpty()) {
                 potentialCandidates = this.b(n);
