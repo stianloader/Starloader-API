@@ -31,6 +31,7 @@ import de.geolykt.starloader.api.serial.Encoder;
 import de.geolykt.starloader.api.serial.MetadataCollector;
 import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.impl.util.JoiningInputStream;
+import de.geolykt.starloader.impl.util.LEB128;
 
 /**
  * A simple wrapper around Vanilla's savegame format that adds savegame metadata as well as slapi metadata.
@@ -102,7 +103,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
         for (int read = dataIn.readInt(); read != -1; read = dataIn.readInt()) {
             NamespacedKey metadataKey = keyCache[read];
             NamespacedKey encodingKey = keyCache[dataIn.readInt()];
-            short len = dataIn.readShort();
+            int len = LEB128.decodeUnsigned(dataIn);
             byte[] data = new byte[len];
             dataIn.readNBytes(data, 0, len);
             metadataState.add(metadataKey, encodingKey, data);
@@ -170,13 +171,9 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
             if (serialized == null) {
                 continue; // Previously discarded - discard again
             }
-            if (serialized.length > Short.MAX_VALUE) {
-                throw new IOException("The maximum size of a serialized object is " + Short.MAX_VALUE+ " bytes, but currently it is "
-                        + serialized.length + " bytes long. Key of object: " + key + ", Key of encoder: " + encoding.get(key));
-            }
             dataOut.writeInt(keyToId.get(key));
             dataOut.writeInt(keyToId.get(encoding.get(key)));
-            dataOut.writeShort(serialized.length);
+            LEB128.encodeUnsigned(serialized.length, out);
             dataOut.write(serialized);
         }
         dataOut.writeInt(-1);
