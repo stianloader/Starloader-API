@@ -9,14 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility class for writing and reading
- * <a href="https://en.wikipedia.org/wiki/LEB128">LEB128<a> integers.
+ * <a href="https://en.wikipedia.org/wiki/LEB128">LEB128</a> integers.
  *
  * <p>
  * Note: This class is only used for writing the length of savegame metadata and
  * there could get removed should LEB128 be replaced with another method of
  * determining the length of an entry. The main reason a replacement could be
  * required is because decoding LEB128 integers may lead to many branch
- * mispredictions, such drastically lowering performance. However since loading
+ * mispredictions, as such drastically lowering performance. However since loading
  * savegames needn't be very fast, this is not a pressing issue.
  *
  * @since 2.0.0

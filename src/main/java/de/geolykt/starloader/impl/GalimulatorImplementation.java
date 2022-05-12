@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Gdx;
 import com.example.Main;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
@@ -322,6 +323,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void resumeGame() {
         Space.setPaused(false);
+    }
+
+    @Override
+    public void runTaskOnNextFrame(Runnable task) {
+        Gdx.app.postRunnable(task);
     }
 
     @Override

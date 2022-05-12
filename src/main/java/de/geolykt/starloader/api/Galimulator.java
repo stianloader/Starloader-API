@@ -284,6 +284,16 @@ public final class Galimulator {
         public void resumeGame();
 
         /**
+         * Schedule a task that should run on the next frame. More concretely, it should run before the next frame is drawn, however
+         * other tasks may run before that. If two tasks are scheduled at the same frame, the task that is scheduled first should run
+         * before. All scheduled tasks need to be run on the main thread.
+         *
+         * @param task The task to run on the next tick
+         * @since 2.0.0
+         */
+        public void runTaskOnNextFrame(Runnable task);
+
+        /**
          * Saves a file inside the data folder.
          * The file will NOT be overridden if it already exists.
          *
@@ -863,6 +873,18 @@ public final class Galimulator {
      */
     public static void resumeGame() {
         impl.resumeGame();
+    }
+
+    /**
+     * Schedule a task that should run on the next frame. More concretely, it should run before the next frame is drawn, however
+     * other tasks may run before that. If two tasks are scheduled at the same frame, the task that is scheduled first should run
+     * before. All scheduled tasks need to be run on the main thread.
+     *
+     * @param task The task to run on the next tick
+     * @since 2.0.0
+     */
+    public static void runTaskOnNextFrame(Runnable task) {
+        impl.runTaskOnNextFrame(task);
     }
 
     /**

@@ -397,7 +397,7 @@ public class StarMixins implements Star {
      *
      * @param info Callback info required for injection, not used inside the method.
      */
-    @Inject(method = "i()V", at = @At("HEAD"))
+    @Inject(method = "tick()V", at = @At("HEAD"))
     public void tick(CallbackInfo info) {
         if (tickCallbacks == null) {
             tickCallbacks = new ArrayList<>();
