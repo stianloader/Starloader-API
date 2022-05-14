@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.gui.screen.Screen;
+import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
 
@@ -148,29 +149,40 @@ public interface DrawingImpl {
      * @param font The font name from which the BitmapFont belong to
      * @return The {@link BitmapFont} associated under that name
      */
-    public @Nullable BitmapFont getFontBitmap(@NotNull String font);
+    @Nullable
+    public BitmapFont getFontBitmap(@NotNull String font);
 
     /**
      * Obtains the main drawing sprite batch. Operations performed on this batch
      * will result in them getting displayed on the user interface.
      *
+     * <p>SLAPI guarantees that during {@link ScreenComponent#renderAt(float, float, Camera)},
+     * {@link SpriteBatch#isDrawing()} is returning true. In other circumstances the drawing
+     * batch may allow drawing, but it might also not allow it. For safety reasons, other mods must
+     * use {@link SpriteBatch#begin()} and {@link SpriteBatch#end()} before and after drawing respectively
+     * if {@link SpriteBatch#isDrawing()} returns false. It is furthermore recommended to put the end
+     * call in a finally block where as they try block encompasses the main drawing logic.
+     *
      * @return The main drawing batch.
      */
-    public @NotNull SpriteBatch getMainDrawingBatch();
+    @NotNull
+    public SpriteBatch getMainDrawingBatch();
 
     /**
      * Obtains the instance's {@link TextFactory}.
      *
      * @return The {@link TextFactory} bound to the implementation
      */
-    public @NotNull TextFactory getTextFactory();
+    @NotNull
+    public TextFactory getTextFactory();
 
     /**
      * Obtains the texture provider that is valid for this drawing instance.
      *
      * @return The connected {@link TextureProvider}.
      */
-    public @NotNull TextureProvider getTextureProvider();
+    @NotNull
+    public TextureProvider getTextureProvider();
 
     /**
      * Reads the file at the given path (which is relative to the data directory)

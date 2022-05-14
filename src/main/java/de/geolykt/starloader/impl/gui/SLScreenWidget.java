@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.NullUtils;
@@ -242,7 +243,18 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         if (!headless) {
             drawHeader();
         }
-        renderSLChildComponents();
+        SpriteBatch mainBatch = Drawing.getDrawingBatch();
+        boolean startedDraw = !mainBatch.isDrawing();
+        if (startedDraw) {
+            mainBatch.begin();
+        }
+        try {
+            renderSLChildComponents();
+        } finally {
+            if (startedDraw) {
+                mainBatch.end();
+            }
+        }
     }
 
     /**
@@ -253,6 +265,9 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
     }
 
     protected void renderSLChildComponents() {
+        if (!Drawing.getDrawingBatch().isDrawing()) {
+            throw new IllegalStateException("API contract violation: Drawing is not enabled for the main drawing batch");
+        }
         @SuppressWarnings("null")
         @NotNull Iterator<ScreenComponent> hackvar = this.components.iterator();
         Camera c = NullUtils.requireNotNull(getCamera(), "The internal camera may not be null in order for draw operations to succeed.");

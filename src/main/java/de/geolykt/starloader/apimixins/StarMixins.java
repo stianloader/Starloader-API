@@ -400,7 +400,7 @@ public class StarMixins implements Star {
     @Inject(method = "tick()V", at = @At("HEAD"))
     public void tick(CallbackInfo info) {
         if (tickCallbacks == null) {
-            tickCallbacks = new ArrayList<>();
+            return;
         }
         for (TickCallback<Star> callback : tickCallbacks) {
             callback.tick(this);

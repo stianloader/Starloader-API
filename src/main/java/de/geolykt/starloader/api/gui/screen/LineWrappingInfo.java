@@ -27,10 +27,26 @@ public class LineWrappingInfo {
      * this class is immutable.
      *
      * @return See above
+     * @since 2.0.0
      */
     @NotNull
-    public static LineWrappingInfo wrapDifferyType() {
+    public static LineWrappingInfo wrapDifferentType() {
         return new LineWrappingInfo(false, false, true, false);
+    }
+
+    /**
+     * Obtains an instance of {@link LineWrappingInfo} that only wraps if the object before it is of a different type, or
+     * when the width of the screen is exhausted and no further objects can be added to the screen on that line.
+     * Note: this produces a <b>new</b> instance of the class, however this detail might be changed in the future given that
+     * this class is immutable.
+     *
+     * @return See above
+     * @deprecated The name of this method contains a typo, use {@link #wrapDifferentType} instead.
+     */
+    @NotNull
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public static LineWrappingInfo wrapDifferyType() {
+        return wrapDifferentType();
     }
 
     /**
