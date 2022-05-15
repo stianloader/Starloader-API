@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.geolykt.starloader.impl.gui.ModConfButtonWidget;
+import de.geolykt.starloader.impl.usertest.UsertestSelection;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.SettingsDialog;
@@ -17,6 +18,7 @@ public class SettingsscreenMixins {
 
     @Inject(method = "getItems", at = @At("TAIL"))
     public void getItems(CallbackInfoReturnable<ArrayList<Object>> ci) {
-        ci.getReturnValue().add(new ModConfButtonWidget("Mod Settings", GalColor.WHITE, GalColor.WHITE, "Simulation"));
+        ci.getReturnValue().add(new ModConfButtonWidget("Mod Settings", GalColor.WHITE, GalColor.WHITE, "Mods"));
+        ci.getReturnValue().add(new UsertestSelection("Run Usertests", GalColor.WHITE, GalColor.WHITE, "Mods"));
     }
 }

@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.gui;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public interface TextureProvider {
@@ -49,6 +50,17 @@ public interface TextureProvider {
      */
     @NotNull
     public NinePatch getRoundedButtonNinePatch();
+
+    /**
+     * Obtains a 1x1 pixel square used for simple drawing operations. Why it has to be this way is a bit beyond me, but
+     * hey. The color of the pixel can be set for example through {@link SpriteBatch#setColor(com.badlogic.gdx.graphics.Color)}.
+     * Usually corresponds to the "whitesquare.png" file.
+     *
+     * @return The 1x1 pixel square {@link TextureRegion}
+     * @since 2.0.0
+     */
+    @NotNull
+    public TextureRegion getSinglePixelSquare();
 
     /**
      * Obtains the ninepatch responsible for window frames.

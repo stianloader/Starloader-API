@@ -8,9 +8,14 @@ import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 
+import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.impl.GalimulatorImplementation;
+
 import snoddasmannen.galimulator.GalColor;
+import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.ui.Widget;
 
 /**
@@ -20,8 +25,8 @@ import snoddasmannen.galimulator.ui.Widget;
  */
 public abstract class SLAbstractWidget extends Widget {
 
-    private boolean basicDrawLock = false;
-    private boolean basicMessageLock = false;
+    private volatile boolean basicDrawLock = false;
+    private volatile boolean basicMessageLock = false;
 
     /**
      * The constructor. Does not much other than invoking super as well as initialising a potentially
@@ -40,20 +45,40 @@ public abstract class SLAbstractWidget extends Widget {
             throw new IllegalStateException("Either a draw call completed abnormally or there is recursion going on!");
         }
         basicDrawLock = true;
-        onRender();
-        basicDrawLock = false;
+        SpriteBatch batch = Drawing.getDrawingBatch();
+        boolean startedDrawing;
+        if ((startedDrawing = !batch.isDrawing())) {
+            GalFX.u = true;
+            batch.begin();
+        }
+
+        try {
+            onRender();
+        } catch(Exception e) {
+            GalimulatorImplementation.crash(e, "Exception occured while rendering a widget. This suggests a mod-caused error while drawing a canvas or screen.", true);
+        } finally {
+            if (startedDrawing) {
+                batch.end();
+                GalFX.u = false;
+            }
+            basicDrawLock = false;
+        }
     }
 
     @Override
     public void onMouseUp(double x, double y) {
-        super.onMouseUp(x, y);
+        super.onMouseUp(x, getHeight() - y);
         tap(x, getHeight() - y, false);
     }
 
     @Override
     public void a(float unknown, float amount, float x, float y) {
         super.a(unknown, amount, x, y);
-        scroll((int) x, (int) y, (int) amount / -40);
+        // Panning and dragging is also included in this method, but exact behaviour is not known
+        // I am not even sure what the usecase is behind that distinction
+        if (amount <= -40 || amount >= 40) {
+            scroll((int) x, (int) y, (int) amount / -40);
+        }
     }
 
     @Override
@@ -205,6 +230,7 @@ public abstract class SLAbstractWidget extends Widget {
 
     /**
      * Listener method for when the user clicks on the widget.
+     * More specifically it is called when the mouse is released.
      *
      * @param x The X-position of the click
      * @param y The Y-position of the click

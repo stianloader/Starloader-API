@@ -221,7 +221,7 @@ public final class Drawing {
      * @return The current instance used as a delegate.
      * @see Drawing#requireInstance()
      */
-    public static @Nullable DrawingImpl getInstance() {
+    public static DrawingImpl getInstance() {
         return implementation;
     }
 

@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.NullUtils;
@@ -243,18 +242,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         if (!headless) {
             drawHeader();
         }
-        SpriteBatch mainBatch = Drawing.getDrawingBatch();
-        boolean startedDraw = !mainBatch.isDrawing();
-        if (startedDraw) {
-            mainBatch.begin();
-        }
-        try {
-            renderSLChildComponents();
-        } finally {
-            if (startedDraw) {
-                mainBatch.end();
-            }
-        }
+        renderSLChildComponents();
     }
 
     /**

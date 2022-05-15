@@ -23,9 +23,11 @@ import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.TextureProvider;
+import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
+import de.geolykt.starloader.impl.gui.canvas.SLCanvasManager;
 import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 
 import snoddasmannen.galimulator.Dialog;
@@ -38,7 +40,10 @@ import snoddasmannen.galimulator.ui.Widget;
 
 public class DrawingManager implements DrawingImpl, TextureProvider {
 
-    private static final @NotNull StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
+    @NotNull
+    private static final CanvasManager CANVAS_MANAGER = new SLCanvasManager();
+    @NotNull
+    private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
 
     // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -142,13 +147,21 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull NinePatch getBoxButtonNinePatch() {
+    @NotNull
+    public NinePatch getBoxButtonNinePatch() {
         return GalFX.NINEPATCH.NICEBUTTON.getNine();
+    }
+
+    @Override
+    @NotNull
+    public CanvasManager getCanvasManager() {
+        return CANVAS_MANAGER;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @Nullable BitmapFont getFontBitmap(@NotNull String font) {
+    @Nullable
+    public BitmapFont getFontBitmap(@NotNull String font) {
         GalFX.FONT_TYPE arg;
         try {
             arg = GalFX.FONT_TYPE.valueOf(font);
@@ -165,23 +178,33 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull SpriteBatch getMainDrawingBatch() {
+    @NotNull
+    public SpriteBatch getMainDrawingBatch() {
         return GalFX.a;
     }
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull NinePatch getRoundedButtonNinePatch() {
+    @NotNull
+    public NinePatch getRoundedButtonNinePatch() {
         return GalFX.NINEPATCH.BUTTON3.getNine();
     }
 
     @Override
-    public @NotNull TextFactory getTextFactory() {
+    @NotNull
+    public TextureRegion getSinglePixelSquare() {
+        return findTextureRegion("whitesquare.png");
+    }
+
+    @Override
+    @NotNull
+    public TextFactory getTextFactory() {
         return TEXT_FACTORY;
     }
 
     @Override
-    public @NotNull TextureProvider getTextureProvider() {
+    @NotNull
+    public TextureProvider getTextureProvider() {
         return this;
     }
 

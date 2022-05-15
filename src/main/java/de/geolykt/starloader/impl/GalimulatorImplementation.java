@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.example.Main;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
+import de.geolykt.starloader.Starloader;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NullUtils;
@@ -39,7 +42,9 @@ import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.RandomNameType;
 import de.geolykt.starloader.impl.serial.BoilerplateSavegameFormat;
 import de.geolykt.starloader.impl.serial.VanillaSavegameFormat;
+import de.geolykt.starloader.mod.Extension;
 
+import snoddasmannen.galimulator.Galemulator;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.Space;
@@ -58,6 +63,61 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @NotNull
     private static final List<SavegameFormat> SAVEGAME_FORMATS = new ArrayList<>(Arrays.asList(VanillaSavegameFormat.INSTANCE));
 
+
+    /**
+     * Renders a crash report to the screen and log. This action cannot be undone.
+     *
+     * @param e The stacktrace that should be displayed. Stacktraces are powerful tools to debug issues
+     * @param cause The description of the cause of the issue.
+     * @param save True if the current game state should be written to disk
+     * @since 2.0.0
+     */
+    public static void crash(@NotNull Exception e, @NotNull String cause, boolean save) {
+        Galemulator listener = (Galemulator) Main.application.getApplicationListener();
+
+        if (save) {
+            listener.g = "Game crashed! Saving what still can be saved... Please wait";
+
+            Thread thread = new Thread(() -> {
+                boolean threadDied = false;
+                try (FileOutputStream fos = new FileOutputStream(new File("crash-save.dat"))) {
+                    Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).saveGameState(fos, "Game crashed", "crash-save.dat");
+                } catch (Throwable t) {
+                    if (t instanceof ThreadDeath) {
+                        t.addSuppressed(e);
+                        t.printStackTrace();
+                        threadDied = true;
+                        throw (ThreadDeath) t;
+                    }
+                    t.printStackTrace();
+                } finally {
+                    if (!threadDied) {
+                        crash(e, cause, false);
+                    }
+                }
+            }, "crash-saving-thread");
+            thread.start();
+        } else {
+            StringBuilder builder = new StringBuilder();
+            builder.append("This game is modded, report this crash report to the respective mod devs first, not snoddasmannen directly.\n\n");
+            builder.append("The crash report has also been printed to the log, give the FULL logs to the mod devs, not a screenshot of this.\n");
+            builder.append("Cause (for beginners): " + cause + "\n");
+            builder.append("Installed mods:\n");
+            for (Extension ext : Starloader.getExtensionManager().getExtensions()) {
+                builder.append("    " + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
+            }
+            builder.append("\nStacktrace:\n");
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            sw.flush();
+            builder.append(sw.getBuffer().toString().replace("\n", "\n    "));
+            listener.g = "[LIME]" + builder.toString();
+            for (String s : builder.toString().split("\n")) {
+                LoggerFactory.getLogger("CrashReporter").error(s);
+            }
+        }
+    }
+
     /**
      * Converts a Galimulator map mode into a starloader API map mode.
      * This is a clean cast and should never throw exception, except if there is an issue unrelated to this method.
@@ -65,7 +125,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @param mode The map mode to convert
      * @return The converted map mode
      */
-    private static @NotNull MapMode toSLMode(@NotNull MapModes mode) {
+    @NotNull
+    private static MapMode toSLMode(@NotNull MapModes mode) {
         return (MapMode) (Object) mode;
     }
 

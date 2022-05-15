@@ -18,6 +18,7 @@ accessible      method  snoddasmannen/galimulator/MapMode$MapModes          <ini
 
 # Fields
 accessible      field   com/example/Main                                    shortcuts           Ljava/util/List;
+accessible      field   com/example/Main                                    application         Lcom/badlogic/gdx/backends/lwjgl/LwjglApplication;
 accessible      field   snoddasmannen/galimulator/ui/class_13               d                   J
 extendable      field   snoddasmannen/galimulator/ui/TextInputDialogWidget  c                   Ljava/lang/String;
 accessible      field   snoddasmannen/galimulator/ui/Widget                 layout              Lsnoddasmannen/galimulator/ui/WidgetLayout;
@@ -51,7 +52,9 @@ accessible      field   snoddasmannen/galimulator/SpaceState                bord
 accessible      field   snoddasmannen/galimulator/SpaceState                employmentAgency    Lsnoddasmannen/galimulator/EmploymentAgency;
 accessible      field   snoddasmannen/galimulator/SpaceState                vanity              Lsnoddasmannen/galimulator/VanityHolder;
 accessible      field   snoddasmannen/galimulator/Star                      starRenderingRegion Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
+accessible      field   snoddasmannen/galimulator/Galemulator               g                   Ljava/lang/String;
 accessible      field   snoddasmannen/galimulator/GalFX                     l                   Lcom/badlogic/gdx/graphics/OrthographicCamera;
+accessible      field   snoddasmannen/galimulator/GalFX                     u                   Z
 accessible      field   snoddasmannen/galimulator/War                       e1                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 accessible      field   snoddasmannen/galimulator/War                       e2                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 

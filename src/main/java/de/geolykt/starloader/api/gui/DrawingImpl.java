@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.gui.canvas.Canvas;
+import de.geolykt.starloader.api.gui.canvas.CanvasManager;
+import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
@@ -141,6 +144,16 @@ public interface DrawingImpl {
      * @return A collection of all Font names available at this current time
      */
     public @NotNull Collection<String> getAvailiableFonts();
+
+    /**
+     * Obtains the currently active {@link CanvasManager} instance, which is used to create and open
+     * {@link Canvas canvases} and {@link MultiCanvas multi-canvases}.
+     *
+     * @return The current active {@link CanvasManager}.
+     * @since 2.0.0
+     */
+    @NotNull
+    public CanvasManager getCanvasManager();
 
     /**
      * Obtains the {@link BitmapFont} associated with the font name. May return null
