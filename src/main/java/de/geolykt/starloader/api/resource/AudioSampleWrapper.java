@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.audio.Sound;
 
+import snoddasmannen.galimulator.AudioManager.AudioSample;
+
 /**
  * Wrapper for sounds. They can be used to enrich the user experience, however
  * this does not meant that the game is limited to this selection of sounds, as
@@ -85,4 +87,9 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
      * @param y The Y-position of the sound
      */
     public abstract void play(float x, float y);
+
+    static {
+        AudioSample.values(); // Force the loading of the underlying resources if this class (AudioSampleWrapper is loaded too early).
+        // Slightly strange, but this is a rather small issue that will be resolved eventually later on - at least hopefully
+    }
 }

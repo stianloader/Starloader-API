@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.screen.Screen;
+import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
 /**
  * A canvas is a graphical layer that allows the communication with users.
@@ -16,6 +17,24 @@ import de.geolykt.starloader.api.gui.screen.Screen;
  * @since 2.0.0
  */
 public interface Canvas {
+
+    /**
+     * Displays an selection effect that mirrors the effect that galimulator plays when a button is pressed.
+     * More specifically, a ghost image will be rendered on the user's screen for the next few frames which will get larger
+     * until it appears.
+     *
+     * <p>While originally intended for GUI elements such as buttons, it is applicable to entire canvases and their subcomponents.
+     *
+     * <p>The sound effect itself will not be played. Use {@link AudioSampleWrapper#UI_SMALL_SELECT} for this if deemed required.
+     *
+     * <p>Internally (within galimulator) this effect is known as the widget fade effect.
+     *
+     * <p><b>Calling this method outside of mouse-related events might result in unspecified behaviour as it was not tested for these
+     * circumstances.</b>
+     *
+     * @since 2.0.0
+     */
+    public void displaySelectionEffect();
 
     /**
      * Obtains the {@link CanvasSettings} instance that is used by this canvas instance.

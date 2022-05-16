@@ -67,8 +67,12 @@ public abstract class SLAbstractWidget extends Widget {
 
     @Override
     public void onMouseUp(double x, double y) {
-        super.onMouseUp(x, getHeight() - y);
-        tap(x, getHeight() - y, false);
+        try {
+            super.onMouseUp(x, getHeight() - y);
+            tap(x, getHeight() - y, false);
+        } catch(Exception e) {
+            GalimulatorImplementation.crash(e, "Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true);
+        }
     }
 
     @Override
@@ -113,8 +117,8 @@ public abstract class SLAbstractWidget extends Widget {
     }
 
     /**
-     * Draws the title of the widget. While the title itself will not be rendered,
-     * leaving out just this method call will not result in the vanishing of header background color.
+     * Draws the title of the widget. The title will be drawn alongside the background of the title.
+     * The actual background for the widget must be draw with {@link #drawBackground(GalColor)}
      */
     @Override
     protected final void drawHeader() {

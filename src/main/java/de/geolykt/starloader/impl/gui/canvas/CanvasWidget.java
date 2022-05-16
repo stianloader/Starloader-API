@@ -20,6 +20,8 @@ import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
 
 import snoddasmannen.galimulator.GalColor;
+import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.effects.WidgetFadeEffect;
 import snoddasmannen.galimulator.ui.FlowLayout;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
 import snoddasmannen.galimulator.ui.Widget;
@@ -81,6 +83,20 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
             }
         }
         return super.addChild(widget);
+    }
+
+    @Override
+    public void displaySelectionEffect() {
+        // TODO Deobf the underlying methods (Such as Space#a or Widget#b)
+        // I have no true idea what the two integer arguments are
+        // They could be the focal point of the fade event, but I am not too sure about this.
+        // After some crude investigation it almost definitely has something to do with the focal point, though
+        // it seems to be relative to the mouse press.
+        // The current values result in the focal point being at the mouse press, which is good enough for my pruposes.
+        // That being said it does open up the issue what happens if this method is called outside CanvasWidget#tap
+        // or similar. But I'll guess I'll need to wait for this since I don't really want to test that right now as
+        // it is getting late
+        Space.a(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
     }
 
     @Override
