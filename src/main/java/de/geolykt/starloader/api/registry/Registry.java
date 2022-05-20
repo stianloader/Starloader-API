@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 import de.geolykt.starloader.api.gui.MapMode;
@@ -55,14 +56,26 @@ public abstract class Registry<T> {
     public static Registry<MapMode> MAP_MODES;
 
     /**
-     * Enum registry for the weapon types that can be used within the JSON actor definitions.
+     * Enum registry for all the existing religions.
+     * Adding, removing or otherwise modifying religions is not encouraged by SLAPI and may not work
+     * as religion modding is not really welcome in the inner circles of the galimulator community.
+     *
+     * @since 2.0.0
      */
-    public static Registry<? extends WeaponType> WEAPON_TYPES;
+    public static Registry<? extends Enum<?>> RELIGIONS;
+
+    /**
+     * Registry for {@link StateActorFactory state actor creators}. Unlike most other registries, this registry
+     * is not an enum registry and as such it can be modified at any time after startup.
+     *
+     * @since 2.0.0
+     */
+    public static Registry<StateActorFactory<?>> STATE_ACTOR_FACTORIES;
 
     /**
      * Enum registry for the weapon types that can be used within the JSON actor definitions.
      */
-    public static Registry<? extends Enum<?>> RELIGIONS;
+    public static Registry<? extends WeaponType> WEAPON_TYPES;
 
     /**
      * Internal map containing the key-value pairs of the registry for lookup.

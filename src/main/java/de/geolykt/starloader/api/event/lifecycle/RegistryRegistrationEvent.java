@@ -15,7 +15,6 @@ public class RegistryRegistrationEvent extends Event {
     public static final String REGISTRY_EMPIRE_STATE = "EMPIRESTATE";
     public static final String REGISTRY_FLAG_SYMBOL = "FLAGSYMBOL";
     public static final String REGISTRY_MAP_MODE = "MAPMODES";
-    public static final String REGISTRY_WEAPONS_TYPE = "WEAPONSFACTORY";
 
     /**
      * The name of the registry corresponding to {@link Registry#RELIGIONS}.
@@ -23,6 +22,15 @@ public class RegistryRegistrationEvent extends Event {
      * @since 2.0.0
      */
     public static final String REGISTRY_RELIGION = "RELIGION";
+
+    /**
+     * The name of the registry corresponding to {@link Registry#STATE_ACTOR_FACTORIES}.
+     *
+     * @since 2.0.0
+     */
+    public static final String REGISTRY_STATE_ACTOR_FACTORY = "STATE_ACTOR_FACTORY";
+
+    public static final String REGISTRY_WEAPONS_TYPE = "WEAPONSFACTORY";
 
     protected final Class<?> clazz;
     protected final String name;
