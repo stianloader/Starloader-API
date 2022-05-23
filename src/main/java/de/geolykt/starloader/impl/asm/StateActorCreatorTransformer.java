@@ -15,8 +15,6 @@ import org.objectweb.asm.tree.VarInsnNode;
 import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.transformers.ASMTransformer;
 
-import snoddasmannen.galimulator.actors.JsonActorFactory;
-
 /**
  * ASM Transformer that targets the StateActorCreator interface to make it extend {@link StateActorFactory}.
  *
@@ -52,16 +50,12 @@ public class StateActorCreatorTransformer extends ASMTransformer {
         }
         node.interfaces.add(STATE_ACTOR_FACTORY_NAME);
         MethodNode getTypeName = new MethodNode(Opcodes.ACC_PUBLIC, "getTypeName", "()Ljava/lang/String;", null, null);
-        getTypeName.maxStack = 1;
-        getTypeName.maxLocals = 1;
         getTypeName.instructions = new InsnList();
         getTypeName.instructions.add(new LabelNode());
         getTypeName.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
         getTypeName.instructions.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, TARGET_CLASS, "getShipName", "()Ljava/lang/String;"));
         getTypeName.instructions.add(new InsnNode(Opcodes.ARETURN));
         MethodNode spawnActorMethod = new MethodNode(Opcodes.ACC_PUBLIC, "spawnActor", "(L" + SLAPI_STAR_NAME + ";)L" + SLAPI_STATE_ACTOR_NAME + ";", null, null);
-        spawnActorMethod.maxStack = 3;
-        spawnActorMethod.maxLocals = 2;
         spawnActorMethod.instructions = new InsnList();
         spawnActorMethod.instructions.add(new FieldInsnNode(Opcodes.GETSTATIC, "snoddasmannen/galimulator/Space", galimActorField.split("[ \\.]")[1], "Ljava/util/Vector;"));
         spawnActorMethod.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0)); // ALOAD THIS

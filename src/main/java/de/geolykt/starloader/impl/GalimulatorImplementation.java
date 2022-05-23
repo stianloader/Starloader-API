@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -27,6 +28,7 @@ import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.Actor;
+import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
@@ -40,6 +42,7 @@ import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.RandomNameType;
+import de.geolykt.starloader.impl.actors.GlobalSpawningPredicatesContainer;
 import de.geolykt.starloader.impl.serial.BoilerplateSavegameFormat;
 import de.geolykt.starloader.impl.serial.VanillaSavegameFormat;
 import de.geolykt.starloader.mod.Extension;
@@ -63,6 +66,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @NotNull
     private static final List<SavegameFormat> SAVEGAME_FORMATS = new ArrayList<>(Arrays.asList(VanillaSavegameFormat.INSTANCE));
 
+    @NotNull
+    private final SpawnPredicatesContainer globalSpawningPredicates = new GlobalSpawningPredicatesContainer();
 
     /**
      * Renders a crash report to the screen and log. This action cannot be undone.
@@ -76,6 +81,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         Galemulator listener = (Galemulator) Main.application.getApplicationListener();
 
         if (save) {
+            // TODO deobf
             listener.g = "Game crashed! Saving what still can be saved... Please wait";
 
             Thread thread = new Thread(() -> {
@@ -302,8 +308,16 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return SLSoundHandler.getInstance();
     }
 
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public List<@NotNull Star> getStarList() {
+        return Collections.unmodifiableList(getStarsUnsafe());
+    }
+
     @SuppressWarnings({ "null" })
     @Override
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public @NotNull List<@NotNull Star> getStars() {
         return getStarsUnsafe();
     }
@@ -312,6 +326,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public Vector<Star> getStarsUnsafe() {
         return NullUtils.requireNotNull((Vector) Space.stars);
+    }
+
+    @Override
+    @NotNull
+    public SpawnPredicatesContainer getStateActorSpawningPredicates() {
+        return globalSpawningPredicates;
     }
 
     @Override

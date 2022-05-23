@@ -31,9 +31,11 @@ public interface StateActorFactory<T extends StateActor> {
 
     /**
      * Creates an instance of an actor that is spawned at the given location.
-     * It is also added in the internal actor list and can be used as any actor.
+     * It is also added in the {@link de.geolykt.starloader.api.Galimulator.Unsafe#getActorsUnsafe() internal actor list}
+     * and can be used like any other actor afterwards.
+     * The {@link StateActor#getOwningEmpire() owner of the spawned actor} will be {@link Star#getAssignedEmpire() the owner of the star}.
      *
-     * @param location
+     * @param location The location to spawn the actor in
      * @return The spawned actor instance
      * @since 2.0.0
      */

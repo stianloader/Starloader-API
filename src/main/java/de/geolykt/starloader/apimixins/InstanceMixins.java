@@ -16,15 +16,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.badlogic.gdx.Gdx;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
+import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
+import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratingEvent;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
+import de.geolykt.starloader.impl.actors.SelfDestroyingActor;
 
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.Settings;
-import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.Settings.EnumSettings;
+import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.actors.Actor;
+import snoddasmannen.galimulator.actors.ShipFactory;
+import snoddasmannen.galimulator.actors.StateActorCreator;
 
 /**
  * Mixin to intercept any calls to the static methods within the Galimulator
@@ -78,5 +85,43 @@ public class InstanceMixins {
             Gdx.app.postRunnable(Galimulator::pauseGame);
         }
         return successful;
+    }
+
+    @Overwrite
+    public static Actor spawnActor(snoddasmannen.galimulator.Star galimStar) {
+
+        if (galimStar.getOwningEmpire().getExtension() != null) {
+            Actor var1 = galimStar.getOwningEmpire().getExtension().extendedBuildActor(galimStar);
+            if (var1 != null) {
+               return var1;
+            }
+        }
+
+        if (Space.actorSpawnPredicates == null) {
+            Space.initializeActorSpawnPredicates();
+        }
+
+        SpawnPredicatesContainer container = Galimulator.getStateActorSpawningPredicates();
+
+        if (galimStar.getStarNative() != null) {
+            StateActorSpawnPredicate<?> predicate = container.getNatives().get(galimStar.getStarNative());
+            if (predicate != null && predicate.test((Star) galimStar)) {
+                return new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+            }
+        }
+
+        for (StateActorSpawnPredicate<?> predicate : container.getGeneral()) {
+            if (predicate.test((Star) galimStar)) {
+                return new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+            }
+        }
+
+        for (StateActorSpawnPredicate<?> predicate : container.getFallbackShuffled()) {
+            if (predicate.test((Star) galimStar)) {
+                return new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+            }
+        }
+
+        return new SelfDestroyingActor();
     }
 }

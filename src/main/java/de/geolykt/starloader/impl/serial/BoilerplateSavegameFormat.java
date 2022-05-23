@@ -129,7 +129,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
         DataOutputStream dataOut = new DataOutputStream(out);
         dataOut.write(FORMAT_HEADER); // Format Header
         dataOut.writeInt(0); // Version
-        dataOut.writeInt(Galimulator.getStars().size()); // Amount of stars
+        dataOut.writeInt(Galimulator.getStarList().size()); // Amount of stars
         dataOut.writeInt(Galimulator.getGameYear()); // Game year
         dataOut.writeBoolean(Galimulator.hasUsedSandbox()); // Sandbox
         dataOut.writeLong(System.currentTimeMillis()); // Time

@@ -5,63 +5,67 @@ accessWidener   v2     intermediary
 # ---------------------------------------------------------
 
 # Methods
-accessible      method  snoddasmannen/galimulator/AudioManager              f          ()V
-extendable      method  snoddasmannen/galimulator/EmpireSpecial             <init>     (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-accessible      method  snoddasmannen/galimulator/FlagItem$BuiltinSymbols   <init>     (Ljava/lang/String;ILjava/lang/String;ZII)V
-accessible      method  snoddasmannen/galimulator/GalFX                     c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
-accessible      method  snoddasmannen/galimulator/Space                     ar         ()V
-accessible      method  snoddasmannen/galimulator/Space                     aW         ()V
-accessible      method  snoddasmannen/galimulator/SpaceState                <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
-accessible      method  snoddasmannen/galimulator/ppclass_50                <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
-accessible      method  snoddasmannen/galimulator/UserSettingsEntry         <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
-accessible      method  snoddasmannen/galimulator/MapMode$MapModes          <init>     (Ljava/lang/String;ILjava/lang/String;Z)V
+accessible      method  snoddasmannen/galimulator/AudioManager                 f          ()V
+extendable      method  snoddasmannen/galimulator/EmpireSpecial                <init>     (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+accessible      method  snoddasmannen/galimulator/FlagItem$BuiltinSymbols      <init>     (Ljava/lang/String;ILjava/lang/String;ZII)V
+accessible      method  snoddasmannen/galimulator/GalFX                        c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+accessible      method  snoddasmannen/galimulator/Space                        ar         ()V
+accessible      method  snoddasmannen/galimulator/Space                        aW         ()V
+accessible      method  snoddasmannen/galimulator/SpaceState                   <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
+accessible      method  snoddasmannen/galimulator/ppclass_50                   <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+accessible      method  snoddasmannen/galimulator/UserSettingsEntry            <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
+accessible      method  snoddasmannen/galimulator/MapMode$MapModes             <init>     (Ljava/lang/String;ILjava/lang/String;Z)V
+accessible      method  snoddasmannen/galimulator/Space$ActorSpawningPredicate <init>     (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
 
 # Fields
-accessible      field   com/example/Main                                    shortcuts           Ljava/util/List;
-accessible      field   com/example/Main                                    application         Lcom/badlogic/gdx/backends/lwjgl/LwjglApplication;
-accessible      field   snoddasmannen/galimulator/ui/class_13               d                   J
-extendable      field   snoddasmannen/galimulator/ui/TextInputDialogWidget  c                   Ljava/lang/String;
-accessible      field   snoddasmannen/galimulator/ui/Widget                 layout              Lsnoddasmannen/galimulator/ui/WidgetLayout;
-accessible      field   snoddasmannen/galimulator/AudioManager              a                   Lsnoddasmannen/galimulator/class_4;
-accessible      field   snoddasmannen/galimulator/AudioManager              b                   I
-accessible      field   snoddasmannen/galimulator/AudioManager              c                   Ljava/util/ArrayList;
-accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample  sound               Lcom/badlogic/gdx/audio/Sound;
-accessible      field   snoddasmannen/galimulator/Space                     i                   Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     disruptedStars      Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     corporations        Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     persons             Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     alliances           Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     t                   Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     o                   Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/Space                     milliYear           I
-accessible      field   snoddasmannen/galimulator/Space                     transcended         I
-accessible      field   snoddasmannen/galimulator/Space                     ak                  F
-accessible      field   snoddasmannen/galimulator/Space                     al                  F
-accessible      field   snoddasmannen/galimulator/Space                     player              Lsnoddasmannen/galimulator/Player;
-accessible      field   snoddasmannen/galimulator/Space                     mapData             Lsnoddasmannen/galimulator/MapData;
-accessible      field   snoddasmannen/galimulator/SpaceState                stars               Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                empires             Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                artifacts           Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                actors              Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                disruptedStars      Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                quests              Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                corporations        Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                persons             Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                alliances           Ljava/util/Vector;
-accessible      field   snoddasmannen/galimulator/SpaceState                borders             Ljava/util/List;
-accessible      field   snoddasmannen/galimulator/SpaceState                employmentAgency    Lsnoddasmannen/galimulator/EmploymentAgency;
-accessible      field   snoddasmannen/galimulator/SpaceState                vanity              Lsnoddasmannen/galimulator/VanityHolder;
-accessible      field   snoddasmannen/galimulator/Star                      starRenderingRegion Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
-accessible      field   snoddasmannen/galimulator/Galemulator               g                   Ljava/lang/String;
-accessible      field   snoddasmannen/galimulator/GalFX                     l                   Lcom/badlogic/gdx/graphics/OrthographicCamera;
-accessible      field   snoddasmannen/galimulator/GalFX                     u                   Z
-accessible      field   snoddasmannen/galimulator/War                       e1                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
-accessible      field   snoddasmannen/galimulator/War                       e2                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+accessible      field   com/example/Main                                       shortcuts            Ljava/util/List;
+accessible      field   com/example/Main                                       application          Lcom/badlogic/gdx/backends/lwjgl/LwjglApplication;
+accessible      field   snoddasmannen/galimulator/ui/class_13                  d                    J
+extendable      field   snoddasmannen/galimulator/ui/TextInputDialogWidget     c                    Ljava/lang/String;
+accessible      field   snoddasmannen/galimulator/ui/Widget                    layout               Lsnoddasmannen/galimulator/ui/WidgetLayout;
+accessible      field   snoddasmannen/galimulator/AudioManager                 a                    Lsnoddasmannen/galimulator/class_4;
+accessible      field   snoddasmannen/galimulator/AudioManager                 b                    I
+accessible      field   snoddasmannen/galimulator/AudioManager                 c                    Ljava/util/ArrayList;
+accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample     sound                Lcom/badlogic/gdx/audio/Sound;
+accessible      field   snoddasmannen/galimulator/Space                        actorSpawnPredicates Ljava/util/ArrayList;
+accessible      field   snoddasmannen/galimulator/Space                        i                    Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        disruptedStars       Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        corporations         Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        persons              Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        alliances            Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        t                    Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        o                    Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        milliYear            I
+accessible      field   snoddasmannen/galimulator/Space                        transcended          I
+accessible      field   snoddasmannen/galimulator/Space                        ak                   F
+accessible      field   snoddasmannen/galimulator/Space                        al                   F
+accessible      field   snoddasmannen/galimulator/Space                        player               Lsnoddasmannen/galimulator/Player;
+accessible      field   snoddasmannen/galimulator/Space                        mapData              Lsnoddasmannen/galimulator/MapData;
+accessible      field   snoddasmannen/galimulator/Space$ActorSpawningPredicate actorFactory         Lsnoddasmannen/galimulator/actors/StateActorCreator;
+accessible      field   snoddasmannen/galimulator/SpaceState                   stars                Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   empires              Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   artifacts            Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   actors               Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   disruptedStars       Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   quests               Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   corporations         Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   persons              Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   alliances            Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/SpaceState                   borders              Ljava/util/List;
+accessible      field   snoddasmannen/galimulator/SpaceState                   employmentAgency     Lsnoddasmannen/galimulator/EmploymentAgency;
+accessible      field   snoddasmannen/galimulator/SpaceState                   vanity               Lsnoddasmannen/galimulator/VanityHolder;
+accessible      field   snoddasmannen/galimulator/Star                         starRenderingRegion  Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
+accessible      field   snoddasmannen/galimulator/Galemulator                  g                    Ljava/lang/String;
+accessible      field   snoddasmannen/galimulator/GalFX                        l                   Lcom/badlogic/gdx/graphics/OrthographicCamera;
+accessible      field   snoddasmannen/galimulator/GalFX                        u                   Z
+accessible      field   snoddasmannen/galimulator/War                          e1                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+accessible      field   snoddasmannen/galimulator/War                          e2                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 
 # Classes
 accessible      class   snoddasmannen/galimulator/ppclass_50
 accessible      class   snoddasmannen/galimulator/ppclass_51
 accessible      class   snoddasmannen/galimulator/Space$SaveMode
+accessible      class   snoddasmannen/galimulator/Space$ActorSpawningPredicate
 
 # Enum Hacks
 compileOnly denumerised class snoddasmannen/galimulator/EmpireSpecial

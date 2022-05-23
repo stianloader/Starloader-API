@@ -688,7 +688,7 @@ public class EmpireMixins implements ActiveEmpire {
             if (stateKey == RegistryKeys.GALIMULATOR_ALL_WILL_BE_ASHES) {
                 // AWBA does not believe in development, and as such development is reset within
                 // it
-                for (Star star : Galimulator.getStars()) {
+                for (Star star : Galimulator.getStarList()) {
                     if (star.getAssignedEmpire() == this) {
                         ((snoddasmannen.galimulator.Star) star).d(0); // resets the development within the empire
                     }

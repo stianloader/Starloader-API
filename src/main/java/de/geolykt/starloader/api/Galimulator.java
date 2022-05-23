@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.Actor;
+import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
+import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
@@ -178,6 +180,18 @@ public final class Galimulator {
         public @NotNull SoundHandler getSoundHandler();
 
         /**
+         * Obtains an immutable view of the underlying list of the internal vector
+         * of stars.
+         *
+         * @return An immutable {@link List} of {@link Star stars} that are known
+         * @since 2.0.0
+         * @see Unsafe#getStarsUnsafe()
+         */
+        @Contract(pure = true, value = "-> new")
+        @NotNull
+        public List<@NotNull Star> getStarList();
+
+        /**
          * Gets the currently registered Stars. Note that like many other methods in the
          * API, this is NOT a clone of the backing collection, which means that any
          * modifications done to the collections will happen in game. This behaviour is
@@ -188,8 +202,23 @@ public final class Galimulator {
          * This will be resolved in the 2.0.0 release
          *
          * @return A {@link List} of {@link Star stars} that are known
+         * @deprecated This method goes against the current design philosophy of this API, use {@link Unsafe#getStarsUnsafe()}
+         * or {@link Galimulator#getStarList()} instead.
          */
-        public @NotNull List<@NotNull Star> getStars();
+        @NotNull
+        @Deprecated(forRemoval = true, since = "2.0.0")
+        public List<@NotNull Star> getStars();
+
+        /**
+         * Obtains the {@link StateActorSpawnPredicate state actor spawning predicates} used globally
+         * for all empires.
+         *
+         * @return A view of the spawning requirements
+         * @since 2.0.0
+         */
+        @Contract(pure = true)
+        @NotNull
+        public SpawnPredicatesContainer getStateActorSpawningPredicates();
 
         /**
          * Obtains the amount of empires that have transcended in during the game.
@@ -750,8 +779,23 @@ public final class Galimulator {
      *
      * @return The active {@link SoundHandler}.
      */
-    public static @NotNull SoundHandler getSoundHandler() {
+    @NotNull
+    public static SoundHandler getSoundHandler() {
         return impl.getSoundHandler();
+    }
+
+    /**
+     * Obtains an immutable view of the underlying list of the internal vector
+     * of stars.
+     *
+     * @return An immutable {@link List} of {@link Star stars} that are known
+     * @since 2.0.0
+     * @see Unsafe#getStarsUnsafe()
+     */
+    @NotNull
+    @Contract(pure = true, value = "-> new")
+    public static List<@NotNull Star> getStarList() {
+        return impl.getStarList();
     }
 
     /**
@@ -762,14 +806,31 @@ public final class Galimulator {
      * performance friendly.
      *
      * @return A {@link Vector} of {@link Star stars} that are known
+     * @deprecated This method goes against the current design philosophy of this API, use {@link Unsafe#getStarsUnsafe()}
+     * or {@link Galimulator#getStarList()} instead.
      */
     @SuppressWarnings("null")
-    public static @NotNull Vector<@NotNull Star> getStars() { // TODO 2.0.0: use List instead of Vector
+    @NotNull
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public static Vector<@NotNull Star> getStars() {
         List<Star> result = impl.getStars();
         if (result instanceof Vector) {
             return (@NotNull Vector<@NotNull Star>) result;
         }
         return new Vector<>(result);
+    }
+
+    /**
+     * Obtains the {@link StateActorSpawnPredicate state actor spawning predicates} used globally
+     * for all empires.
+     *
+     * @return A view of the spawning requirements
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    @NotNull
+    public static SpawnPredicatesContainer getStateActorSpawningPredicates() {
+        return impl.getStateActorSpawningPredicates();
     }
 
     /**

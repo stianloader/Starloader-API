@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_11",
   "mixins": [
     "ActorMixins",
+    "ActorSpawningPredicateMixins",
     "AllianceMixins",
     "ApplicationMixins",
     "AudioManagerMixins",
