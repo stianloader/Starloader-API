@@ -2,6 +2,7 @@ package de.geolykt.starloader.api.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +44,10 @@ public final class EventManager {
             if (method.isAnnotationPresent(EventHandler.class)) {
                 if (method.getParameterCount() != 1) {
                     DebugNagException.nag("Invalid parameter count for event handler within listener!");
+                    continue;
+                }
+                if ((method.getModifiers() & Modifier.STATIC) != 0) {
+                    DebugNagException.nag("Cannot make method " + method + " accessible as it is static, which is not supported!");
                     continue;
                 }
                 if (!method.canAccess(listener) && !method.trySetAccessible()) {

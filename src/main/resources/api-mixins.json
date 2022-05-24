@@ -29,6 +29,8 @@
     "PersonMixins",
     "ReligionMixins",
     "SettingsscreenMixins",
+    "ShipFactoryMixins",
+    "ShipTypeMixins",
     "StarMixins",
     "StateActorMixins",
     "TrackMixins",

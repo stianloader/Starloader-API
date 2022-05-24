@@ -16,10 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.badlogic.gdx.Gdx;
 
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.actor.ActorConstructionSite;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
+import de.geolykt.starloader.api.event.actor.ActorConstructionSiteBeginEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratingEvent;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
@@ -106,19 +108,37 @@ public class InstanceMixins {
         if (galimStar.getStarNative() != null) {
             StateActorSpawnPredicate<?> predicate = container.getNatives().get(galimStar.getStarNative());
             if (predicate != null && predicate.test((Star) galimStar)) {
-                return new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+                ShipFactory factory = new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+                @SuppressWarnings({ "unchecked", "rawtypes" })
+                ActorConstructionSiteBeginEvent<?> evt = new ActorConstructionSiteBeginEvent((ActorConstructionSite) factory, predicate);
+                EventManager.handleEvent(evt);
+                if (!evt.isCancelled()) {
+                    return factory;
+                }
             }
         }
 
         for (StateActorSpawnPredicate<?> predicate : container.getGeneral()) {
             if (predicate.test((Star) galimStar)) {
-                return new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+                ShipFactory factory = new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+                @SuppressWarnings({ "unchecked", "rawtypes" })
+                ActorConstructionSiteBeginEvent<?> evt = new ActorConstructionSiteBeginEvent((ActorConstructionSite) factory, predicate);
+                EventManager.handleEvent(evt);
+                if (!evt.isCancelled()) {
+                    return factory;
+                }
             }
         }
 
         for (StateActorSpawnPredicate<?> predicate : container.getFallbackShuffled()) {
             if (predicate.test((Star) galimStar)) {
-                return new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+                ShipFactory factory = new ShipFactory((StateActorCreator) predicate.getFactory(), galimStar);
+                @SuppressWarnings({ "unchecked", "rawtypes" })
+                ActorConstructionSiteBeginEvent<?> evt = new ActorConstructionSiteBeginEvent((ActorConstructionSite) factory, predicate);
+                EventManager.handleEvent(evt);
+                if (!evt.isCancelled()) {
+                    return factory;
+                }
             }
         }
 

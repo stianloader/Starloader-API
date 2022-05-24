@@ -2,8 +2,6 @@ package de.geolykt.starloader.impl.asm;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.actor.StateActor;
-import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
 
 import snoddasmannen.galimulator.actors.StateActorCreator;
@@ -27,20 +25,6 @@ public final class SLInstrinsics {
      */
     @NotNull
     public static final StateActorSpawnPredicate<?> createPredicate(StateActorCreator creator, float triggerChance) {
-        return createPredicate((StateActorFactory<?>) creator, triggerChance);
-    }
-
-    /**
-     * Create a {@link StateActorSpawnPredicate} that uses the given creator and has a given chance to trigger.
-     *
-     * @param <T> The type of the actor
-     * @param creator The factory for the actor
-     * @param triggerChance The chance to trigger (0.0F = never, 1.0F = always)
-     * @return The created {@link StateActorSpawnPredicate} instance.
-     * @since 2.0.0
-     */
-    @NotNull
-    public static final <T extends StateActor> StateActorSpawnPredicate<T> createPredicate(StateActorFactory<T> creator, float triggerChance) {
         throw new UnsupportedOperationException("The SLInstrinsics class is meant to be transformed at runtime.");
     }
 }
