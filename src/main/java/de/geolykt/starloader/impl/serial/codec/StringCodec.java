@@ -1,7 +1,7 @@
 package de.geolykt.starloader.impl.serial.codec;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +43,7 @@ public class StringCodec extends Codec<@NotNull String> {
     @SuppressWarnings("null")
     @Override
     @NotNull
-    public String decode(@NotNull InputStream input) throws IOException {
+    public String decode(@NotNull DataInputStream input) throws IOException {
         return decode(input.readAllBytes());
     }
 }

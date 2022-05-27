@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api.serial;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -45,7 +46,7 @@ public interface Decoder<T> {
      * @since 2.0.0
      */
     @NotNull
-    public T decode(@NotNull InputStream input) throws IOException;
+    public T decode(@NotNull DataInputStream input) throws IOException;
 
     /**
      * Obtains the key used for encoding operations. This basically is used to identify the decoder that needs to be used
