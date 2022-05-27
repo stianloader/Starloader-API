@@ -1,13 +1,17 @@
 package de.geolykt.starloader.api.registry;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.gui.FlagSymbol;
@@ -81,7 +85,7 @@ public abstract class Registry<T> {
      * Internal map containing the key-value pairs of the registry for lookup.
      */
     @NotNull
-    protected final Map<NamespacedKey, T> keyedValues = new HashMap<>();
+    protected final Map<@NotNull NamespacedKey, T> keyedValues = new HashMap<>();
 
     /**
      * Internal map containing the enum's name of the registry for lookup. Used to
@@ -122,12 +126,26 @@ public abstract class Registry<T> {
      *
      * @param key The key of the entry
      * @return The value associated under the key
+     * @since 1.1.0
      * @deprecated This is internal API not meant for non-internal use.
      */
     @Deprecated(forRemoval = false, since = "1.1.0")
     @Nullable
     public T getIntern(@NotNull String key) {
         return keyedValuesIntern.get(key);
+    }
+
+    /**
+     * Obtains an immutable view of all {@link NamespacedKey namespaced keys} that are linked to a known value
+     * as per {@link #get(NamespacedKey)}. Attempting to modify the returned collection will result in a runtime
+     * error
+     *
+     * @return An immutable view of all keys
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public Set<@NotNull NamespacedKey> getKeys() {
+        return Collections.unmodifiableSet(this.keyedValues.keySet());
     }
 
     /**
@@ -200,4 +218,17 @@ public abstract class Registry<T> {
      * @since 1.1.0
      */
     public abstract void register(@NotNull NamespacedKey key, @NotNull T value);
+
+    /**
+     * Obtains the value that is tied to a specific key, throwing an exception is the key is not associated with a value.
+     *
+     * @param key The key
+     * @return The value tied to the key
+     * @see #get(NamespacedKey)
+     * @since 2.0.0
+     */
+    @NotNull
+    public T require(@NotNull NamespacedKey key) {
+        return NullUtils.requireNotNull(get(key), "Key \"" + key + "\" is not associated with a value!");
+    }
 }

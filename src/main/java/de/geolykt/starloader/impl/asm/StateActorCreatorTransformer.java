@@ -2,6 +2,7 @@ package de.geolykt.starloader.impl.asm;
 
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
@@ -22,26 +23,31 @@ import de.geolykt.starloader.transformers.ASMTransformer;
  */
 public class StateActorCreatorTransformer extends ASMTransformer {
 
-    private boolean valid = true;
     @NotNull
-    private static final String TARGET_CLASS = "snoddasmannen/galimulator/actors/StateActorCreator";
-    @NotNull
-    private static final String STATE_ACTOR_FACTORY_NAME = "de/geolykt/starloader/api/actor/StateActorFactory";
-
-    @NotNull
-    private static final String SLAPI_STATE_ACTOR_NAME = "de/geolykt/starloader/api/actor/StateActor";
-
-    @NotNull
-    private static final String SLAPI_STAR_NAME = "de/geolykt/starloader/api/empire/Star";
+    private static final String GALIM_STAR_NAME = "snoddasmannen/galimulator/Star";
 
     @NotNull
     private static final String GALIM_STATE_ACTOR_NAME = "snoddasmannen/galimulator/actors/StateActor";
 
     @NotNull
-    private static final String GALIM_STAR_NAME = "snoddasmannen/galimulator/Star";
+    public static String galimActorField = "snoddasmannen/galimulator/Space.actors Ljava/util/Vector;";
 
     @NotNull
-    public static String galimActorField = "snoddasmannen/galimulator/Space.actors Ljava/util/Vector;";
+    private static final String SLAPI_NAMESPACED_KEY_NAME = "de/geolykt/starloader/api/NamespacedKey";
+
+    @NotNull
+    private static final String SLAPI_STAR_NAME = "de/geolykt/starloader/api/empire/Star";
+
+    @NotNull
+    private static final String SLAPI_STATE_ACTOR_NAME = "de/geolykt/starloader/api/actor/StateActor";
+
+    @NotNull
+    private static final String STATE_ACTOR_FACTORY_NAME = "de/geolykt/starloader/api/actor/StateActorFactory";
+
+    @NotNull
+    private static final String TARGET_CLASS = "snoddasmannen/galimulator/actors/StateActorCreator";
+
+    private boolean valid = true;
 
     @Override
     public boolean accept(@NotNull ClassNode node) {
@@ -70,17 +76,38 @@ public class StateActorCreatorTransformer extends ASMTransformer {
         spawnActorMethod.instructions.add(new InsnNode(Opcodes.ARETURN));
         node.methods.add(getTypeName);
         node.methods.add(spawnActorMethod);
+
+        {
+            MethodNode setKey = new MethodNode(Opcodes.ACC_PUBLIC, "setRegistryKey", "(L" + SLAPI_NAMESPACED_KEY_NAME + ";)V", null, null);
+            setKey.maxStack = 2;
+            setKey.instructions = new InsnList();
+            setKey.instructions.add(new TypeInsnNode(Opcodes.NEW, Type.getInternalName(UnsupportedOperationException.class)));
+            setKey.instructions.add(new InsnNode(Opcodes.DUP));
+            setKey.instructions.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, Type.getInternalName(UnsupportedOperationException.class), "<init>", "()V"));
+            setKey.instructions.add(new InsnNode(Opcodes.ATHROW));
+            node.methods.add(setKey);
+        }
+        {
+            MethodNode getKey = new MethodNode(Opcodes.ACC_PUBLIC, "getRegistryKey", "()L" + SLAPI_NAMESPACED_KEY_NAME + ";", null, null);
+            getKey.maxStack = 1;
+            getKey.instructions = new InsnList();
+            getKey.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
+            getKey.instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/impl/registry/StateActorFactoryRegistry", "getKey", "(L" + STATE_ACTOR_FACTORY_NAME + ";)L" + SLAPI_NAMESPACED_KEY_NAME + ";"));
+            getKey.instructions.add(new InsnNode(Opcodes.ARETURN));
+            node.methods.add(getKey);
+        }
+
         valid = false;
         return true;
     }
 
     @Override
-    public boolean isValidTraget(@NotNull String internalName) {
-        return internalName.equals(TARGET_CLASS);
+    public boolean isValid() {
+        return valid;
     }
 
     @Override
-    public boolean isValid() {
-        return valid;
+    public boolean isValidTraget(@NotNull String internalName) {
+        return internalName.equals(TARGET_CLASS);
     }
 }

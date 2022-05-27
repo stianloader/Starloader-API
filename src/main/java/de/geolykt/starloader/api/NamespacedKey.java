@@ -26,6 +26,18 @@ public class NamespacedKey {
         return new NamespacedKey(string.substring(0, colonIndex), string.substring(colonIndex + 1));
     }
 
+    /**
+     * Creates a namespaced key based on two strings. Practically exposing {@link #NamespacedKey(String, String)} to the public.
+     *
+     * @return The {@link NamespacedKey} that was parsed from the strings.
+     * @since 2.0.0
+     */
+    @SuppressWarnings("null")
+    @NotNull
+    public static NamespacedKey fromString(String namespace, String key) {
+        return new NamespacedKey(namespace, key);
+    }
+
     @NotNull
     private final String keyString;
 

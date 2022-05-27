@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.actor;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.registry.RegistryKeyed;
 
 /**
  * Object that can create instances of {@link StateActor StateActors}.
@@ -10,7 +11,7 @@ import de.geolykt.starloader.api.empire.Star;
  * @param <T> The instance of the class
  * @since 2.0.0
  */
-public interface StateActorFactory<T extends StateActor> {
+public interface StateActorFactory<T extends StateActor> extends RegistryKeyed {
 
     /**
      * Obtains the name of the type that is created. Should be user-friendly.

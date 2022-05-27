@@ -1,11 +1,14 @@
 package de.geolykt.starloader.apimixins;
 
 import java.lang.reflect.Constructor;
+import java.util.Locale;
 
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ReflectionStateActorFactory;
 import de.geolykt.starloader.api.actor.StateActor;
@@ -22,6 +25,9 @@ public class ShipTypeMixins<T extends StateActor> implements ReflectionStateActo
     Class<@NotNull T> shipClass;
     @Shadow
     private String shipName;
+
+    @Unique
+    private transient NamespacedKey registryKeyCache;
 
     @SuppressWarnings("null")
     @Override
@@ -53,6 +59,23 @@ public class ShipTypeMixins<T extends StateActor> implements ReflectionStateActo
         } catch (Exception e) {
             GalimulatorImplementation.crash(e, "Unable to create an instance of a ship type (" + getTypeName() + ")", true);
             return NullUtils.provideNull();
+        }
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public NamespacedKey getRegistryKey() {
+        if (registryKeyCache == null) {
+            registryKeyCache = NamespacedKey.fromString("galimulator:ship-" + ((Enum<?>) (Object) this).name().toLowerCase(Locale.ROOT));
+        }
+        return registryKeyCache;
+    }
+
+    @Override
+    public void setRegistryKey(@NotNull NamespacedKey key) {
+        if (!key.equals(getRegistryKey())) {
+            throw new IllegalArgumentException("Cannot redefine registry key for an instance of ShipType!");
         }
     }
 }

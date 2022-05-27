@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.registry.RegistryKeyed;
 
 import snoddasmannen.galimulator.Native;
 import snoddasmannen.galimulator.Space;
@@ -19,18 +20,33 @@ import snoddasmannen.galimulator.actors.StateActorCreator;
 
 public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
 
+    public static NamespacedKey getKey(@NotNull StateActorFactory<?> factory) {
+        if (factory instanceof JsonActorFactory) {
+            JsonActorFactory jsonFactory = (JsonActorFactory) factory;
+            if (factory.isNative()) {
+                return NamespacedKey.fromString("galimulator", "native-" + jsonFactory.getShipName());
+            } else {
+                String modName = jsonFactory.getModName().replace(' ', '_').toLowerCase(Locale.ROOT);
+                String shipName = jsonFactory.getShipName().replace(' ', '_').toLowerCase(Locale.ROOT);
+                return NamespacedKey.fromString(modName, shipName);
+            }
+        } else {
+            throw new IllegalArgumentException(factory.getClass() + " not known");
+        }
+    }
+
     public StateActorFactoryRegistry() {
         // TODO properly register natives and deobf this
         Set<String> nativesName = new HashSet<>();
         Native.get_a().forEach(starNative -> {
             nativesName.add(starNative.getName());
-            register(NamespacedKey.fromString("galimulator:native-" + starNative.getName().toLowerCase(Locale.ROOT)), starNative.e());
+            register(((RegistryKeyed) starNative.e()).getRegistryKey(), starNative.e());
         });
         for (ShipType type : ShipType.values()) {
-            register(NamespacedKey.fromString("galimulator:ship-" + type.name().toLowerCase(Locale.ROOT)), type);
+            register(((RegistryKeyed) (Object)type).getRegistryKey(), type);
         }
         Set<Object> alreadyIncluded = new HashSet<>(super.keyedValues.values());
-        // TODO Deobfuscate. "aI" contains the string "Error while getting state actor creators"
+        // TODO Deobfuscate. "Space#aI" contains the string "Error while getting state actor creators"
         for (Object o : Space.aI()) {
             if (alreadyIncluded.contains(o)) {
                 continue;
@@ -44,9 +60,7 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
                     LoggerFactory.getLogger(StateActorFactoryRegistry.class).warn("Unregistered native actor creator (not registering it anyways): " + jsonFactory.getShipName());
                     continue;
                 }
-                String modName = jsonFactory.getModName().replace(' ', '_').toLowerCase(Locale.ROOT);
-                String shipName = jsonFactory.getShipName().replace(' ', '_').toLowerCase(Locale.ROOT);
-                register(NamespacedKey.fromString(modName + ':' + shipName), jsonFactory);
+                register(((RegistryKeyed) o).getRegistryKey(), jsonFactory);
             } else {
                 LoggerFactory.getLogger(StateActorFactoryRegistry.class).warn("Unknown factory class: " + o.getClass().getName());
             }
