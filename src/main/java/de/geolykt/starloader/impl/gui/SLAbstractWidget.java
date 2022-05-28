@@ -157,6 +157,16 @@ public abstract class SLAbstractWidget extends Widget {
     @Override
     public abstract int getWidth();
 
+    @Override
+    public final void hover(float x, float y, boolean unknown) {
+        super.hover(x, y, unknown);
+        hover((int) x, (int) y);
+    }
+
+    protected void hover(int x, int y) {
+        // Dummy method
+    }
+
     /**
      * Obtains the X-position of the object relative to the current frame of reference. Basically,
      * should the Widget be within another Widget, then the returned value is the position of the widget within that widget.

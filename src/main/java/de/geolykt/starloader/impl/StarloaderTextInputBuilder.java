@@ -46,7 +46,8 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     }
 
     @Override
-    public @Nullable InputDialog build() {
+    @Nullable
+    public InputDialog build() {
         if (Settings.EnumSettings.USE_NATIVE_KEYBOARD.b() == Boolean.TRUE) {
             Gdx.input.getTextInput(new TextInputWrapper(hooks), title, text, hint);
             return null;
@@ -57,7 +58,8 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
         if (initialText != null) {
             dialog.setText(initialText);
         }
-        Space.i.add(new BufferedWidgetWrapper(dialog, GalFX.G() - dialog.getWidth() - 120.0f, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
+        // Basically Space#showWidget, but does not close non-persistent widgets
+        Space.openedWidgets.add(new BufferedWidgetWrapper(dialog, GalFX.getScreenWidth() - dialog.getWidth() - 120.0f, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
         return dialog;
     }
 

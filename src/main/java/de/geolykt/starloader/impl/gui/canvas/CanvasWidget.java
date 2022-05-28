@@ -138,6 +138,17 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
         return ctx.getWidth();
     }
 
+    @SuppressWarnings("null")
+    @Override
+    public void hover(int x, int y) {
+        ctx.onHover(x, y, internalCamera, this);
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return ctx.isPersistent();
+    }
+
     @Override
     @NotNull
     public Canvas markDirty() {

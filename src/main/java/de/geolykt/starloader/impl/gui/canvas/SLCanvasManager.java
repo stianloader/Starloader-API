@@ -13,7 +13,9 @@ import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.api.gui.screen.Screen;
 
+import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.Widget;
 
 public class SLCanvasManager implements CanvasManager {
@@ -73,7 +75,9 @@ public class SLCanvasManager implements CanvasManager {
     @NotNull
     public Canvas openCanvas(@NotNull Canvas canvas) {
         if (canvas instanceof Widget) {
-            Space.showWidget((Widget) canvas);
+            Space.closeNonPersistentWidgets(); // Called in Space#showWidget()
+            double x = GalFX.getScreenWidth() - canvas.getContext().getWidth() - 120;
+            Space.openedWidgets.add(new BufferedWidgetWrapper((Widget) canvas, x, 200.0 /* ?! */, true, Widget.WIDGET_ALIGNMENT.BOTTOM));
         } else {
             throw new UnsupportedOperationException("The canvas is not an instanceof Widget and therefore this operation is inapplicable.");
         }

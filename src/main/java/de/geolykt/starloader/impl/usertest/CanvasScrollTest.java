@@ -72,7 +72,28 @@ public class CanvasScrollTest extends Usertest {
         Canvas row2 = manager.multiCanvas(manager.dummyContext(400, 200), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.LEFT_TO_RIGHT, c3, c4);
 
         CanvasSettings settings = new CanvasSettings("CanvasScrollTest");
-        Canvas fullCanvas = manager.multiCanvas(manager.dummyContext(400, 400), settings, ChildObjectOrientation.BOTTOM_TO_TOP, row1, row2);
+        Canvas fullCanvas = manager.multiCanvas(new CanvasContext() {
+
+            @Override
+            public int getHeight() {
+                return 400;
+            }
+
+            @Override
+            public int getWidth() {
+                return 400;
+            }
+
+            @Override
+            public boolean isPersistent() {
+                return true;
+            }
+
+            @Override
+            public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
+                // NOP
+            }
+        }, settings, ChildObjectOrientation.BOTTOM_TO_TOP, row1, row2);
         fullCanvas.openCanvas();
     }
 

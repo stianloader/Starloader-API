@@ -23,5 +23,6 @@ public abstract class Usertest {
         USERTESTS.add(new MatryoshkaTest());
         USERTESTS.add(new CanvasScrollTest());
         USERTESTS.add(new CheckerboardTest());
+        USERTESTS.add(new CanvasHoverTest());
     }
 }

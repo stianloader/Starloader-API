@@ -53,6 +53,21 @@ public interface CanvasContext {
     public int getWidth();
 
     /**
+     * Queries whether the canvas should be "persistent". Persistent canvases will not get closed after another (persistent or not)
+     * canvas is opened. However, the canvases might get cleared under certain circumstances either way, for example when the game is
+     * resized. Additionally, persistent canvases will not get closed if the user taps outside the canvas. However it can still get closed
+     * manually with the "X" button but cannot get closed by pressing "ESC".
+     *
+     * <p>Only the persistent modifier for the top-level (multi-)canvas is used. The modifier is basically discarded for child canvases.
+     *
+     * @return The persistence modifier of the widget
+     * @since 2.0.0
+     */
+    public default boolean isPersistent() {
+        return false;
+    }
+
+    /**
      * Called when the user clicks on the canvas.
      * More specifically it is called when the user releases the mouse click.
      *
@@ -74,9 +89,7 @@ public interface CanvasContext {
      * @param camera  The camera supplied for drawing operations
      * @param canvas  The canvas that was clicked on
      * @since 2.0.0.
-     * @deprecated Not yet implemented
      */
-    @Deprecated(forRemoval = false, since = "2.0.0")
     public default void onHover(int canvasX, int canvasY, @NotNull Camera camera, @NotNull Canvas canvas) {
         // NOP
     }

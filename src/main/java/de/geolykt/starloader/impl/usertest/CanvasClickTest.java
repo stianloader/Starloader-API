@@ -25,5 +25,4 @@ public class CanvasClickTest extends Usertest {
     public String getCategoryName() {
         return "SLAPI";
     }
-
 }
