@@ -34,8 +34,6 @@ import snoddasmannen.galimulator.Job;
 import snoddasmannen.galimulator.Job.JobType;
 import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.ppclass_50;
-import snoddasmannen.galimulator.ppclass_51;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
 
 @Mixin(EmploymentAgency.class)
@@ -147,11 +145,11 @@ public class EmploymentAgencyMixins {
                 }
             }
         }
-        final ArrayList<Callable<ppclass_51>> callbacks = new ArrayList<>();
+        final ArrayList<Callable<EmploymentAgency.InnerClass2>> callbacks = new ArrayList<>();
         final int n2 = potentialCandidates.size() / 100 + 1;
         for (int i = 0; i < n2; ++i) {
             @SuppressWarnings("unchecked")
-            Callable<ppclass_51> callable = new ppclass_50((EmploymentAgency) (Object) this, i * 100, potentialCandidates, job);
+            Callable<EmploymentAgency.InnerClass2> callable = ((EmploymentAgency) (Object) this).new InnerClass1(i * 100, potentialCandidates, job);
             callbacks.add(callable);
         }
         Person successor = null;
@@ -160,8 +158,8 @@ public class EmploymentAgencyMixins {
             if (this.b == null) {
                 this.b = Executors.newFixedThreadPool(4);
             }
-            for (Future<ppclass_51> finishedTask : b.invokeAll(callbacks)) {
-                final ppclass_51 finishedTaskReturn = finishedTask.get();
+            for (Future<EmploymentAgency.InnerClass2> finishedTask : b.invokeAll(callbacks)) {
+                final EmploymentAgency.InnerClass2 finishedTaskReturn = finishedTask.get();
                 if (successor == null || finishedTaskReturn.b > successorMerit) {
                     successor = finishedTaskReturn.a;
                     successorMerit = finishedTaskReturn.b;

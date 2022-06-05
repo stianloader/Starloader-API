@@ -5,17 +5,17 @@ accessWidener   v2     intermediary
 # ---------------------------------------------------------
 
 # Methods
-accessible      method  snoddasmannen/galimulator/AudioManager                 f          ()V
-extendable      method  snoddasmannen/galimulator/EmpireSpecial                <init>     (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-accessible      method  snoddasmannen/galimulator/FlagItem$BuiltinSymbols      <init>     (Ljava/lang/String;ILjava/lang/String;ZII)V
-accessible      method  snoddasmannen/galimulator/GalFX                        c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
-accessible      method  snoddasmannen/galimulator/Space                        ar         ()V
-accessible      method  snoddasmannen/galimulator/Space                        aW         ()V
-accessible      method  snoddasmannen/galimulator/SpaceState                   <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
-accessible      method  snoddasmannen/galimulator/ppclass_50                   <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
-accessible      method  snoddasmannen/galimulator/UserSettingsEntry            <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
-accessible      method  snoddasmannen/galimulator/MapMode$MapModes             <init>     (Ljava/lang/String;ILjava/lang/String;Z)V
-accessible      method  snoddasmannen/galimulator/Space$ActorSpawningPredicate <init>     (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
+accessible      method  snoddasmannen/galimulator/AudioManager                                   f          ()V
+extendable      method  snoddasmannen/galimulator/EmpireSpecial                                  <init>     (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+accessible      method  snoddasmannen/galimulator/FlagItem$BuiltinSymbols                        <init>     (Ljava/lang/String;ILjava/lang/String;ZII)V
+accessible      method  snoddasmannen/galimulator/GalFX                                          c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+accessible      method  snoddasmannen/galimulator/Space                                          ar         ()V
+accessible      method  snoddasmannen/galimulator/Space                                          aW         ()V
+accessible      method  snoddasmannen/galimulator/SpaceState                                     <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
+accessible      method  snoddasmannen/galimulator/EmploymentAgency$InnerClass1                   <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+accessible      method  snoddasmannen/galimulator/UserSettingsEntry                              <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
+accessible      method  snoddasmannen/galimulator/MapMode$MapModes                               <init>     (Ljava/lang/String;ILjava/lang/String;Z)V
+accessible      method  snoddasmannen/galimulator/Space$ActorSpawningPredicate                   <init>     (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
 
 # Fields
 accessible      field   com/example/Main                                       shortcuts            Ljava/util/List;
@@ -56,14 +56,14 @@ accessible      field   snoddasmannen/galimulator/SpaceState                   e
 accessible      field   snoddasmannen/galimulator/SpaceState                   vanity               Lsnoddasmannen/galimulator/VanityHolder;
 accessible      field   snoddasmannen/galimulator/Star                         starRenderingRegion  Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
 accessible      field   snoddasmannen/galimulator/Galemulator                  g                    Ljava/lang/String;
-accessible      field   snoddasmannen/galimulator/GalFX                        l                   Lcom/badlogic/gdx/graphics/OrthographicCamera;
-accessible      field   snoddasmannen/galimulator/GalFX                        u                   Z
-accessible      field   snoddasmannen/galimulator/War                          e1                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
-accessible      field   snoddasmannen/galimulator/War                          e2                  Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+accessible      field   snoddasmannen/galimulator/GalFX                        l                    Lcom/badlogic/gdx/graphics/OrthographicCamera;
+accessible      field   snoddasmannen/galimulator/GalFX                        u                    Z
+accessible      field   snoddasmannen/galimulator/War                          e1                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+accessible      field   snoddasmannen/galimulator/War                          e2                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 
 # Classes
-accessible      class   snoddasmannen/galimulator/ppclass_50
-accessible      class   snoddasmannen/galimulator/ppclass_51
+accessible      class   snoddasmannen/galimulator/EmploymentAgency$InnerClass1
+accessible      class   snoddasmannen/galimulator/EmploymentAgency$InnerClass2
 accessible      class   snoddasmannen/galimulator/Space$SaveMode
 accessible      class   snoddasmannen/galimulator/Space$ActorSpawningPredicate
 

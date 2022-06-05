@@ -48,6 +48,7 @@ public class CanvasHoverTest extends Usertest implements CanvasContext {
     public void onHover(int canvasX, int canvasY, @NotNull Camera camera, @NotNull Canvas canvas) {
         mouseX = canvasX;
         mouseY = canvasY;
+        canvas.markDirty();
     }
 
     @Override

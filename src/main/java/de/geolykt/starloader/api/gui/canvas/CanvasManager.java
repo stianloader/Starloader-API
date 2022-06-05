@@ -76,6 +76,32 @@ public interface CanvasManager {
     public MultiCanvas multiCanvas(@NotNull CanvasContext context, @NotNull CanvasSettings settings, @NotNull ChildObjectOrientation orientation, @NotNull Canvas @NotNull... children);
 
     /**
+     * Creates a {@link MultiCanvas} object from a {@link CanvasContext} and other {@link CanvasContext canvas contexts}.
+     * The canvas contexts are transformed into a {@link Canvas} via {@link #newCanvas(CanvasContext, CanvasSettings)},
+     * after which {@link #multiCanvas(CanvasContext, CanvasSettings, ChildObjectOrientation, Canvas...)} in invoked.
+     *
+     * <p>The inherent background from the canvas as defined by {@link CanvasSettings#getBackgroundColor()}
+     * and obtained by {@link Canvas#getCanvasSettings()} is drawn first, then the child canvases are drawn and
+     * lastly {@link CanvasContext#render(com.badlogic.gdx.graphics.g2d.SpriteBatch, com.badlogic.gdx.graphics.Camera)} is invoked.
+     *
+     * @param context The {@link CanvasContext} that is used to get the width and height of the canvas or used to make the canvas responsive
+     * @param settings The {@link CanvasSettings} instance that is returned by {@link Canvas#getCanvasSettings()}.
+     * @param orientation The {@link ChildObjectOrientation} that is used to lay out the child canvases.
+     * @param children The children {@link CanvasContext canvas contexts} that are included in the newly created instance
+     * @return The newly created {@link MultiCanvas}.
+     * @since 2.0.0
+     */
+    @NotNull
+    public default MultiCanvas multiCanvas(@NotNull CanvasContext context, @NotNull CanvasSettings settings, @NotNull ChildObjectOrientation orientation, @NotNull CanvasContext... children) {
+        int childLen = children.length;
+        @NotNull Canvas[] canvases = new @NotNull Canvas[childLen];
+        for (int i = 0; i < childLen; i++) {
+            canvases[i] = newCanvas(children[i], CanvasSettings.CHILD_TRANSPARENT);
+        }
+        return multiCanvas(context, settings, orientation, canvases);
+    }
+
+    /**
      * Creates a {@link Canvas} object from a {@link CanvasContext}, which will execute the drawing
      * logic.
      *

@@ -20,7 +20,7 @@ import de.geolykt.starloader.impl.registry.Registries;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.ui.class_39;
+import snoddasmannen.galimulator.ui.BaseButtonWidget;
 
 /**
  * Mixins into the empire special class, which makes it more registry-like.
@@ -36,16 +36,13 @@ public class EmpireSpecialMixins implements RegistryKeyed {
 
     @Overwrite
     private static void k() {
-        // I do not even know if this is called, but better be safe than sorry
-        HashMap<EmpireSpecial, class_39> maps = new HashMap<>();
-        EmpireSpecial[] var0 = (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues();
-        int var1 = var0.length;
+        // I do not even know if this method is called, but better be safe than sorry
+        HashMap<EmpireSpecial, BaseButtonWidget> map = new HashMap<>();
 
-        for (int var2 = 0; var2 < var1; ++var2) {
-            EmpireSpecial var3 = var0[var2];
-            maps.put(var3, new class_39("specialsbox.png", 30, GalFX.Q(), var3.getAbbreviation(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
+        for (EmpireSpecial var3 : (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues()) {
+            map.put(var3, new BaseButtonWidget("specialsbox.png", 30, GalFX.Q(), var3.getAbbreviation(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
         }
-        EmpireSpecial.q = maps;
+        EmpireSpecial.q = map;
     }
 
     /**
