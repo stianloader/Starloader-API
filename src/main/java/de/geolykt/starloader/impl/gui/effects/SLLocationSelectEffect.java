@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
 
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.Locateable;
@@ -13,9 +12,9 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.effects.LocationSelectEffect;
 
-import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Item;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.Star;
 
 public class SLLocationSelectEffect extends Item implements LocationSelectEffect {
 
@@ -24,19 +23,24 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
      */
     private static final long serialVersionUID = -3946401399724740073L;
 
+    @NotNull
+    private static final TextureRegion TEXTURE = Drawing.getTextureProvider().findTextureRegion("circle-outline.png");
     private boolean disposed = true;
+    @NotNull
+    private Locateable location;
+    private float radius = Star.globalSizeFactor * 3;
+
     @SuppressWarnings("null")
     @NotNull
     private Color ringColor = Color.WHITE;
-    @NotNull
-    private Locateable location;
-    private float radius = 10.0F;
-
-    @NotNull
-    private static final TextureRegion TEXTURE = Drawing.getTextureProvider().findTextureRegion("circle-outline.png");
 
     public SLLocationSelectEffect(@NotNull Locateable loc) {
         this.location = loc;
+    }
+
+    @Override
+    public void activity() {
+        // NOP
     }
 
     @Override
@@ -45,17 +49,10 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
     }
 
     @Override
-    public boolean isDisposed() {
-        return disposed;
-    }
-
-    @Override
-    public void show() {
-        if (!disposed) {
-            throw new IllegalStateException("Effect already disposed!");
-        }
-        disposed = false;
-        Space.showItem(this);
+    public void draw() {
+        SpriteBatch batch = Drawing.getDrawingBatch();
+        batch.setColor(ringColor);
+        batch.draw(TEXTURE, getX() - radius, getY() - radius, radius * 2, radius * 2);
     }
 
     @Override
@@ -68,6 +65,26 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
     @NotNull
     public Locateable getTrackingLocateable() {
         return this.location;
+    }
+
+    @Override
+    public float getX() {
+        return location.getX();
+    }
+
+    @Override
+    public float getY() {
+        return location.getY();
+    }
+
+    @Override
+    public boolean isAlive() {
+        return !disposed;
+    }
+
+    @Override
+    public boolean isDisposed() {
+        return disposed;
     }
 
     @Override
@@ -88,21 +105,11 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
     }
 
     @Override
-    public void draw() {
-        Vector3 var1 = new Vector3(this.getX(), this.getY(), 0.0F);
-        GalFX.projectBoardToScreen(var1);
-        SpriteBatch batch = Drawing.getDrawingBatch();
-        batch.setColor(ringColor);
-        batch.draw(TEXTURE, var1.x - radius, var1.y - radius, radius * 2, radius * 2);
-    }
-
-    @Override
-    public void activity() {
-        // NOP
-    }
-
-    @Override
-    public boolean isAlive() {
-        return !disposed;
+    public void show() {
+        if (!disposed) {
+            throw new IllegalStateException("Effect already disposed!");
+        }
+        disposed = false;
+        Space.showItem(this);
     }
 }

@@ -28,7 +28,7 @@ public interface CanvasManager {
 
     /**
      * Creates a new {@link CanvasContext} object with no rendering or otherwise responsive logic.
-     * The width and height will be constant.
+     * The width and height will be constant. The resulting canvas context will not be persistent
      *
      * @param width The width of the canvas, used for {@link CanvasContext#getWidth()}
      * @param height The height of the canvas, used for {@link CanvasContext#getHeight()}
@@ -37,7 +37,23 @@ public interface CanvasManager {
      */
     @Contract(pure = true, value = "_, _ -> new")
     @NotNull
-    public CanvasContext dummyContext(int width, int height);
+    public default CanvasContext dummyContext(int width, int height) {
+        return dummyContext(width, height, false);
+    }
+
+    /**
+     * Creates a new {@link CanvasContext} object with no rendering or otherwise responsive logic.
+     * The width, height and persistence will be constant.
+     *
+     * @param width The width of the canvas, used for {@link CanvasContext#getWidth()}
+     * @param height The height of the canvas, used for {@link CanvasContext#getHeight()}
+     * @param persistent Whether the canvas should be persistent, as returned by {@link CanvasContext#isPersistent()}
+     * @return The newly created {@link CanvasContext} instance that returns the specified width and height.
+     * @since 2.0.0
+     */
+    @Contract(pure = true, value = "_, _, _ -> new")
+    @NotNull
+    public CanvasContext dummyContext(int width, int height, boolean persistent);
 
     /**
      * Creates a {@link Canvas} object from a {@link Screen} object.

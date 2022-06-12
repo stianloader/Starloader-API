@@ -37,12 +37,14 @@ import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.RandomNameType;
 import de.geolykt.starloader.impl.actors.GlobalSpawningPredicatesContainer;
+import de.geolykt.starloader.impl.gui.ForwardingListener;
 import de.geolykt.starloader.impl.serial.BoilerplateSavegameFormat;
 import de.geolykt.starloader.impl.serial.VanillaSavegameFormat;
 import de.geolykt.starloader.mod.Extension;
@@ -64,10 +66,22 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     protected static final Logger LOGGER = LoggerFactory.getLogger(GalimulatorImplementation.class);
 
     @NotNull
-    private static final List<SavegameFormat> SAVEGAME_FORMATS = new ArrayList<>(Arrays.asList(VanillaSavegameFormat.INSTANCE));
+    private static final List<SavegameFormat> SAVEGAME_FORMATS = new ArrayList<>(Arrays.asList(VanillaSavegameFormat.INSTANCE, BoilerplateSavegameFormat.INSTANCE));
 
     @NotNull
     private final SpawnPredicatesContainer globalSpawningPredicates = new GlobalSpawningPredicatesContainer();
+
+    /**
+     * A list of all currently registered {@link MouseInputListener MouseInputListeners}. This list is only here
+     * to allow the registration of listeners at an arbitrary time and is synced to the internal list
+     * used by the {@link ForwardingListener} that actually calls the methods on the listeners.
+     *
+     * <p>As usual with anything in the impl package, this field is not official API.
+     * The fact that this is documented does not change that.
+     *
+     * @since 2.0.0
+     */
+    public final List<MouseInputListener> listeners = new ArrayList<>();
 
     /**
      * Renders a crash report to the screen and log. This action cannot be undone.
@@ -77,7 +91,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @param save True if the current game state should be written to disk
      * @since 2.0.0
      */
-    public static void crash(@NotNull Exception e, @NotNull String cause, boolean save) {
+    public static void crash(@NotNull Throwable e, @NotNull String cause, boolean save) {
         Galemulator listener = (Galemulator) Main.application.getApplicationListener();
 
         if (save) {
@@ -407,6 +421,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     public void registerKeybind(@NotNull Dynbind bind) {
         Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
         Main.shortcuts.add(new SLDynbind(bind));
+    }
+
+    @Override
+    public void registerMouseInputListener(@NotNull MouseInputListener listener) {
+        listeners.add(Objects.requireNonNull(listener, "listener cannot be null"));
     }
 
     @Override

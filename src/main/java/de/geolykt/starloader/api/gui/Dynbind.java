@@ -13,6 +13,8 @@ import com.badlogic.gdx.Input;
  *
  * <p>This interface does not allow for remapping keys, which is something that may be desirable later on.
  * However, such a change will likely result in yet another version of a hotkey interface.
+ *
+ * @since 1.3.0
  */
 public interface Dynbind {
 

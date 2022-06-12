@@ -22,6 +22,7 @@ import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
+import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
@@ -332,8 +333,22 @@ public final class Galimulator {
          * Registers the given keybind to the list of active keybinds.
          *
          * @param bind The keybind to register.
+         * @since 1.3.0
          */
         public void registerKeybind(@NotNull Dynbind bind);
+
+        /**
+         * Registers a {@link MouseInputListener}.
+         * The priority of a {@link MouseInputListener} registered through this method is defined by the point of time
+         * of this method call compared to the time of registration of the other listeners.
+         *
+         * <p>Registration can happen at any time, including during the extension loading phase (provided SLAPI
+         * is already on the classpath and initialized).
+         *
+         * @param listener The listener to register
+         * @since 2.0.0
+         */
+        public void registerMouseInputListener(@NotNull MouseInputListener listener);
 
         /**
          * Resumes the game. This method basically reverts {@link #pauseGame()}
@@ -984,9 +999,25 @@ public final class Galimulator {
      * Registers the given keybind to the list of active keybinds.
      *
      * @param bind The keybind to register.
+     * @since 1.3.0
      */
     public static void registerKeybind(@NotNull Dynbind bind) {
         impl.registerKeybind(bind);
+    }
+
+    /**
+     * Registers a {@link MouseInputListener}.
+     * The priority of a {@link MouseInputListener} registered through this method is defined by the point of time
+     * of this method call compared to the time of registration of the other listeners.
+     *
+     * <p>Registration can happen at any time, including during the extension loading phase (provided SLAPI
+     * is already on the classpath and initialized).
+     *
+     * @param listener The listener to register
+     * @since 2.0.0
+     */
+    public static void registerMouseInputListener(@NotNull MouseInputListener listener) {
+        impl.registerMouseInputListener(listener);
     }
 
     /**

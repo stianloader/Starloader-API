@@ -31,7 +31,11 @@ public enum CoordinateGrid {
      * Do note however that extensions are going to find little use in this projection
      * as SLAPI does most of the hard work already when it comes to widget coordinates.
      *
+     * @deprecated Sometimes the Y-Axis is adjusted when working with this representation, other times it is not.
+     * Thus rather often it may appear as if the grid was flipped. This is an inherent flaw in the internal galimulator
+     * widget code, which SLAPI will mirror, even if nonsensical.
      * @since 2.0.0
      */
+    @Deprecated(forRemoval = false, since = "2.0.0")
     WIDGET;
 }

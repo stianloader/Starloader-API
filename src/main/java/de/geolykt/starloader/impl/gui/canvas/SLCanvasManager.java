@@ -22,7 +22,7 @@ public class SLCanvasManager implements CanvasManager {
 
     @Override
     @NotNull
-    public CanvasContext dummyContext(int width, int height) {
+    public CanvasContext dummyContext(int width, int height, boolean persistent) {
         return new CanvasContext() {
 
             @Override
@@ -33,6 +33,11 @@ public class SLCanvasManager implements CanvasManager {
             @Override
             public int getWidth() {
                 return width;
+            }
+
+            @Override
+            public boolean isPersistent() {
+                return persistent;
             }
 
             @Override
