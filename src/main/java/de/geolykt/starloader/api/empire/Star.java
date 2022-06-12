@@ -86,7 +86,8 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @return A {@link Vector2} describing the position of the star
      * @see #syncCoordinates()
      */
-    public @NotNull Vector2 getCoordinates();
+    @NotNull
+    public Vector2 getCoordinates();
 
     /**
      * returns the faction that is currently controlling the star or null if not applicable (i. e. the star is not

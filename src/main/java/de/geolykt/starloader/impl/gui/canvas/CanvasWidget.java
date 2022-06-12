@@ -39,6 +39,8 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
     @NotNull
     private final ChildObjectOrientation orientation;
 
+    private boolean open = false;
+
     public CanvasWidget(@NotNull CanvasContext ctx, @NotNull CanvasSettings settings, @NotNull ChildObjectOrientation orientation) {
         this.ctx = ctx;
         this.canvasSettings = settings;
@@ -87,16 +89,15 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
 
     @Override
     public void displaySelectionEffect() {
-        // TODO Deobf the underlying methods (Such as Space#a or Widget#b)
         // I have no true idea what the two integer arguments are
         // They could be the focal point of the fade event, but I am not too sure about this.
         // After some crude investigation it almost definitely has something to do with the focal point, though
         // it seems to be relative to the mouse press.
-        // The current values result in the focal point being at the mouse press, which is good enough for my pruposes.
+        // The current values result in the focal point being at the mouse press, which is good enough for my purposes.
         // That being said it does open up the issue what happens if this method is called outside CanvasWidget#tap
         // or similar. But I'll guess I'll need to wait for this since I don't really want to test that right now as
         // it is getting late
-        Space.a(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
+        Space.showItem(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
     }
 
     @Override
@@ -158,6 +159,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
 
     @Override
     public void onRender() {
+        open = true;
         if (this.canvasSettings.getBackgroundColor().a != 0) {
             drawBackground(new GalColor(this.canvasSettings.getBackgroundColor()));
         }
@@ -190,5 +192,16 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
                 ctx.onClick((int) x, (int) y, internalCamera, this);
             }
         }
+    }
+
+    @Override
+    public boolean isOpen() {
+        return open;
+    }
+
+    @Override
+    public void onDispose() {
+        open = false;
+        super.onDispose();
     }
 }

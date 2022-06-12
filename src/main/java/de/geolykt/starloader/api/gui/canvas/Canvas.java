@@ -58,6 +58,15 @@ public interface Canvas {
     public CanvasContext getContext();
 
     /**
+     * Checks whether the canvas (or one of it's parents) is still displayed to the user.
+     * This operation is usually accurate, though the check is not that complete.
+     *
+     * @return True if it is open, false otherwise.
+     * @since 2.0.0
+     */
+    public boolean isOpen();
+
+    /**
      * Marks a canvas as dirty, prompting it be redrawn.
      *
      * @return The current canvas instance, for chaining

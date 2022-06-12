@@ -12,7 +12,7 @@ accessible      method  snoddasmannen/galimulator/GalFX                         
 accessible      method  snoddasmannen/galimulator/Space                                          ar         ()V
 accessible      method  snoddasmannen/galimulator/Space                                          aW         ()V
 accessible      method  snoddasmannen/galimulator/SpaceState                                     <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;)V
-accessible      method  snoddasmannen/galimulator/EmploymentAgency$InnerClass1                   <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+accessible      method  snoddasmannen/galimulator/EmploymentAgency$Local1                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
 accessible      method  snoddasmannen/galimulator/UserSettingsEntry                              <init>     (Ljava/lang/String;Lsnoddasmannen/galimulator/UserSettings$SettingType;Lsnoddasmannen/galimulator/Settings$EnumSettings;)V
 accessible      method  snoddasmannen/galimulator/MapMode$MapModes                               <init>     (Ljava/lang/String;ILjava/lang/String;Z)V
 accessible      method  snoddasmannen/galimulator/Space$ActorSpawningPredicate                   <init>     (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
@@ -62,8 +62,8 @@ accessible      field   snoddasmannen/galimulator/War                          e
 accessible      field   snoddasmannen/galimulator/War                          e2                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 
 # Classes
-accessible      class   snoddasmannen/galimulator/EmploymentAgency$InnerClass1
-accessible      class   snoddasmannen/galimulator/EmploymentAgency$InnerClass2
+accessible      class   snoddasmannen/galimulator/EmploymentAgency$Local1
+accessible      class   snoddasmannen/galimulator/EmploymentAgency$Local2
 accessible      class   snoddasmannen/galimulator/Space$SaveMode
 accessible      class   snoddasmannen/galimulator/Space$ActorSpawningPredicate
 

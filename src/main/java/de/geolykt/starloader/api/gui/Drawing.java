@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
+import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
@@ -47,6 +49,23 @@ public final class Drawing {
     }
 
     private static DrawingImpl implementation;
+
+
+    /**
+     * Converts coordinates between two representations.
+     * Note: Not all conversions are supported as of yet.
+     *
+     * @param from The source grid
+     * @param to   The target grid
+     * @param x    The x coordinate in the source grid
+     * @param y    The y coordinate in the source grid
+     * @return The coordinate vector in the target grid
+     * @since 2.0.0
+     */
+    @NotNull
+    public static Vector3 convertCoordinates(@NotNull CoordinateGrid from, @NotNull CoordinateGrid to, float x, float y) {
+        return implementation.convertCoordinates(from, to, x, y);
+    }
 
     /**
      * Draws a line on the user interface. Due to libGDX not supporting this

@@ -133,6 +133,20 @@ public final class Galimulator {
         public @NotNull Map getMap();
 
         /**
+         * Obtains the nearest Star that is near the given board coordinates and within the given
+         * search radius.
+         *
+         * @param boardX The X coordinate
+         * @param boardY The Y coordinate
+         * @param searchRadius The search radius
+         * @return The nearest star, or null if there is no star at the location.
+         * @since 2.0.0
+         */
+        @Nullable
+        @Contract(pure = true)
+        public Star getNearestStar(float boardX, float boardY, float searchRadius);
+
+        /**
          * Convenience method to obtain the neutral empire. The neutral empire should
          * NOT be ticked as it may create serious side effects within the ticking
          * mechanism. Additionally merging or destroying the empire might have serious
@@ -178,6 +192,20 @@ public final class Galimulator {
          * @return The active {@link SoundHandler}.
          */
         public @NotNull SoundHandler getSoundHandler();
+
+        /**
+         * Obtains the star that is at or next to the given coordinates.
+         * This is basically a {@link #getNearestStar(float, float, float)} call
+         * with the radius being set to a magic value.
+         *
+         * @param boardX The X coordinate
+         * @param boardY The Y coordinate
+         * @return The star at the given location, or null if there is none
+         * @since 2.0.0
+         */
+        @Nullable
+        @Contract(pure = true)
+        public Star getStarAt(float boardX, float boardY);
 
         /**
          * Obtains an immutable view of the underlying list of the internal vector
@@ -713,6 +741,22 @@ public final class Galimulator {
     }
 
     /**
+     * Obtains the nearest Star that is near the given board coordinates and within the given
+     * search radius.
+     *
+     * @param boardX The X coordinate
+     * @param boardY The Y coordinate
+     * @param searchRadius The search radius
+     * @return The nearest star, or null if there is no star at the location.
+     * @since 2.0.0
+     */
+    @Nullable
+    @Contract(pure = true)
+    public static Star getNearestStar(float boardX, float boardY, float searchRadius) {
+        return impl.getNearestStar(boardX, boardY, searchRadius);
+    }
+
+    /**
      * Convenience method to obtain the neutral empire. The neutral empire should
      * NOT be ticked as it may create serious side effects within the ticking
      * mechanism. Additionally merging or destroying the empire might have serious
@@ -782,6 +826,22 @@ public final class Galimulator {
     @NotNull
     public static SoundHandler getSoundHandler() {
         return impl.getSoundHandler();
+    }
+
+    /**
+     * Obtains the star that is at or next to the given coordinates.
+     * This is basically a {@link #getNearestStar(float, float, float)} call
+     * with the radius being set to a magic value.
+     *
+     * @param boardX The X coordinate
+     * @param boardY The Y coordinate
+     * @return The star at the given location, or null if there is none
+     * @since 2.0.0
+     */
+    @Nullable
+    @Contract(pure = true)
+    public static Star getStarAt(float boardX, float boardY) {
+        return impl.getStarAt(boardX, boardY);
     }
 
     /**

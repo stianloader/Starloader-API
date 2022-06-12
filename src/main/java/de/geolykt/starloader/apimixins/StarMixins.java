@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
+import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
@@ -170,18 +171,27 @@ public class StarMixins implements Star {
 
     @Override
     @Shadow
-    public @NotNull Vector2 getCoordinates() { // thankfully this is already implemented by the base class
+    @NotNull
+    public Vector2 getCoordinates() { // thankfully this is already implemented by the base class
         throw new UnsupportedOperationException("This should be created by the shadowed field!");
     }
 
     @Override
-    public @Nullable Faction getFaction() {
+    @Nullable
+    public Faction getFaction() {
         return (Faction) faction;
+    }
+
+    @Override
+    @NotNull
+    public CoordinateGrid getGrid() {
+        return CoordinateGrid.BOARD;
     }
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull Random getInternalRandom() {
+    @NotNull
+    public Random getInternalRandom() {
         return d;
     }
 

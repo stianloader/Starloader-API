@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
+import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
@@ -34,8 +35,8 @@ import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.class_30;
-import snoddasmannen.galimulator.class_42;
+import snoddasmannen.galimulator.class_29;
+import snoddasmannen.galimulator.class_41;
 import snoddasmannen.galimulator.ui.Widget;
 
 public class DrawingManager implements DrawingImpl, TextureProvider {
@@ -50,6 +51,42 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     private EnumMap fontBitmapCache = new EnumMap(GalFX.FONT_TYPE.class);
 
     private Collection<String> fonts;
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Vector3 convertCoordinates(@NotNull CoordinateGrid from, @NotNull CoordinateGrid to, float x, float y) {
+        Vector3 vect = new Vector3(x, y, 0);
+        if (from == CoordinateGrid.BOARD) {
+            if (to == CoordinateGrid.SCREEN) {
+                GalFX.projectBoardToScreen(vect);
+            } else if (to == CoordinateGrid.WIDGET) {
+                GalFX.projectBoardToScreen(vect);
+                GalFX.unprojectScreenToWidget(vect);
+            } else if (Objects.isNull(to)) {
+                throw new NullPointerException("to may not be null");
+            }
+        } else if (from == CoordinateGrid.SCREEN) {
+            if (to == CoordinateGrid.BOARD) {
+                vect = GalFX.unprojectScreenToBoard(x, y);
+            } else if (to == CoordinateGrid.WIDGET) {
+                GalFX.unprojectScreenToWidget(vect);
+            } else if (Objects.isNull(to)) {
+                throw new NullPointerException("to may not be null");
+            }
+        } else if (from == CoordinateGrid.WIDGET) {
+            if (to == CoordinateGrid.SCREEN) {
+                throw new UnsupportedOperationException("Cannot convert from " + from + " to " + to);
+            } else if (to == CoordinateGrid.BOARD) {
+                throw new UnsupportedOperationException("Cannot convert from " + from + " to " + to);
+            } else if (Objects.isNull(to)) {
+                throw new NullPointerException("to may not be null");
+            }
+        } else {
+            throw new NullPointerException("from may not be null");
+        }
+        return vect;
+    }
 
     @Override
     public void drawLine(double x1, double y1, double x2, double y2, float width, @NotNull Color color, @NotNull Camera camera) {
@@ -226,12 +263,12 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new class_42(message));
+        Space.a(new class_41(message));
     }
 
     @Override
     public void sendOddityBulletin(@NotNull String message) {
-        Space.a(new class_30(message));
+        Space.a(new class_29(message));
     }
 
     @Override

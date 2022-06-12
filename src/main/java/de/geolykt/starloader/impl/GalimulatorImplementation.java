@@ -247,6 +247,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return (Map) Space.getMapData();
     }
 
+    @Nullable
+    @Contract(pure = true)
+    public Star getNearestStar(float boardX, float boardY, float searchRadius) {
+        return (Star) Space.findStarNear(boardX, boardY, searchRadius, null); // TODO Not fully efficient (uses Math#sqrt)
+    }
+
     @SuppressWarnings("null")
     @Override
     public @NotNull ActiveEmpire getNeutralEmpire() {
@@ -259,13 +265,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return NullUtils.requireNotNull((Vector) Space.getPersons());
     }
 
-    public @Nullable snoddasmannen.galimulator.Player getPlayer() {
-        return Space.getPlayer();
-    }
-
     @Override
     public @Nullable ActiveEmpire getPlayerEmpire() {
-        snoddasmannen.galimulator.Player plyr = getPlayer();
+        var plyr = Space.getPlayer();
         if (plyr == null) {
             // It likely can never be null, however before the map is generated,
             // this might return null, so we are going to make sure just in case.
@@ -306,6 +308,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public @NotNull SoundHandler getSoundHandler() {
         return SLSoundHandler.getInstance();
+    }
+
+    @Nullable
+    @Contract(pure = true)
+    public Star getStarAt(float boardX, float boardY) {
+        return getNearestStar(boardX, boardY, snoddasmannen.galimulator.Star.globalSizeFactor * 2);
     }
 
     @SuppressWarnings("null")
@@ -451,7 +459,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 getTranscendedEmpires(),
                 getVanityHolder(),
                 (Vector) getQuestsUnsafe(),
-                getPlayer(),
+                Space.getPlayer(),
                 Space.getMapData(),
                 hasUsedSandbox(),
                 snoddasmannen.galimulator.EmploymentAgency.getInstance(),

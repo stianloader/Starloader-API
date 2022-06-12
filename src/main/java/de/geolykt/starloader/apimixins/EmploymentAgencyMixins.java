@@ -145,11 +145,11 @@ public class EmploymentAgencyMixins {
                 }
             }
         }
-        final ArrayList<Callable<EmploymentAgency.InnerClass2>> callbacks = new ArrayList<>();
+        final ArrayList<Callable<EmploymentAgency.Local2>> callbacks = new ArrayList<>();
         final int n2 = potentialCandidates.size() / 100 + 1;
         for (int i = 0; i < n2; ++i) {
             @SuppressWarnings("unchecked")
-            Callable<EmploymentAgency.InnerClass2> callable = ((EmploymentAgency) (Object) this).new InnerClass1(i * 100, potentialCandidates, job);
+            Callable<EmploymentAgency.Local2> callable = ((EmploymentAgency) (Object) this).new Local1(i * 100, potentialCandidates, job);
             callbacks.add(callable);
         }
         Person successor = null;
@@ -158,8 +158,8 @@ public class EmploymentAgencyMixins {
             if (this.b == null) {
                 this.b = Executors.newFixedThreadPool(4);
             }
-            for (Future<EmploymentAgency.InnerClass2> finishedTask : b.invokeAll(callbacks)) {
-                final EmploymentAgency.InnerClass2 finishedTaskReturn = finishedTask.get();
+            for (Future<EmploymentAgency.Local2> finishedTask : b.invokeAll(callbacks)) {
+                final EmploymentAgency.Local2 finishedTaskReturn = finishedTask.get();
                 if (successor == null || finishedTaskReturn.b > successorMerit) {
                     successor = finishedTaskReturn.a;
                     successorMerit = finishedTaskReturn.b;

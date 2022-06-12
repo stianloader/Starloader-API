@@ -25,6 +25,7 @@ public class Buildscript extends StarloaderStarplaneProject implements Descripti
                     .addDependency("org.ow2.asm", "asm-tree", "9.2", "https://asm.ow2.io/javadoc/")
                     .addDependency("org.ow2.asm", "asm", "9.2", "https://asm.ow2.io/javadoc/")
                     .addDependency("org.jetbrains", "annotations", "22.0.0", "https://javadoc.io/doc/org.jetbrains/annotations/22.0.0/")
+                    .addDecompileDep("org.jetbrains", "annotations", "22.0.0", "https://javadoc.io/doc/org.jetbrains/annotations/22.0.0/")
                     .addDependency("de.geolykt.starloader", "mixin", "0.8.4", "https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/")
                     .addDependency("com.badlogicgames.gdx", "gdx", "1.9.11", "https://libgdx.badlogicgames.com/ci/nightlies/docs/api/")
                     .addDependency("de.geolykt.starloader", "launcher", "3.0.0"));

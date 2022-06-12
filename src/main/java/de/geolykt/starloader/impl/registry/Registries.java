@@ -334,7 +334,7 @@ class StarloaderAudioSample extends AudioSampleWrapper {
 
     @Override
     public void play() {
-        sample.a();
+        sample.play();
     }
 
     @Override
