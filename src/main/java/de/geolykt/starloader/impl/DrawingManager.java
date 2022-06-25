@@ -52,7 +52,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     private Collection<String> fonts;
 
-    @SuppressWarnings("null")
+    @SuppressWarnings({ "null", "deprecation" })
     @Override
     @NotNull
     public Vector3 convertCoordinates(@NotNull CoordinateGrid from, @NotNull CoordinateGrid to, float x, float y) {

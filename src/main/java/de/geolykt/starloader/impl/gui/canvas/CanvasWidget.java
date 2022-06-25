@@ -146,6 +146,11 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
     }
 
     @Override
+    public boolean isOpen() {
+        return open;
+    }
+
+    @Override
     public boolean isPersistent() {
         return ctx.isPersistent();
     }
@@ -155,6 +160,13 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
     public Canvas markDirty() {
         dispatchMessage(WIDGET_MESSAGE.WIDGET_FORCE_REDRAW);
         return this;
+    }
+
+    @Override
+    public void onDispose() {
+        open = false;
+        ctx.onDispose(this);
+        super.onDispose();
     }
 
     @Override
@@ -192,16 +204,5 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
                 ctx.onClick((int) x, (int) y, internalCamera, this);
             }
         }
-    }
-
-    @Override
-    public boolean isOpen() {
-        return open;
-    }
-
-    @Override
-    public void onDispose() {
-        open = false;
-        super.onDispose();
     }
 }

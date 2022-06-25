@@ -24,14 +24,13 @@ public class ForwardingListener implements AuxiliaryListener {
 
     @Override
     public boolean globalKeyDown(float screenX, float screenY) {
-        // (what a strange name)
+        // (what a strange name considering that the mouse is pressed, not a key)
         if (listeners.isEmpty()) {
             return false;
         }
 
         Vector3 widgetCoords = new Vector3(screenX, screenY, 0);
         GalFX.unprojectScreenToWidget(widgetCoords);
-//        Vector3 widgetCoords = Drawing.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGr/id.WIDGET, screenX, screenY);
         Vector2 widgetCoordsV2 = new Vector2(widgetCoords.x, GalFX.getScreenHeight() - widgetCoords.y);
 
         for (Widget w : Space.activeWidgets) {

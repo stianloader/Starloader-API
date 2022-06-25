@@ -29,6 +29,11 @@ public interface MouseInputListener {
      * A processed click means that other listeners (that have been registered later on),
      * do not receive this method call.
      *
+     * <p>Note: returning true in implementations of this method does not block most GUI actions such as
+     * those that are caused when clicking on a star as those are triggered when the mouse is
+     * released and not when they are pressed. Therefore {@link #onMouseRelease(float, float, float, float)}
+     * might make more sense when those events need to be cancelled.
+     *
      * @param screenX The X coordinate of the click on the {@link CoordinateGrid#SCREEN} grid
      * @param screenY The Y coordinate of the click on the {@link CoordinateGrid#SCREEN} grid
      * @param boardX The X coordinate of the click on the {@link CoordinateGrid#BOARD} grid

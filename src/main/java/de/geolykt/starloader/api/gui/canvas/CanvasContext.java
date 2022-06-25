@@ -82,6 +82,18 @@ public interface CanvasContext {
     }
 
     /**
+     * Method that is called when a canvas is no longer drawn.
+     * This means that {@link Canvas#isOpen()} should return false
+     * for the canvas that was given as a parameter.
+     *
+     * @param canvas Reference to the canvas that was closed
+     * @since 2.0.0
+     */
+    public default void onDispose(@NotNull Canvas canvas) {
+        // NOP
+    }
+
+    /**
      * Called when the mouse moves over the component.
      *
      * @param canvasX The X-position of the mouse relative to the canvas. Use for drawing operations.
