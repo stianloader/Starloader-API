@@ -574,6 +574,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void setStarsUnsafe(Vector<Star> stars) {
         Space.stars = NullUtils.requireNotNull((Vector) stars);
+        // TODO Space.H is used in class_32#i()V. class_32 is the galaxy preview.
+        // class32#i()V is invoked by class_32#layout and is a protected method.
+        Space.H = stars.size();
     }
 
     @Override

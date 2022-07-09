@@ -156,7 +156,6 @@ public class VanillaSavegameFormat implements SavegameFormat {
         galiImpl.setPeopleUnsafe(NullUtils.requireNotNull((Vector) spaceState.persons));
         galiImpl.setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
         galiImpl.setStarsUnsafe(NullUtils.requireNotNull((Vector) spaceState.stars));
-        Space.H = spaceState.stars.size();
         EmploymentAgency.setInstance(spaceState.employmentAgency);
         Space.o = null;
         Space.C = true;

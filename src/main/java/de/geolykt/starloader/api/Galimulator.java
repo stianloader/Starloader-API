@@ -509,6 +509,12 @@ public final class Galimulator {
         /**
          * Obtains the internal star vector without cloning it.
          *
+         * <p>This vector can be modified but beware of the dangers such an operation
+         * may have. As galimulator keeps track the amount of stars in a separate variable,
+         * it is generally recommended to invoke {@link #setStarsUnsafe(Vector)} after any modification,
+         * as that method is programmed to reset the variable to the proper value given by
+         * {@link Vector#size()}.
+         *
          * @return The stars currently registered
          */
         public Vector<Star> getStarsUnsafe();
@@ -604,6 +610,8 @@ public final class Galimulator {
 
         /**
          * Sets the internal star vector without cloning it.
+         * Also sets the internal counter of the amount of stars to the size
+         * of the given vector.
          *
          * @param stars The stars currently registered
          */
