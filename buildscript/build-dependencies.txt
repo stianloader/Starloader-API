@@ -1,3 +1,6 @@
 0
-sl-deobf-0.0.2.jar	ignored sl-deobf-0.0.2.jar	true
-starplane.jar		ignored starplane-b0.jar	true
+sl-deobf-0.0.2.jar	ignored	sl-deobf-0.0.2.jar	true
+starplane.jar		ignored	starplane-b0.jar	true
+
+
+https://maven.quiltmc.org/repository/snapshot/org/quiltmc/quiltflower/1.9.0-SNAPSHOT/quiltflower-1.9.0-20220707.054148-140.jar	a0de46d8e973a8945a0f23c56b09f6e9fb2a99d0	quiltflower-1.9.0-20220707.054148-140.jar	true
