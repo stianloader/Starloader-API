@@ -36,7 +36,7 @@ import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.class_29;
-import snoddasmannen.galimulator.class_41;
+import snoddasmannen.galimulator.class_43;
 import snoddasmannen.galimulator.ui.Widget;
 
 public class DrawingManager implements DrawingImpl, TextureProvider {
@@ -263,7 +263,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new class_41(message));
+        Space.a(new class_43(message));
     }
 
     @Override

@@ -77,8 +77,8 @@ public class VanillaSavegameFormat implements SavegameFormat {
         Space.getMapData().getGenerator().i(); // Change the xmax and ymax of the generator area
         Space.ao(); // big calculations with voronoi diagrams
         Space.setBackgroundTaskDescription("Loading galaxy: Reconstructing map metadata");
-        Space.ak = Space.q(); // set the width/height of the board
-        Space.al = Space.r();
+        Space.ap = Space.q(); // set the width/height of the board
+        Space.aq = Space.r();
 
         // repopulate the starlanes (this was extracted from another method)
         // Also sets the owner empire, which was also extracted from another method
@@ -157,13 +157,13 @@ public class VanillaSavegameFormat implements SavegameFormat {
         galiImpl.setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
         galiImpl.setStarsUnsafe(NullUtils.requireNotNull((Vector) spaceState.stars));
         EmploymentAgency.setInstance(spaceState.employmentAgency);
-        Space.o = null;
-        Space.C = true;
+        Space.p = null;
+        Space.E = true;
         Space.setBackgroundTaskDescription(null);
     }
 
     static synchronized void saveVanillaState(@NotNull OutputStream raw) throws Throwable {
-        Space.G = 0; // reset Stack depth
+        Space.J = 0; // reset Stack depth
         GalimulatorImplementation galiImpl = (GalimulatorImplementation) Galimulator.getImplementation();
         SpaceState var2 = galiImpl.createState();
         if (DeviceConfiguration.getConfiguration().useXStream()) {

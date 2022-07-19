@@ -29,20 +29,20 @@ import snoddasmannen.galimulator.ui.BaseButtonWidget;
 public class EmpireSpecialMixins implements RegistryKeyed {
 
     @Overwrite
-    public static EmpireSpecial f() {
-        EmpireSpecial[] var0 = (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues();
-        return var0[ThreadLocalRandom.current().nextInt(var0.length)];
-    }
-
-    @Overwrite
     private static void k() {
         // I do not even know if this method is called, but better be safe than sorry
         HashMap<EmpireSpecial, BaseButtonWidget> map = new HashMap<>();
 
         for (EmpireSpecial var3 : (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues()) {
-            map.put(var3, new BaseButtonWidget("specialsbox.png", 30, GalFX.Q(), var3.getAbbreviation(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
+            map.put(var3, new BaseButtonWidget("specialsbox.png", 30, GalFX.O(), var3.getAbbreviation(), GalFX.FONT_TYPE.MONOTYPE_SMALL, GalColor.WHITE, var3.j(), 0));
         }
         EmpireSpecial.q = map;
+    }
+
+    @Overwrite
+    public static EmpireSpecial f() {
+        EmpireSpecial[] var0 = (EmpireSpecial[]) Registry.EMPIRE_SPECIALS.getValues();
+        return var0[ThreadLocalRandom.current().nextInt(var0.length)];
     }
 
     /**

@@ -51,6 +51,7 @@ import de.geolykt.starloader.mod.Extension;
 
 import snoddasmannen.galimulator.Galemulator;
 import snoddasmannen.galimulator.MapMode.MapModes;
+import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
@@ -96,7 +97,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
         if (save) {
             // TODO deobf
-            listener.g = "Game crashed! Saving what still can be saved... Please wait";
+            listener.h = "Game crashed! Saving what still can be saved... Please wait";
 
             Thread thread = new Thread(() -> {
                 boolean threadDied = false;
@@ -131,7 +132,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             e.printStackTrace(new PrintWriter(sw));
             sw.flush();
             builder.append(sw.getBuffer().toString().replace("\n", "\n    "));
-            listener.g = "[LIME]" + builder.toString();
+            listener.h = "[LIME]" + builder.toString();
             for (String s : builder.toString().split("\n")) {
                 LoggerFactory.getLogger("CrashReporter").error(s);
             }
@@ -247,7 +248,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @NotNull
     public Vector<DynastyMember> getFollowedPeopleUnsafe() {
-        return (Vector) Space.t;
+        return (Vector) (Vector<Person>) Space.v;
     }
 
     @Override
@@ -354,6 +355,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @NotNull
     public SpawnPredicatesContainer getStateActorSpawningPredicates() {
         return globalSpawningPredicates;
+    }
+
+    // Since galim 5.0 / SLAPI 2.0
+    private ArrayList<?> getTranscendedEmpireNames() {
+        return Space.an; // TODO figure out *why* autodeobf is too stupid to figure out that one
     }
 
     @Override
@@ -487,7 +493,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 (List) null,
                 (Vector) getAlliancesUnsafe(),
                 (Vector) getCooperationsUnsafe(),
-                (Vector) getWarsUnsafe());
+                (Vector) getWarsUnsafe(),
+                (ArrayList) getTranscendedEmpireNames());
     }
 
     @Override
@@ -533,7 +540,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setFollowedPeopleUnsafe(@NotNull Vector<DynastyMember> people) {
-        Space.t = NullUtils.requireNotNull((Vector) people);
+        Space.v = NullUtils.requireNotNull((Vector) people);
     }
 
     @Override
@@ -574,9 +581,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void setStarsUnsafe(Vector<Star> stars) {
         Space.stars = NullUtils.requireNotNull((Vector) stars);
-        // TODO Space.H is used in class_32#i()V. class_32 is the galaxy preview.
-        // class32#i()V is invoked by class_32#layout and is a protected method.
-        Space.H = stars.size();
+        Space.starCount = stars.size();
     }
 
     @Override

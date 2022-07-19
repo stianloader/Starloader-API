@@ -205,7 +205,7 @@ public class SpaceASMTransformer extends ASMTransformer {
         // Apparently there is no implementation of "interface_9" so we cannot really know.
         // Upcoming feature perhaps?
         // Apparently this has been there for quite a while too
-        for (interface_9 var1 : Space.u) {
+        for (interface_9 var1 : Space.w) {
             var1.f();
         }
     }

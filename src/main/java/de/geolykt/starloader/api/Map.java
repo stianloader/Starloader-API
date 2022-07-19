@@ -19,8 +19,12 @@ public interface Map {
      * Starloader is not deemed safe to use on these, so this operation should be deemed safe
      *
      * @return The background image
+     * @deprecated It is best to move away from AWT, especially because this method
+     * does not always work. Use {@link #getGDXBackground()} instead.
      */
-    public @Nullable BufferedImage getAWTBackground();
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    @Nullable
+    public BufferedImage getAWTBackground();
 
     /**
      * Obtains the filename that is used as the background.
@@ -32,7 +36,8 @@ public interface Map {
      *
      * @return The filename of the background image
      */
-    public @Nullable String getBackgroundFilename();
+    @Nullable
+    public String getBackgroundFilename();
 
     /**
      * Obtains the background image (if possible) as a GDX Texture.
@@ -40,7 +45,8 @@ public interface Map {
      *
      * @return The background image
      */
-    public @Nullable Texture getGDXBackground();
+    @Nullable
+    public Texture getGDXBackground();
 
     /**
      * Obtains the name of the generator that was used to generate the map.

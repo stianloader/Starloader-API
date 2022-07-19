@@ -46,8 +46,7 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
             register(((RegistryKeyed) (Object)type).getRegistryKey(), type);
         }
         Set<Object> alreadyIncluded = new HashSet<>(super.keyedValues.values());
-        // TODO Deobfuscate. "Space#aI" contains the string "Error while getting state actor creators"
-        for (Object o : Space.aI()) {
+        for (Object o : Space.getStateActorCreators()) {
             if (alreadyIncluded.contains(o)) {
                 continue;
             }
