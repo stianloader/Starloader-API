@@ -25,6 +25,8 @@ import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.TextureProvider;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
+import de.geolykt.starloader.api.gui.rendercache.RenderCacheState;
+import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.TextFactory;
@@ -39,7 +41,7 @@ import snoddasmannen.galimulator.class_29;
 import snoddasmannen.galimulator.class_43;
 import snoddasmannen.galimulator.ui.Widget;
 
-public class DrawingManager implements DrawingImpl, TextureProvider {
+public class DrawingManager implements DrawingImpl, TextureProvider, RendercacheUtils {
 
     @NotNull
     private static final CanvasManager CANVAS_MANAGER = new SLCanvasManager();
@@ -164,6 +166,13 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
 
     @SuppressWarnings("null")
     @Override
+    @NotNull
+    public RenderCacheState getActiveState() {
+        return (RenderCacheState) snoddasmannen.galimulator.rendersystem.class_4.a();
+    }
+
+    @SuppressWarnings("null")
+    @Override
     public @NotNull NinePatch getAlternateWindowNinepatch() {
         return GalFX.NINEPATCH.WINDOW3.getNine();
     }
@@ -195,6 +204,13 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
         return CANVAS_MANAGER;
     }
 
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public RenderCacheState getDrawingState() {
+        return (RenderCacheState) GalFX.ad.get();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
@@ -218,6 +234,12 @@ public class DrawingManager implements DrawingImpl, TextureProvider {
     @NotNull
     public SpriteBatch getMainDrawingBatch() {
         return GalFX.a;
+    }
+
+    @Override
+    @NotNull
+    public RendercacheUtils getRendercacheUtils() {
+        return this;
     }
 
     @SuppressWarnings("null")

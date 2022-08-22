@@ -58,6 +58,7 @@ accessible      field   snoddasmannen/galimulator/Star                         s
 accessible      field   snoddasmannen/galimulator/Galemulator                  h                    Ljava/lang/String;
 accessible      field   snoddasmannen/galimulator/GalFX                        l                    Lcom/badlogic/gdx/graphics/OrthographicCamera;
 accessible      field   snoddasmannen/galimulator/GalFX                        u                    Z
+accessible      field   snoddasmannen/galimulator/GalFX                        ad                   Ljava/lang/ThreadLocal;
 accessible      field   snoddasmannen/galimulator/War                          e1                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 accessible      field   snoddasmannen/galimulator/War                          e2                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 

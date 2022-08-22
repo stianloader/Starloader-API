@@ -16,6 +16,7 @@ import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
+import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
@@ -196,6 +197,15 @@ public interface DrawingImpl {
      */
     @NotNull
     public SpriteBatch getMainDrawingBatch();
+
+    /**
+     * Obtains the currently valid instance of the {@link RendercacheUtils} interface.
+     *
+     * @return The instance of that interface.
+     * @since 2.0.0
+     */
+    @NotNull
+    public RendercacheUtils getRendercacheUtils();
 
     /**
      * Obtains the instance's {@link TextFactory}.

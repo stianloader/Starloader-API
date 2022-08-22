@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
@@ -242,6 +243,17 @@ public final class Drawing {
      */
     public static DrawingImpl getInstance() {
         return implementation;
+    }
+
+    /**
+     * Obtains the currently valid instance of the {@link RendercacheUtils} interface.
+     *
+     * @return The instance of that interface.
+     * @since 2.0.0
+     */
+    @NotNull
+    public static RendercacheUtils getRendercacheUtils() {
+        return implementation.getRendercacheUtils();
     }
 
     /**

@@ -2,6 +2,7 @@ package de.geolykt.starloader.impl.asm;
 
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnNode;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.SidebarInjector.Orientation;
+import de.geolykt.starloader.api.gui.rendercache.RenderObject;
 import de.geolykt.starloader.impl.SLSidebarInjector;
 import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
 import de.geolykt.starloader.transformers.ASMTransformer;
@@ -41,6 +43,16 @@ public final class UIASMTransformer extends ASMTransformer {
     @NotNull
     public static String mainSidebarClass = "snoddasmannen/galimulator/ui/SidebarWidget";
 
+    /**
+     * The fully classified name of the RenderItem class.
+     * Remapped by starplane - contents of this string will vary in built jar.
+     *
+     * @since 2.0.0
+     */
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String renderItemClass = "snoddasmannen/galimulator/rendersystem/RenderItem";
+
     public static final void sideBarBottom(Object widget) {
         if (widget instanceof Widget && SidebarInjector.getImplementation() instanceof SLSidebarInjector) {
             ((SLSidebarInjector) SidebarInjector.getImplementation()).addAll(Orientation.BOTTOM, (Widget) widget);
@@ -58,13 +70,17 @@ public final class UIASMTransformer extends ASMTransformer {
         if (node.name.equals(mainSidebarClass)) {
             transformSidebarClass(node);
             return true;
+        } else if (node.name.equals(renderItemClass)) {
+            node.interfaces.add(Type.getInternalName(RenderObject.class));
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean isValidTraget(@NotNull String internalName) {
-        return internalName.replace('/', '.').equals(mainSidebarClass);
+        // TODO does this work?
+        return internalName.equals(mainSidebarClass) || internalName.equals(renderItemClass);
     }
 
     private void sidebarInjectHelper(@NotNull String flag, @NotNull String methodName, @NotNull ClassNode source) {

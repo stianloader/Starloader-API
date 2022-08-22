@@ -28,6 +28,7 @@
     "MissileMixins",
     "PersonMixins",
     "ReligionMixins",
+    "RenderCacheMixins",
     "SettingsscreenMixins",
     "ShipFactoryMixins",
     "ShipTypeMixins",
