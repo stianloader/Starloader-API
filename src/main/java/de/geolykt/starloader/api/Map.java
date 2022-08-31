@@ -62,7 +62,7 @@ public interface Map {
      * meaning hasn't been fully reverse-engineered (other than the fact that
      * it is a height or at least proportional to it).
      * For the Procedural generation, it is the square root of the amount of stars/100
-     * multiplied by 0.8.
+     * multiplied by 1.6.
      * As it perform a square rooting operation that is generally NOT cached,
      * this method should not be called too frequently.
      *

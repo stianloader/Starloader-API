@@ -48,7 +48,7 @@ public abstract class SLAbstractWidget extends Widget {
         SpriteBatch batch = Drawing.getDrawingBatch();
         boolean startedDrawing;
         if ((startedDrawing = !batch.isDrawing())) {
-            GalFX.u = true;
+            GalFX.v = true;
             batch.begin();
         }
 
@@ -59,7 +59,7 @@ public abstract class SLAbstractWidget extends Widget {
         } finally {
             if (startedDrawing) {
                 batch.end();
-                GalFX.u = false;
+                GalFX.v = false;
             }
             basicDrawLock = false;
         }

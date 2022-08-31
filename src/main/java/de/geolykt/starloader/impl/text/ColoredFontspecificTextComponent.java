@@ -28,7 +28,7 @@ public class ColoredFontspecificTextComponent extends ColoredTextComponent {
 
     @Override
     public float renderText(float x, float y) {
-        return renderTextAt(x, y, NullUtils.requireNotNull(GalFX.get_s()));
+        return renderTextAt(x, y, NullUtils.requireNotNull(GalFX.get_t()));
     }
 
     @Override

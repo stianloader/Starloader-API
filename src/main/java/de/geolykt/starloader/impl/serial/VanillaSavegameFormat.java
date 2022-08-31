@@ -73,12 +73,12 @@ public class VanillaSavegameFormat implements SavegameFormat {
         @NotNull
         final NamespacedKey nullReligion = NullUtils.provideNull();
         galiImpl.getNeutralEmpire().setReligion(nullReligion);
-        Space.ar(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
-        Space.getMapData().getGenerator().i(); // Change the xmax and ymax of the generator area
-        Space.ao(); // big calculations with voronoi diagrams
+        Space.au(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
+        Space.getMapData().getGenerator().prepareGenerator(); // Change the xmax and ymax of the generator area
+        Space.regenerateVoronoiCells(); // big calculations with voronoi diagrams
         Space.setBackgroundTaskDescription("Loading galaxy: Reconstructing map metadata");
-        Space.ap = Space.q(); // set the width/height of the board
-        Space.aq = Space.r();
+        Space.maxXCache = Space.getMaxX(); // set the width/height of the board
+        Space.maxYCache = Space.getMaxY();
 
         // repopulate the starlanes (this was extracted from another method)
         // Also sets the owner empire, which was also extracted from another method
@@ -95,7 +95,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
             star.setAssignedEmpire(owner);
         }
 
-        Space.am(); // setup quad trees
+        Space.ap(); // setup quad trees
         if (unsafe.getAlliancesUnsafe() == null) {
             unsafe.setAlliancesUnsafe(new Vector<>());
         } else {
@@ -115,9 +115,9 @@ public class VanillaSavegameFormat implements SavegameFormat {
         unsafe.setFollowedPeopleUnsafe(followedMembers);
         class_0.b();
 
-        Space.getMapData().getGenerator().n();
-        GalFX.l.zoom = GalFX.e();
-        GalFX.l.update();
+        Space.getMapData().getGenerator().onLoad();
+        GalFX.m.zoom = GalFX.e();
+        GalFX.m.update();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -196,28 +196,32 @@ public class VanillaSavegameFormat implements SavegameFormat {
         EventManager.handleEvent(new GalaxyLoadingEvent());
         loadVanillaState(input);
         inferSavegameData();
-        EventManager.handleEvent(new GalaxyLoadingEndEvent(this, new WriteableMetadataState()));
+        EventManager.handleEvent(new GalaxyLoadingEndEvent(this, new WriteableMetadataState())); // TODO perhaps make a NOP metadata collection?
     }
 
     @Override
-    public void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException {
+    public void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException, OutOfMemoryError {
         if (reason == null) {
             reason = "Programmer issued save";
         }
         if (location == null) {
             location = "Unespecified";
         }
-        EventManager.handleEvent(new GalaxySavingEvent(reason, location, new BasicMetadataCollector()));
+        EventManager.handleEvent(new GalaxySavingEvent(reason, location, new BasicMetadataCollector())); // TODO perhaps make a NOP metadata collection?
 
+        GalaxySavingEndEvent saveEndEvent = new GalaxySavingEndEvent(location);
         try {
             VanillaSavegameFormat.saveVanillaState(out);
         } catch (Throwable var6) {
             if (var6 instanceof ThreadDeath) {
                 throw (ThreadDeath) var6;
             }
+            if (var6 instanceof OutOfMemoryError) {
+                throw (OutOfMemoryError) var6;
+            }
             throw new IOException("Issue during serialisation.", var6);
         } finally {
-            EventManager.handleEvent(new GalaxySavingEndEvent(location));
+            EventManager.handleEvent(saveEndEvent);
         }
     }
 

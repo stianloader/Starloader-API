@@ -208,7 +208,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     @NotNull
     public RenderCacheState getDrawingState() {
-        return (RenderCacheState) GalFX.ad.get();
+        return (RenderCacheState) GalFX.af.get();
     }
 
     @SuppressWarnings("unchecked")

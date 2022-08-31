@@ -9,7 +9,7 @@ accessible      method  snoddasmannen/galimulator/AudioManager                  
 extendable      method  snoddasmannen/galimulator/EmpireSpecial                                  <init>     (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 accessible      method  snoddasmannen/galimulator/FlagItem$BuiltinSymbols                        <init>     (Ljava/lang/String;ILjava/lang/String;ZII)V
 accessible      method  snoddasmannen/galimulator/GalFX                                          c          (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
-accessible      method  snoddasmannen/galimulator/Space                                          ar         ()V
+accessible      method  snoddasmannen/galimulator/Space                                          au         ()V
 accessible      method  snoddasmannen/galimulator/Space                                          aW         ()V
 accessible      method  snoddasmannen/galimulator/SpaceState                                     <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/ArrayList;)V
 accessible      method  snoddasmannen/galimulator/EmploymentAgency$Local1                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
@@ -36,8 +36,8 @@ accessible      field   snoddasmannen/galimulator/Space                        a
 accessible      field   snoddasmannen/galimulator/Space                        p                    Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                        milliYear            I
 accessible      field   snoddasmannen/galimulator/Space                        transcended          I
-accessible      field   snoddasmannen/galimulator/Space                        ap                   F
-accessible      field   snoddasmannen/galimulator/Space                        aq                   F
+accessible      field   snoddasmannen/galimulator/Space                        maxXCache            F
+accessible      field   snoddasmannen/galimulator/Space                        maxYCache            F
 accessible      field   snoddasmannen/galimulator/Space                        an                   Ljava/util/ArrayList;
 accessible      field   snoddasmannen/galimulator/Space                        player               Lsnoddasmannen/galimulator/Player;
 accessible      field   snoddasmannen/galimulator/Space                        mapData              Lsnoddasmannen/galimulator/MapData;
@@ -56,9 +56,9 @@ accessible      field   snoddasmannen/galimulator/SpaceState                   e
 accessible      field   snoddasmannen/galimulator/SpaceState                   vanity               Lsnoddasmannen/galimulator/VanityHolder;
 accessible      field   snoddasmannen/galimulator/Star                         starRenderingRegion  Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
 accessible      field   snoddasmannen/galimulator/Galemulator                  h                    Ljava/lang/String;
-accessible      field   snoddasmannen/galimulator/GalFX                        l                    Lcom/badlogic/gdx/graphics/OrthographicCamera;
-accessible      field   snoddasmannen/galimulator/GalFX                        u                    Z
-accessible      field   snoddasmannen/galimulator/GalFX                        ad                   Ljava/lang/ThreadLocal;
+accessible      field   snoddasmannen/galimulator/GalFX                        m                    Lcom/badlogic/gdx/graphics/OrthographicCamera;
+accessible      field   snoddasmannen/galimulator/GalFX                        v                    Z
+accessible      field   snoddasmannen/galimulator/GalFX                        af                   Ljava/lang/ThreadLocal;
 accessible      field   snoddasmannen/galimulator/War                          e1                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 accessible      field   snoddasmannen/galimulator/War                          e2                   Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
 

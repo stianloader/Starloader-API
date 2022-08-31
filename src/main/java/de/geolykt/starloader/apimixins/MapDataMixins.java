@@ -68,11 +68,11 @@ public class MapDataMixins implements Map {
 
     @Override
     public float getHeight() {
-        return generator.a();
+        return generator.getMaxY() * 2;
     }
 
     @Override
     public float getWidth() {
-        return generator.b();
+        return generator.getMaxX() * 2;
     }
 }

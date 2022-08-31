@@ -25,6 +25,7 @@ public class GalaxySavingEndEvent extends Event {
      * @since 2.0.0
      */
     public GalaxySavingEndEvent(@NotNull String location) {
+        // TODO OOM boolean
         this.location = NullUtils.requireNotNull(location, "location must not be null");
     }
 

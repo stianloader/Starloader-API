@@ -101,7 +101,7 @@ public class StarMixins implements Star {
     } // setMajorityFaith
 
     @Shadow
-    public void a(snoddasmannen.galimulator.Empire var0) { // setEmpire
+    public void setOwnerEmpire(snoddasmannen.galimulator.Empire var0) { // setEmpire
         return;
     }
 
@@ -111,12 +111,13 @@ public class StarMixins implements Star {
     }
 
     @Shadow
-    public void a(snoddasmannen.galimulator.Star var1) {
+    public void disconnect(snoddasmannen.galimulator.Star var1) {
     } // removeNeighbour
 
     @Override
     public void addNeighbour(@NotNull Star star) {
-        b((snoddasmannen.galimulator.Star) star);
+//        ((snoddasmannen.galimulator.Star) (Object) this).disconnect(null);
+        connect((snoddasmannen.galimulator.Star) star);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class StarMixins implements Star {
     } // takeover
 
     @Shadow
-    public void b(snoddasmannen.galimulator.Star var1) {
+    public void connect(snoddasmannen.galimulator.Star var1) {
     } // addNeighbour
 
     @Shadow
@@ -286,7 +287,7 @@ public class StarMixins implements Star {
 
     @Override
     public void removeNeighbour(@NotNull Star star) {
-        a((snoddasmannen.galimulator.Star) star);
+        disconnect((snoddasmannen.galimulator.Star) star);
     }
 
     @Override
@@ -295,7 +296,7 @@ public class StarMixins implements Star {
         snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
         oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
         newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
-        a(newEmp);
+        setOwnerEmpire(newEmp);
     }
 
     @Override

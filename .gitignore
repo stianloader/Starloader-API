@@ -13,3 +13,4 @@ run/
 data
 # Galimulator savegames
 *.dat
+/target/
