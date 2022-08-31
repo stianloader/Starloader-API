@@ -3,6 +3,8 @@ package de.geolykt.starloader.impl.asm;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
@@ -97,7 +99,7 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     @StarplaneReobfuscateReference
     @NotNull
-    public static String spaceDrawMethod = "snoddasmannen/galimulator/Space.draw()V";
+    public static String spaceDrawMethod = "snoddasmannen/galimulator/Space.draw(Lsnoddasmannen/galimulator/rendersystem/RenderCache;)V";
 
     @StarplaneReobfuscateReference
     @NotNull
@@ -115,7 +117,7 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     @StarplaneReobfuscateReference
     @NotNull
-    public static String tickMethod = "snoddasmannen/galimulator/Space.tick()V";;
+    public static String tickMethod = "snoddasmannen/galimulator/Space.tick()I";
 
     /**
      * The internal name of the class you are viewing right now right here.
@@ -262,7 +264,8 @@ public class SpaceASMTransformer extends ASMTransformer {
                 }
                 // WARNING: this is some seriously dangerous assumptions.
                 AbstractInsnNode lastNode = method.instructions.getLast();
-                while (lastNode.getOpcode() != Opcodes.RETURN) {
+                Objects.requireNonNull(lastNode);
+                while (lastNode.getOpcode() != Opcodes.IRETURN && lastNode.getOpcode() != Opcodes.RETURN) {
                     lastNode = lastNode.getPrevious();
                 }
                 method.instructions.insert(currentInsn, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPre", "()V"));
@@ -278,17 +281,28 @@ public class SpaceASMTransformer extends ASMTransformer {
         if (source.name.equals(SPACE_CLASS)) {
             String generateGalaxyMethodName = generateGalaxyMethod.split("[\\.\\(]", 3)[1];
             String tickMethodName = tickMethod.split("[\\.\\(]", 3)[1];
+            String tickMethodDesc = '(' + tickMethod.split("[\\.\\(]", 3)[2];
             String saveSyncMethodName = saveSyncMethod.split("[\\.\\(]", 3)[1];
             String spaceDrawMethodName = spaceDrawMethod.split("[\\.\\(]", 3)[1];
+            String spaceDrawMethodDesc = '(' + spaceDrawMethod.split("[\\.\\(]", 3)[2];
+
+            boolean foundTickMethod = false;
+            boolean foundEmpireCollapseMethod = false;
+            boolean foundSaveSyncMethod = false;
+            boolean foundSpaceDrawMethod = false;
+            boolean foundSaveGalaxyMethodName = false;
 
             for (MethodNode method : source.methods) {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
                     addEmpireCollapseListener(method);
-                } else if (method.name.equals(spaceDrawMethodName) && method.desc.equals("()V")) {
+                    foundEmpireCollapseMethod = true;
+                } else if (method.name.equals(spaceDrawMethodName) && method.desc.equals(spaceDrawMethodDesc)) {
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPre", "()V"));
                     method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPost", "()V"));
-                } else if (method.name.equals(tickMethodName) && method.desc.equals("()V")) {
+                    foundSpaceDrawMethod = true;
+                } else if (method.name.equals(tickMethodName) && method.desc.equals(tickMethodDesc)) {
                     addLogicalListener(method);
+                    foundTickMethod = true;
                 } else if (method.name.equals(saveSyncMethodName) && method.desc.equals("(Ljava/lang/String;Ljava/lang/String;)V")) {
                     method.instructions.clear();
                     method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
@@ -296,6 +310,7 @@ public class SpaceASMTransformer extends ASMTransformer {
                     method.instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "save", "(Ljava/lang/String;Ljava/lang/String;)V"));
                     method.instructions.add(new InsnNode(Opcodes.RETURN));
                     method.tryCatchBlocks.clear();
+                    foundSaveSyncMethod = true;
                 } else if (method.name.equals(generateGalaxyMethodName) && method.desc.equals("(ILsnoddasmannen/galimulator/MapData;)V")) {
                     AbstractInsnNode returnInsn = null;
                     for (AbstractInsnNode insn : method.instructions) {
@@ -312,6 +327,20 @@ public class SpaceASMTransformer extends ASMTransformer {
                     MethodInsnNode insn = new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "generateGalaxy", "(Z)V");
                     method.instructions.insertBefore(returnInsn, new InsnNode(Opcodes.ICONST_1)); // load true into the stack
                     method.instructions.insertBefore(returnInsn, insn);
+                    foundSaveGalaxyMethodName = true;
+                }
+            }
+
+            boolean[] foundStuff = new boolean[] {
+                    foundEmpireCollapseMethod,
+                    foundSaveGalaxyMethodName,
+                    foundSaveSyncMethod,
+                    foundSpaceDrawMethod,
+                    foundTickMethod
+            };
+            for (boolean x : foundStuff) {
+                if (!x) {
+                    throw new AssertionError("Unable to transform class! Found stuff: " + Arrays.toString(foundStuff));
                 }
             }
             return true;
