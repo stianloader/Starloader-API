@@ -337,7 +337,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_42.b().a("transcending"))).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_42.b().a("transcending"))).show();
                 }
             }
         }
@@ -348,7 +348,7 @@ public class EmpireMixins implements ActiveEmpire {
         broadcastNews("Has degenerated, now tech level: " + getTechnologyLevel());
         if (this == Galimulator.getPlayerEmpire()) {
             new BasicDialogBuilder("Technologicy lost", "You have degenerated to tech level: " + this.techLevel
-                    + ". You kindly ask your scientists to make back-ups next time.").buildAndShow();
+                    + ". You kindly ask your scientists to make back-ups next time.").show();
         }
         return true;
     }
@@ -548,7 +548,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_42.b().a("transcending"))).buildAndShow();
+                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_42.b().a("transcending"))).show();
                 }
             }
         }
@@ -560,7 +560,7 @@ public class EmpireMixins implements ActiveEmpire {
         this.a(EmpireAchievementType.RESEARCHED);
         if (Galimulator.getPlayerEmpire() == this) {
             new BasicDialogBuilder("Technological advance", "You have advanced to tech level: " + this.techLevel
-                    + "! This will give your armies and fleets a significant boost.").buildAndShow();
+                    + "! This will give your armies and fleets a significant boost.").show();
         }
         return true;
     }

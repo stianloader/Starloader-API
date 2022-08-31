@@ -2,9 +2,12 @@ package de.geolykt.starloader.api.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import de.geolykt.starloader.api.Galimulator;
 
 /**
  * A builder that builds basic dialogs.
@@ -146,9 +149,54 @@ public class BasicDialogBuilder {
      * Builds the dialog with the data within the Builder and displays it.
      *
      * @return The dialog that was built via the operation.
+     * @deprecated This operation is not thread safe and must be run in the GUI thread. If you are indeed running it on
+     * the GUI thread, migrate to {@link #buildAndShowNow()}. If you are running this method outside
+     * the GUI thread use {@link #buildAndShow(Consumer)} or {@link #show()}.
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    @NotNull
     public BasicDialog buildAndShow() {
         return new de.geolykt.starloader.impl.BasicDialog(title, description, choices, closeListeners, actionListeners,
                 duration, playSFX);
+    }
+
+    /**
+     * Builds the dialog with the data within the Builder and displays it.
+     * <p>Warning: This operation is not thread safe and must be run in the GUI thread.
+     *
+     * @return The dialog that was built via the operation.
+     * @since 2.0.0
+     */
+    @NotNull
+    public BasicDialog buildAndShowNow() {
+        return new de.geolykt.starloader.impl.BasicDialog(title, description, choices, closeListeners, actionListeners,
+                duration, playSFX);
+    }
+
+    /**
+     * Builds the dialog with the data within the Builder and displays it.
+     * This operation is thread-safe, as it will only be shown when the next frame is being rendered.
+     *
+     * @since 2.0.0
+     */
+    public void show() {
+        Galimulator.runTaskOnNextFrame(() -> {
+            new de.geolykt.starloader.impl.BasicDialog(title, description, choices, closeListeners, actionListeners,
+                    duration, playSFX);
+        });
+    }
+
+    /**
+     * Builds the dialog with the data within the Builder and displays it.
+     * This operation is thread-safe
+     *
+     * @param consumer A consumer that will be given the built dialog. The consumer is invoked in the GUI thread.
+     * @since 2.0.0
+     */
+    public void buildAndShow(@NotNull Consumer<BasicDialog> consumer) {
+        Galimulator.runTaskOnNextFrame(() -> {
+            consumer.accept(new de.geolykt.starloader.impl.BasicDialog(title, description, choices, closeListeners, actionListeners,
+                    duration, playSFX));
+        });
     }
 }

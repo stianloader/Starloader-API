@@ -20,8 +20,6 @@ import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
 
 import snoddasmannen.galimulator.GalColor;
-import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.effects.WidgetFadeEffect;
 import snoddasmannen.galimulator.ui.FlowLayout;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
 import snoddasmannen.galimulator.ui.Widget;
@@ -97,7 +95,13 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
         // That being said it does open up the issue what happens if this method is called outside CanvasWidget#tap
         // or similar. But I'll guess I'll need to wait for this since I don't really want to test that right now as
         // it is getting late
-        Space.showItem(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
+        // --
+        // Hello! Geolykt from the future here (or well - past)!
+        // I am not sure why the Geolykt who wrote above comment didn't bother to look at the source code of the
+        // constructor of the WidgetFadeEffect. Either way it does not matter as of now it seems that WidgetFadeEffect is
+        // a thing of the past and seems to have been removed as of 5.0-alpha.unknown
+
+        // Space.showItem(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
     }
 
     @Override

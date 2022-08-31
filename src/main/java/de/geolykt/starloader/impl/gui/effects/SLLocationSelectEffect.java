@@ -50,6 +50,7 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
 
     @Override
     public void draw() {
+        // FIXME use the rendercache system!
         SpriteBatch batch = Drawing.getDrawingBatch();
         batch.setColor(ringColor);
         batch.draw(TEXTURE, getX() - radius, getY() - radius, radius * 2, radius * 2);

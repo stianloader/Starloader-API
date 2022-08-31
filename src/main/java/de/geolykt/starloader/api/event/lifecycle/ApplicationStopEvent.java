@@ -10,5 +10,6 @@ import de.geolykt.starloader.mod.Extension;
  * is a boilerplate solution.
  */
 public class ApplicationStopEvent extends Event {
+    // FIXME The logic thread continues to run even when while this method is being run
     // Dummy event, holds no real data
 }

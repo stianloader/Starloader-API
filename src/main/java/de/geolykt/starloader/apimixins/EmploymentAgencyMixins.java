@@ -116,14 +116,16 @@ public class EmploymentAgencyMixins {
                             }
                         }
                     });
-                    BasicDialog dialog = selectEmperorDialog;
-                    if (dialog != null && !dialog.isClosed()) {
-                        dialog.close();
-                    }
-                    selectEmperorDialog = dialogBuilder.buildAndShow();
+                    Galimulator.runTaskOnNextFrame(() -> {
+                        BasicDialog dialog = selectEmperorDialog;
+                        if (dialog != null && !dialog.isClosed()) {
+                            dialog.close();
+                        }
+                        selectEmperorDialog = dialogBuilder.buildAndShowNow();
+                    });
                     return null;
                 }
-                new BasicDialogBuilder("Emperor dead", "Bad news, the emperor kind of died! There weren't really any great options out there, so we just picked somebody off the street").buildAndShow();
+                new BasicDialogBuilder("Emperor dead", "Bad news, the emperor kind of died! There weren't really any great options out there, so we just picked somebody off the street").show();
             } else {
                 // Non-player empire
                 List<@NotNull DynastyMember> candidates = new ArrayList<>(potentialCandidates.size());
