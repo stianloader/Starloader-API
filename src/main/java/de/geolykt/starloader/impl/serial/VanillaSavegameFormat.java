@@ -163,7 +163,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
     }
 
     static synchronized void saveVanillaState(@NotNull OutputStream raw) throws Throwable {
-        Space.J = 0; // reset Stack depth
+        Space.saveStackdepth = 0; // reset Stack depth
         GalimulatorImplementation galiImpl = (GalimulatorImplementation) Galimulator.getImplementation();
         SpaceState var2 = galiImpl.createState();
         if (DeviceConfiguration.getConfiguration().useXStream()) {
@@ -205,7 +205,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
             reason = "Programmer issued save";
         }
         if (location == null) {
-            location = "Unespecified";
+            location = "Unspecified";
         }
         EventManager.handleEvent(new GalaxySavingEvent(reason, location, new BasicMetadataCollector())); // TODO perhaps make a NOP metadata collection?
 

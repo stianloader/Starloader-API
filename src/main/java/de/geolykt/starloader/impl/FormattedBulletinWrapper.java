@@ -2,9 +2,9 @@ package de.geolykt.starloader.impl;
 
 import de.geolykt.starloader.api.gui.text.FormattedText;
 
-import snoddasmannen.galimulator.class_43;
+import snoddasmannen.galimulator.TextBulletin;
 
-public class FormattedBulletinWrapper extends class_43 {
+public class FormattedBulletinWrapper extends TextBulletin {
 
     private final FormattedText text;
 
@@ -14,7 +14,7 @@ public class FormattedBulletinWrapper extends class_43 {
     }
 
     @Override
-    public void a(float var1, float var2) {
-        text.renderText(var1, var2);
+    public void drawAt(float x, float y) {
+        text.renderText(x, y);
     }
 }

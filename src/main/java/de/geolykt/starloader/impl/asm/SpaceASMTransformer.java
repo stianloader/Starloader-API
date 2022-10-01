@@ -38,7 +38,7 @@ import de.geolykt.starloader.transformers.ASMTransformer;
 
 import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.interface_9;
+import snoddasmannen.galimulator.interface_10;
 
 /**
  * Transformers targeting the Space class.
@@ -204,10 +204,10 @@ public class SpaceASMTransformer extends ASMTransformer {
         }
 
         // No idea what this does.
-        // Apparently there is no implementation of "interface_9" so we cannot really know.
+        // Apparently there is no implementation of "interface_10" so we cannot really know.
         // Upcoming feature perhaps?
         // Apparently this has been there for quite a while too
-        for (interface_9 var1 : Space.w) {
+        for (interface_10 var1 : Space.w) {
             var1.f();
         }
     }

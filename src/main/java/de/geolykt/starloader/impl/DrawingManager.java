@@ -36,9 +36,9 @@ import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
+import snoddasmannen.galimulator.OddityBulletin;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.class_29;
-import snoddasmannen.galimulator.class_43;
+import snoddasmannen.galimulator.TextBulletin;
 import snoddasmannen.galimulator.ui.Widget;
 
 public class DrawingManager implements DrawingImpl, TextureProvider, RendercacheUtils {
@@ -111,12 +111,12 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
         GalColor galColor = new GalColor(color);
         switch (size) {
         case LARGE:
-            return GalFX.a(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_BIG);
+            return GalFX.drawText(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_BIG);
         case MEDIUM:
-            return GalFX.a(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_DEFAULT);
+            return GalFX.drawText(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_DEFAULT);
         case SMALL:
         default:
-            return GalFX.a(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_SMALL);
+            return GalFX.drawText(x, y, message, galColor, GalFX.FONT_TYPE.MONOTYPE_SMALL);
         }
     }
 
@@ -285,12 +285,12 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new class_43(message));
+        Space.a(new TextBulletin(message));
     }
 
     @Override
     public void sendOddityBulletin(@NotNull String message) {
-        Space.a(new class_29(message));
+        Space.a(new OddityBulletin(message));
     }
 
     @Override

@@ -120,7 +120,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
             reason = "Programmer issued save";
         }
         if (location == null) {
-            location = "Unespecified";
+            location = "Unspecified";
         }
         // Obtain metadata from extensions
         MetadataCollector collector = new BasicMetadataCollector();
