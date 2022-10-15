@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,9 +52,11 @@ import de.geolykt.starloader.impl.serial.VanillaSavegameFormat;
 import de.geolykt.starloader.mod.Extension;
 
 import snoddasmannen.galimulator.Galemulator;
+import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Player;
+import snoddasmannen.galimulator.ProceduralStarGenerator;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
@@ -125,13 +129,14 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             builder.append("Cause (for beginners): " + cause + "\n");
             builder.append("Installed mods:\n");
             for (Extension ext : Starloader.getExtensionManager().getExtensions()) {
-                builder.append("    " + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
+                // (We use .repeat() to trick our checkstyle config because I have slightly misconfigured it)
+                builder.append(" ".repeat(4) + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
             }
             builder.append("\nStacktrace:\n");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             sw.flush();
-            builder.append(sw.getBuffer().toString().replace("\n", "\n    "));
+            builder.append(sw.getBuffer().toString().replace("\n", "\n" + " ".repeat(4)));
             listener.h = "[LIME]" + builder.toString();
             for (String s : builder.toString().split("\n")) {
                 LoggerFactory.getLogger("CrashReporter").error(s);
@@ -413,6 +418,58 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).loadGameState(input);
     }
 
+    @SuppressWarnings("null")
+    @Override
+    public synchronized void loadSavegameFile(@NotNull String savegameFile) {
+        Galemulator.d = 0L;
+        new Thread(() -> {
+            boolean acquiredLocks = false;
+            Throwable suppressedException = null;
+            try {
+                Space.getMainTickLoopLock().acquire(2);
+                acquiredLocks = true;
+                loadGameState(Files.newInputStream(Paths.get(savegameFile)));
+                LOGGER.info("Restored from disk, stack depth was: " + Space.saveStackdepth);
+            } catch (InterruptedException interrupted) {
+                if (!acquiredLocks) {
+                    crash(interrupted, "Interrupted loading thread while acquiring main tick loop lock - this is almost definetly caused by mods.", false);
+                } else {
+                    LOGGER.info("Loading was interrupted!", interrupted);
+                }
+            } catch (OutOfMemoryError oom) {
+                suppressedException = oom;
+                System.gc();
+            } catch (Throwable t) {
+                suppressedException = t;
+            } finally {
+                if (!acquiredLocks) {
+                    // The GalimulatorImplementation.crash() method has been invoked
+                    return;
+                }
+                if (suppressedException != null) {
+                    boolean generateSuccess = false;
+                    try {
+                        Space.player = new Player();
+                        Space.generateGalaxy(300, new MapData(ProceduralStarGenerator.STRETCHED_SPIRAL));
+                        Space.ay = true;
+                        generateSuccess = true;
+                    } catch (Throwable t) {
+                        t.addSuppressed(suppressedException);
+                        crash(t, "Unable to generate galaxy after failed loading attempt.", false);
+                    } finally {
+                        Space.getMainTickLoopLock().release(2);
+                    }
+                    if (generateSuccess) {
+                        // Not printing if it didn't succeed because the .crash() method already deals with that
+                        suppressedException.printStackTrace();
+                    }
+                } else {
+                    Space.getMainTickLoopLock().release(2);
+                }
+            }
+        }).start();
+    }
+
     @Override
     public void pauseGame() {
         Space.setPaused(true);
@@ -420,7 +477,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void recalculateVoronoiGraphs() {
-        Space.ao();
+        Space.regenerateVoronoiCells();
     }
 
     @Override

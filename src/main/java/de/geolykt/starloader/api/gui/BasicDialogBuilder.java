@@ -162,6 +162,7 @@ public class BasicDialogBuilder {
 
     /**
      * Builds the dialog with the data within the Builder and displays it.
+     *
      * <p>Warning: This operation is not thread safe and must be run in the GUI thread.
      *
      * @return The dialog that was built via the operation.

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
+import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
@@ -74,7 +75,7 @@ public class LineChart implements ScreenComponent {
         @NotNull Color white = Color.WHITE;
 
         DrawingImpl graphics = Drawing.requireInstance();
-        graphics.fillWindow(x, y, getWidth(), -getHeight(), white, camera);
+        AsyncRenderer.fillWindow(x, y, getWidth(), -getHeight(), white, camera);
 
         float pixelsPerValue = getChartHeight() / chart.getHeight();
         float pixelsPerIntervall;

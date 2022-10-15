@@ -47,5 +47,4 @@ public class SLInstrinsicsTransformer extends ASMTransformer {
     public boolean isValidTraget(@NotNull String internalName) {
         return internalName.equals("de/geolykt/starloader/impl/asm/SLInstrinsics");
     }
-
 }

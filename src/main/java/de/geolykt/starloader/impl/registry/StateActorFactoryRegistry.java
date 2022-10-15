@@ -43,7 +43,7 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
             register(((RegistryKeyed) starNative.e()).getRegistryKey(), starNative.e());
         });
         for (ShipType type : ShipType.values()) {
-            register(((RegistryKeyed) (Object)type).getRegistryKey(), type);
+            register(((RegistryKeyed) (Object) type).getRegistryKey(), type);
         }
         Set<Object> alreadyIncluded = new HashSet<>(super.keyedValues.values());
         for (Object o : Space.getStateActorCreators()) {

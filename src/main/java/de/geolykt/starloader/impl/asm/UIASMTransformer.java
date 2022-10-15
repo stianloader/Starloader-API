@@ -43,6 +43,10 @@ public final class UIASMTransformer extends ASMTransformer {
     @NotNull
     public static String mainSidebarClass = "snoddasmannen/galimulator/ui/SidebarWidget";
 
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String openGameControlMethod = "snoddasmannen/galimulator/ui/SidebarWidget.openGameControl()V";
+
     /**
      * The fully classified name of the RenderItem class.
      * Remapped by starplane - contents of this string will vary in built jar.
@@ -134,5 +138,15 @@ public final class UIASMTransformer extends ASMTransformer {
     public void transformSidebarClass(@NotNull ClassNode source) {
         sidebarInjectHelper("FileButton.png", "sideBarTop", source);
         sidebarInjectHelper("peoplebutton.png", "sideBarBottom", source);
+
+        /*
+        String openGameControlMethodName = openGameControlMethod.split("[\\.\\(]", 3)[1];
+        for (MethodNode method : source.methods) {
+            if (method.desc.equals("()V") && method.name.equals(openGameControlMethodName) && (method.access & Opcodes.ACC_STATIC) != 0) {
+                method.instructions.clear();
+                method.instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/api/gui/openui/UIControl", "openGameControlMenu", "()V"));
+                method.instructions.add(new InsnNode(Opcodes.RETURN));
+            }
+        }*/
     }
 }

@@ -51,5 +51,4 @@ public class CheckerboardTest extends Usertest {
     public String getCategoryName() {
         return "SLAPI";
     }
-
 }

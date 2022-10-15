@@ -61,7 +61,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
                 } else {
                     this.layout = new FlowLayout(FlowDirection.VERTICAL, this.internalCamera);
                 }
-             }
+            }
             widget.setPositioning(WIDGET_POSITIONING.LAYOUT);
         }
         if (widget.getHeight() > getHeight() || widget.getWidth() > getWidth()) {

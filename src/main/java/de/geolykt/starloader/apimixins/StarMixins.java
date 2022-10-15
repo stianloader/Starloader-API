@@ -116,7 +116,6 @@ public class StarMixins implements Star {
 
     @Override
     public void addNeighbour(@NotNull Star star) {
-//        ((snoddasmannen.galimulator.Star) (Object) this).disconnect(null);
         connect((snoddasmannen.galimulator.Star) star);
     }
 

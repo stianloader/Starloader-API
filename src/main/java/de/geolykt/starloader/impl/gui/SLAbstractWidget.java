@@ -54,7 +54,7 @@ public abstract class SLAbstractWidget extends Widget {
 
         try {
             onRender();
-        } catch(Exception e) {
+        } catch (Exception e) {
             GalimulatorImplementation.crash(e, "Exception occured while rendering a widget. This suggests a mod-caused error while drawing a canvas or screen.", true);
         } finally {
             if (startedDrawing) {
@@ -70,7 +70,7 @@ public abstract class SLAbstractWidget extends Widget {
         try {
             super.onMouseUp(x, getHeight() - y);
             tap(x, getHeight() - y, false);
-        } catch(Exception e) {
+        } catch (Exception e) {
             GalimulatorImplementation.crash(e, "Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true);
         }
     }

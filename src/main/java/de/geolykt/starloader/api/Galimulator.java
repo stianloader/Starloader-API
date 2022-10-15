@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -311,6 +312,19 @@ public final class Galimulator {
          * @throws IOException If any IO issues occur at the underlying layers
          */
         public void loadGameState(@NotNull InputStream in) throws IOException;
+
+        /**
+         * Loads a savegame on another thread while also blocking the main ticking loop.
+         * If loading fails, a new galaxy is generated using the stretched_spiral generator with a size of
+         * 300 stars.
+         *
+         * <p>This is basically the method that is used by Galimulator to load savegames.
+         *
+         * @param savegameFile The savegame file to load. Relative to the current working directory, but can be absolute.
+         * @since 2.0.0
+         */
+        @NonBlocking
+        public void loadSavegameFile(@NotNull String savegameFile);
 
         /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
@@ -979,6 +993,20 @@ public final class Galimulator {
      */
     public static void loadGameState(@NotNull InputStream in) throws IOException {
         impl.loadGameState(in);
+    }
+
+    /**
+     * Loads a savegame on another thread while also blocking the main ticking loop.
+     * If loading fails, a new galaxy is generated using the stretched_spiral generator with a size of 300 stars.
+     *
+     * <p>This is basically the method that is used by Galimulator to load savegames.
+     *
+     * @param savegameFile The savegame file to load. Relative to the current working directory, but can be absolute.
+     * @since 2.0.0
+     */
+    @NonBlocking
+    public static void loadSavegameFile(@NotNull String savegameFile) {
+        impl.loadSavegameFile(savegameFile);
     }
 
     /**

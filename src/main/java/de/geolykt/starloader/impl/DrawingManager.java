@@ -2,7 +2,6 @@ package de.geolykt.starloader.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
@@ -47,10 +46,6 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     private static final CanvasManager CANVAS_MANAGER = new SLCanvasManager();
     @NotNull
     private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
-
-    // Welcome to unchecked valley; I think this isn't possible otherwise, so who cares?
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private EnumMap fontBitmapCache = new EnumMap(GalFX.FONT_TYPE.class);
 
     private Collection<String> fonts;
 
@@ -137,6 +132,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
         SpriteBatch drawBatch = getMainDrawingBatch();
         boolean beganDrawing = false;
@@ -151,11 +147,6 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
         if (beganDrawing) {
             drawBatch.end();
         }
-    }
-
-    @Override
-    public void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
-        GalFX.drawWindow(x, y, width, height, new GalColor(color), camera);
     }
 
     @Override
@@ -208,10 +199,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     @NotNull
     public RenderCacheState getDrawingState() {
-        return (RenderCacheState) GalFX.af.get();
+        return (RenderCacheState) GalFX.RENDERCACHE_LOCAL.get();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     @Nullable
     public BitmapFont getFontBitmap(@NotNull String font) {
@@ -221,12 +211,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
         } catch (IllegalArgumentException e) {
             return null;
         }
-        Object obj = fontBitmapCache.get(arg);
-        if (obj == null) {
-            obj = GalFX.c(arg);
-            fontBitmapCache.put(arg, obj);
-        }
-        return (BitmapFont) obj;
+        return GalFX.c(arg);
     }
 
     @SuppressWarnings("null")
@@ -253,6 +238,13 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @NotNull
     public TextureRegion getSinglePixelSquare() {
         return findTextureRegion("whitesquare.png");
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public BitmapFont getSpaceFont() {
+        return GalFX.c(GalFX.FONT_TYPE.SPACE);
     }
 
     @Override

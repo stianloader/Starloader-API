@@ -95,7 +95,7 @@ public class InstanceMixins {
         if (galimStar.getOwningEmpire().getExtension() != null) {
             Actor var1 = galimStar.getOwningEmpire().getExtension().extendedBuildActor(galimStar);
             if (var1 != null) {
-               return var1;
+                return var1;
             }
         }
 

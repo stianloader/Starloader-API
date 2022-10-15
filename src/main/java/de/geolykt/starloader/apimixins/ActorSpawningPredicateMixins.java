@@ -74,7 +74,7 @@ public class ActorSpawningPredicateMixins implements StateActorSpawnPredicate<St
         }
         List<@NotNull NamespacedKey> keys = new ArrayList<>();
         for (EmpireSpecial special : specialRequirements) {
-            keys.add(((RegistryKeyed)special).getRegistryKey());
+            keys.add(((RegistryKeyed) special).getRegistryKey());
         }
         return Collections.unmodifiableCollection(keys);
     }
@@ -101,7 +101,7 @@ public class ActorSpawningPredicateMixins implements StateActorSpawnPredicate<St
             return false;
         }
         if (this.specialRequirements != null) {
-            for(NamespacedKey special : getRequiredSpecials()) {
+            for (NamespacedKey special : getRequiredSpecials()) {
                 if (!star.getAssignedEmpire().hasSpecial(special)) {
                     return false;
                 }

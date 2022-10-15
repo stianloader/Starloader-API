@@ -1,13 +1,18 @@
 package de.geolykt.starloader.impl.gui.canvas;
 
+import java.util.WeakHashMap;
+
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
+import de.geolykt.starloader.api.gui.canvas.CanvasPosition;
 import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
@@ -17,8 +22,11 @@ import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.Widget;
+import snoddasmannen.galimulator.ui.Widget.WIDGET_ALIGNMENT;
 
 public class SLCanvasManager implements CanvasManager {
+
+    private final WeakHashMap<Canvas, BufferedWidgetWrapper> widgetWrappers = new WeakHashMap<>();
 
     @Override
     @NotNull
@@ -78,11 +86,56 @@ public class SLCanvasManager implements CanvasManager {
 
     @Override
     @NotNull
-    public Canvas openCanvas(@NotNull Canvas canvas) {
+    @Contract(pure = false, value = "null, _ -> fail; _, null -> fail; !null, !null -> param1")
+    public Canvas openCanvas(@NotNull Canvas canvas, @NotNull CanvasPosition position) {
+        WIDGET_ALIGNMENT alignment;
+        switch (NullUtils.requireNotNull(position, "\"position\" may not be null!")) {
+        case BOTTOM_LEFT:
+            alignment = WIDGET_ALIGNMENT.BOTTOM_LEFT;
+            break;
+        case BOTTOM_RIGHT:
+            alignment = WIDGET_ALIGNMENT.BOTTOM;
+            break;
+        case CENTER:
+            alignment = WIDGET_ALIGNMENT.MIDDLE;
+            break;
+        case TOP:
+            alignment = WIDGET_ALIGNMENT.TOP;
+            break;
+        case RIGHT:
+            alignment = WIDGET_ALIGNMENT.RIGHT;
+            break;
+        case TOP_LEFT:
+            alignment = WIDGET_ALIGNMENT.TOP_LEFT;
+            break;
+        case TOP_RIGHT:
+            alignment = WIDGET_ALIGNMENT.TOP_RIGHT;
+            break;
+        default:
+            throw new IllegalStateException("Unknown enum instance for the position: " + position.name());
+        }
+
         if (canvas instanceof Widget) {
             Space.closeNonPersistentWidgets(); // Called in Space#showWidget()
             double x = GalFX.getScreenWidth() - canvas.getContext().getWidth() - 120;
-            Space.openedWidgets.add(new BufferedWidgetWrapper((Widget) canvas, x, 200.0 /* ?! */, true, Widget.WIDGET_ALIGNMENT.BOTTOM));
+            BufferedWidgetWrapper bww = new BufferedWidgetWrapper((Widget) canvas, x, 200.0 /* ?! */, true, alignment);
+            widgetWrappers.put(canvas, bww);
+            Space.openedWidgets.add(bww);
+        } else {
+            throw new UnsupportedOperationException("The canvas is not an instanceof Widget and therefore this operation is inapplicable.");
+        }
+        return canvas;
+    }
+
+    @Override
+    @NotNull
+    public Canvas closeCanvas(@NotNull Canvas canvas) {
+        if (canvas instanceof Widget) {
+            BufferedWidgetWrapper bww = widgetWrappers.get(canvas);
+            if (bww == null) {
+                return canvas;
+            }
+            Space.closeWidget(bww);
         } else {
             throw new UnsupportedOperationException("The canvas is not an instanceof Widget and therefore this operation is inapplicable.");
         }

@@ -27,6 +27,17 @@ public interface CanvasManager {
     }
 
     /**
+     * Closes a canvas, making it no longer visible to the user.
+     *
+     * @param canvas The canvas instance to close
+     * @return The canvas instance that was passed as an argument, for chaining
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, value = "null -> fail; !null -> param1")
+    public Canvas closeCanvas(@NotNull Canvas canvas);
+
+    /**
      * Creates a new {@link CanvasContext} object with no rendering or otherwise responsive logic.
      * The width and height will be constant. The resulting canvas context will not be persistent
      *
@@ -141,5 +152,19 @@ public interface CanvasManager {
      */
     @NotNull
     @Contract(pure = false, value = "null -> fail; !null -> param1")
-    public Canvas openCanvas(@NotNull Canvas canvas);
+    public default Canvas openCanvas(@NotNull Canvas canvas) {
+        return openCanvas(canvas, CanvasPosition.BOTTOM_RIGHT);
+    }
+
+    /**
+     * Open a canvas, making it visible for the user.
+     *
+     * @param canvas The canvas instance to open to the user
+     * @param position The positioning of the canvas on the user's screen.
+     * @return The canvas instance that was passed as an argument, for chaining
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, value = "null, _ -> fail; _, null -> fail; !null, !null -> param1")
+    public Canvas openCanvas(@NotNull Canvas canvas, @NotNull CanvasPosition position);
 }

@@ -49,8 +49,17 @@ public final class Drawing {
         SMALL;
     }
 
-    private static DrawingImpl implementation;
+    /**
+     * The field storing the implementation to use for the {@link AsyncRenderer} class.
+     * Do not use directly, instead use {@link AsyncRenderer#setInstance(AsyncRenderer)}
+     * and {@link AsyncRenderer#getInstance()}. This field is not public API and may vanish or be moved
+     * without notice.
+     *
+     * @since 2.0.0
+     */
+    static AsyncRenderer asyncImplementation;
 
+    private static DrawingImpl implementation;
 
     /**
      * Converts coordinates between two representations.
@@ -167,7 +176,15 @@ public final class Drawing {
      * @param camera    The camera to use. It transforms x/y-positions of the drawn rectangle. <b>Width and height are unaffected</b>
      * @param fillColor The GDX color to fill it with.
      * @since 1.5.0
+     * @deprecated This method has numerous flaws that cannot be addressed correctly. The most obvious one is that
+     * it does not make sense for width and height to be unaffected by the camera. Another issue is that
+     * this method and it's implementation predates SLAPI 2.0.0 and with that Galimulator 5.X, which means
+     * that the implementation will directly draw to the main drawing batch and thus bypasses the rendercache
+     * system - which can cause a crash with galimulator 5.X.
+     * <br>It is advisable to migrate to {@link AsyncRenderer#fillRect(double, double, double, double, Color, Camera)},
+     * although one would need to beware that width and height may be affected by the camera there.
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public static void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
         implementation.fillRect(x, y, width, height, fillColor, camera);
     }
@@ -191,9 +208,13 @@ public final class Drawing {
      * @apiNote It is not known what the effects are if this method is called by
      *          anything but the Widget. Act carefully for you may not want to call
      *          this method.
+     * @since 1.5.0
+     * @deprecated Bridges to {@link AsyncRenderer#fillWindow(float, float, float, float, Color, Camera)},
+     * which should be preferred over this method as this method will eventually be removed
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public static void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
-        implementation.fillWindow(x, y, width, height, color, camera);
+        AsyncRenderer.fillWindow(x, y, width, height, color, camera);
     }
 
     /**
@@ -254,6 +275,22 @@ public final class Drawing {
     @NotNull
     public static RendercacheUtils getRendercacheUtils() {
         return implementation.getRendercacheUtils();
+    }
+
+    /**
+     * Obtains the {@link BitmapFont} that corresponds to the "SPACE" font type (returned by {@link #getFonts()} and
+     * used for {@link #getFontBitmap(String)}. As of the latest galimulator 5.0 alpha build for October 15th 2022,
+     * the concrete font used is "Signika2.fnt", located in the "data/fonts" directory.
+     *
+     * <p>Should for whatever reason the font type not exist in future galimulator releases, an adequate replacement
+     * needs to be returned - this method shouldn't throw an exception.
+     *
+     * @return The {@link BitmapFont} used for the "SPACE" font type.
+     * @since 2.0.0
+     */
+    @NotNull
+    public static BitmapFont getSpaceFont() {
+        return implementation.getSpaceFont();
     }
 
     /**

@@ -45,7 +45,7 @@ public interface LocationSelectEffect extends Effect {
 
     /**
      * Obtains the {@link Locateable} that describes the location of the selection.
-     * 
+     *
      * <p>This {@link Locateable} may be non-SLAPI related as it is legal (in this case) for other mods
      * to implement that interface and supply it to this effect.
      * <br/>This may look strange at first, but it allows mods to supply arbitrary coordinates for

@@ -86,7 +86,7 @@ public interface StateActorSpawnPredicate<T extends StateActor> {
      * @since 2.0.0
      */
     @Contract(pure = true, value = "null -> fail, !null -> _")
-    public boolean test(@NotNull Star star); 
+    public boolean test(@NotNull Star star);
 
     /**
      * Checks whether all requirements set by this predicates match. The only exception is the base spawning chance, which

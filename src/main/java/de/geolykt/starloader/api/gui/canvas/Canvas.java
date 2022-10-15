@@ -19,6 +19,18 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 public interface Canvas {
 
     /**
+     * Hides the canvas from the user, convenience method for {@link CanvasManager#closeCanvas(Canvas)}.
+     *
+     * @return The current canvas instance, for chaining
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, value = "-> this")
+    public default Canvas closeCanvas() {
+        return CanvasManager.getInstance().closeCanvas(this);
+    }
+
+    /**
      * Displays an selection effect that mirrors the effect that galimulator plays when a button is pressed.
      * More specifically, a ghost image will be rendered on the user's screen for the next few frames which will get larger
      * until it appears.
@@ -48,7 +60,6 @@ public interface Canvas {
 
     /**
      * Obtains the {@link CanvasContext} associated with the canvas object.
-     * The canvas context is 
      *
      * @return The {@link CanvasContext} that is currently used with this canvas object
      * @since 2.0.0
