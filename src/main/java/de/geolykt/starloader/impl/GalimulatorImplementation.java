@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.example.Main;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
@@ -97,6 +98,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @since 2.0.0
      */
     public static void crash(@NotNull Throwable e, @NotNull String cause, boolean save) {
+        try {
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST); // Sometimes the game can crash while rendering, at which point a scissor might be applied. To render the entire crash message we might need to disable the scissor though.
+            Galimulator.pauseGame(); // Pause the game on crash so the simulation loop doesn't continue to run in the background.
+        } catch (Throwable ignored) {
+        }
         Galemulator listener = (Galemulator) Main.application.getApplicationListener();
 
         if (save) {

@@ -35,7 +35,19 @@ public final class CanvasSettings {
      * @since 2.0.0
      */
     @NotNull
-    public static final CanvasSettings DEFAULT_SEMISOLID = new CanvasSettings(new Color(GalColor.NEAR_SOLID.getGDXColor()));
+    public static final CanvasSettings DEFAULT_SEMISOLID = new CanvasSettings(new Color(1.0F, 1.0F, 1.0F, 0.95F));
+
+    /**
+     * The color of the default look and field without a header.
+     * It is white and slightly transparent, and should be used in root canvases.
+     *
+     * @since 2.0.0
+     * @implNote While the semantics of the {@link Color} class mean that this {@link Color} instance can be modified,
+     * it is recommended to not modify it if you are looking to create your own Look & Feel. Some mods may copy the
+     * value of this field or not use this field at all ({@link #DEFAULT_SEMISOLID} uses an independent instance).
+     * As such is may cause some somewhat annoying edge-case behaviour.
+     */
+    public static final Color NEAR_SOLID_COLOR = new Color(1.0F, 1.0F, 1.0F, 0.95F);
 
     @NotNull
     private final Color backgroundColor;

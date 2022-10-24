@@ -24,5 +24,7 @@ public abstract class Usertest {
         USERTESTS.add(new CanvasScrollTest());
         USERTESTS.add(new CheckerboardTest());
         USERTESTS.add(new CanvasHoverTest());
+        USERTESTS.add(new CanvasClippingTest());
+        USERTESTS.add(new ShapesTest());
     }
 }

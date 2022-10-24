@@ -167,4 +167,21 @@ public interface CanvasManager {
     @NotNull
     @Contract(pure = false, value = "null, _ -> fail; _, null -> fail; !null, !null -> param1")
     public Canvas openCanvas(@NotNull Canvas canvas, @NotNull CanvasPosition position);
+
+    /**
+     * Returns a canvas that contains a canvas which has defined margins to the side of the returned
+     * canvas. The header of the two canvases are independent from each other.
+     *
+     * @param top The top margin.
+     * @param right The margin to the right side.
+     * @param down The lower margin.
+     * @param left The margin to the left side.
+     * @param input The canvas to wrap.
+     * @param settings The {@link CanvasSettings} object to use.
+     * @return The returned canvas.
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = false, value = "_, _, _, _, null, _ -> fail; _, _, _, _, _, null -> fail; _, _, _, _, !null, !null -> new")
+    public Canvas withMargins(int top, int right, int down, int left, @NotNull Canvas input, @NotNull CanvasSettings settings);
 }

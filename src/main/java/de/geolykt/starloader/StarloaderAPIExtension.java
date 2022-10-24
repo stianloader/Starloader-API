@@ -23,6 +23,7 @@ import de.geolykt.starloader.impl.DrawingManager;
 import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.SLSidebarInjector;
+import de.geolykt.starloader.impl.asm.GLTransformer;
 import de.geolykt.starloader.impl.asm.SLInstrinsicsTransformer;
 import de.geolykt.starloader.impl.asm.SpaceASMTransformer;
 import de.geolykt.starloader.impl.asm.StateActorCreatorTransformer;
@@ -66,6 +67,7 @@ public class StarloaderAPIExtension extends Extension {
     }
 
     static {
+        MinestomRootClassLoader.getInstance().addTransformer(new GLTransformer());
         File dataFolder = new File("data");
         DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), NullUtils.requireNotNull(dataFolder.toPath())));
         MinestomRootClassLoader.getInstance().addTransformer(new UIASMTransformer());

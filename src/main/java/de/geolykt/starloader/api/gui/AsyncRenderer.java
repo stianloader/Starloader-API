@@ -67,7 +67,7 @@ public interface AsyncRenderer {
      * @param color       The color to draw the string in
      * @param camera      The camera to use for the drawing operation - the old
      *                    projection will stay present after running this method.
-     * @param halign      The horizontal alignment to use. See {@link Align} for values.
+     * @param halign      The horizontal alignment to use. See {@link Align} for the concrete values that can be used.
      * @since 2.0.0
      */
     public static void drawText(float x, float y, float targetWidth, @NotNull CharSequence text, @NotNull Color color,
@@ -184,7 +184,7 @@ public interface AsyncRenderer {
     public static void fillRect(double x, double y, double width, double height, @NotNull Color color,
             @NotNull Camera camera) {
         Drawing.asyncImplementation.drawTexture0(Drawing.getTextureProvider().getSinglePixelSquare(), x, y, width,
-                height, height, color, camera);
+                height, 0F, color, camera);
     }
 
     /**
@@ -280,7 +280,7 @@ public interface AsyncRenderer {
      * @param color       The color to draw the string in
      * @param camera      The camera to use for the drawing operation - the old
      *                    projection will stay present after running this method.
-     * @param halign      The horizontal alignment to use. See {@link Align} for values.
+     * @param halign      The horizontal alignment to use. See {@link Align} for the concrete values that can be used.
      * @param font        The font to use
      * @since 2.0.0
      */

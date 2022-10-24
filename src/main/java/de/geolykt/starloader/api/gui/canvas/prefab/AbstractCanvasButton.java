@@ -23,7 +23,7 @@ import de.geolykt.starloader.api.gui.canvas.CanvasContext;
 public abstract class AbstractCanvasButton implements CanvasContext {
 
     @NotNull
-    protected Color color = NullUtils.requireNotNull(Color.ORANGE);
+    protected Color color = NullUtils.COLOR_ORANGE;
     @NotNull
     protected Color textColor = NullUtils.requireNotNull(Color.WHITE);
     @NotNull

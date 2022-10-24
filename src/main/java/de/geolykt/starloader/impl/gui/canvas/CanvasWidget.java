@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.NullUtils;
@@ -17,11 +19,15 @@ import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
+import de.geolykt.starloader.impl.gui.GLScissorState;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
 
 import snoddasmannen.galimulator.GalColor;
+import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.effects.WidgetFadeEffect;
 import snoddasmannen.galimulator.ui.FlowLayout;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
+
 import snoddasmannen.galimulator.ui.Widget;
 
 public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
@@ -69,7 +75,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
                 CanvasWidget cw = (CanvasWidget) widget;
                 if (!cw.getContext().allowNonsensicalDimensions() && !this.getContext().allowNonsensicalDimensions()) {
                     try {
-                        throw new IllegalArgumentException("Child widget larger than parent widget");
+                        throw new IllegalArgumentException("Child widget larger than parent widget. Child dimensions: " + widget.getWidth() + "/" + widget.getHeight() + ", parent dimensions: " + this.getWidth() + "/" + this.getHeight());
                     } catch (IllegalArgumentException e) {
                         GalimulatorImplementation.crash(e, "Added a widget larger than it's parent. This can be caused by the header or just a crude error.", true);
                     }
@@ -100,8 +106,12 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
         // I am not sure why the Geolykt who wrote above comment didn't bother to look at the source code of the
         // constructor of the WidgetFadeEffect. Either way it does not matter as of now it seems that WidgetFadeEffect is
         // a thing of the past and seems to have been removed as of 5.0-alpha.unknown
+        // ---
+        // Hello! Another Geolykt from the future! (Or well - past)
+        // The WidgetFadeEffect is a thing again as of 5.0-alpha.unknown and I do not think that it will be removed
+        // anytime soon.
 
-        // Space.showItem(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
+        Space.showItem(new WidgetFadeEffect(this, getWidth() / 2, getHeight() / 2));
     }
 
     @Override
@@ -176,16 +186,36 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
     @Override
     public void onRender() {
         open = true;
+
+        GLScissorState oldScissor = GLScissorState.captureScissor();
+
+        SpriteBatch surface = Drawing.getDrawingBatch();
+        surface.flush();
+        if (oldScissor.enabled) {
+            GLScissorState.glScissor(oldScissor.x + getXPosition(), oldScissor.y + getYPosition(), getWidth(), getHeight());
+        } else {
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+            GLScissorState.glScissor(0, 0, getWidth(), getHeight());
+        }
+
         if (this.canvasSettings.getBackgroundColor().a != 0) {
             drawBackground(new GalColor(this.canvasSettings.getBackgroundColor()));
         }
         if (this.canvasSettings.hasHeader()) {
             drawHeader();
         }
-        renderChildren();
-        SpriteBatch surface = Drawing.getDrawingBatch();
-        surface.setProjectionMatrix(internalCamera.combined);
-        ctx.render(surface, NullUtils.requireNotNull(getCamera(), "the internal camera is null, how strange"));
+
+        try {
+            renderChildren();
+            surface.setProjectionMatrix(internalCamera.combined);
+            ctx.render(surface, NullUtils.requireNotNull(getCamera(), "the internal camera is null, how strange"));
+        } finally {
+            surface.flush();
+            oldScissor.reapplyState();
+            if (!oldScissor.enabled) {
+                GLScissorState.forgetScissor();
+            }
+        }
     }
 
     @SuppressWarnings("null")

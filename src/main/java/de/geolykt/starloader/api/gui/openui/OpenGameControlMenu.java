@@ -13,7 +13,7 @@ import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
-import de.geolykt.starloader.api.gui.canvas.prefab.AbstractCanvasButton;
+import de.geolykt.starloader.api.gui.canvas.prefab.RunnableCanvasButton;
 
 /**
  * The game control menu is the menu that is opened when the user hits the escape key or
@@ -41,7 +41,10 @@ public class OpenGameControlMenu {
         actions.put("Online scenarios", () -> { });
         actions.put("Load scenario from clipboard", () -> { });
         actions.put("Share a mod", () -> { });
-        actions.put("Save galaxy", () -> { });
+        actions.put("Save galaxy", () -> {
+            UIControl.openGalaxySaveMenu();
+            canvas.closeCanvas();
+        });
         actions.put("Load galaxy", () -> { });
         actions.put("[PURPLE]Exit[] game", Gdx.app::exit);
     }
@@ -67,22 +70,23 @@ public class OpenGameControlMenu {
         if (c != null && !dirty) {
             return c;
         }
+        CanvasManager cmgr = CanvasManager.getInstance();
 
-        List<Canvas> buttons = new ArrayList<>();
+        List<@NotNull Canvas> buttons = new ArrayList<>();
         actions.forEach((text, action) -> {
-            buttons.add(0, CanvasManager.getInstance()
-                    .newCanvas(new AbstractCanvasButton(text, 200, 50) {
-                        @Override
-                        public void onClick() {
-                            action.run();
-                        }
-                    }, CanvasSettings.CHILD_TRANSPARENT));
+            if (action == null) {
+                throw new NullPointerException("\"action\" is null");
+            }
+            buttons.add(0, cmgr.newCanvas(new RunnableCanvasButton(action, text, 600, 50), CanvasSettings.CHILD_TRANSPARENT));
         });
+        @NotNull Canvas @NotNull[] subcanvases = new @NotNull Canvas[buttons.size() * 2];
+        for (int i = 0; i < buttons.size(); i++) {
+            subcanvases[i * 2] = buttons.get(i); 
+            subcanvases[i * 2 + 1] = cmgr.newCanvas(cmgr.dummyContext(600, 5), CanvasSettings.CHILD_TRANSPARENT);
+        }
 
-        @SuppressWarnings("null")
-        @NotNull Canvas @NotNull[] subcanvases = buttons.toArray(new @NotNull Canvas[0]);
-
-        canvas = c = CanvasManager.getInstance().multiCanvas(CanvasManager.getInstance().dummyContext(250, subcanvases.length * 50 + Galimulator.getConfiguration().getMinimumComponentHeight(), true), new CanvasSettings("Game control"), ChildObjectOrientation.BOTTOM_TO_TOP, subcanvases);
+        c = cmgr.multiCanvas(cmgr.dummyContext(600, buttons.size() * 55, true), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.BOTTOM_TO_TOP, subcanvases);
+        canvas = c = cmgr.withMargins(5, 5, 5, 5, c, new CanvasSettings("Game control"));
         return c;
     }
 }

@@ -100,7 +100,7 @@ public class CanvasScrollTest extends Usertest {
     @Override
     @NotNull
     public String getName() {
-        return "CanvasScrollTest";
+        return "CanvasScrolling";
     }
 
     @Override

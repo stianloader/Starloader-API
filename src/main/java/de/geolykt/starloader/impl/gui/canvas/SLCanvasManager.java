@@ -117,7 +117,7 @@ public class SLCanvasManager implements CanvasManager {
 
         if (canvas instanceof Widget) {
             Space.closeNonPersistentWidgets(); // Called in Space#showWidget()
-            double x = GalFX.getScreenWidth() - canvas.getContext().getWidth() - 120;
+            double x = GalFX.getScreenWidth() - canvas.getContext().getWidth() - 120; // Why 120???
             BufferedWidgetWrapper bww = new BufferedWidgetWrapper((Widget) canvas, x, 200.0 /* ?! */, true, alignment);
             widgetWrappers.put(canvas, bww);
             Space.openedWidgets.add(bww);
@@ -140,5 +140,19 @@ public class SLCanvasManager implements CanvasManager {
             throw new UnsupportedOperationException("The canvas is not an instanceof Widget and therefore this operation is inapplicable.");
         }
         return canvas;
+    }
+
+    @Override
+    @NotNull
+    public Canvas withMargins(int top, int right, int down, int left, @NotNull Canvas input,
+            @NotNull CanvasSettings settings) {
+        // Due to how Canvas layouting works, the top and right margins needn't be declared as canvases.
+        Canvas downContext = newCanvas(new VolatileDummyContext(input.getContext()::getWidth, down), CanvasSettings.CHILD_TRANSPARENT);
+        Canvas leftContext = newCanvas(new VolatileDummyContext(left, input.getContext()::getHeight), CanvasSettings.CHILD_TRANSPARENT);
+        Canvas midpiece = multiCanvas(new VolatileDummyContext(input.getContext()::getWidth, () -> {
+            return input.getContext().getHeight() + top + down + (input.getCanvasSettings().hasHeader() ? 32 : 0);
+        }), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.BOTTOM_TO_TOP, downContext, input);
+
+        return multiCanvas(new VolatileDummyContext(() -> input.getContext().getWidth() + left + right, () -> input.getContext().getHeight() + top + down + (input.getCanvasSettings().hasHeader() ? 32 : 0)), settings, ChildObjectOrientation.LEFT_TO_RIGHT, leftContext, midpiece);
     }
 }
