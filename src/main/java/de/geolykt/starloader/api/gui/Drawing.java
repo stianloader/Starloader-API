@@ -18,8 +18,6 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
-import de.geolykt.starloader.api.gui.text.FormattedText;
-import de.geolykt.starloader.api.gui.text.TextFactory;
 
 /**
  * Direct drawing and rendering class.
@@ -297,8 +295,11 @@ public final class Drawing {
      * Obtains the instance's {@link TextFactory}.
      *
      * @return The {@link TextFactory} bound to the implementation
+     * @deprecated The Text/Component API was deprecated for removal, without a proper replacement.
      */
-    public static @NotNull TextFactory getTextFactory() {
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    @NotNull
+    public static de.geolykt.starloader.api.gui.text.TextFactory getTextFactory() {
         return implementation.getTextFactory();
     }
 
@@ -307,7 +308,8 @@ public final class Drawing {
      *
      * @return The connected {@link TextureProvider}.
      */
-    public static @NotNull TextureProvider getTextureProvider() {
+    @NotNull
+    public static TextureProvider getTextureProvider() {
         return implementation.getTextureProvider();
     }
 
@@ -346,8 +348,12 @@ public final class Drawing {
      * cases.
      *
      * @param text The formatted text to send as a bulletin
+     * @deprecated The Text API was deprecated for removal. There are no planned alternative
+     * to this method. If you wish to use colored text in your bulletins, use GDX Color escapes
+     * such has "[red]this text is red![] While this one is in the standard color."
      */
-    public static void sendBulletin(@NotNull FormattedText text) {
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public static void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text) {
         implementation.sendBulletin(text);
     }
 

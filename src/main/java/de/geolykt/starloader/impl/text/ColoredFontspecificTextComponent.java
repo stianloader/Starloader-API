@@ -14,7 +14,10 @@ import snoddasmannen.galimulator.GalFX.FONT_TYPE;
 
 /**
  * A colored text component with a specific specified font.
+ *
+ * @deprecated The entire Text API has been deprecated for removal
  */
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class ColoredFontspecificTextComponent extends ColoredTextComponent {
 
     protected final GalFX.FONT_TYPE font;

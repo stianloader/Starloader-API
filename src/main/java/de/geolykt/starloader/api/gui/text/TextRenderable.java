@@ -6,6 +6,13 @@ import com.badlogic.gdx.graphics.Camera;
 
 import de.geolykt.starloader.api.gui.Renderable;
 
+/**
+ * @deprecated The Text/Component API has been deprecated for removal without a replacement.
+ * This was deemed logical as the Text API seems to not behave correctly and the alternative
+ * of canvases is a much more mature alternative. In retrospect, the Text API was rushed and
+ * did not make much sense in galimulator space.
+ */
+@Deprecated(forRemoval = true, since = "2.0.0")
 public interface TextRenderable extends Renderable {
 
     /**
@@ -31,7 +38,7 @@ public interface TextRenderable extends Renderable {
      * @param y The Y-Coordinate of the rendering position
      * @return The width of the text (?)
      */
-    public float renderText(float x, float y); // TODO get more info on return value
+    public float renderText(float x, float y);
 
     /**
      * Renders the text on screen at the given coordinates. The view may get

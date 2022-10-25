@@ -19,8 +19,6 @@ import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
-import de.geolykt.starloader.api.gui.text.FormattedText;
-import de.geolykt.starloader.api.gui.text.TextFactory;
 
 /**
  * Abstract interface for the implementation of the {@link Drawing} class.
@@ -239,9 +237,10 @@ public interface DrawingImpl {
      * Obtains the instance's {@link TextFactory}.
      *
      * @return The {@link TextFactory} bound to the implementation
+     * @deprecated The Text API is deprecated and marked for removal
      */
-    @NotNull
-    public TextFactory getTextFactory();
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public de.geolykt.starloader.api.gui.text.@NotNull TextFactory getTextFactory();
 
     /**
      * Obtains the texture provider that is valid for this drawing instance.
@@ -261,7 +260,8 @@ public interface DrawingImpl {
      * @param path The path to the image file to load.
      * @return The bound texture.
      */
-    public @NotNull Texture loadTexture(@NotNull String path);
+    @NotNull
+    public Texture loadTexture(@NotNull String path);
 
     /**
      * Sends a bulletin to the player which is visible in the bottom left in most
@@ -269,8 +269,12 @@ public interface DrawingImpl {
      * making your own space oddities
      *
      * @param text The text to send
+     * @deprecated The Text API was deprecated for removal. There are no planned alternative
+     * to this method. If you wish to use colored text in your bulletins, use GDX Color escapes
+     * such has "[red]this text is red![] While this one is in the standard color."
      */
-    public void sendBulletin(@NotNull FormattedText text);
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text);
 
     /**
      * Sends a bulletin to the player which is visible in the bottom left in most

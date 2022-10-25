@@ -8,7 +8,14 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 
 /**
  * An interface for a generator-like object that can create {@link ScreenComponent ScreenComponents}.
+ *
+ * @deprecated All member methods of this class have been deprecated for removal thanks to the
+ * Text API deprecation. Furthermore the days of the Screen API are numbered - it is much more
+ * sensical to move to the canvas API instead, as the canvas API provides the
+ * {@link de.geolykt.starloader.api.gui.canvas.prefab} package, which intends to do a similar
+ * job as this class, although it should be more exhaustive once it is fully developed.
  */
+@Deprecated(forRemoval = true, since = "2.0.0")
 public interface ComponentCreator {
 
     /**
@@ -16,7 +23,9 @@ public interface ComponentCreator {
      *
      * @param text The text of the {@link TextScreenComponent}.
      * @return The created Screen component
+     * @deprecated The Text/Component API has been deprecated for removal
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public @NotNull TextScreenComponent createTextScreenComponent(@NotNull FormattedText text);
 
     /**
@@ -26,6 +35,8 @@ public interface ComponentCreator {
      *
      * @param text The text supplier of the {@link TextScreenComponent}.
      * @return The created Screen component
+     * @deprecated The Text/Component API has been deprecated for removal
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public @NotNull TextScreenComponent createTextScreenComponent(@NotNull Supplier<@NotNull FormattedText> text);
 }

@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.gui.screen.TextScreenComponent;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.impl.gui.screencomponents.SLTextScreenComponent;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class SLComponentCreator implements ComponentCreator {
 
     @Override

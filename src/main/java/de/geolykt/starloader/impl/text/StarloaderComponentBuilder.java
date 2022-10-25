@@ -14,6 +14,7 @@ import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class StarloaderComponentBuilder implements ComponentBuilder {
 
     @SuppressWarnings("null")

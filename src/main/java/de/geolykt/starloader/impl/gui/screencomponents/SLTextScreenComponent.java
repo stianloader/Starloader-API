@@ -17,7 +17,11 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 
 /**
  * The default implementation of {@link TextScreenComponent}.
+ *
+ * @deprecated Alongside the fact that the screen API's days are numbered, the Text API has been deprecated for
+ * removal, making this class nonsensical.
  */
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class SLTextScreenComponent implements TextScreenComponent {
 
     protected FormattedText currentText;

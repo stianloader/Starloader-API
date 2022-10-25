@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class BaseFormattedText implements FormattedText {
 
     private final @NotNull List<@NotNull FormattedTextComponent> components;

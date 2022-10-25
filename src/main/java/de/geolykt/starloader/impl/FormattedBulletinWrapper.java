@@ -4,6 +4,7 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 
 import snoddasmannen.galimulator.TextBulletin;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class FormattedBulletinWrapper extends TextBulletin {
 
     private final FormattedText text;

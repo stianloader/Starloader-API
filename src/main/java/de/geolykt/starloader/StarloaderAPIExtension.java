@@ -29,7 +29,6 @@ import de.geolykt.starloader.impl.asm.SpaceASMTransformer;
 import de.geolykt.starloader.impl.asm.StateActorCreatorTransformer;
 import de.geolykt.starloader.impl.asm.UIASMTransformer;
 import de.geolykt.starloader.impl.gui.GalFXAsyncRenderer;
-import de.geolykt.starloader.impl.gui.SLComponentCreator;
 import de.geolykt.starloader.impl.gui.SLScreenBuilder;
 import de.geolykt.starloader.impl.gui.effects.SLEffectImplFactory;
 import de.geolykt.starloader.impl.registry.SLRegistryExpander;
@@ -66,6 +65,15 @@ public class StarloaderAPIExtension extends Extension {
         Registry.CODECS.register(StringCodec.INSTANCE.getRegistryKey(), StringCodec.INSTANCE, String.class);
     }
 
+    /**
+     * Initialize subcomponents of the Starloader API that have been deprecated
+     * and as such may have been marked for removal.
+     */
+    @SuppressWarnings("all")
+    private static void initDeprecatedSubcomponents() {
+        ScreenBuilder.setComponentCreator(new de.geolykt.starloader.impl.gui.SLComponentCreator());
+    }
+
     static {
         MinestomRootClassLoader.getInstance().addTransformer(new GLTransformer());
         File dataFolder = new File("data");
@@ -82,8 +90,8 @@ public class StarloaderAPIExtension extends Extension {
         EffectFactory.setInstance(new SLEffectImplFactory());
         SidebarInjector.setImplementation(new SLSidebarInjector());
         ScreenBuilder.setFactory(SLScreenBuilder::new);
-        ScreenBuilder.setComponentCreator(new SLComponentCreator());
         RegistryExpander.setImplementation(new SLRegistryExpander());
         registerBuiltinCodecs();
+        initDeprecatedSubcomponents();
     }
 }

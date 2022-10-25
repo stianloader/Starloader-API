@@ -8,6 +8,7 @@ import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 import de.geolykt.starloader.impl.util.PseudoImmutableArrayList;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class BaseFormattedTextComponent implements FormattedTextComponent {
 
     protected final @NotNull PseudoImmutableArrayList<@NotNull TextComponent> components;

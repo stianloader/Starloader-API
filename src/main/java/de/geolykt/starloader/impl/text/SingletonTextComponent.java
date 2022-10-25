@@ -12,6 +12,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class SingletonTextComponent implements FormattedTextComponent {
 
     private final @NotNull TextComponent component;

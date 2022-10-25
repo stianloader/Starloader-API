@@ -20,7 +20,10 @@ public abstract class ScreenBuilder {
     /**
      * The componentCreator instance used by {@link #getComponentCreator()}
      * and set by {@link #setComponentCreator(ComponentCreator)}.
+     *
+     * @deprecated The type of this field has been deprecated for removal.
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     private static ComponentCreator componentCreator;
 
     /**
@@ -46,7 +49,9 @@ public abstract class ScreenBuilder {
      *
      * @return The currently active {@link ComponentCreator}.
      * @throws NullPointerException If the component creator was not set.
+     * @deprecated The return type has been deprecated for removal.
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public static @NotNull ComponentCreator getComponentCreator() {
         return NullUtils.requireNotNull(componentCreator);
     }
@@ -55,7 +60,9 @@ public abstract class ScreenBuilder {
      * Sets the current {@link ComponentCreator} instance that should be returned by {@link #getComponentCreator()}.
      *
      * @param componentCreator The new valid ComponentCreator.
+     * @deprecated The return type has been deprecated for removal.
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public static void setComponentCreator(@NotNull ComponentCreator componentCreator) {
         ScreenBuilder.componentCreator = Objects.requireNonNull(componentCreator);
     }

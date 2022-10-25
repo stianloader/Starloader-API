@@ -7,6 +7,13 @@ import com.badlogic.gdx.graphics.Color;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.Drawing.TextSize;
 
+/**
+ * @deprecated The Text/Component API has been deprecated for removal without a replacement.
+ * This was deemed logical as the Text API seems to not behave correctly and the alternative
+ * of canvases is a much more mature alternative. In retrospect, the Text API was rushed and
+ * did not make much sense in galimulator space.
+ */
+@Deprecated(forRemoval = true, since = "2.0.0")
 public interface ComponentBuilder {
 
     /**

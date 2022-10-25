@@ -9,6 +9,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class ColoredTextComponent implements TextComponent {
 
     protected final @NotNull Color color;

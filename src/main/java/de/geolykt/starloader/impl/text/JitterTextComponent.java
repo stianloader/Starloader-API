@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.gui.Drawing;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class JitterTextComponent extends ColoredTextComponent {
 
     protected final float intensity;

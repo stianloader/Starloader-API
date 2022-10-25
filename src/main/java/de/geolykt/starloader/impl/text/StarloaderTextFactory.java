@@ -14,6 +14,7 @@ import de.geolykt.starloader.api.gui.text.TextFactory;
 
 import snoddasmannen.galimulator.GalFX;
 
+@Deprecated(forRemoval = true, since = "2.0.0")
 public class StarloaderTextFactory implements TextFactory {
 
     @Override

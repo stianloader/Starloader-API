@@ -7,7 +7,11 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
 /**
  * Represents a ScreenComponent that displays text. This text must stem from a {@link FormattedText}
  * object.
+ *
+ * @deprecated Alongside the fact that the screen API's days are numbered, the Text API has been deprecated for
+ * removal, making this class nonsensical.
  */
+@Deprecated(forRemoval = true, since = "2.0.0")
 public interface TextScreenComponent extends ScreenComponent {
 
     /**
@@ -18,7 +22,7 @@ public interface TextScreenComponent extends ScreenComponent {
     public @NotNull FormattedText getText();
 
     /**
-     * Whether the text is changing dynamically. How this is archieved is left unspecified.
+     * Whether the text is changing dynamically. How this is achieved is left unspecified.
      * Either way, if this method returns true, then {@link #setText(FormattedText)} should
      * not be a valid method.
      *

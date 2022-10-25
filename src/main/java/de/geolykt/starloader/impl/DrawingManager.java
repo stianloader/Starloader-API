@@ -27,10 +27,7 @@ import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.rendercache.RenderCacheState;
 import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
-import de.geolykt.starloader.api.gui.text.FormattedText;
-import de.geolykt.starloader.api.gui.text.TextFactory;
 import de.geolykt.starloader.impl.gui.canvas.SLCanvasManager;
-import de.geolykt.starloader.impl.text.StarloaderTextFactory;
 
 import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
@@ -44,8 +41,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
 
     @NotNull
     private static final CanvasManager CANVAS_MANAGER = new SLCanvasManager();
-    @NotNull
-    private static final StarloaderTextFactory TEXT_FACTORY = new StarloaderTextFactory();
+
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    private static final de.geolykt.starloader.impl.text.@NotNull StarloaderTextFactory TEXT_FACTORY = new de.geolykt.starloader.impl.text.StarloaderTextFactory();
 
     private Collection<String> fonts;
 
@@ -248,8 +246,8 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    @NotNull
-    public TextFactory getTextFactory() {
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public de.geolykt.starloader.api.gui.text.@NotNull TextFactory getTextFactory() {
         return TEXT_FACTORY;
     }
 
@@ -271,7 +269,8 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    public void sendBulletin(@NotNull FormattedText text) {
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    public void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text) {
         Space.a(new FormattedBulletinWrapper(text));
     }
 
