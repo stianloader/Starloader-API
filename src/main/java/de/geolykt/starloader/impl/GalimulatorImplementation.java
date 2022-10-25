@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -426,7 +426,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("null")
     @Override
-    public synchronized void loadSavegameFile(@NotNull String savegameFile) {
+    public synchronized void loadSavegameFile(@NotNull Path savegameFile) {
         Galemulator.d = 0L;
         new Thread(() -> {
             boolean acquiredLocks = false;
@@ -434,7 +434,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             try {
                 Space.getMainTickLoopLock().acquire(2);
                 acquiredLocks = true;
-                loadGameState(Files.newInputStream(Paths.get(savegameFile)));
+                loadGameState(Files.newInputStream(savegameFile));
                 LOGGER.info("Restored from disk, stack depth was: " + Space.saveStackdepth);
             } catch (InterruptedException interrupted) {
                 if (!acquiredLocks) {

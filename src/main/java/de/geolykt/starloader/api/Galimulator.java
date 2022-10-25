@@ -2,6 +2,8 @@ package de.geolykt.starloader.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -324,7 +326,23 @@ public final class Galimulator {
          * @since 2.0.0
          */
         @NonBlocking
-        public void loadSavegameFile(@NotNull String savegameFile);
+        public void loadSavegameFile(@NotNull Path savegameFile);
+
+        /**
+         * Loads a savegame on another thread while also blocking the main ticking loop.
+         * If loading fails, a new galaxy is generated using the stretched_spiral generator with a size of
+         * 300 stars.
+         *
+         * <p>This is basically the method that is used by Galimulator to load savegames.
+         *
+         * @param savegameFile The savegame file to load. Relative to the current working directory, but can be absolute.
+         * @since 2.0.0
+         */
+        @SuppressWarnings("null")
+        @NonBlocking
+        public default void loadSavegameFile(@NotNull String savegameFile) {
+            loadSavegameFile(Path.of(savegameFile));
+        }
 
         /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
@@ -993,6 +1011,20 @@ public final class Galimulator {
      */
     public static void loadGameState(@NotNull InputStream in) throws IOException {
         impl.loadGameState(in);
+    }
+
+    /**
+     * Loads a savegame on another thread while also blocking the main ticking loop.
+     * If loading fails, a new galaxy is generated using the stretched_spiral generator with a size of 300 stars.
+     *
+     * <p>This is basically the method that is used by Galimulator to load savegames.
+     *
+     * @param savegameFile The savegame file to load. Relative to the current working directory, but can be absolute.
+     * @since 2.0.0
+     */
+    @NonBlocking
+    public static void loadSavegameFile(@NotNull Path savegameFile) {
+        impl.loadSavegameFile(savegameFile);
     }
 
     /**

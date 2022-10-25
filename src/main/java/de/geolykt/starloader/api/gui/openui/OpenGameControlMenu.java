@@ -45,7 +45,10 @@ public class OpenGameControlMenu {
             UIControl.openGalaxySaveMenu();
             canvas.closeCanvas();
         });
-        actions.put("Load galaxy", () -> { });
+        actions.put("Load galaxy", () -> {
+            UIControl.openGalaxyLoadMenu();
+            canvas.closeCanvas();
+        });
         actions.put("[PURPLE]Exit[] game", Gdx.app::exit);
     }
 
