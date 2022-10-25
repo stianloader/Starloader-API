@@ -48,6 +48,7 @@ import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.RandomNameType;
 import de.geolykt.starloader.impl.actors.GlobalSpawningPredicatesContainer;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
+import de.geolykt.starloader.impl.gui.GLScissorState;
 import de.geolykt.starloader.impl.serial.BoilerplateSavegameFormat;
 import de.geolykt.starloader.impl.serial.VanillaSavegameFormat;
 import de.geolykt.starloader.mod.Extension;
@@ -101,6 +102,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         try {
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST); // Sometimes the game can crash while rendering, at which point a scissor might be applied. To render the entire crash message we might need to disable the scissor though.
             Galimulator.pauseGame(); // Pause the game on crash so the simulation loop doesn't continue to run in the background.
+            GLScissorState.glScissor(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+            GLScissorState.forgetScissor();
         } catch (Throwable ignored) {
         }
         Galemulator listener = (Galemulator) Main.application.getApplicationListener();
@@ -112,7 +115,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             Thread thread = new Thread(() -> {
                 boolean threadDied = false;
                 try (FileOutputStream fos = new FileOutputStream(new File("crash-save.dat"))) {
-                    Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).saveGameState(fos, "Game crashed", "crash-save.dat");
+                    Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).saveGameState(fos, "Game crashed", "crash-save.dat", false);
                 } catch (Throwable t) {
                     if (t instanceof ThreadDeath) {
                         t.addSuppressed(e);
@@ -306,6 +309,33 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     public Vector<?> getQuestsUnsafe() {
         return NullUtils.requireNotNull((Vector) Space.quests);
+    }
+
+    @Override
+    @Nullable
+    public SavegameFormat getSavegameFormat(@NotNull InputStream input) {
+        Objects.requireNonNull(input, "\"input\" may not be null!");
+        byte[] header = new byte[64];
+        int offset = 0;
+        try {
+            for (int read = input.read(header); read != -1; read = input.read(header, offset, 64 - offset)) {
+                offset += read;
+                if (offset >= 64) {
+                    break;
+                }
+            }
+        } catch (Exception ignored) {
+            // Ignored by contract of the method
+        }
+        if (offset == 0) {
+            return null; // Empty stream - what gives?
+        }
+        if (BoilerplateSavegameFormat.FORMAT_HEADER.length <= offset
+                && Arrays.equals(header, 0, BoilerplateSavegameFormat.FORMAT_HEADER.length, BoilerplateSavegameFormat.FORMAT_HEADER, 0, BoilerplateSavegameFormat.FORMAT_HEADER.length)) {
+            return BoilerplateSavegameFormat.INSTANCE;
+        }
+        // I am quite sure that the ObjectOutputStream leaves behind some form of header too, but I am too lazy to go that route.
+        return null;
     }
 
     @SuppressWarnings("deprecation")

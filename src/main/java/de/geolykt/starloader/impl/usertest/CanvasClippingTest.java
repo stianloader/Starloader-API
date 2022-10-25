@@ -31,10 +31,10 @@ public class CanvasClippingTest extends Usertest {
 
         @Override
         public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
-            AsyncRenderer.fillRect(0, 0, getWidth(), getHeight(), NullUtils.requireNotNull(Color.CHARTREUSE), camera);
-            AsyncRenderer.fillRect(-getWidth() * 0.5, -getHeight() * 0.5, getWidth() * 2, getHeight() * 2, NullUtils.requireNotNull(Color.PURPLE), camera);
-            AsyncRenderer.drawText(0, getHeight(), 250, "There is something wrong if you can see this text it it's entirety.", NullUtils.COLOR_WHITE, camera, Align.left);
-            AsyncRenderer.drawText(getWidth() / 2, 0, 200, "This text should be invisble", NullUtils.COLOR_WHITE, camera, Align.center);
+            AsyncRenderer.fillRect(0, 0, getWidth(), getHeight(), Color.CHARTREUSE, camera);
+            AsyncRenderer.fillRect(-getWidth() * 0.5, -getHeight() * 0.5, getWidth() * 2, getHeight() * 2, Color.PURPLE, camera);
+            AsyncRenderer.drawText(0, getHeight(), 250, "There is something wrong if you can see this text it it's entirety.", Color.WHITE, camera, Align.left);
+            AsyncRenderer.drawText(getWidth() / 2, 0, 200, "This text should be invisble", Color.WHITE, camera, Align.center);
         }
     }
 
@@ -52,7 +52,7 @@ public class CanvasClippingTest extends Usertest {
 
         @Override
         public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
-            AsyncRenderer.drawText(getWidth() / 2, getHeight() / 2, 250, "Similarly there is also something wrong if you can see this text it it's entirety.", NullUtils.COLOR_WHITE, camera, Align.left);
+            AsyncRenderer.drawText(getWidth() / 2, getHeight() / 2, 250, "Similarly there is also something wrong if you can see this text it it's entirety.", Color.WHITE, camera, Align.left);
         }
     }
 

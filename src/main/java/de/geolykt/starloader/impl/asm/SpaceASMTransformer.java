@@ -184,11 +184,12 @@ public class SpaceASMTransformer extends ASMTransformer {
     }
 
     public static final void save(String cause, String location) {
+        Space.getMainTickLoopLock().acquireUninterruptibly(2);
         Space.backgroundTaskDescription = "Saving galaxy: " + cause;
         LOGGER.info("Saving state to disk.");
 
         try (FileOutputStream fos = new FileOutputStream(new File(location))) {
-            Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).saveGameState(fos, cause, location);
+            Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).saveGameState(fos, cause, location, false);
         } catch (IOException e) {
             LOGGER.error("IO Error while saving the state of the game", e);
         } catch (Throwable e) {
@@ -201,6 +202,7 @@ public class SpaceASMTransformer extends ASMTransformer {
             }
         } finally {
             Settings.b("StartedLoading", false);
+            Space.getMainTickLoopLock().release(2);
         }
 
         // No idea what this does.

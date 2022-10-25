@@ -76,7 +76,7 @@ public class SavegameBrowserContext implements CanvasContext {
 
         float width = getWidth();
         BitmapFont displayNameFont = Drawing.getSpaceFont();
-        Color versionColor = NullUtils.requireNotNull(Color.GRAY);
+        Color versionColor = Color.GRAY;
         DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
 
         for (int i = 0; i < this.savegames.size(); i++) {
@@ -86,9 +86,9 @@ public class SavegameBrowserContext implements CanvasContext {
             ZonedDateTime timestampTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(timestampMillis), ZoneId.systemDefault());
             String timestamp = formatter.format(timestampTime);
 
-            AsyncRenderer.drawNinepatch(buttonNine, 0, buttonY, width, BUTTON_HEIGHT, NullUtils.COLOR_ORANGE, camera);
-            AsyncRenderer.drawText(0, buttonY + BUTTON_HEIGHT * 0.95F, width, sg.getDisplayName(), NullUtils.COLOR_WHITE, camera, Align.center, displayNameFont);
-            AsyncRenderer.drawText(0, buttonY + BUTTON_HEIGHT * 0.65F, width, timestamp + "", NullUtils.COLOR_WHITE, camera, Align.center);
+            AsyncRenderer.drawNinepatch(buttonNine, 0, buttonY, width, BUTTON_HEIGHT, Color.ORANGE, camera);
+            AsyncRenderer.drawText(0, buttonY + BUTTON_HEIGHT * 0.95F, width, sg.getDisplayName(), Color.WHITE, camera, Align.center, displayNameFont);
+            AsyncRenderer.drawText(0, buttonY + BUTTON_HEIGHT * 0.65F, width, timestamp + "", Color.WHITE, camera, Align.center);
             AsyncRenderer.drawText(0, buttonY + BUTTON_HEIGHT * 0.35F, width, sg.getSavagameFormat() + " (" + sg.getGalimulatorVersion() + ")", versionColor, camera, Align.center);
         }
     }

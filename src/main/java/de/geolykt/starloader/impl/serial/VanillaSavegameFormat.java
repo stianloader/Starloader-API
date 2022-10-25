@@ -200,16 +200,30 @@ public class VanillaSavegameFormat implements SavegameFormat {
     }
 
     @Override
-    public void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException, OutOfMemoryError {
+    public void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location, boolean acquireLocks) throws IOException, OutOfMemoryError {
+        if (acquireLocks) {
+            Space.getMainTickLoopLock().acquireUninterruptibly(2);
+        }
+
         if (reason == null) {
             reason = "Programmer issued save";
         }
         if (location == null) {
             location = "Unspecified";
         }
-        EventManager.handleEvent(new GalaxySavingEvent(reason, location, new BasicMetadataCollector())); // TODO perhaps make a NOP metadata collection?
 
-        GalaxySavingEndEvent saveEndEvent = new GalaxySavingEndEvent(location);
+        GalaxySavingEndEvent saveEndEvent;
+
+        try {
+            EventManager.handleEvent(new GalaxySavingEvent(reason, location, new BasicMetadataCollector())); // TODO perhaps make a NOP metadata collection?
+            saveEndEvent = new GalaxySavingEndEvent(location);
+        } catch (Throwable t) {
+            if (acquireLocks) {
+                Space.getMainTickLoopLock().release(2);
+            }
+            throw t;
+        }
+
         try {
             VanillaSavegameFormat.saveVanillaState(out);
         } catch (Throwable var6) {
@@ -221,7 +235,13 @@ public class VanillaSavegameFormat implements SavegameFormat {
             }
             throw new IOException("Issue during serialisation.", var6);
         } finally {
-            EventManager.handleEvent(saveEndEvent);
+            try {
+                EventManager.handleEvent(saveEndEvent);
+            } finally {
+                if (acquireLocks) {
+                    Space.getMainTickLoopLock().release(2);
+                }
+            }
         }
     }
 

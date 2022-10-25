@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import de.geolykt.starloader.api.NullUtils;
@@ -19,6 +20,9 @@ import de.geolykt.starloader.api.gui.canvas.CanvasManager;
  * To set which {@link Canvas} instance this {@link CanvasContext} closes,
  * {@link #closesCanvas(Canvas)} needs to be called.
  *
+ * <p>By default the Color used by the text of the button is {@link Color#RED red}, but the
+ * color can be changed through {@link #setTextColor(Color)}.
+ *
  * @since 2.0.0
  */
 public final class CanvasCloseButton extends AbstractCanvasButton {
@@ -29,14 +33,17 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
 
     public CanvasCloseButton(@NotNull BitmapFont font, @NotNull CharSequence message, int width, int height) {
         super(font, message, width, height);
+        setTextColor(Color.RED);
     }
 
     public CanvasCloseButton(@NotNull BitmapFont font, int width, int height) {
-        this(font, "[RED]Cancel[]", width, height);
+        this(font, "Cancel", width, height);
+        setTextColor(Color.RED);
     }
 
     public CanvasCloseButton(int width, int height) {
-        super("[RED]Cancel[]", width, height);
+        super("Cancel", width, height);
+        setTextColor(Color.RED);
     }
 
     /**
@@ -58,6 +65,33 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
         if (closedCanvas != null) {
             canvasManager.closeCanvas(closedCanvas);
         }
+    }
+
+    /**
+     * Sets the button's color.
+     *
+     * @param color The new color of the button
+     * @return The current {@link CanvasCloseButton} instance (for chaining)
+     * @since 2.0.0
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    public CanvasCloseButton setButtonColor(@NotNull Color color) {
+        return (CanvasCloseButton) super.setButtonColor(color);
+    }
+
+    /**
+     * Sets the color of text displayed on the button.
+     *
+     * @param color The new color of the text to display
+     * @return The current {@link CanvasCloseButton} instance (for chaining)
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    public CanvasCloseButton setTextColor(@NotNull Color color) {
+        return (CanvasCloseButton) super.setTextColor(color);
     }
 
     /**

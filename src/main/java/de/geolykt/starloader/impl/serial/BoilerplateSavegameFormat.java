@@ -33,6 +33,8 @@ import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.impl.util.JoiningInputStream;
 import de.geolykt.starloader.impl.util.LEB128;
 
+import snoddasmannen.galimulator.Space;
+
 /**
  * A simple wrapper around Vanilla's savegame format that adds savegame metadata as well as slapi metadata.
  * Invocation of any methods of this class outside of the main thread while the main tick loop is not halted
@@ -44,7 +46,8 @@ import de.geolykt.starloader.impl.util.LEB128;
  */
 public class BoilerplateSavegameFormat implements SavegameFormat {
 
-    private static final byte[] FORMAT_HEADER = "SLAPI/0_SAVEGAME".getBytes(StandardCharsets.US_ASCII);
+    public static final byte[] FORMAT_HEADER = "SLAPI/0_SAVEGAME".getBytes(StandardCharsets.US_ASCII);
+
     @NotNull
     public static final BoilerplateSavegameFormat INSTANCE = new BoilerplateSavegameFormat();
 
@@ -115,78 +118,87 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
     }
 
     @Override
-    public synchronized void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException {
+    public synchronized void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location, boolean acquireLocks) throws IOException {
+        if (acquireLocks) {
+            Space.getMainTickLoopLock().acquireUninterruptibly(2);
+        }
         if (reason == null) {
             reason = "Programmer issued save";
         }
         if (location == null) {
             location = "Unspecified";
         }
-        // Obtain metadata from extensions
-        MetadataCollector collector = new BasicMetadataCollector();
-        EventManager.handleEvent(new GalaxySavingEvent(reason, location, collector));
-
-        DataOutputStream dataOut = new DataOutputStream(out);
-        dataOut.write(FORMAT_HEADER); // Format Header
-        dataOut.writeInt(0); // Version
-        dataOut.writeInt(Galimulator.getStarList().size()); // Amount of stars
-        dataOut.writeInt(Galimulator.getGameYear()); // Game year
-        dataOut.writeBoolean(Galimulator.hasUsedSandbox()); // Sandbox
-        dataOut.writeLong(System.currentTimeMillis()); // Time
-
-        Collection<@NotNull NamespacedKey> metadataKeys = collector.getKeys();
-        Set<NamespacedKey> namespacedKeys = new HashSet<>(metadataKeys);
-        Map<NamespacedKey, Integer> keyToId = new HashMap<>();
-        Map<NamespacedKey, byte[]> serializedMetadata = new HashMap<>();
-        Map<NamespacedKey, NamespacedKey> encoding = new HashMap<>();
-
-        for (NamespacedKey key : metadataKeys) {
-            Optional<Object> optional = collector.getDeserializedForm(key);
-            if (!optional.isPresent()) {
-                continue; // Discard object
-            }
-            @SuppressWarnings("null") // It is safe
-            @NotNull
-            Object obj = optional.get();
-            Encoder<Object> encoder = Registry.CODECS.getEncoder(obj);
-            if (encoder == null) {
-                LoggerFactory.getLogger(getClass()).warn("Cannot serialize an object of instance "
-                        + obj.getClass() + " which is the deserialized form of " + key + ". Did a mod forget to register a codec?");
-                continue;
-            }
-            encoding.put(key, encoder.getEncodingKey());
-            serializedMetadata.put(key, encoder.encode(obj));
-            namespacedKeys.add(encoder.getEncodingKey());
-        }
-
-        dataOut.writeInt(namespacedKeys.size());
-        int i = 0;
-        for (NamespacedKey key : namespacedKeys) {
-            dataOut.writeUTF(key.toString());
-            keyToId.put(key, i++);
-        }
-
-        for (NamespacedKey key : metadataKeys) {
-            byte[] serialized = serializedMetadata.get(key);
-            if (serialized == null) {
-                continue; // Previously discarded - discard again
-            }
-            dataOut.writeInt(keyToId.get(key));
-            dataOut.writeInt(keyToId.get(encoding.get(key)));
-            LEB128.encodeUnsigned(serialized.length, out);
-            dataOut.write(serialized);
-        }
-        dataOut.writeInt(-1);
-
         try {
-            VanillaSavegameFormat.saveVanillaState(out);
-        } catch (Throwable var6) {
-            if (var6 instanceof ThreadDeath) {
-                throw (ThreadDeath) var6;
+            // Obtain metadata from extensions
+            MetadataCollector collector = new BasicMetadataCollector();
+            EventManager.handleEvent(new GalaxySavingEvent(reason, location, collector));
+
+            DataOutputStream dataOut = new DataOutputStream(out);
+            dataOut.write(FORMAT_HEADER); // Format Header
+            dataOut.writeInt(0); // Version
+            dataOut.writeInt(Galimulator.getStarList().size()); // Amount of stars
+            dataOut.writeInt(Galimulator.getGameYear()); // Game year
+            dataOut.writeBoolean(Galimulator.hasUsedSandbox()); // Sandbox
+            dataOut.writeLong(System.currentTimeMillis()); // Time
+
+            Collection<@NotNull NamespacedKey> metadataKeys = collector.getKeys();
+            Set<NamespacedKey> namespacedKeys = new HashSet<>(metadataKeys);
+            Map<NamespacedKey, Integer> keyToId = new HashMap<>();
+            Map<NamespacedKey, byte[]> serializedMetadata = new HashMap<>();
+            Map<NamespacedKey, NamespacedKey> encoding = new HashMap<>();
+
+            for (NamespacedKey key : metadataKeys) {
+                Optional<Object> optional = collector.getDeserializedForm(key);
+                if (!optional.isPresent()) {
+                    continue; // Discard object
+                }
+                @SuppressWarnings("null") // It is safe
+                @NotNull
+                Object obj = optional.get();
+                Encoder<Object> encoder = Registry.CODECS.getEncoder(obj);
+                if (encoder == null) {
+                    LoggerFactory.getLogger(getClass()).warn("Cannot serialize an object of instance "
+                            + obj.getClass() + " which is the deserialized form of " + key + ". Did a mod forget to register a codec?");
+                    continue;
+                }
+                encoding.put(key, encoder.getEncodingKey());
+                serializedMetadata.put(key, encoder.encode(obj));
+                namespacedKeys.add(encoder.getEncodingKey());
             }
-            throw new IOException("Issue during serialisation.", var6);
+
+            dataOut.writeInt(namespacedKeys.size());
+            int i = 0;
+            for (NamespacedKey key : namespacedKeys) {
+                dataOut.writeUTF(key.toString());
+                keyToId.put(key, i++);
+            }
+
+            for (NamespacedKey key : metadataKeys) {
+                byte[] serialized = serializedMetadata.get(key);
+                if (serialized == null) {
+                    continue; // Previously discarded - discard again
+                }
+                dataOut.writeInt(keyToId.get(key));
+                dataOut.writeInt(keyToId.get(encoding.get(key)));
+                LEB128.encodeUnsigned(serialized.length, out);
+                dataOut.write(serialized);
+            }
+            dataOut.writeInt(-1);
+
+            try {
+                VanillaSavegameFormat.saveVanillaState(out);
+            } catch (Throwable var6) {
+                if (var6 instanceof ThreadDeath) {
+                    throw (ThreadDeath) var6;
+                }
+                throw new IOException("Issue during serialisation.", var6);
+            } finally {
+                EventManager.handleEvent(new GalaxySavingEndEvent(location));
+            }
         } finally {
-            EventManager.handleEvent(new GalaxySavingEndEvent(location));
+            if (acquireLocks) {
+                Space.getMainTickLoopLock().release(2);
+            }
         }
     }
 

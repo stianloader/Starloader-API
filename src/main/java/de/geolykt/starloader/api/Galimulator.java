@@ -3,7 +3,6 @@ package de.geolykt.starloader.api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -167,6 +166,23 @@ public final class Galimulator {
          * @return The {@link ActiveEmpire} owned by the player, or null
          */
         public @Nullable ActiveEmpire getPlayerEmpire();
+
+        /**
+         * Obtains the closest-matching {@link SavegameFormat} instance that can decode a given
+         * input stream. This method does not guarantee that the returned format fully supports
+         * the given input stream - that can only be evaluated once the format actually loads the
+         * savegame in it's entirety. Instead, this method checks which format might be able to
+         * load the savegame based on headers and whatnot. This means that this method is likely
+         * to return null for savegames saved by vanilla galimulator.
+         *
+         * @param input The input stream from which to read the savegame from.
+         * @return The closest matching {@link SavegameFormat}, or null if unknown.
+         * @since 2.0.0
+         * @implNote Implementations of this method shouldn't throw an exception, exception being
+         * if the parameter is null.
+         */
+        @Nullable
+        public SavegameFormat getSavegameFormat(@NotNull InputStream input);
 
         /**
          * Obtains the {@link SavegameFormat} instance that is implementing a certain {@link SupportedSavegameFormat}.
@@ -388,9 +404,12 @@ public final class Galimulator {
         public void resumeGame();
 
         /**
-         * Schedule a task that should run on the next frame. More concretely, it should run before the next frame is drawn, however
+         * Schedule a task that should run on the next <b>frame</b>. More concretely, it should run before the next frame is drawn, however
          * other tasks may run before that. If two tasks are scheduled at the same frame, the task that is scheduled first should run
          * before. All scheduled tasks need to be run on the main thread.
+         *
+         * <p>This methods schedules task to be run on the next graphical frame,
+         * not on the next simulation tick.
          *
          * @param task The task to run on the next tick
          * @since 2.0.0
@@ -848,6 +867,25 @@ public final class Galimulator {
     }
 
     /**
+     * Obtains the closest-matching {@link SavegameFormat} instance that can decode a given
+     * input stream. This method does not guarantee that the returned format fully supports
+     * the given input stream - that can only be evaluated once the format actually loads the
+     * savegame in it's entirety. Instead, this method checks which format might be able to
+     * load the savegame based on headers and whatnot. This means that this method is likely
+     * to return null for savegames saved by vanilla galimulator.
+     *
+     * @param input The input stream from which to read the savegame from.
+     * @return The closest matching {@link SavegameFormat}, or null if unknown.
+     * @since 2.0.0
+     * @implNote Implementations of this method shouldn't throw an exception, exception being
+     * if the parameter is null.
+     */
+    @Nullable
+    public static SavegameFormat getSavegameFormat(@NotNull InputStream input) {
+        return impl.getSavegameFormat(input);
+    }
+
+    /**
      * Obtains the {@link SavegameFormat} instance that is implementing a certain {@link SupportedSavegameFormat}.
      *
      * @param format The format the should be implemented
@@ -1099,6 +1137,9 @@ public final class Galimulator {
      * Schedule a task that should run on the next frame. More concretely, it should run before the next frame is drawn, however
      * other tasks may run before that. If two tasks are scheduled at the same frame, the task that is scheduled first should run
      * before. All scheduled tasks need to be run on the main thread.
+     *
+     * <p>This methods schedules task to be run on the next graphical frame,
+     * not on the next simulation tick.
      *
      * @param task The task to run on the next tick
      * @since 2.0.0

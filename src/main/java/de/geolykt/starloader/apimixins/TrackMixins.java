@@ -35,7 +35,8 @@ public class TrackMixins implements Track {
     }
 
     @Override
-    public @NotNull Music getGDXMusic() {
+    @NotNull
+    public Music getGDXMusic() {
         return NullUtils.requireNotNull(b);
     }
 

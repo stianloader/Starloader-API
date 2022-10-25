@@ -4,11 +4,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
@@ -67,7 +70,7 @@ public class UIControl {
             return;
         }
         new BasicDialogBuilder("Overwrite savegame", "Do you really wish to overwrite your savegame?")
-            .setChoices(List.of("No", "Yes"))
+            .setChoices(List.of("Yes", "No"))
             .addCloseListener((cause, selection) -> {
                 if (selection == null || !selection.equalsIgnoreCase("yes")) {
                     return;
@@ -75,7 +78,7 @@ public class UIControl {
                 Path location = ((PathSavegame) savegame).getLocationPath();
                 try {
                     Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE)
-                        .saveGameState(NullUtils.requireNotNull(Files.newOutputStream(location)), "User-issued save", location.getFileName().toString());
+                        .saveGameState(NullUtils.requireNotNull(Files.newOutputStream(location)), "User-issued save", location.getFileName().toString(), true);
                 } catch (IOException e) {
                     throw new RuntimeException("Cannot save game!", e); // This should crash the game - kind of a double-edged sword but whatever
                 }
@@ -97,10 +100,10 @@ public class UIControl {
         int fullHeight = 800;
 
         AtomicReference<Canvas> canvasRef = new AtomicReference<>();
-        CanvasCloseButton closeButton = new CanvasCloseButton(width, 50);
+        CanvasCloseButton closeButton = new CanvasCloseButton(width, 50).setButtonColor(Color.RED).setTextColor(Color.WHITE);
         Canvas bottomElement = cmgr.newCanvas(closeButton, CanvasSettings.CHILD_TRANSPARENT);
 
-        SavegameBrowserContext browserCtx = new SavegameBrowserContext(width, fullHeight - 110, (savegame) -> {
+        SavegameBrowserContext browserCtx = new SavegameBrowserContext(width, fullHeight - 50, (savegame) -> {
             canvasRef.get().closeCanvas();
             if (!(savegame instanceof PathSavegame)) {
                 Drawing.getInstance().toast("Something went wrong while saving your savegame: The savegame location cannot be determined!");
@@ -114,22 +117,24 @@ public class UIControl {
             List<Path> savegames = Files.walk(savegameDir, 1)
                     .filter(p -> p.getFileName().toString().endsWith(".dat"))
                     .distinct()
-                    .sorted((p1, p2) -> p2.getFileName().toString().compareTo(p1.getFileName().toString()))
                     .collect(Collectors.toList());
+            List<@NotNull Savegame> savegameInstances = new ArrayList<>();
             for (Path savegamePath : savegames) {
                 if (savegamePath == null) {
                     throw new IllegalStateException();
                 }
-                browserCtx.addSavegame(new PathSavegame(savegamePath));
+                savegameInstances.add(new PathSavegame(savegamePath));
             }
+            savegameInstances.sort((s1, s2) -> Long.compare(s1.getLastModifiedTimestamp(), s2.getLastModifiedTimestamp()));
+            browserCtx.addSavegames(savegameInstances);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Canvas mainWindow = cmgr.newCanvas(browserCtx, CanvasSettings.CHILD_TRANSPARENT);
-        Canvas topElements = cmgr.newCanvas(cmgr.dummyContext(width, 60), CanvasSettings.CHILD_TRANSPARENT);
+        Canvas topElements = cmgr.newCanvas(cmgr.dummyContext(width, 0), CanvasSettings.CHILD_TRANSPARENT);
 
-        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings("Save Galaxy"), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElement, mainWindow, topElements);
+        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings(CanvasSettings.NEAR_SOLID_COLOR, "Load Galaxy", NullUtils.requireNotNull(Color.BLUE)), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElement, mainWindow, topElements);
         cmgr.openCanvas(c, CanvasPosition.CENTER);
         closeButton.closesCanvas(c);
         canvasRef.set(c);
@@ -148,7 +153,7 @@ public class UIControl {
         int fullHeight = 800;
 
         AtomicReference<Canvas> canvasRef = new AtomicReference<>();
-        CanvasCloseButton closeButton = new CanvasCloseButton(width / 2, 50);
+        CanvasCloseButton closeButton = new CanvasCloseButton(width / 2, 50).setButtonColor(Color.RED).setTextColor(Color.WHITE);
         CanvasContext newFileButton = new RunnableCanvasButton(() -> {
             canvasRef.get().closeCanvas();
             Drawing.textInputBuilder("Pick savegame name", "", "")
@@ -158,7 +163,7 @@ public class UIControl {
                     }
                     try {
                         Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE)
-                            .saveGameState(new FileOutputStream(name + ".dat"),  "User-issued save", name + ".dat");
+                            .saveGameState(new FileOutputStream(name + ".dat"),  "User-issued save", name + ".dat", true);
                     } catch (IOException e) {
                         // Doesn't crash the game yet, but does lead to unexpected behaviour.
                         // let's just assume that any savegame can be saved.
@@ -167,10 +172,10 @@ public class UIControl {
                     }
                 })
                 .build();
-        }, "New file", width / 2, 50);
-        Canvas bottomElements = cmgr.multiCanvas(cmgr.dummyContext(width, 60), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.LEFT_TO_RIGHT, closeButton, newFileButton);
+        }, "New file", width / 2, 50).setButtonColor(Color.GREEN);
+        Canvas bottomElements = cmgr.multiCanvas(cmgr.dummyContext(width, 50), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.LEFT_TO_RIGHT, closeButton, newFileButton);
 
-        SavegameBrowserContext browserCtx = new SavegameBrowserContext(width, fullHeight - 120, (savegame) -> {
+        SavegameBrowserContext browserCtx = new SavegameBrowserContext(width, fullHeight - 50, (savegame) -> {
             canvasRef.get().closeCanvas();
             overwriteSavegame(savegame);
         });
@@ -180,22 +185,24 @@ public class UIControl {
             List<Path> savegames = Files.walk(savegameDir, 1)
                     .filter(p -> p.getFileName().toString().endsWith(".dat"))
                     .distinct()
-                    .sorted((p1, p2) -> p2.getFileName().toString().compareTo(p1.getFileName().toString()))
                     .collect(Collectors.toList());
+            List<@NotNull Savegame> savegameInstances = new ArrayList<>();
             for (Path savegamePath : savegames) {
                 if (savegamePath == null) {
                     throw new IllegalStateException();
                 }
-                browserCtx.addSavegame(new PathSavegame(savegamePath));
+                savegameInstances.add(new PathSavegame(savegamePath));
             }
+            savegameInstances.sort((s1, s2) -> Long.compare(s1.getLastModifiedTimestamp(), s2.getLastModifiedTimestamp()));
+            browserCtx.addSavegames(savegameInstances);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Canvas mainWindow = cmgr.newCanvas(browserCtx, CanvasSettings.CHILD_TRANSPARENT);
-        Canvas topElements = cmgr.newCanvas(cmgr.dummyContext(width, 60), CanvasSettings.CHILD_TRANSPARENT);
+        Canvas topElements = cmgr.newCanvas(cmgr.dummyContext(width, 0), CanvasSettings.CHILD_TRANSPARENT);
 
-        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings("Save Galaxy"), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElements, mainWindow, topElements);
+        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings(CanvasSettings.NEAR_SOLID_COLOR, "Save Galaxy", NullUtils.requireNotNull(Color.BLUE)), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElements, mainWindow, topElements);
         cmgr.openCanvas(c, CanvasPosition.CENTER);
         closeButton.closesCanvas(c);
         canvasRef.set(c);

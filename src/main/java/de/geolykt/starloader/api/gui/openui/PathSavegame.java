@@ -7,6 +7,9 @@ import java.nio.file.Path;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.serial.SavegameFormat;
+
 /**
  * An implementation of the {@link Savegame} interface that makes use of {@link Path} for IO.
  *
@@ -16,6 +19,7 @@ public class PathSavegame implements Savegame {
 
     @NotNull
     private final Path path;
+    private final SavegameFormat format;
 
     /**
      * Constructor.
@@ -26,6 +30,7 @@ public class PathSavegame implements Savegame {
      */
     public PathSavegame(@NotNull Path path) throws IOException {
         this.path = path;
+        this.format = Galimulator.getSavegameFormat(asInputStream());
     }
 
     @SuppressWarnings("null")
@@ -71,6 +76,10 @@ public class PathSavegame implements Savegame {
     @Override
     @NotNull
     public String getSavagameFormat() {
-        return "unknown";
+        if (format == null) {
+            return "unknown; likely vanilla";
+        } else {
+            return format.getName();
+        }
     }
 }

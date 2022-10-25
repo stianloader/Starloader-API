@@ -47,6 +47,7 @@ public final class CanvasSettings {
      * value of this field or not use this field at all ({@link #DEFAULT_SEMISOLID} uses an independent instance).
      * As such is may cause some somewhat annoying edge-case behaviour.
      */
+    @NotNull
     public static final Color NEAR_SOLID_COLOR = new Color(1.0F, 1.0F, 1.0F, 0.95F);
 
     @NotNull

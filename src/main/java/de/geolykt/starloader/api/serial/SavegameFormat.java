@@ -55,15 +55,37 @@ public interface SavegameFormat {
      * A {@link GalaxySavingEvent} and a {@link GalaxySavingEndEvent} will be emitted with the natural
      * flag set to false. The location will be set to unspecified.
      * Warning: it is recommended to pause the game during the operation as otherwise
-     * it might corrupt the data
+     * it might corrupt the data (or just acquire the main ticking loop lock.)
      *
      * @param out The output stream to dump the state into
      * @param reason The reason for the save, used for {@link GalaxySavingEvent}. May be null to indicate programmer-issued save
      * @param location The location of the save, used for {@link GalaxySavingEvent}. May be null to indicate unknown or unspecifable location
      * @throws IOException If any IO issues occur at the underlying layers
      * @since 2.0.0
+     * @deprecated This method does not acquire any locks due to legacy behaviour - which in most circumstances is probably not the intended behaviour.
+     * Use {@link #saveGameState(OutputStream, String, String, boolean)} instead.
      */
-    public void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException;
+    @Deprecated(forRemoval = false, since = "2.0.0")
+    public default void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException {
+        saveGameState(out, reason, location, false);
+    }
+
+    /**
+     * Saves the current state of the game and dumps it into an output stream.
+     * A {@link GalaxySavingEvent} and a {@link GalaxySavingEndEvent} will be emitted with the natural
+     * flag set to false. The location will be set to unspecified.
+     *
+     * <p>The main ticking lock should generally be acquired whenever the current thread
+     * is not the main ticking thread. But exact usage depends on a case-by-case basis.
+     *
+     * @param out The output stream to dump the state into
+     * @param reason The reason for the save, used for {@link GalaxySavingEvent}. May be null to indicate programmer-issued save
+     * @param location The location of the save, used for {@link GalaxySavingEvent}. May be null to indicate unknown or unspecifable location
+     * @param acquireLocks Whether to acquire the main ticking lock. If true, the method may block for longer periods of time
+     * @throws IOException If any IO issues occur at the underlying layers
+     * @since 2.0.0
+     */
+    public void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location, boolean acquireLocks) throws IOException;
 
     /**
      * Returns whether the format can write and read SLAPI Metadata.

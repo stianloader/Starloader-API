@@ -24,7 +24,7 @@ public class ShapesTest extends Usertest {
 
             @Override
             public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
-                AsyncRenderer.fillRect(0, 0, getWidth(), getHeight(), NullUtils.COLOR_BLACK, camera);
+                AsyncRenderer.fillRect(0, 0, getWidth(), getHeight(), Color.BLACK, camera);
             }
 
             @Override
@@ -41,7 +41,7 @@ public class ShapesTest extends Usertest {
 
             @Override
             public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
-                AsyncRenderer.fillWindow(0, 0, getWidth(), getHeight(), NullUtils.requireNotNull(Color.YELLOW), camera);
+                AsyncRenderer.fillWindow(0, 0, getWidth(), getHeight(), Color.YELLOW, camera);
             }
 
             @Override
@@ -58,7 +58,7 @@ public class ShapesTest extends Usertest {
 
             @Override
             public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
-                AsyncRenderer.drawNinepatch(Drawing.getTextureProvider().getRoundedButtonNinePatch(), 0, 0, getWidth(), getHeight(), NullUtils.COLOR_BLACK, camera);
+                AsyncRenderer.drawNinepatch(Drawing.getTextureProvider().getRoundedButtonNinePatch(), 0, 0, getWidth(), getHeight(), Color.BLACK, camera);
             }
 
             @Override

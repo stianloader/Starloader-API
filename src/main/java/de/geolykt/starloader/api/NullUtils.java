@@ -9,36 +9,10 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.badlogic.gdx.graphics.Color;
-
 /**
  * Collection of QoL null safety-related utility methods.
  */
 public final class NullUtils {
-
-    /**
-     * A null-checked instance of {@link Color#BLACK}.
-     *
-     * @since 2.0.0
-     */
-    @NotNull
-    public static final Color COLOR_BLACK = NullUtils.requireNotNull(Color.BLACK);
-
-    /**
-     * A null-checked instance of {@link Color#ORANGE}.
-     *
-     * @since 2.0.0
-     */
-    @NotNull
-    public static final Color COLOR_ORANGE = NullUtils.requireNotNull(Color.ORANGE);
-
-    /**
-     * A null-checked instance of {@link Color#WHITE}.
-     *
-     * @since 2.0.0
-     */
-    @NotNull
-    public static final Color COLOR_WHITE = NullUtils.requireNotNull(Color.WHITE);
 
     /**
      * Similar to {@link Optional#ofNullable(Object)} but with correct annotations.
@@ -189,6 +163,6 @@ public final class NullUtils {
     }
 
     private NullUtils() {
-        // reduce visibility to help JIT
+        // reduce visibility to help JIT - possibly
     }
 }
