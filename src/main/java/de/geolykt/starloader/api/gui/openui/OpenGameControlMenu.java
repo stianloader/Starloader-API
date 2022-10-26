@@ -31,16 +31,34 @@ public class OpenGameControlMenu {
         actions.put("[RED]Cancel[]", () -> {
             canvas.closeCanvas(); // Beware: You cannot use "canvas::closeCanvas" as canvas is not final (as it depends on the actions)!
         });
-        actions.put("Create new Galaxy", () -> { });
+        actions.put("Create new Galaxy", () -> {
+            Galimulator.showGalaxyCreationScreen();
+            canvas.closeCanvas();
+        });
         actions.put("Load autosave", () -> {
             Galimulator.loadSavegameFile("state.dat");
             canvas.closeCanvas();
         });
-        actions.put("Save scenario", () -> { });
-        actions.put("Edit scenario", () -> { });
-        actions.put("Online scenarios", () -> { });
-        actions.put("Load scenario from clipboard", () -> { });
-        actions.put("Share a mod", () -> { });
+        actions.put("Save scenario", () -> {
+            Galimulator.showScenarioSaveScreen();
+            canvas.closeCanvas();
+        });
+        actions.put("Edit scenario", () -> {
+            Galimulator.showScenarioMetadataEditor(Galimulator.getMap());
+            canvas.closeCanvas();
+        });
+        actions.put("Online scenarios", () -> {
+            Galimulator.showOnlineScenarioBrowser();
+            canvas.closeCanvas();
+        });
+        actions.put("Load scenario from clipboard", () -> {
+            Galimulator.loadClipboardScenario();
+            canvas.closeCanvas();
+        });
+        actions.put("Share a mod", () -> {
+            Galimulator.showModUploadScreen();
+            canvas.closeCanvas();
+        });
         actions.put("Save galaxy", () -> {
             UIControl.openGalaxySaveMenu();
             canvas.closeCanvas();

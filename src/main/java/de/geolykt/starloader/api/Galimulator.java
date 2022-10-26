@@ -311,6 +311,13 @@ public final class Galimulator {
         public boolean isPaused();
 
         /**
+         * Loads the scenario that is currently in the clipboard.
+         *
+         * @since 2.0.0
+         */
+        public void loadClipboardScenario();
+
+        /**
          * Loads the state of the game from given input data.
          * Additional warning: it is recommended to pause the game during the operation as otherwise
          * it might corrupt the data
@@ -474,6 +481,45 @@ public final class Galimulator {
          * @param state The sandbox used modifier
          */
         public void setUsedSandbox(boolean state);
+
+        /**
+         * Displays the widgets used for the galaxy creation process to the user.
+         *
+         * @since 2.0.0
+         */
+        public void showGalaxyCreationScreen();
+
+        /**
+         * Shows the online scenario browser.
+         *
+         * @since 2.0.0
+         */
+        public void showOnlineScenarioBrowser();
+
+        /**
+         * Displays the widget responsible for allowing the user to upload their maps or ship mods
+         * to the steam workshop.
+         *
+         * @since 2.0.0
+         */
+        public void showModUploadScreen();
+
+        /**
+         * Shows the editor that allows one to upload a scenario to the Internet
+         * and to edit the scenario metadata of the scenario saved within the given map.
+         *
+         * @param map The map where the scenario to edit lies within
+         * @since 2.0.0
+         */
+        public void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map);
+
+        /**
+         * Displays the widget responsible for saving the currently active savegame as a scenario
+         * to the user.
+         *
+         * @since 2.0.0
+         */
+        public void showScenarioSaveScreen();
     }
 
     /**
@@ -1027,6 +1073,15 @@ public final class Galimulator {
     }
 
     /**
+     * Loads the scenario that is currently in the clipboard.
+     *
+     * @since 2.0.0
+     */
+    public static void loadClipboardScenario() {
+        impl.loadClipboardScenario();
+    }
+
+    /**
      * Loads the state of the game from given input data.
      * Additional warning: it is recommended to pause the game during the operation as otherwise
      * it might corrupt the data
@@ -1252,6 +1307,55 @@ public final class Galimulator {
      */
     public static void setUsedSandbox(boolean state) {
         impl.setUsedSandbox(state);
+    }
+
+    /**
+     * Displays the widgets used for the galaxy creation process to the user.
+     *
+     * @since 2.0.0
+     */
+    public static void showGalaxyCreationScreen() {
+        impl.showGalaxyCreationScreen();
+    }
+
+    /**
+     * Shows the online scenario browser.
+     *
+     * @since 2.0.0
+     */
+    public static void showOnlineScenarioBrowser() {
+        impl.showOnlineScenarioBrowser();
+    }
+
+    /**
+     * Displays the widget responsible for allowing the user to upload their maps or ship mods
+     * to the steam workshop.
+     *
+     * @since 2.0.0
+     */
+    public static void showModUploadScreen() {
+        impl.showModUploadScreen();
+    }
+
+    /**
+     * Shows the editor that allows one to upload a scenario to the Internet
+     * and to edit the scenario metadata of the scenario saved within the given map.
+     *
+     * @param map The map where the scenario to edit lies within
+     * @since 2.0.0
+     */
+    public static void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
+        impl.showScenarioMetadataEditor(map);
+    }
+
+    /**
+     * Displays the widget responsible for saving the currently active savegame as a scenario
+     * to the user.
+     *
+     * @since 2.0.0
+     */
+    public static void showScenarioSaveScreen() {
+        impl.showScenarioSaveScreen();
     }
 
     /**

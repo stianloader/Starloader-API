@@ -56,9 +56,13 @@ import de.geolykt.starloader.mod.Extension;
 import snoddasmannen.galimulator.Galemulator;
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.MapMode.MapModes;
+import snoddasmannen.galimulator.ui.class_13;
+import snoddasmannen.galimulator.ui.class_55;
+import snoddasmannen.galimulator.ui.interface_0;
 import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.ProceduralStarGenerator;
+import snoddasmannen.galimulator.Scenario;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
@@ -445,6 +449,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
+    public void loadClipboardScenario() {
+        Scenario.loadClipboardScenario();
+    }
+
+    @Override
     public synchronized void loadGameState(byte[] data) throws IOException {
         getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).loadGameState(data);
     }
@@ -700,5 +709,39 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void setWarsUnsafe(Vector<War> wars) {
         Space.wars = NullUtils.requireNotNull((Vector) wars);
+    }
+
+    @Override
+    public void showGalaxyCreationScreen() {
+        Space.R();
+    }
+
+    @Override
+    public void showOnlineScenarioBrowser() {
+        Space.S();
+    }
+
+    @Override
+    public void showModUploadScreen() {
+        Space.a(class_55.class);
+    }
+
+    @Override
+    public void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
+        Space.a(((MapData) map).getMetadata(), true, null, false);
+    }
+
+    @Override
+    public void showScenarioSaveScreen() {
+        class_13 var3 = Space.a("Choose slot", "Choose save slot", Space.a("scenarios/Scenario_"), 0, null, true);
+        if (var3 != null) {
+            var3.a(new interface_0() {
+                @Override
+                public void a(Object object) {
+                    String var2 = object.toString().substring(0, object.toString().indexOf("\n")) + ".dat";
+                    Space.k(var2);
+                }
+            });
+        }
     }
 }
