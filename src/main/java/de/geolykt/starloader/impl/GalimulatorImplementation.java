@@ -56,9 +56,6 @@ import de.geolykt.starloader.mod.Extension;
 import snoddasmannen.galimulator.Galemulator;
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.MapMode.MapModes;
-import snoddasmannen.galimulator.ui.class_13;
-import snoddasmannen.galimulator.ui.class_55;
-import snoddasmannen.galimulator.ui.interface_0;
 import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.ProceduralStarGenerator;
@@ -66,6 +63,8 @@ import snoddasmannen.galimulator.Scenario;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.VanityHolder;
+import snoddasmannen.galimulator.ui.ModUploadWidget;
+import snoddasmannen.galimulator.ui.OptionChooserWidget;
 import snoddasmannen.namegenerator.NameGenerator;
 
 // TODO split the unsafe impl and the game impl
@@ -253,7 +252,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings({ "null" })
     @Override
     public @NotNull List<@NotNull ActiveEmpire> getEmpires() {
-        return getEmpiresUnsafe(); // TODO change this to a clone after the spec permits us that
+        return getEmpiresUnsafe(); // TODO change this to a clone after the Spec permits us that
     }
 
     @SuppressWarnings("rawtypes")
@@ -329,7 +328,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 }
             }
         } catch (Exception ignored) {
-            // Ignored by contract of the method
+            // Ignored as defined by contract of the method
         }
         if (offset == 0) {
             return null; // Empty stream - what gives?
@@ -713,34 +712,31 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void showGalaxyCreationScreen() {
-        Space.R();
+        Space.showGalaxyCreationScreen();
     }
 
     @Override
     public void showOnlineScenarioBrowser() {
-        Space.S();
+        Space.showOnlineScenarioBrowser();
     }
 
     @Override
     public void showModUploadScreen() {
-        Space.a(class_55.class);
+        Space.showWidget(ModUploadWidget.class);
     }
 
     @Override
     public void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
-        Space.a(((MapData) map).getMetadata(), true, null, false);
+        Space.showDialog(((MapData) map).getMetadata(), true, null, false); 
     }
 
     @Override
     public void showScenarioSaveScreen() {
-        class_13 var3 = Space.a("Choose slot", "Choose save slot", Space.a("scenarios/Scenario_"), 0, null, true);
+        OptionChooserWidget var3 = Space.openOptionChooser("Choose slot", "Choose save slot", Space.a("scenarios/Scenario_"), 0, null, true);
         if (var3 != null) {
-            var3.a(new interface_0() {
-                @Override
-                public void a(Object object) {
-                    String var2 = object.toString().substring(0, object.toString().indexOf("\n")) + ".dat";
-                    Space.k(var2);
-                }
+            var3.registerSelectionListener((selection) -> {
+                String var2 = selection.toString().substring(0, selection.toString().indexOf("\n")) + ".dat";
+                Space.k(var2);
             });
         }
     }

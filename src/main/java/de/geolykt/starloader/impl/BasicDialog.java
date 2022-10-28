@@ -10,15 +10,15 @@ import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
 
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.ui.OptionChooserWidget;
 import snoddasmannen.galimulator.ui.Widget;
-import snoddasmannen.galimulator.ui.class_13;
 
 /**
  * A simple wrapper around the dialog, a graphical component of Galimulator.
  */
 public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
 
-    protected final class_13 dialog;
+    protected final OptionChooserWidget dialog;
     private boolean closed = false;
 
     /**
@@ -36,13 +36,13 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
     public BasicDialog(@NotNull String title, @NotNull String description, @Nullable List<@NotNull String> choices,
             @NotNull ArrayList<@NotNull BasicDialogCloseListener> closeListeners,
             @NotNull ArrayList<@NotNull WidgetActionListener> actionListeners, int duration, boolean playSFX) {
-        dialog = Space.a(title, description, choices, duration, null, true);
+        dialog = Space.openOptionChooser(title, description, choices, duration, null, true);
         dialog.a((Widget.WIDGET_MESSAGE msg) -> {
             if (msg == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
                 closed = true;
             }
         });
-        dialog.a((Object obj) -> {
+        dialog.registerSelectionListener((Object obj) -> {
             closed = true;
         });
         dialog.a(new DialogCloseListenerWrapper(closeListeners, playSFX));

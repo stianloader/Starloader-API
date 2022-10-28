@@ -21,7 +21,7 @@ accessible      method  snoddasmannen/galimulator/Space$ActorSpawningPredicate  
 accessible      field   com/example/Main                                       shortcuts            Ljava/util/List;
 accessible      field   com/example/Main                                       application          Lcom/badlogic/gdx/backends/lwjgl/LwjglApplication;
 extendable      field   snoddasmannen/galimulator/rendersystem/RenderItem      b                    Lcom/badlogic/gdx/math/Rectangle;
-accessible      field   snoddasmannen/galimulator/ui/class_13                  d                    J
+accessible      field   snoddasmannen/galimulator/ui/OptionChooserWidget       d                    J
 extendable      field   snoddasmannen/galimulator/ui/TextInputDialogWidget     c                    Ljava/lang/String;
 accessible      field   snoddasmannen/galimulator/ui/Widget                    layout               Lsnoddasmannen/galimulator/ui/WidgetLayout;
 accessible      field   snoddasmannen/galimulator/AudioManager                 a                    Lsnoddasmannen/galimulator/class_4;
