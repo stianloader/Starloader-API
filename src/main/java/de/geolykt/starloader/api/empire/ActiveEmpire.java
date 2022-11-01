@@ -6,11 +6,13 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Vector;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
@@ -120,7 +122,33 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return A list of currently present modifiers
      */
-    public @NotNull List<ShipCapacityModifier> getCapcityModifiers();
+    @NotNull
+    public List<ShipCapacityModifier> getCapcityModifiers();
+
+    /**
+     * Obtains the {@link Star} that is the capital of the empire.
+     * Due to the nature of the capital of an empire, the returned star might
+     * not be controlled by the empire.
+     *
+     * @return The Star that is the capital of the empire
+     * @since 2.0.0
+     * @see #getCapitalID()
+     */
+    @Contract(pure = true)
+    public Star getCapital();
+
+    /**
+     * Obtains the UID of the star that is the capital of the empire.
+     * Due to the nature of the capital of an empire, the star denoted by the
+     * returned UID might not be controlled by the empire.
+     *
+     * @return The ID of the star that is the capital of this empire
+     * @since 2.0.0
+     * @see #getCapital()
+     * @see Galimulator#lookupStar(int)
+     */
+    @Contract(pure = true)
+    public int getCapitalID();
 
     /**
      * Obtains the X coordinate of the capital star assigned to this empire.
@@ -128,7 +156,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return The X coordinate of the capital
      */
-    public float getCapitalX();
+    public float getCapitalX(); // FIXME This method is probably named incorrectly and should be named "getHQX()" if it is indeed misleadingly named
 
     /**
      * Obtains the Y coordinate of the capital star assigned to this empire.
@@ -136,11 +164,11 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return The Y coordinate of the capital
      */
-    public float getCapitalY();
+    public float getCapitalY(); // FIXME This method is probably named incorrectly and should be named "getHQY()" if it is indeed misleadingly named
 
     /**
      * Obtains the name of the empire with color. The format of the colored string
-     * is [123456]text[] where as 123456 is a 48 bit integer encoded in hexadecimal.
+     * is [#123456]text[] where as 123456 is a 48 bit integer encoded in hexadecimal.
      * This integer represents the RGB values of the color.
      *
      * @return A formatted string the is the colored name of the empire
@@ -227,8 +255,12 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return A {@link Vector} of the {@link Actor Actors} that are
      *         assigned to the empire.
+     * @deprecated This method violates several design choices that
+     * are now commonly used. Use {@link #getActors()} instead.
      */
-    public @NotNull Vector<Actor> getSLActors();
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    @NotNull
+    public Vector<Actor> getSLActors();
 
     /**
      * Obtains the registry key of the current state of the empire. To obtain the

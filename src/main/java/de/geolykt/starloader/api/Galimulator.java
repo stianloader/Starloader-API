@@ -368,6 +368,23 @@ public final class Galimulator {
         }
 
         /**
+         * Obtains the {@link Star} instance that is associated by the given ID.
+         * If there is no star with the given ID an {@link IllegalArgumentException}
+         * is thrown.
+         *
+         * @param id The ID of the star
+         * @return The instance of the Star associated to the ID.
+         * @throws IllegalArgumentException If there is no star with the given ID
+         * @since 2.0.0
+         * @see Star#getUID()
+         * @implNote The implementation of this method is O(1), so unlike most other
+         * lookup methods, it is perfectly safe performance-wise to run this method
+         * repeatedly in an uncached manner.
+         */
+        @NotNull
+        public Star lookupStar(int id);
+
+        /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
          * It will also not cause the loading screen to show up.
          *
@@ -1132,6 +1149,25 @@ public final class Galimulator {
     @NonBlocking
     public static void loadSavegameFile(@NotNull String savegameFile) {
         impl.loadSavegameFile(savegameFile);
+    }
+
+    /**
+     * Obtains the {@link Star} instance that is associated by the given ID.
+     * If there is no star with the given ID an {@link IllegalArgumentException}
+     * is thrown.
+     *
+     * @param id The ID of the star
+     * @return The instance of the Star associated to the ID.
+     * @throws IllegalArgumentException If there is no star with the given ID
+     * @since 2.0.0
+     * @see Star#getUID()
+     * @implNote The implementation of this method is O(1), so unlike most other
+     * lookup methods, it is perfectly safe performance-wise to run this method
+     * repeatedly in an uncached manner.
+     */
+    @NotNull
+    public static Star lookupStar(int id) {
+        return impl.lookupStar(id);
     }
 
     /**

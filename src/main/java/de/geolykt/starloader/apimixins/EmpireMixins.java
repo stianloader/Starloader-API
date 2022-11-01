@@ -77,6 +77,9 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     public transient Deque<Star> c; // recentlyLost
 
+    @Shadow
+    int capitalId;
+
     private transient ArrayList<ShipCapacityModifier> capModifiers;
 
     @Shadow
@@ -378,6 +381,16 @@ public class EmpireMixins implements ActiveEmpire {
             return new ArrayList<>();
         }
         return new ArrayList<>(capModifiers);
+    }
+
+    @Override
+    public Star getCapital() {
+        return Galimulator.lookupStar(getCapitalID());
+    }
+
+    @Override
+    public int getCapitalID() {
+        return capitalId;
     }
 
     @Override

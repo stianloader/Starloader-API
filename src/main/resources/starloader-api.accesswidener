@@ -13,6 +13,7 @@ accessible      method  snoddasmannen/galimulator/GalFX                         
 accessible      method  snoddasmannen/galimulator/Space                                          au         ()V
 accessible      method  snoddasmannen/galimulator/Space                                          aW         ()V
 accessible      method  snoddasmannen/galimulator/SpaceState                                     <init>     (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/ArrayList;)V
+accessible      method  snoddasmannen/galimulator/Sprawl                                         <init>     (Lsnoddasmannen/galimulator/Sprawl$SprawlType;Lsnoddasmannen/galimulator/Star;)V
 accessible      method  snoddasmannen/galimulator/EmploymentAgency$Local1                        <init>     (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
 accessible      method  snoddasmannen/galimulator/MapMode$MapModes                               <init>     (Ljava/lang/String;ILjava/lang/String;Z)V
 accessible      method  snoddasmannen/galimulator/Space$ActorSpawningPredicate                   <init>     (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
@@ -56,7 +57,9 @@ accessible      field   snoddasmannen/galimulator/SpaceState                   a
 accessible      field   snoddasmannen/galimulator/SpaceState                   borders              Ljava/util/List;
 accessible      field   snoddasmannen/galimulator/SpaceState                   employmentAgency     Lsnoddasmannen/galimulator/EmploymentAgency;
 accessible      field   snoddasmannen/galimulator/SpaceState                   vanity               Lsnoddasmannen/galimulator/VanityHolder;
+accessible      field   snoddasmannen/galimulator/Star                         sprawls              Ljava/util/ArrayList;
 accessible      field   snoddasmannen/galimulator/Star                         starRenderingRegion  Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
+accessible      field   snoddasmannen/galimulator/Star                         orbitingActors       Ljava/util/Set;
 accessible      field   snoddasmannen/galimulator/Galemulator                  h                    Ljava/lang/String;
 accessible      field   snoddasmannen/galimulator/GalFX                        m                    Lcom/badlogic/gdx/graphics/OrthographicCamera;
 accessible      field   snoddasmannen/galimulator/GalFX                        v                    Z

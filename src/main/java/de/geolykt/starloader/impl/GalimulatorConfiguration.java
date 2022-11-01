@@ -13,22 +13,22 @@ public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     public boolean allowAWBA() {
-        return (boolean) ALLOW_ALL_WILL_BE_ASHES.b();
+        return (boolean) ALLOW_ALL_WILL_BE_ASHES.getValue();
     }
 
     @Override
     public boolean allowBloodPurge() {
-        return (boolean) ALLOW_BLOOD_PURGE.b();
+        return (boolean) ALLOW_BLOOD_PURGE.getValue();
     }
 
     @Override
     public boolean allowDegeneration() {
-        return (boolean) ALLOW_DEGENERATION.b();
+        return (boolean) ALLOW_DEGENERATION.getValue();
     }
 
     @Override
     public boolean allowTranscendence() {
-        return (boolean) ALLOW_TRANSCENDENCE.b();
+        return (boolean) ALLOW_TRANSCENDENCE.getValue();
     }
 
     @Override
@@ -38,11 +38,11 @@ public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     public int getShipMultiplier() {
-        return (int) SHIP_NUMBER_MOD.b();
+        return (int) SHIP_NUMBER_MOD.getValue();
     }
 
     @Override
     public int getTranscendceLevel() {
-        return (int) TRANSCEND_LEVEL.b();
+        return (int) TRANSCEND_LEVEL.getValue();
     }
 }

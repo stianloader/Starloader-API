@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.empire;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import org.jetbrains.annotations.Contract;
@@ -15,6 +17,7 @@ import de.geolykt.starloader.api.Locateable;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.event.TickCallback;
+import de.geolykt.starloader.api.registry.RegistryKeys;
 
 /**
  * Wrapper interface for Stars. This should not be extended by any other
@@ -22,6 +25,20 @@ import de.geolykt.starloader.api.event.TickCallback;
  * implementation.
  */
 public interface Star extends Identifiable, Metadatable, Locateable, InternalRandom {
+
+    /**
+     * Increments the development present locally on this star.
+     * Development is a mostly invisible and normally undocumented factor within the
+     * game's ticking loop. Any star that has a local development of 14400 or greater
+     * will contribute as a star that can cause the empire to increase it's technological
+     * advantage. Development is reduced with warlike activities at the star and is
+     * not displayed to the user.
+     *
+     * @param development The development to add ontop this star's development
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public void addLocalDevelopment(int development);
 
     /**
      * Adds a star to the neighbour lists. Please note that you likely do not want
@@ -95,7 +112,33 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      *
      * @return The controlling faction
      */
-    public @Nullable Faction getFaction();
+    @Nullable
+    public Faction getFaction();
+
+    /**
+     * Obtains the current heat of the star.
+     * Heat represents how war-torn a given region is.
+     * As of right now (Galimulator 5.0), heat only serves the purpose
+     * of providing a more realistic trade system by making Traders avoid
+     * areas of high heat. This means that if the smart trader setting is
+     * turned off, traders will navigate through areas regardless of high
+     * heat. If the setting is turned on, areas with high heat are more
+     * likely to be more in poverty as a result.
+     *
+     * <p>Heat decays at a rate of about 1% every 20 milliYears. Or more
+     * specifically defined at a rate of 1% every active tick.
+     *
+     * <p>Heat can be viewed through the
+     * {@link RegistryKeys#GALIMULATOR_HEAT_MAPMODE} map mode.
+     *
+     * <p>Heat is not stored persistently, that is it is reset between
+     * saving and loading.
+     *
+     * @return The amount of heat present locally
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public float getHeat();
 
     /**
      * Obtains the majority faith within the star's borders. May not be null.
@@ -138,14 +181,30 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     public Vector<Integer> getNeighbourIDs();
 
     /**
+     * Obtains an immutable {@link List} backing the internal list of neighbours of this
+     * star.
+     *
+     * @return A {@link List} of {@link Star Stars} that the current Star has a
+     *         starlane to (assuming neither star is disrupted at the moment)
+     * @since 2.0.0
+     */
+    @NotNull
+    @Contract(pure = true)
+    public List<@NotNull Star> getNeighbourList();
+
+    /**
      * Obtains the direct neighbours of the star. Do NOT modify the returned vector
      * directly (this is the internal representation of the star's neighbours)! If
-     * you need to modify it copy it first, otherwise bad things will happen
+     * you need to modify it you should copy it first, otherwise bad things may happen
      *
      * @return A {@link Vector} of {@link Star Stars} that the current Star has a
      *         starlane to
+     * @deprecated This method violates several core design principles that were developed
+     * later on in the developer lifecycle, use {@link #getNeighbourList()} instead.
      */
-    public @NotNull Vector<Star> getNeighbours();
+    @Deprecated(forRemoval = true, since = "2.0.0")
+    @NotNull
+    public Vector<Star> getNeighbours();
 
     /**
      * Obtains the neighbours the star has recursively. The returned vector is a new
@@ -158,6 +217,31 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     public @NotNull Vector<Star> getNeighboursRecursive(int recurseDepth);
 
     /**
+     * Obtains the tick callbacks registered to this {@link Star} instance.
+     * The returned collection is not modifiable, that is {@link Iterator#remove()}
+     * will not work.
+     *
+     * @return The tick callbacks
+     * @since 2.0.0
+     */
+    @NotNull
+    public Iterable<TickCallback<Star>> getTickCallbacks();
+
+    /**
+     * Obtains the unique numeric identifier of the star. By contract, there are no two
+     * different stars with the same UID at the same time.
+     *
+     * <p>The range of the UID of the star ranges between -1 and the amounts of stars minus
+     * two. Therefore to cleanly map anything that has the star's UID as the key, the
+     * ID of the star has to be incremented by 1 - assuming array-like indexing is used.
+     *
+     * @return The UID of the empire
+     * @see Galimulator#lookupStar(int)
+     */
+    @Override
+    public int getUID();
+
+    /**
      * Obtains the wealth of the star. Wealthier stars are harder to take and have
      * more additional extras for them and the empire owning the star
      *
@@ -166,12 +250,40 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     public float getWealth();
 
     /**
+     * Returns the sprawl level of the star.
+     * The value is ignored by default if sprawl is disabled in the settings.
+     * Even if it is enabled sprawl is a purely cosmetic attribute and it is
+     * up to the user's interpretation of what sprawl means - although usually
+     * it is linked to advancements and prestige.
+     *
+     * <p>In vanilla galimulator (as of 5.0) sprawl is limited at 100.
+     *
+     * @return The star's current sprawl level
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public float getSprawlLevel();
+
+    /**
      * Queries whether the star is present in the neighbour list.
      *
      * @param star The Star to query
      * @return true if the star is in the neighbour list
+     * @deprecated The naming of this method is nonsensical. Use {@link #isNeighbour(Star)}
+     * instead.
      */
+    @Deprecated(forRemoval = true, since = "2.0.0")
     public boolean hasNeighbour(@NotNull Star star);
+
+    /**
+     * Queries whether the star is present in the neighbour list.
+     *
+     * @param star The Star to query
+     * @return true if the star is in the neighbour list
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public boolean isNeighbour(@NotNull Star star);
 
     /**
      * Moves the star based on it's current coordinates and the method parameter.
@@ -210,6 +322,31 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
     public void setFaction(@Nullable Faction faction);
 
     /**
+     * Sets the current heat of the star.
+     * Heat represents how war-torn a given region is.
+     * As of right now (Galimulator 5.0), heat only serves the purpose
+     * of providing a more realistic trade system by making Traders avoid
+     * areas of high heat. This means that if the smart trader setting is
+     * turned off, traders will navigate through areas regardless of high
+     * heat. If the setting is turned on, areas with high heat are more
+     * likely to be more in poverty as a result.
+     *
+     * <p>Heat decays at a rate of about 1% every 20 milliYears. Or more
+     * specifically defined at a rate of 1% every active tick.
+     *
+     * <p>Heat can be viewed through the
+     * {@link RegistryKeys#GALIMULATOR_HEAT_MAPMODE} map mode.
+     *
+     * <p>Heat is not stored persistently, that is it is reset between
+     * saving and loading.
+     *
+     * @param heat The amount of heat present locally after the method call
+     * @since 2.0.0
+     */
+    @Contract(pure = false, mutates = "this")
+    public void setHeat(float heat);
+
+    /**
      * Sets the majority religion of the system.
      *
      * @param religion The registry key of the religion that should now be prevalent in this system
@@ -235,6 +372,22 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      *         starlane to
      */
     public void setNeighbours(@NotNull Vector<Star> neighbours);
+
+    /**
+     * Sets the star's sprawl level.
+     * The value is ignored by default if sprawl is disabled in the settings.
+     * Even if it is enabled sprawl is a purely cosmetic attribute and it is
+     * up to the user's interpretation of what sprawl means - although usually
+     * it is linked to advancements and prestige.
+     *
+     * <p>While normally the sprawl level is capped at 100, this method allows
+     * to set it to higher values, although the set value will be rather short-lived.
+     *
+     * @param sprawl The star's future sprawl level
+     * @since 2.0.0
+     */
+    @Contract(pure = false, mutates = "this")
+    public void setSprawlLevel(float sprawl);
 
     /**
      * Obtains the wealth of the star. Wealthier stars are harder to take and have

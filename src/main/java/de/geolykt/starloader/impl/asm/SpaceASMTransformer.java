@@ -184,6 +184,10 @@ public class SpaceASMTransformer extends ASMTransformer {
     }
 
     public static final void save(String cause, String location) {
+        if (location == null) {
+            throw new IllegalArgumentException("\"location\" may not be null.");
+        }
+
         Space.getMainTickLoopLock().acquireUninterruptibly(2);
         Space.backgroundTaskDescription = "Saving galaxy: " + cause;
         LOGGER.info("Saving state to disk.");

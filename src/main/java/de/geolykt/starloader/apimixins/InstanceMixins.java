@@ -66,10 +66,10 @@ public class InstanceMixins {
         Space.setBackgroundTaskDescription("Loading galaxy");
 
         boolean successful = true;
+        if (path == null) {
+            throw new InternalError();
+        }
         try (InputStream is = Files.newInputStream(path)) {
-            if (is == null) {
-                throw new NullPointerException();
-            }
             Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).loadGameState(is);
         } catch (Throwable t) {
             LOGGER.warn("Unable to load savegame", t);
@@ -83,7 +83,7 @@ public class InstanceMixins {
         }
 
         Drawing.sendBulletin("Welcome back to the galaxy");
-        if (EnumSettings.PAUSE_AFTER_LOADING.b() == Boolean.TRUE) {
+        if (EnumSettings.PAUSE_AFTER_LOADING.getValue() == Boolean.TRUE) {
             Gdx.app.postRunnable(Galimulator::pauseGame);
         }
         return successful;

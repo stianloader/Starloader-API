@@ -514,6 +514,16 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         }).start();
     }
 
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Star lookupStar(int id) {
+        if (id < -1 || (id + 1) > Space.stars.size()) {
+            throw new IllegalArgumentException("There is no star with the given UID: " + id);
+        }
+        return (Star) Space.stars.get(id + 1);
+    }
+
     @Override
     public void pauseGame() {
         Space.setPaused(true);

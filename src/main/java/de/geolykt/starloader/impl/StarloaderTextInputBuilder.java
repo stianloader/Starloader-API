@@ -48,7 +48,7 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     @Override
     @Nullable
     public InputDialog build() {
-        if (Settings.EnumSettings.USE_NATIVE_KEYBOARD.b() == Boolean.TRUE) {
+        if (Settings.EnumSettings.USE_NATIVE_KEYBOARD.getValue() == Boolean.TRUE) {
             Gdx.input.getTextInput(new TextInputWrapper(hooks), title, text, hint);
             return null;
         }

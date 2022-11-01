@@ -35,6 +35,7 @@ public class MapDataMixins implements Map {
     @Deprecated(forRemoval = true, since = "2.0.0")
     @Nullable
     public BufferedImage getAWTBackground() {
+        String backgroundImage = this.backgroundImage;
         if (backgroundImage != null) {
             if (awtImage != null) {
                 return awtImage;
@@ -48,7 +49,7 @@ public class MapDataMixins implements Map {
                 }
             }
         }
-        return null; // FIXME Is there any other way?
+        return null;
     }
 
     @Override

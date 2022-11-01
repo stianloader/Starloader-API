@@ -1,6 +1,8 @@
 package de.geolykt.starloader.apimixins;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -40,9 +42,6 @@ import snoddasmannen.galimulator.Religion;
 @Mixin(snoddasmannen.galimulator.Star.class)
 public class StarMixins implements Star {
 
-    @Shadow
-    transient Vector<Star> a; // neighbours
-
     @SuppressWarnings("rawtypes")
     @Shadow
     transient HashMap b; // starlaneCache
@@ -60,6 +59,9 @@ public class StarMixins implements Star {
     private Religion faith; // majorityFaith
 
     @Shadow
+    private transient float heat;
+
+    @Shadow
     int id; // uId
 
     @SuppressWarnings("rawtypes")
@@ -73,11 +75,17 @@ public class StarMixins implements Star {
     private Religion minorityFaith; // minorityFaith
 
     @Shadow
+    transient Vector<Star> neighbours;
+
+    @Shadow
     int ownerid;
 
     @Shadow
     @Nullable
     private transient Vector2 r; // coordinates
+
+    @Shadow
+    private float sprawlLevel;
 
     private transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
@@ -91,19 +99,8 @@ public class StarMixins implements Star {
     public double y; // y
 
     @Shadow
-    @NotNull
-    public snoddasmannen.galimulator.Empire getOwningEmpire() { // getEmpire
-        return (Empire) Galimulator.getNeutralEmpire();
-    }
-
-    @Shadow
     public void a(Religion var1) {
     } // setMajorityFaith
-
-    @Shadow
-    public void setOwnerEmpire(snoddasmannen.galimulator.Empire var0) { // setEmpire
-        return;
-    }
 
     @Overwrite
     public void a(snoddasmannen.galimulator.factions.Faction faction) { // setFaction
@@ -111,8 +108,13 @@ public class StarMixins implements Star {
     }
 
     @Shadow
-    public void disconnect(snoddasmannen.galimulator.Star var1) {
-    } // removeNeighbour
+    private void addDevelopment(int development) {
+    }
+
+    @Override
+    public void addLocalDevelopment(int development) {
+        this.addDevelopment(development);
+    }
 
     @Override
     public void addNeighbour(@NotNull Star star) {
@@ -136,10 +138,6 @@ public class StarMixins implements Star {
     } // takeover
 
     @Shadow
-    public void connect(snoddasmannen.galimulator.Star var1) {
-    } // addNeighbour
-
-    @Shadow
     public @NotNull Vector<Star> c(int var1) { // getNeighboursRecursive
         return new Vector<>();
     }
@@ -148,6 +146,14 @@ public class StarMixins implements Star {
     public void clearStarlaneCache() {
         this.b.clear();
     }
+
+    @Shadow
+    public void connect(snoddasmannen.galimulator.Star var1) {
+    } // addNeighbour
+
+    @Shadow
+    public void disconnect(snoddasmannen.galimulator.Star var1) {
+    } // removeNeighbour
 
     @Override
     public boolean doTakeover(@NotNull ActiveEmpire newOwner) {
@@ -186,6 +192,11 @@ public class StarMixins implements Star {
     @NotNull
     public CoordinateGrid getGrid() {
         return CoordinateGrid.BOARD;
+    }
+
+    @Override
+    public float getHeat() {
+        return heat;
     }
 
     @SuppressWarnings("null")
@@ -235,13 +246,38 @@ public class StarMixins implements Star {
 
     @SuppressWarnings("null")
     @Override
+    @NotNull
+    public List<@NotNull Star> getNeighbourList() {
+        return Collections.unmodifiableList(neighbours);
+    }
+
+    @SuppressWarnings("null")
+    @Override
     public @NotNull Vector<Star> getNeighbours() {
-        return a;
+        return neighbours;
     }
 
     @Override
     public @NotNull Vector<Star> getNeighboursRecursive(int recurseDepth) {
         return c(recurseDepth);
+    }
+
+    @Shadow
+    @NotNull
+    public snoddasmannen.galimulator.Empire getOwningEmpire() { // getEmpire
+        return (Empire) Galimulator.getNeutralEmpire();
+    }
+
+    @Override
+    public float getSprawlLevel() {
+        return sprawlLevel;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Iterable<TickCallback<Star>> getTickCallbacks() {
+        return Collections.unmodifiableList(tickCallbacks);
     }
 
     @Override
@@ -274,7 +310,12 @@ public class StarMixins implements Star {
 
     @Override
     public boolean hasNeighbour(@NotNull Star star) {
-        return this.a.contains(star);
+        return this.neighbours.contains(star);
+    }
+
+    @Override
+    public boolean isNeighbour(@NotNull Star star) {
+        return this.neighbours.contains(star);
     }
 
     @Override
@@ -326,6 +367,11 @@ public class StarMixins implements Star {
     }
 
     @Override
+    public void setHeat(float heat) {
+        this.heat = heat;
+    }
+
+    @Override
     public void setInternalRandom(@NotNull Random random) {
         d = NullUtils.requireNotNull(random);
     }
@@ -373,7 +419,17 @@ public class StarMixins implements Star {
 
     @Override
     public void setNeighbours(@NotNull Vector<Star> neighbours) {
-        a = NullUtils.requireNotNull(neighbours);
+        neighbours = NullUtils.requireNotNull(neighbours);
+    }
+
+    @Shadow
+    public void setOwnerEmpire(snoddasmannen.galimulator.Empire var0) { // setEmpire
+        return;
+    }
+
+    @Override
+    public void setSprawlLevel(float sprawl) {
+        this.sprawlLevel = sprawl;
     }
 
     @Override
