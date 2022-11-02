@@ -49,7 +49,7 @@ public final class SLWeaponsManager implements WeaponsManager {
     @Override
     public @NotNull WeaponType getWeaponTypeByEnumName(@NotNull String key) throws IllegalArgumentException {
         @SuppressWarnings("deprecation")
-        WeaponType type = (WeaponType) Registry.WEAPON_TYPES.getIntern(NullUtils.requireNotNull(key));
+        WeaponType type = Registry.WEAPON_TYPES.getIntern(NullUtils.requireNotNull(key));
         if (type == null) {
             throw new IllegalArgumentException("Name not bound to an instance.");
         }
@@ -58,6 +58,6 @@ public final class SLWeaponsManager implements WeaponsManager {
 
     @Override
     public @NotNull WeaponType[] getWeaponTypes() {
-        return (@NotNull WeaponType[]) Registry.WEAPON_TYPES.getValues();
+        return Registry.WEAPON_TYPES.getValues();
     }
 }

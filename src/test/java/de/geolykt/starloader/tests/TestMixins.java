@@ -34,8 +34,9 @@ public class TestMixins {
     @Test
     public void testNoShadowAssignments() throws Exception {
         URL url = ClassLoader.getSystemResource("de/geolykt/starloader/apimixins");
+        @SuppressWarnings("null")
         File[] children = new File(url.toURI()).listFiles((dir, name) -> !name.equals("package-info.class") && name.endsWith(".class"));
-        if (children.length == 0) {
+        if (children == null || children.length == 0) {
             throw new Exception("Unable to obtain mixin classes");
         }
         for (File mixinClass : children) {

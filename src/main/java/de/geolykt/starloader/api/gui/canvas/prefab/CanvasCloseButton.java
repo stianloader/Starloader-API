@@ -88,6 +88,7 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
      * @return The current {@link CanvasCloseButton} instance (for chaining)
      * @since 2.0.0
      */
+    @Override
     @NotNull
     @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
     public CanvasCloseButton setTextColor(@NotNull Color color) {

@@ -11,6 +11,13 @@ import de.geolykt.starloader.api.registry.Registry;
  */
 public class RegistryRegistrationEvent extends Event {
 
+    /**
+     * The name of the Empire achievement registry, i.e. {@link Registry#EMPIRE_ACHIVEMENTS}.
+     *
+     * @since 2.0.0
+     */
+    public static final String REGISTRY_EMPIRE_ACHIEVEMENTS = "EMPIRE_ACHIEVEMENT";
+
     public static final String REGISTRY_EMPIRE_SPECIAL = "EMPIRESPECIAL";
     public static final String REGISTRY_EMPIRE_STATE = "EMPIRESTATE";
     public static final String REGISTRY_FLAG_SYMBOL = "FLAGSYMBOL";

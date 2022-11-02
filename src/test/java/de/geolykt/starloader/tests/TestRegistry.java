@@ -35,6 +35,7 @@ public class TestRegistry {
             add("snoddasmannen/galimulator/weapons/WeaponsFactory.class");
             add("snoddasmannen/galimulator/FlagItem$BuiltinSymbols.class");
             add("snoddasmannen/galimulator/Religion.class");
+            add("snoddasmannen/galimulator/EmpireAchievement$EmpireAchievementType.class");
         }
     };
 
@@ -69,6 +70,7 @@ public class TestRegistry {
     @Test
     public void testRegistryCompleteness() throws Exception {
         URL url = ClassLoader.getSystemResource("de/geolykt/starloader/impl/registry/Registries.class");
+        @SuppressWarnings("null")
         File registriesClass = new File(url.toURI());
 
         ClassNode clazzNode = new ClassNode(Opcodes.ASM9);

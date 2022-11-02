@@ -14,6 +14,7 @@ import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.actor.WeaponType;
+import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 import de.geolykt.starloader.api.gui.MapMode;
 
@@ -36,6 +37,15 @@ public abstract class Registry<T> {
      */
     @NotNull
     public static final CodecRegistry CODECS = new CodecRegistry();
+
+    /**
+     * The registry for the empire achievements.
+     * Mods should refrain from adding instances to this registry manually, unless they are absolutely
+     * sure that they know what they are doing.
+     *
+     * @since 2.0.0
+     */
+    public static Registry<EmpireAchievementType> EMPIRE_ACHIVEMENTS;
 
     /**
      * The empire specials registry.

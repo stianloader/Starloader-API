@@ -6,12 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
-import de.geolykt.starloader.api.gui.FlagSymbol;
-import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryExpander;
@@ -19,6 +16,7 @@ import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
 
 import snoddasmannen.galimulator.AudioManager.AudioSample;
+import snoddasmannen.galimulator.EmpireAchievement.EmpireAchievementType;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
@@ -59,6 +57,49 @@ public final class Registries {
         AudioSampleWrapper.HEALRAY = new StarloaderAudioSample("healray.wav", AudioSample.HEALRAY);
         AudioSampleWrapper.CLONE = new StarloaderAudioSample("healray.wav", AudioSample.CLONE);
         AudioSampleWrapper.MISSILE = new StarloaderAudioSample("missile.wav", AudioSample.MISSILE);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void initEmpireAchievements() {
+        LOGGER.info("Registering empire achievements");
+        SimpleEnumRegistry<EmpireAchievementType> achievementRegistry = new SimpleEnumRegistry<>(EmpireAchievementType.class);
+        @SuppressWarnings("null")
+        @NotNull EmpireAchievementType[] achivements = new @NotNull EmpireAchievementType[] {
+            EmpireAchievementType.FIVEMILOLD,
+            EmpireAchievementType.TENMILOLD,
+            EmpireAchievementType.TWENTYMILOLD,
+            EmpireAchievementType.FOURTYMILOLD,
+            EmpireAchievementType.HUNDREDMILOLD,
+            EmpireAchievementType.BUILTARTIFACT,
+            EmpireAchievementType.RESEARCHED,
+            EmpireAchievementType.HALFGALAXY,
+            EmpireAchievementType.BEATENEMY,
+            EmpireAchievementType.COLONISTS,
+            EmpireAchievementType.FIRSTTOTHEPARTY,
+            EmpireAchievementType.AWBA,
+            EmpireAchievementType.TRANSCENDED,
+            EmpireAchievementType.TRANSCENDFAILED,
+            EmpireAchievementType.DOMINATEDGALAXY
+        };
+        achievementRegistry.registerBulk(new @NotNull NamespacedKey[] {
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_FIVEMILOLD,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_TENMILOLD,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_TWENTYMILOLD,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_FOURTYMILOLD,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_HUNDREDMILOLD,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_BUILTARTIFACT,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_RESEARCHED,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_HALFGALAXY,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_BEATENEMY,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_COLONISTS,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_FIRSTTOTHEPARTY,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_AWBA,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_TRANSCENDED,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_TRANSCENDFAILED,
+            RegistryKeys.GALIMULATOR_ACHIEVEMENT_DOMINATEDGALAXY
+        }, achivements);
+        Registry.EMPIRE_ACHIVEMENTS = (Registry) achievementRegistry;
+        EventManager.handleEvent(new RegistryRegistrationEvent(achievementRegistry, EmpireAchievementType.class, RegistryRegistrationEvent.REGISTRY_FLAG_SYMBOL));
     }
 
     /**
@@ -178,7 +219,7 @@ public final class Registries {
                 RegistryKeys.GALIMULATOR_FLAG_FUNNEL,
                 RegistryKeys.GALIMULATOR_FLAG_FRAME
         }, symbols);
-        Registry.FLAG_SYMBOLS = (Registry<FlagSymbol>) (Registry) symbolRegistry;
+        Registry.FLAG_SYMBOLS = (Registry) symbolRegistry;
         EventManager.handleEvent(new RegistryRegistrationEvent(symbolRegistry, BuiltinSymbols.class, RegistryRegistrationEvent.REGISTRY_FLAG_SYMBOL));
     }
 
@@ -214,7 +255,7 @@ public final class Registries {
             mapModeRegistry.register(prototype.key, new SLMapMode(mapModeRegistry.getSize(), prototype));
             return true;
         });
-        Registry.MAP_MODES = (Registry<MapMode>) (Registry) mapModeRegistry;
+        Registry.MAP_MODES = (Registry) mapModeRegistry;
         Event e = new RegistryRegistrationEvent(mapModeRegistry, MapModes.class, RegistryRegistrationEvent.REGISTRY_MAP_MODE);
         EventManager.handleEvent(e);
         expander.frozenMapModeRegistry = true;
@@ -264,7 +305,7 @@ public final class Registries {
                 RegistryKeys.GALIMULATOR_REL_SIMULACRUM,
                 RegistryKeys.GALIMULATOR_REL_IMMERSION
         }, religions);
-        Registry.RELIGIONS = (Registry<? extends Enum<?>>) (Registry) religionRegistry;
+        Registry.RELIGIONS = (Registry) religionRegistry;
         EventManager.handleEvent(new RegistryRegistrationEvent(religionRegistry, Religion.class, RegistryRegistrationEvent.REGISTRY_RELIGION));
         religionRegistry.freeze();
     }
@@ -308,7 +349,7 @@ public final class Registries {
                 WeaponsFactory.RAILGUN, // FIXME I believe that the order of this entry might change in the near future
                 WeaponsFactory.CHAIN_MISSILE
         });
-        Registry.WEAPON_TYPES = (Registry<? extends WeaponType>) (Registry) weaponTypes;
+        Registry.WEAPON_TYPES = (Registry) weaponTypes;
         EventManager.handleEvent(new RegistryRegistrationEvent(weaponTypes, WeaponsFactory.class, RegistryRegistrationEvent.REGISTRY_WEAPONS_TYPE));
     }
 

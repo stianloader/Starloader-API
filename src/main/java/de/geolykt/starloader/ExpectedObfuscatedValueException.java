@@ -38,10 +38,10 @@ public class ExpectedObfuscatedValueException extends IllegalArgumentException {
      */
     @SuppressWarnings("cast") // Actually needed
     public static @NotNull MapModes requireMapMode(@NotNull MapMode mode) {
-        if (!((Object) mode instanceof MapModes)) {
+        if (!(mode instanceof MapModes)) {
             throw new ExpectedObfuscatedValueException();
         }
-        return (MapModes) (Object) mode;
+        return (MapModes) mode;
     }
 
     public static @Nullable StateActor requireNullableStateActor(@Nullable Actor actor) {

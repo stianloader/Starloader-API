@@ -122,7 +122,12 @@ public final class Galimulator {
          * lower later in game unless a new galaxy is spun up. 1000 in-game years span
          * an in-game millenia, which is the time format most players are familiar with
          * in the game. However please note that this is not always corresponding in years,
-         * sometimes it is also in milliyears or other time formats.
+         * sometimes it is also in milliYears or other time formats.
+         *
+         * <p>As such the SLAPI documentation uses the terms "year" and "milliYear" interchangeably
+         * when talking about values (indirectly) produced by this method. However
+         * as of SLAPI 2.0 latter naming scheme is the recommended one, older documentations
+         * might still use the former.
          *
          * @return The in-game year.
          */
@@ -847,7 +852,12 @@ public final class Galimulator {
      * lower later in game unless a new galaxy is spun up. 1000 in-game years span
      * an in-game millenia, which is the time format most players are familiar with
      * in the game. However please note that this is not always corresponding in years,
-     * sometimes it is also in milliyears or other time formats.
+     * sometimes it is also in milliYears or other time formats.
+     *
+     * <p>As such the SLAPI documentation uses the terms "year" and "milliYear" interchangeably
+     * when talking about values (indirectly) produced by this method. However
+     * as of SLAPI 2.0 latter naming scheme is the recommended one, older documentations
+     * might still use the former.
      *
      * @return The in-game year.
      */

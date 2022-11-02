@@ -30,6 +30,7 @@ public class GalFXAsyncRenderer implements AsyncRenderer {
         GalFX.drawNinepatch(ninepatch, (int) x, (int) y, (int) width, (int) height, new GalColor(color), camera);
     }
 
+    @Override
     public void drawText0(float x, float y, float targetWidth, @NotNull CharSequence text, @NotNull Color color, @NotNull Camera camera, int halign, @NotNull BitmapFont font) {
         RenderCache cache = (RenderCache) GalFX.RENDERCACHE_LOCAL.get();
         if (cache != null) {

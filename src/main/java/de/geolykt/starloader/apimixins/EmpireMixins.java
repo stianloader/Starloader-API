@@ -30,6 +30,8 @@ import de.geolykt.starloader.api.actor.Flagship;
 import de.geolykt.starloader.api.actor.StateActor;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
+import de.geolykt.starloader.api.empire.EmpireAchievement;
+import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
 import de.geolykt.starloader.api.empire.ShipCapacityModifier;
 import de.geolykt.starloader.api.empire.ShipCapacityModifier.Type;
 import de.geolykt.starloader.api.empire.Star;
@@ -51,8 +53,8 @@ import de.geolykt.starloader.api.registry.EmpireStateMetadataEntry;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
+import de.geolykt.starloader.impl.registry.Registries;
 
-import snoddasmannen.galimulator.EmpireAchievement.EmpireAchievementType;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.GalColor;
@@ -63,6 +65,9 @@ import snoddasmannen.galimulator.class_43;
 
 @Mixin(snoddasmannen.galimulator.Empire.class)
 public class EmpireMixins implements ActiveEmpire {
+
+    @Shadow
+    private Vector<EmpireAchievement> achievements;
 
     @SuppressWarnings("rawtypes")
     @Shadow
@@ -140,14 +145,6 @@ public class EmpireMixins implements ActiveEmpire {
     private int techLevel; // technologyLevel
 
     private transient List<TickCallback<ActiveEmpire>> tickCallbacks;
-
-    /**
-     * @param a  dummy doc
-     */
-    @Shadow
-    public void a(EmpireAchievementType a) { // addAchievement
-        return;
-    }
 
     @Overwrite
     public void a(final EmpireState state) { // setState
@@ -248,6 +245,29 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     public void av() { // voidTreaties
         return;
+    }
+
+    @Override
+    public void awardAchievement(@NotNull EmpireAchievementType achievement) {
+        for (EmpireAchievement a : this.achievements) {
+            if (a.getAchievement() == achievement) { // We assume that achievement types are singletons, which should be good enough I guess
+                return;
+            }
+        }
+        this.achievements.add((EmpireAchievement) (Object) new snoddasmannen.galimulator.EmpireAchievement((snoddasmannen.galimulator.EmpireAchievement.EmpireAchievementType) (Object) achievement));
+        e();
+    }
+
+    @Override
+    public void awardAchievement(@NotNull NamespacedKey achievementKey) {
+        if (Registry.EMPIRE_ACHIVEMENTS == null) {
+            Registries.initEmpireAchievements();
+        }
+        EmpireAchievementType achievement = Registry.EMPIRE_ACHIVEMENTS.get(achievementKey);
+        if (achievement == null) {
+            throw new IllegalArgumentException("Unable to find empire achievement defined by " + achievementKey.toString());
+        }
+        awardAchievement(achievement);
     }
 
     @Shadow
@@ -352,8 +372,15 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public void e() { // No idea what this does
+    public void e() { // No idea what this does; // TODO Increased deobfuscation priority - this one should be rather easy
     //    this.g = null;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Collection<@NotNull EmpireAchievement> getAchievements() {
+        return Collections.unmodifiableList(achievements);
     }
 
     @SuppressWarnings({ "unchecked", "null" })
@@ -565,7 +592,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
 
         broadcastNews("Has advanced, now tech level: " + getTechnologyLevel());
-        this.a(EmpireAchievementType.RESEARCHED);
+        awardAchievement(RegistryKeys.GALIMULATOR_ACHIEVEMENT_RESEARCHED);
         if (Galimulator.getPlayerEmpire() == this) {
             new BasicDialogBuilder("Technological advance", "You have advanced to tech level: " + this.techLevel
                     + "! This will give your armies and fleets a significant boost.").show();

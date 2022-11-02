@@ -26,7 +26,7 @@ public class LogicalTickEvent extends Event {
 
         /**
          * The event was emitted before any logical processing occurred. However some graphical-ish
-         * processing might have occoured, such as background ticking. Event will not be emitted if the game is
+         * processing might have occurred, such as background ticking. Event will not be emitted if the game is
          * paused or the tick is skipped due to the game being in slow-mode.
          */
         PRE_LOGICAL,

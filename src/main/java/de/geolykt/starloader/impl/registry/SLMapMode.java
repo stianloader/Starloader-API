@@ -26,7 +26,7 @@ public class SLMapMode extends MapModes {
         if (prototype.mapMode != null) {
             throw new IllegalStateException("Prototype already assigned to a map mode");
         }
-        prototype.mapMode = (MapMode) (Object) this;
+        prototype.mapMode = (MapMode) this;
         this.prototype = prototype;
     }
 

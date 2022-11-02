@@ -20,6 +20,23 @@ public final class RegistryKeys {
         // stupidity of the average developer
     }
 
+    // Empire achievements, since 2.0.0
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_FIVEMILOLD = new GalimulatorResourceKey("ACHIEVEMENT_FIVEMILOLD");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_TENMILOLD = new GalimulatorResourceKey("ACHIEVEMENT_TENMILOLD");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_TWENTYMILOLD = new GalimulatorResourceKey("ACHIEVEMENT_TWENTYMILOLD");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_FOURTYMILOLD = new GalimulatorResourceKey("ACHIEVEMENT_FOURTYMILOLD");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_HUNDREDMILOLD = new GalimulatorResourceKey("ACHIEVEMENT_HUNDREDMILOLD");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_BUILTARTIFACT = new GalimulatorResourceKey("ACHIEVEMENT_BUILTARTIFACT");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_RESEARCHED = new GalimulatorResourceKey("ACHIEVEMENT_RESEARCHED");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_HALFGALAXY = new GalimulatorResourceKey("ACHIEVEMENT_HALFGALAXY");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_BEATENEMY = new GalimulatorResourceKey("ACHIEVEMENT_BEATENEMY");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_COLONISTS = new GalimulatorResourceKey("ACHIEVEMENT_COLONISTS");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_FIRSTTOTHEPARTY = new GalimulatorResourceKey("ACHIEVEMENT_FIRSTTOTHEPARTY");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_AWBA = new GalimulatorResourceKey("ACHIEVEMENT_AWBA");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_TRANSCENDED = new GalimulatorResourceKey("ACHIEVEMENT_TRANSCENDED");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_TRANSCENDFAILED = new GalimulatorResourceKey("ACHIEVEMENT_TRANSCENDFAILED");
+    public static final @NotNull NamespacedKey GALIMULATOR_ACHIEVEMENT_DOMINATEDGALAXY = new GalimulatorResourceKey("ACHIEVEMENT_DOMINATEDGALAXY");
+
     // Empire Specials
     public static final @NotNull NamespacedKey GALIMULATOR_AGGRESSIVE = new GalimulatorResourceKey("SPECIAL_AGGRESSIVE");
     public static final @NotNull NamespacedKey GALIMULATOR_CAPITALIST = new GalimulatorResourceKey("SPECIAL_CAPITALIST");
@@ -58,8 +75,11 @@ public final class RegistryKeys {
     public static final @NotNull NamespacedKey GALIMULATOR_FLAG_GRADIENT_HORIZONTAL_STRIPE = new GalimulatorResourceKey("GRADIENT_HORIZONTAL_STRIPE");
 
     /**
-     * The registry key mirroring the "GRADIENTLVERTICAL_STRIPE" member of the BUiltinSymbols enum.
-     * the SLAPI does currently mirrors the typo for savegame compatibility, but the value of this member may get changed due to reasons.
+     * The registry key mirroring the "GRADIENTLVERTICAL_STRIPE" member of the BuiltinSymbols enum.
+     * the SLAPI currently mirrors the typo for savegame compatibility, and therefore the key's name is unlikely to change
+     * anytime in the near future.
+     *
+     * @since 1.5.0
      */
     public static final @NotNull NamespacedKey GALIMULATOR_FLAG_GRADIENT_VERTICAL_STRIPE = new GalimulatorResourceKey("GRADIENTLVERTICAL_STRIPE");
 

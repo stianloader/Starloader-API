@@ -21,6 +21,7 @@ import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.ActorFleet;
 import de.geolykt.starloader.api.actor.Flagship;
 import de.geolykt.starloader.api.actor.StateActor;
+import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
 import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.gui.FlagComponent;
 
@@ -70,6 +71,24 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public void addTickCallback(TickCallback<ActiveEmpire> callback);
 
     /**
+     * Adds an achievement to the internal list of achievements, provided the achievement
+     * isn't already included in that list.
+     *
+     * @param achievementKey The achievement to add
+     * @since 2.0.0
+     */
+    public void awardAchievement(@NotNull EmpireAchievementType achievement);
+
+    /**
+     * Adds an achievement to the internal list of achievements, provided there isn't already
+     * an achievement with the same registry key.
+     *
+     * @param achievementKey The achievement to add
+     * @since 2.0.0
+     */
+    public void awardAchievement(@NotNull NamespacedKey achievementKey);
+
+    /**
      * Decreases the technology level by one, however creates the appropriate events
      * beforehand and checks whether they have been cancelled or not. Depending on
      * the parameters the player can be notified about the event and the event may
@@ -84,6 +103,15 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @return False if the event got cancelled or if the technology level is at 1
      */
     public boolean decreaseTechnologyLevel(boolean notify, boolean force);
+
+    /**
+     * Obtains an immutable view of the empire's achievements.
+     *
+     * @return An immutable collection backing the list of achievements awarded to the empire
+     * @since 2.0.0
+     */
+    @NotNull
+    public Collection<@NotNull EmpireAchievement> getAchievements();
 
     /**
      * Obtains a collection of the {@link StateActor StateActors} that are
@@ -246,7 +274,6 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @return The amount of ships the empire is allowed to build, <strong>with</strong> modded modifiers
      */
     public double getShipCapacity();
-
     /**
      * Obtains the {@link Vector} of the {@link Actor Actors} that are
      * currently assigned to the empire. The list is backing the internal actor

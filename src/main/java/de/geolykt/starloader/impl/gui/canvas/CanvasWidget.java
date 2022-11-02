@@ -27,7 +27,6 @@ import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.effects.WidgetFadeEffect;
 import snoddasmannen.galimulator.ui.FlowLayout;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
-
 import snoddasmannen.galimulator.ui.Widget;
 
 public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {

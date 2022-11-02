@@ -56,7 +56,6 @@ import de.geolykt.starloader.mod.Extension;
 import snoddasmannen.galimulator.Galemulator;
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.MapMode.MapModes;
-import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Player;
 import snoddasmannen.galimulator.ProceduralStarGenerator;
 import snoddasmannen.galimulator.Scenario;
@@ -165,7 +164,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      */
     @NotNull
     private static MapMode toSLMode(@NotNull MapModes mode) {
-        return (MapMode) (Object) mode;
+        return (MapMode) mode;
     }
 
     @Override
@@ -265,7 +264,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @NotNull
     public Vector<DynastyMember> getFollowedPeopleUnsafe() {
-        return (Vector) (Vector<Person>) Space.v;
+        return (Vector) Space.v;
     }
 
     @Override
@@ -279,6 +278,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return (Map) Space.getMapData();
     }
 
+    @Override
     @Nullable
     @Contract(pure = true)
     public Star getNearestStar(float boardX, float boardY, float searchRadius) {
@@ -369,6 +369,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return SLSoundHandler.getInstance();
     }
 
+    @Override
     @Nullable
     @Contract(pure = true)
     public Star getStarAt(float boardX, float boardY) {
@@ -737,7 +738,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
-        Space.showDialog(((MapData) map).getMetadata(), true, null, false); 
+        Space.showDialog(((MapData) map).getMetadata(), true, null, false);
     }
 
     @Override

@@ -102,7 +102,7 @@ public class OpenGameControlMenu {
         });
         @NotNull Canvas @NotNull[] subcanvases = new @NotNull Canvas[buttons.size() * 2];
         for (int i = 0; i < buttons.size(); i++) {
-            subcanvases[i * 2] = buttons.get(i); 
+            subcanvases[i * 2] = buttons.get(i);
             subcanvases[i * 2 + 1] = cmgr.newCanvas(cmgr.dummyContext(600, 5), CanvasSettings.CHILD_TRANSPARENT);
         }
 

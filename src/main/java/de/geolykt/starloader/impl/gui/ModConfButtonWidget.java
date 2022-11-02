@@ -4,9 +4,9 @@ import de.geolykt.starloader.api.gui.modconf.ModConf;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Space;
-import snoddasmannen.galimulator.ui.class_47;
 import snoddasmannen.galimulator.dialog.DialogButton;
 import snoddasmannen.galimulator.ui.Widget.WIDGET_ID;
+import snoddasmannen.galimulator.ui.class_47;
 
 public class ModConfButtonWidget extends DialogButton {
 
