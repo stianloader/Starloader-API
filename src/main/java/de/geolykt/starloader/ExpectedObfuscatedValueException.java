@@ -36,8 +36,8 @@ public class ExpectedObfuscatedValueException extends IllegalArgumentException {
      * @return The converted mode
      * @throws ExpectedObfuscatedValueException If the cast fails
      */
-    @SuppressWarnings("cast") // Actually needed
-    public static @NotNull MapModes requireMapMode(@NotNull MapMode mode) {
+    @NotNull
+    public static MapModes requireMapMode(@NotNull MapMode mode) {
         if (!(mode instanceof MapModes)) {
             throw new ExpectedObfuscatedValueException();
         }

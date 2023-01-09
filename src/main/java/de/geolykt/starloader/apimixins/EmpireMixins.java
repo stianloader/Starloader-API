@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -80,7 +81,7 @@ public class EmpireMixins implements ActiveEmpire {
     int birthMilliYear; // foundationYear
 
     @Shadow
-    public transient Deque<Star> c; // recentlyLost
+    public transient Deque<Star> recentlyLostStars;
 
     @Shadow
     int capitalId;
@@ -106,7 +107,7 @@ public class EmpireMixins implements ActiveEmpire {
     private Government government;
 
     @Shadow
-    private transient snoddasmannen.galimulator.Alliance h; // alliance
+    private transient snoddasmannen.galimulator.Alliance alliance;
 
     @Shadow
     private transient float j; // averageWealth
@@ -392,7 +393,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public Alliance getAlliance() {
-        return (Alliance) h;
+        return (Alliance) alliance;
     }
 
     @Override
@@ -493,7 +494,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public @NotNull Collection<Star> getRecentlyLostStars() {
-        return new ArrayList<>(c);
+        return new ArrayList<>(recentlyLostStars);
     }
 
     @SuppressWarnings("null")
@@ -631,7 +632,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public void setAlliance(@Nullable Alliance alliance) {
-        h = (snoddasmannen.galimulator.Alliance) alliance;
+        this.alliance = (snoddasmannen.galimulator.Alliance) alliance;
     }
 
     @Override
@@ -658,7 +659,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public void setRecentlyLostStars(@NotNull Deque<Star> stars) {
-        c = NullUtils.requireNotNull(stars);
+        recentlyLostStars = NullUtils.requireNotNull(stars);
     }
 
     @Override
@@ -752,6 +753,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @SuppressWarnings("null")
+    @Unique
     public snoddasmannen.galimulator.@NotNull Empire slapiAsGalimulatorEmpire() {
         return (snoddasmannen.galimulator.@NotNull Empire) (@NotNull Object) this;
     }

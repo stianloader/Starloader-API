@@ -41,7 +41,7 @@ public class AllianceMixins implements Alliance {
 
     @Shadow
     public void a(snoddasmannen.galimulator.Empire var1) {
-        var1.a((snoddasmannen.galimulator.Alliance) (Object) this);
+        var1.setAlliance((snoddasmannen.galimulator.Alliance) (Object) this);
     } // addMember
 
     @Override

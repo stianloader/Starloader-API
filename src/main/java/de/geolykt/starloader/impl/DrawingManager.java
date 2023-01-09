@@ -117,15 +117,15 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     public float drawText(@NotNull String message, float x, float y, @NotNull Color color,
             Drawing.@NotNull TextSize size, @NotNull Camera camera) {
         GalColor galColor = new GalColor(color);
-        // x, y, rotation, pivot, text, color, font, camera
+        // x, y, rotation, pivot, text, color, font, scale, camera
         switch (size) {
         case LARGE:
-            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_BIG, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_BIG, 1.0F, camera);
         case MEDIUM:
-            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_DEFAULT, 1.0F, camera);
         case SMALL:
         default:
-            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_SMALL, camera);
+            return GalFX.drawText(x, y, 0.0F, (Vector3) null, message, galColor, GalFX.FONT_TYPE.MONOTYPE_SMALL, 1.0F, camera);
         }
     }
 

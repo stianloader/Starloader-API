@@ -73,7 +73,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
         @NotNull
         final NamespacedKey nullReligion = NullUtils.provideNull();
         galiImpl.getNeutralEmpire().setReligion(nullReligion);
-        Space.au(); // probably sets up the background effects. Accesses the LET_IT_SNOW setting as well as creating AmbientStarEffect among others
+        Space.setupBackgroundEffects();
         Space.getMapData().getGenerator().prepareGenerator(); // Change the xmax and ymax of the generator area
         Space.regenerateVoronoiCells(); // big calculations with voronoi diagrams
         Space.setBackgroundTaskDescription("Loading galaxy: Reconstructing map metadata");
