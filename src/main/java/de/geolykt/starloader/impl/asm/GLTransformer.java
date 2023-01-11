@@ -42,7 +42,7 @@ public class GLTransformer extends ASMTransformer {
     }
 
     @Override
-    public boolean isValidTraget(@NotNull String internalName) {
+    public boolean isValidTarget(@NotNull String internalName) {
         return !internalName.equals("de/geolykt/starloader/impl/gui/GLScissorState");
     }
 }

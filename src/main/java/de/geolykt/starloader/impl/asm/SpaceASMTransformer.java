@@ -481,7 +481,7 @@ public class SpaceASMTransformer extends ASMTransformer {
     }
 
     @Override
-    public boolean isValidTraget(@NotNull String internalName) {
+    public boolean isValidTarget(@NotNull String internalName) {
         if (!internalName.startsWith("sno")) {
             return false;
         }

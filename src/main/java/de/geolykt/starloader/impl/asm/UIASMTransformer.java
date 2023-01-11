@@ -82,8 +82,7 @@ public final class UIASMTransformer extends ASMTransformer {
     }
 
     @Override
-    public boolean isValidTraget(@NotNull String internalName) {
-        // TODO does this work?
+    public boolean isValidTarget(@NotNull String internalName) {
         return internalName.equals(mainSidebarClass) || internalName.equals(renderItemClass);
     }
 

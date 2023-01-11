@@ -107,7 +107,7 @@ public class StateActorCreatorTransformer extends ASMTransformer {
     }
 
     @Override
-    public boolean isValidTraget(@NotNull String internalName) {
+    public boolean isValidTarget(@NotNull String internalName) {
         return internalName.equals(TARGET_CLASS);
     }
 }
