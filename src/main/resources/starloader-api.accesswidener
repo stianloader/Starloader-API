@@ -31,6 +31,7 @@ accessible      field   snoddasmannen/galimulator/AudioManager                 c
 accessible      field   snoddasmannen/galimulator/AudioManager$AudioSample     sound                Lcom/badlogic/gdx/audio/Sound;
 accessible      field   snoddasmannen/galimulator/Space                        actorSpawnPredicates Ljava/util/ArrayList;
 accessible      field   snoddasmannen/galimulator/Space                        openedWidgets        Ljava/util/Vector;
+accessible      field   snoddasmannen/galimulator/Space                        closedWidgets        Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                        disruptedStars       Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                        corporations         Ljava/util/Vector;
 accessible      field   snoddasmannen/galimulator/Space                        persons              Ljava/util/Vector;

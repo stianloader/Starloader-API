@@ -35,7 +35,6 @@ import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
  */
 public class UIControl {
 
-    private static Canvas gameControlCanvas;
     private static OpenGameControlMenu gameControlMenu;
 
     /**
@@ -50,13 +49,6 @@ public class UIControl {
      * to the official (vanilla) main menu.
      */
     public static void openGameControlMenu() {
-        Canvas c = gameControlCanvas;
-        if (c != null) {
-            if (!c.isOpen()) {
-                Drawing.getInstance().getCanvasManager().openCanvas(c);
-            }
-            return;
-        }
         OpenGameControlMenu ctx = gameControlMenu;
         if (ctx == null) {
             gameControlMenu = ctx = new OpenGameControlMenu();

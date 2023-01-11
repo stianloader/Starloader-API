@@ -117,6 +117,12 @@ public class SLCanvasManager implements CanvasManager {
 
         if (canvas instanceof Widget) {
             Space.closeNonPersistentWidgets(); // Called in Space#showWidget()
+            // When closing and opening a widget on the same frame, disaster can occur.
+            // Furthermore it would make unnecessary framebuffer allocations. In order to prevent dangerous
+            // behaviour, we simply reuse the old widget buffer that was slated for removal.
+            if (widgetWrappers.containsKey(canvas) && Space.closedWidgets.remove(widgetWrappers.get(canvas))) {
+                return canvas;
+            }
             double x = GalFX.getScreenWidth() - canvas.getContext().getWidth() - 120; // Why 120???
             BufferedWidgetWrapper bww = new BufferedWidgetWrapper((Widget) canvas, x, 200.0 /* ?! */, true, alignment);
             widgetWrappers.put(canvas, bww);
