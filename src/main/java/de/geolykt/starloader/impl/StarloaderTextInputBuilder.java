@@ -2,6 +2,7 @@ package de.geolykt.starloader.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,7 +50,19 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     @Nullable
     public InputDialog build() {
         if (Settings.EnumSettings.USE_NATIVE_KEYBOARD.getValue() == Boolean.TRUE) {
-            Gdx.input.getTextInput(new TextInputWrapper(hooks), title, text, hint);
+            List<Consumer<@Nullable String>> surrogate = Collections.singletonList((s) -> {
+                try {
+                    Space.getMainTickLoopLock().acquire(2);
+                    try {
+                        hooks.forEach(c -> c.accept(s));
+                    } finally {
+                        Space.getMainTickLoopLock().release(2);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            Gdx.input.getTextInput(new TextInputWrapper(surrogate), title, text, hint);
             return null;
         }
         // Based on the galactic preview and a few others, might require something better

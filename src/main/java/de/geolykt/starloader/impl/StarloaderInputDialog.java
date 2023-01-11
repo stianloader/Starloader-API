@@ -9,6 +9,7 @@ import com.badlogic.gdx.Input.TextInputListener;
 
 import de.geolykt.starloader.api.gui.InputDialog;
 
+import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.TextInputDialogWidget;
 import snoddasmannen.galimulator.ui.Widget;
 
@@ -64,5 +65,23 @@ public class StarloaderInputDialog extends TextInputDialogWidget implements Inpu
      */
     public void setText(@NotNull String text) {
         super.c = text;
+    }
+
+    @Override
+    public void a(char character) { // TODO deobf
+        if (character == '\r') {
+            try {
+                Space.getMainTickLoopLock().acquire(2);
+                try {
+                    super.a(character);
+                } finally {
+                    Space.getMainTickLoopLock().release(2);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            super.a(character);
+        }
     }
 }

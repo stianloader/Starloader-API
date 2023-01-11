@@ -155,7 +155,7 @@ public class UIControl {
                     }
                     try {
                         Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE)
-                            .saveGameState(new FileOutputStream(name + ".dat"),  "User-issued save", name + ".dat", true);
+                            .saveGameState(new FileOutputStream(name + ".dat"),  "User-issued save", name + ".dat", false);
                     } catch (IOException e) {
                         // Doesn't crash the game yet, but does lead to unexpected behaviour.
                         // let's just assume that any savegame can be saved.
