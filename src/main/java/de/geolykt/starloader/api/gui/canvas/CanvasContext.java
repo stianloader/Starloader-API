@@ -5,8 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.Galimulator.GameImplementation;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.Renderable;
+import de.geolykt.starloader.api.utils.TickLoopLock;
 
 /**
  * An object that is used by a {@link Canvas} to define the width and height of a canvas as well as providing rendering
@@ -70,6 +72,10 @@ public interface CanvasContext {
     /**
      * Called when the user clicks on the canvas.
      * More specifically it is called when the user releases the mouse click.
+     *
+     * <p><b>This method is called on the graphics thread, without obtaining the simulation loop lock.
+     * The graphics loop lock is also not acquired.</b> However, if such thread safety is needed,
+     * {@link TickLoopLock#acquireHardControl()} can be used on {@link GameImplementation#getSimulationLoopLock()}.
      *
      * @param canvasX The X-position of the mouse relative to the canvas. Use for drawing operations.
      * @param canvasY The Y-position of the mouse relative to the canvas. Use for drawing operations.

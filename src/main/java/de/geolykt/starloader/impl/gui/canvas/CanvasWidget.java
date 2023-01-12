@@ -19,6 +19,7 @@ import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
+import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
 import de.geolykt.starloader.impl.gui.GLScissorState;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
 
@@ -29,7 +30,7 @@ import snoddasmannen.galimulator.ui.FlowLayout;
 import snoddasmannen.galimulator.ui.FlowLayout.FlowDirection;
 import snoddasmannen.galimulator.ui.Widget;
 
-public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
+public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, AsyncWidgetInput {
 
     @NotNull
     private final CanvasSettings canvasSettings;
@@ -156,6 +157,11 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas {
     @Override
     public void hover(int x, int y) {
         ctx.onHover(x, y, internalCamera, this);
+    }
+
+    @Override
+    public boolean isAsyncClick() {
+        return true;
     }
 
     @Override
