@@ -30,6 +30,7 @@ import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.NoiseProvider;
 import de.geolykt.starloader.api.utils.RandomNameType;
+import de.geolykt.starloader.api.utils.TickLoopLock;
 
 /**
  * Class to redirect to instance-wide constants or other static
@@ -210,6 +211,15 @@ public final class Galimulator {
         @NotNull
         @Contract(pure = true, value = "-> !null")
         public Iterable<? extends SavegameFormat> getSavegameFormats();
+
+        /**
+         * Obtains the lock on the simulation loop.
+         *
+         * @return The simulation loop {@link TickLoopLock}.
+         * @since 2.0.0
+         */
+        @NotNull
+        public TickLoopLock getSimulationLoopLock();
 
         /**
          * Obtains the currently active {@link SoundHandler}.
@@ -982,6 +992,17 @@ public final class Galimulator {
     @Contract(pure = true, value = "-> !null")
     public static Iterable<? extends SavegameFormat> getSavegameFormats() {
         return impl.getSavegameFormats();
+    }
+
+    /**
+     * Obtains the lock on the simulation loop.
+     *
+     * @return The simulation loop {@link TickLoopLock}.
+     * @since 2.0.0
+     */
+    @NotNull
+    public static TickLoopLock getSimulationLoopLock() {
+        return impl.getSimulationLoopLock();
     }
 
     /**

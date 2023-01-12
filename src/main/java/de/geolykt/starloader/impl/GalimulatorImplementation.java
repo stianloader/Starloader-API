@@ -46,6 +46,7 @@ import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.RandomNameType;
+import de.geolykt.starloader.api.utils.TickLoopLock;
 import de.geolykt.starloader.impl.actors.GlobalSpawningPredicatesContainer;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
 import de.geolykt.starloader.impl.gui.GLScissorState;
@@ -362,6 +363,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @NotNull
     public Iterable<? extends SavegameFormat> getSavegameFormats() {
         return SAVEGAME_FORMATS;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public TickLoopLock getSimulationLoopLock() {
+        return (TickLoopLock) Space.getMainTickLoopLock();
     }
 
     @Override

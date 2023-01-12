@@ -72,6 +72,16 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String saveSyncMethod = "snoddasmannen/galimulator/Space.saveSync(Ljava/lang/String;Ljava/lang/String;)V";
 
+    /**
+     * The remapped name of the "MAIN_TICK_LOOP_LOCK" / Simulation loop lock field.
+     *
+     * @since 2.0.0
+     * @see StarplaneReobfuscateReference
+     */
+    @StarplaneReobfuscateReference
+    @NotNull
+    public static String simLoopLockField = "snoddasmannen/galimulator/Space.MAIN_TICK_LOOP_LOCK Ljava/util/concurrent/Semaphore;";
+
     @StarplaneReobfuscateReference
     @NotNull
     public static String gestureListenerClass = "snoddasmannen/galimulator/GalimulatorGestureListener";
@@ -291,12 +301,14 @@ public class SpaceASMTransformer extends ASMTransformer {
             String saveSyncMethodName = saveSyncMethod.split("[\\.\\(]", 3)[1];
             String spaceDrawMethodName = spaceDrawMethod.split("[\\.\\(]", 3)[1];
             String spaceDrawMethodDesc = '(' + spaceDrawMethod.split("[\\.\\(]", 3)[2];
+            String simLoopLockFieldName = simLoopLockField.split("[ \\.]", 3)[1];
 
             boolean foundTickMethod = false;
             boolean foundEmpireCollapseMethod = false;
             boolean foundSaveSyncMethod = false;
             boolean foundSpaceDrawMethod = false;
             boolean foundSaveGalaxyMethodName = false;
+            boolean foundLoopLockFieldInit = false;
 
             for (MethodNode method : source.methods) {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
@@ -334,6 +346,25 @@ public class SpaceASMTransformer extends ASMTransformer {
                     method.instructions.insertBefore(returnInsn, new InsnNode(Opcodes.ICONST_1)); // load true into the stack
                     method.instructions.insertBefore(returnInsn, insn);
                     foundSaveGalaxyMethodName = true;
+                } else if (method.name.equals("<clinit>") && method.desc.equals("()V")) {
+                    AbstractInsnNode insn = method.instructions.getFirst();
+                    while (insn != null) {
+                        if (insn.getOpcode() == Opcodes.PUTSTATIC) {
+                            FieldInsnNode finsn = (FieldInsnNode) insn;
+                            if (finsn.owner.equals(SPACE_CLASS) && finsn.name.equals(simLoopLockFieldName) && finsn.desc.equals("Ljava/util/concurrent/Semaphore;")) {
+                                InsnList injected = new InsnList();
+                                injected.add(new InsnNode(Opcodes.POP));
+                                injected.add(new TypeInsnNode(Opcodes.NEW, "de/geolykt/starloader/impl/util/SemaphoreLoopLock"));
+                                injected.add(new InsnNode(Opcodes.DUP));
+                                injected.add(new InsnNode(Opcodes.ICONST_2));
+                                injected.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, "de/geolykt/starloader/impl/util/SemaphoreLoopLock", "<init>", "(I)V"));
+                                method.instructions.insertBefore(finsn, injected);
+                                foundLoopLockFieldInit = true;
+                                break;
+                            }
+                        }
+                        insn = insn.getNext();
+                    }
                 }
             }
 
@@ -342,7 +373,8 @@ public class SpaceASMTransformer extends ASMTransformer {
                     foundSaveGalaxyMethodName,
                     foundSaveSyncMethod,
                     foundSpaceDrawMethod,
-                    foundTickMethod
+                    foundTickMethod,
+                    foundLoopLockFieldInit
             };
             for (boolean x : foundStuff) {
                 if (!x) {
