@@ -36,6 +36,7 @@ import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
+import snoddasmannen.galimulator.class_45;
 import snoddasmannen.galimulator.guides.class_0;
 
 public class VanillaSavegameFormat implements SavegameFormat {
@@ -124,7 +125,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
     static synchronized void loadVanillaState(@NotNull InputStream is) throws IOException {
 
         Object readObject;
-        try (ObjectInputStream in = new ObjectInputStream(is)) {
+        try (ObjectInputStream in = new class_45(is)) {
             try {
                 readObject = in.readObject();
             } catch (ClassNotFoundException | IOException e) {
