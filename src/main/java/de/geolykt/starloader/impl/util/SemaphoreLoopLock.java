@@ -1,7 +1,11 @@
 package de.geolykt.starloader.impl.util;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import de.geolykt.starloader.api.utils.TickLoopLock;
 
@@ -9,21 +13,60 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     private static final long serialVersionUID = 3555178371578225965L;
     private final ThreadLocal<MutableInteger> acquisitions = ThreadLocal.withInitial(MutableInteger::new);
+    private static final boolean DEBUG = Boolean.getBoolean("de.geolykt.starloader.impl.util.SemaphoreLoopLock.DEBUG");
+    private static final AtomicLong DEBUG_ID_COUNTER = new AtomicLong();
+    private static final PrintWriter DEBUG_OUT;
+
+    static {
+        if (DEBUG) {
+            PrintWriter pw = null;
+            try {
+                pw = new PrintWriter("SemaphoreLoopLockLog.csv", StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            DEBUG_OUT = pw;
+            writeDebug("transaction_id,transaction_type,count,start,end");
+        } else {
+            DEBUG_OUT = null;
+        }
+    }
 
     public SemaphoreLoopLock(int permits) {
         super(permits);
     }
 
+    private static synchronized void writeDebug(String ln) {
+        DEBUG_OUT.write(ln + "\r\n");
+        DEBUG_OUT.flush();
+    }
+
     @Override
     public void acquire() throws InterruptedException {
-        super.acquire();
-        acquisitions.get().increment();
+        if (DEBUG) {
+            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+            long start = System.currentTimeMillis();
+            super.acquire();
+            acquisitions.get().increment();
+            writeDebug(debugId + ",ACQUIRE_ONE,1," + start+ "," + System.currentTimeMillis());
+        } else {
+            super.acquire();
+            acquisitions.get().increment();
+        }
     }
 
     @Override
     public void acquire(int permits) throws InterruptedException {
-        super.acquire(permits);
-        acquisitions.get().increment(permits);
+        if (DEBUG) {
+            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+            long start = System.currentTimeMillis();
+            super.acquire(permits);
+            acquisitions.get().increment(permits);
+            writeDebug(debugId + ",ACQUIRE," + permits + "," + start+ "," + System.currentTimeMillis());
+        } else {
+            super.acquire(permits);
+            acquisitions.get().increment(permits);
+        }
     }
 
     @Override
@@ -48,14 +91,30 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     @Override
     public void acquireUninterruptibly() {
-        super.acquireUninterruptibly();
-        acquisitions.get().increment();
+        if (DEBUG) {
+            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+            long start = System.currentTimeMillis();
+            super.acquireUninterruptibly();
+            acquisitions.get().increment();
+            writeDebug(debugId + ",ACQUIRE_HARD_ONE,1," + start+ "," + System.currentTimeMillis());
+        } else {
+            super.acquireUninterruptibly();
+            acquisitions.get().increment();
+        }
     }
 
     @Override
     public void acquireUninterruptibly(int permits) {
-        super.acquireUninterruptibly(permits);
-        acquisitions.get().increment(permits);
+        if (DEBUG) {
+            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+            long start = System.currentTimeMillis();
+            super.acquireUninterruptibly(permits);
+            acquisitions.get().increment(permits);
+            writeDebug(debugId + ",ACQUIRE_HARD," + permits + "," + start+ "," + System.currentTimeMillis());
+        } else {
+            super.acquireUninterruptibly(permits);
+            acquisitions.get().increment(permits);
+        }
     }
 
     @Override
