@@ -751,11 +751,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void showScenarioSaveScreen() {
-        OptionChooserWidget var3 = Space.openOptionChooser("Choose slot", "Choose save slot", Space.a("scenarios/Scenario_"), 0, null, true);
+        OptionChooserWidget var3 = Space.openOptionChooser("Choose slot", "Choose save slot", Space.a("scenarios/Scenario_", false), 0, null, true);
         if (var3 != null) {
             var3.registerSelectionListener((selection) -> {
                 String var2 = selection.toString().substring(0, selection.toString().indexOf("\n")) + ".dat";
-                Space.k(var2);
+                Space.j(var2);
             });
         }
     }

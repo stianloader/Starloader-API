@@ -26,9 +26,6 @@ public class GestureListenerASMTransformer extends ASMTransformer {
     private static String onMouseDown = "snoddasmannen/galimulator/ui/Widget.onMouseDown(FF)Z";
 
     @StarplaneReobfuscateReference
-    private static String onMouseUp = "snoddasmannen/galimulator/ui/Widget.onMouseUp(DD)V";
-
-    @StarplaneReobfuscateReference
     private static String target = "snoddasmannen/galimulator/GalimulatorGestureListener";
 
     private boolean valid = true;
@@ -41,7 +38,6 @@ public class GestureListenerASMTransformer extends ASMTransformer {
         String onMouseDownName = onMouseDown.split("[\\.\\(]", 3)[1];
         String widgetClass = onMouseDown.split("[\\.\\(]", 3)[0];
         String containsPointName = containsPoint.split("[\\.\\(]", 3)[1];
-        String onMouseUpName = onMouseUp.split("[\\.\\(]", 3)[1];
         for (MethodNode method : node.methods) {
             // Conveniently the method names and descriptors cannot be obfuscated for inherited methods
             if (!method.name.equals("touchDown") || !method.desc.equals("(FFII)Z")) {
@@ -143,102 +139,23 @@ public class GestureListenerASMTransformer extends ASMTransformer {
             while (insn != null) {
                 if (insn instanceof MethodInsnNode) {
                     MethodInsnNode minsn = (MethodInsnNode) insn;
-                    if (minsn.owner.equals(widgetClass) && minsn.name.equals(onMouseUpName) && minsn.desc.equals("(DD)V")) {
-                        break;
-                    }
-                }
-                insn = insn.getNext();
-            }
-            if (insn == null) {
-                throw new IllegalStateException("Unable to find method!");
-            }
-            MethodInsnNode invokeOnMouseUp = (MethodInsnNode) insn;
-            while (insn != null) {
-                if (insn instanceof MethodInsnNode) {
-                    MethodInsnNode minsn = (MethodInsnNode) insn;
                     if (minsn.owner.equals(widgetClass) && minsn.name.equals(containsPointName) && minsn.desc.equals("(Lcom/badlogic/gdx/math/Vector2;)Z")) {
                         break;
                     }
                 }
-                insn = insn.getPrevious();
+                insn = insn.getNext();
             }
             if (insn == null) {
                 throw new IllegalStateException("Unable to find method!");
             }
             MethodInsnNode invokeContainsPoint = (MethodInsnNode) insn;
-            while (insn != null) {
-                if (insn instanceof MethodInsnNode) {
-                    MethodInsnNode minsn = (MethodInsnNode) insn;
-                    if (minsn.owner.equals("java/util/concurrent/Semaphore") && minsn.name.equals("acquire") && minsn.desc.equals("(I)V")) {
-                        break;
-                    }
-                }
-                insn = insn.getNext();
+            JumpInsnNode jumpNotContains = (JumpInsnNode) invokeContainsPoint.getNext();
+            if (jumpNotContains.getOpcode() != Opcodes.IFEQ) {
+                throw new IllegalStateException("Unexpected opcode");
             }
-            if (insn == null) {
-                throw new IllegalStateException("Unable to find method!");
-            }
-            MethodInsnNode invokeAcquire = (MethodInsnNode) insn;
-            while (insn != null) {
-                if (insn instanceof MethodInsnNode) {
-                    MethodInsnNode minsn = (MethodInsnNode) insn;
-                    if (minsn.owner.equals("java/util/concurrent/Semaphore") && minsn.name.equals("release") && minsn.desc.equals("(I)V")) {
-                        break;
-                    }
-                }
-                insn = insn.getNext();
-            }
-            if (insn == null) {
-                throw new IllegalStateException("Unable to find method!");
-            }
-            MethodInsnNode invokeRelease = (MethodInsnNode) insn;
-            while (insn != null) {
-                if (insn instanceof MethodInsnNode) {
-                    MethodInsnNode minsn = (MethodInsnNode) insn;
-                    if (minsn.owner.equals("java/util/concurrent/locks/ReentrantLock") && minsn.name.equals("unlock") && minsn.desc.equals("()V")) {
-                        break;
-                    }
-                }
-                insn = insn.getPrevious();
-            }
-            if (insn == null) {
-                throw new IllegalStateException("Unable to find method!");
-            }
-            MethodInsnNode invokeUnlock = (MethodInsnNode) insn;
-            insn = invokeOnMouseUp.getNext();
-            while (insn.getOpcode() == -1) {
-                insn = insn.getNext();
-            }
-            VarInsnNode getWidget = (VarInsnNode) insn;
-            if (!((MethodInsnNode) getWidget.getNext()).owner.equals(widgetClass)) {
-                throw new IllegalStateException("Invalid owner");
-            }
-            insn = invokeContainsPoint;
-            while (insn.getOpcode() != Opcodes.IFEQ) {
-                insn = insn.getNext();
-            }
-            JumpInsnNode jumpNotContaining = (JumpInsnNode) insn;
 
-            LabelNode skipA = new LabelNode();
-            LabelNode skipB = new LabelNode();
-            LabelNode pushF = new LabelNode();
-            InsnList injectA = new InsnList();
-            injectA.add(new VarInsnNode(Opcodes.ALOAD, getWidget.var));
-            injectA.add(new TypeInsnNode(Opcodes.INSTANCEOF, "de/geolykt/starloader/impl/gui/AsyncWidgetInput"));
-            injectA.add(new JumpInsnNode(Opcodes.IFEQ, pushF));
-            injectA.add(new VarInsnNode(Opcodes.ALOAD, getWidget.var));
-            injectA.add(new TypeInsnNode(Opcodes.CHECKCAST, "de/geolykt/starloader/impl/gui/AsyncWidgetInput"));
-            injectA.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "de/geolykt/starloader/impl/gui/AsyncWidgetInput", "isAsyncClick", "()Z"));
-            injectA.add(new JumpInsnNode(Opcodes.IFEQ, pushF));
-            injectA.add(new InsnNode(Opcodes.ICONST_1));
-            injectA.add(new JumpInsnNode(Opcodes.GOTO, skipA));
-            injectA.add(pushF);
-            injectA.add(new InsnNode(Opcodes.ICONST_0));
-
-            method.instructions.insert(jumpNotContaining, injectA);
-            method.instructions.insert(invokeAcquire, skipA);
-            method.instructions.insert(invokeUnlock, new JumpInsnNode(Opcodes.IFNE, skipB));
-            method.instructions.insert(invokeRelease, skipB);
+            method.instructions.insert(invokeContainsPoint, new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/impl/asm/TransformCallbacks", "gesturelistener$tap", "(Lsnoddasmannen/galimulator/ui/Widget;Lcom/badlogic/gdx/math/Vector2;)Z"));
+            method.instructions.remove(invokeContainsPoint);
         }
         return true;
     }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Vector2;
 
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
@@ -23,7 +24,7 @@ import snoddasmannen.galimulator.ui.Widget;
  * This has been done to reduce the amount of work required should the names of obfuscated methods
  * change.
  */
-public abstract class SLAbstractWidget extends Widget {
+public abstract class SLAbstractWidget extends Widget implements WidgetMouseReleaseListener {
 
     private volatile boolean basicDrawLock = false;
     private volatile boolean basicMessageLock = false;
@@ -65,10 +66,23 @@ public abstract class SLAbstractWidget extends Widget {
         }
     }
 
+    private void onMouseUp0(double x, double y) {
+        Vector2 position = new Vector2((float) x, (float) y);
+        for(Widget widget : ((Widget) this).getChildWidgets()) {
+            if (!(widget instanceof WidgetMouseReleaseListener)) {
+                continue;
+            }
+            if (widget.containsPoint(position)) {
+                ((WidgetMouseReleaseListener) widget).onMouseUp(x - widget.getX(), y - widget.getY());
+                break;
+            }
+        }
+    }
+
     @Override
     public void onMouseUp(double x, double y) {
         try {
-            super.onMouseUp(x, getHeight() - y);
+            this.onMouseUp0(x, getHeight() - y);
             tap(x, getHeight() - y, false);
         } catch (Exception e) {
             GalimulatorImplementation.crash(e, "Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true);
