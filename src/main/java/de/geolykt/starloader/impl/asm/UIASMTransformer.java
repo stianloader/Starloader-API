@@ -82,6 +82,11 @@ public final class UIASMTransformer extends ASMTransformer {
     }
 
     @Override
+    public int getPriority() {
+        return -9_900;
+    }
+
+    @Override
     public boolean isValidTarget(@NotNull String internalName) {
         return internalName.equals(mainSidebarClass) || internalName.equals(renderItemClass);
     }

@@ -293,6 +293,11 @@ public class SpaceASMTransformer extends ASMTransformer {
     }
 
     @Override
+    public int getPriority() {
+        return -9_900;
+    }
+
+    @Override
     public boolean accept(@NotNull ClassNode source) {
         if (source.name.equals(SPACE_CLASS)) {
             String generateGalaxyMethodName = generateGalaxyMethod.split("[\\.\\(]", 3)[1];

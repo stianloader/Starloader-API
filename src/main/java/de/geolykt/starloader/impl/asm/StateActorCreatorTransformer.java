@@ -102,6 +102,11 @@ public class StateActorCreatorTransformer extends ASMTransformer {
     }
 
     @Override
+    public int getPriority() {
+        return -9_900;
+    }
+
+    @Override
     public boolean isValid() {
         return valid;
     }
