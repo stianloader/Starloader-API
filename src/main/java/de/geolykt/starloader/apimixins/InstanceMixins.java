@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -23,6 +24,7 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.actor.ActorConstructionSiteBeginEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratingEvent;
+import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.impl.actors.SelfDestroyingActor;
@@ -34,6 +36,7 @@ import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.actors.Actor;
 import snoddasmannen.galimulator.actors.ShipFactory;
 import snoddasmannen.galimulator.actors.StateActorCreator;
+import snoddasmannen.galimulator.rendersystem.RenderCache;
 
 /**
  * Mixin to intercept any calls to the static methods within the Galimulator
@@ -45,6 +48,16 @@ public class InstanceMixins {
 
     @Unique
     private static final Logger LOGGER = LoggerFactory.getLogger(Space.class);
+
+    @Inject(at = @At("HEAD"), target = @Desc(value = "draw", args = RenderCache.class))
+    private static void graphicalTickPre(CallbackInfo ci) {
+        EventManager.handleEvent(new GraphicalTickEvent(GraphicalTickEvent.Phase.PRE));
+    }
+
+    @Inject(at = @At("TAIL"), target = @Desc(value = "draw", args = RenderCache.class))
+    private static void graphicalTickPost(CallbackInfo ci) {
+        EventManager.handleEvent(new GraphicalTickEvent(GraphicalTickEvent.Phase.POST));
+    }
 
     @Inject(method = "generateGalaxy", at = @At("HEAD"))
     private static void generateGalaxy(int size, MapData mapData, CallbackInfo ci) {

@@ -30,7 +30,6 @@ import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratedEvent;
-import de.geolykt.starloader.api.event.lifecycle.GraphicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
@@ -101,16 +100,6 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String generateGalaxyMethod = "snoddasmannen/galimulator/Space.generateGalaxy(ILsnoddasmannen/galimulator/MapData;)V";
 
-    /**
-     * The remapped name of the "Space.draw" method.
-     *
-     * @since 2.0.0
-     * @see StarplaneReobfuscateReference
-     */
-    @StarplaneReobfuscateReference
-    @NotNull
-    public static String spaceDrawMethod = "snoddasmannen/galimulator/Space.draw(Lsnoddasmannen/galimulator/rendersystem/RenderCache;)V";
-
     @StarplaneReobfuscateReference
     @NotNull
     public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
@@ -148,20 +137,6 @@ public class SpaceASMTransformer extends ASMTransformer {
         }
         EventManager.handleEvent(e);
         return e.isCancelled();
-    }
-
-    /**
-     * Called at the end of the render method.
-     */
-    public static final void graphicalTickPost() {
-        EventManager.handleEvent(new GraphicalTickEvent(GraphicalTickEvent.Phase.POST));
-    }
-
-    /**
-     * Called at the beginning of the render method.
-     */
-    public static final void graphicalTickPre() {
-        EventManager.handleEvent(new GraphicalTickEvent(GraphicalTickEvent.Phase.PRE));
     }
 
     /**
@@ -304,14 +279,11 @@ public class SpaceASMTransformer extends ASMTransformer {
             String tickMethodName = tickMethod.split("[\\.\\(]", 3)[1];
             String tickMethodDesc = '(' + tickMethod.split("[\\.\\(]", 3)[2];
             String saveSyncMethodName = saveSyncMethod.split("[\\.\\(]", 3)[1];
-            String spaceDrawMethodName = spaceDrawMethod.split("[\\.\\(]", 3)[1];
-            String spaceDrawMethodDesc = '(' + spaceDrawMethod.split("[\\.\\(]", 3)[2];
             String simLoopLockFieldName = simLoopLockField.split("[ \\.]", 3)[1];
 
             boolean foundTickMethod = false;
             boolean foundEmpireCollapseMethod = false;
             boolean foundSaveSyncMethod = false;
-            boolean foundSpaceDrawMethod = false;
             boolean foundSaveGalaxyMethodName = false;
             boolean foundLoopLockFieldInit = false;
 
@@ -319,10 +291,6 @@ public class SpaceASMTransformer extends ASMTransformer {
                 if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
                     addEmpireCollapseListener(method);
                     foundEmpireCollapseMethod = true;
-                } else if (method.name.equals(spaceDrawMethodName) && method.desc.equals(spaceDrawMethodDesc)) {
-                    method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPre", "()V"));
-                    method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "graphicalTickPost", "()V"));
-                    foundSpaceDrawMethod = true;
                 } else if (method.name.equals(tickMethodName) && method.desc.equals(tickMethodDesc)) {
                     addLogicalListener(method);
                     foundTickMethod = true;
@@ -377,7 +345,6 @@ public class SpaceASMTransformer extends ASMTransformer {
                     foundEmpireCollapseMethod,
                     foundSaveGalaxyMethodName,
                     foundSaveSyncMethod,
-                    foundSpaceDrawMethod,
                     foundTickMethod,
                     foundLoopLockFieldInit
             };
