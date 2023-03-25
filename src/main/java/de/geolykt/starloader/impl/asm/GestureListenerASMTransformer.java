@@ -14,19 +14,28 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import com.badlogic.gdx.math.Vector2;
+
+import de.geolykt.starloader.starplane.annotations.MethodDesc;
+import de.geolykt.starloader.starplane.annotations.ReferenceSource;
+import de.geolykt.starloader.starplane.annotations.RemapClassReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference.ReferenceFormat;
 import de.geolykt.starloader.transformers.ASMTransformer;
+
+import snoddasmannen.galimulator.GalimulatorGestureListener;
+import snoddasmannen.galimulator.ui.Widget;
 
 public class GestureListenerASMTransformer extends ASMTransformer {
 
-    @StarplaneReobfuscateReference
-    private static String containsPoint = "snoddasmannen/galimulator/ui/Widget.containsPoint(Lcom/badlogic/gdx/math/Vector2;)Z";
+    @RemapMemberReference(ownerType = Widget.class, name = "containsPoint", methodDesc = @MethodDesc(args = {Vector2.class}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
+    private static String containsPoint = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
-    private static String onMouseDown = "snoddasmannen/galimulator/ui/Widget.onMouseDown(FF)Z";
+    @RemapMemberReference(ownerType = Widget.class, name = "onMouseDown", methodDesc = @MethodDesc(args = {float.class, float.class}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
+    private static String onMouseDown = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
-    private static String target = "snoddasmannen/galimulator/GalimulatorGestureListener";
+    @RemapClassReference(type = GalimulatorGestureListener.class)
+    private static String target = ReferenceSource.getStringValue();
 
     private boolean valid = true;
 

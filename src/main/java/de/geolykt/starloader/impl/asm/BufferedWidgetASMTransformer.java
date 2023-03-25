@@ -12,16 +12,22 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import de.geolykt.starloader.starplane.annotations.ReferenceSource;
+import de.geolykt.starloader.starplane.annotations.RemapClassReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference.ReferenceFormat;
 import de.geolykt.starloader.transformers.ASMTransformer;
+
+import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
+import snoddasmannen.galimulator.ui.Widget;
 
 public class BufferedWidgetASMTransformer extends ASMTransformer {
 
-    @StarplaneReobfuscateReference
-    private static String child = "snoddasmannen/galimulator/ui/BufferedWidgetWrapper.a Lsnoddasmannen/galimulator/ui/Widget;";
+    @RemapMemberReference(ownerType = BufferedWidgetWrapper.class, name = "a", descType = Widget.class, format = ReferenceFormat.COMBINED_LEGACY)
+    private static String child = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
-    private static String target = "snoddasmannen/galimulator/ui/BufferedWidgetWrapper";
+    @RemapClassReference(type = BufferedWidgetWrapper.class)
+    private static String target = ReferenceSource.getStringValue();
 
     private boolean valid = true;
 

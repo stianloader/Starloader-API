@@ -28,7 +28,8 @@ public class Buildscript extends StarloaderStarplaneProject implements Descripti
                     //.addDecompileDep("org.jetbrains", "annotations", "22.0.0", "https://javadoc.io/doc/org.jetbrains/annotations/22.0.0/")
                     .addDependency("de.geolykt.starloader", "mixin", "0.8.5", "https://jenkins.liteloader.com/view/Other/job/Mixin/javadoc/")
                     .addDependency("com.badlogicgames.gdx", "gdx", "1.9.11", "https://libgdx.badlogicgames.com/ci/nightlies/docs/api/")
-                    .addDependency("de.geolykt.starloader", "launcher", "20230122"));
+                    .addDependency("de.geolykt.starloader", "launcher", "20230122")
+                    .addDependency("de.geolykt.starloader", "starplane-annotations", "1.0.0"));
 
         this.getCompileOptions()
             .addRawOption("-Xlint:all")

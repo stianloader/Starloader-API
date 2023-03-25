@@ -17,9 +17,15 @@ import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.SidebarInjector.Orientation;
 import de.geolykt.starloader.api.gui.rendercache.RenderObject;
 import de.geolykt.starloader.impl.SLSidebarInjector;
-import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import de.geolykt.starloader.starplane.annotations.MethodDesc;
+import de.geolykt.starloader.starplane.annotations.ReferenceSource;
+import de.geolykt.starloader.starplane.annotations.RemapClassReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference.ReferenceFormat;
 import de.geolykt.starloader.transformers.ASMTransformer;
 
+import snoddasmannen.galimulator.rendersystem.RenderItem;
+import snoddasmannen.galimulator.ui.SidebarWidget;
 import snoddasmannen.galimulator.ui.Widget;
 
 /**
@@ -39,13 +45,13 @@ public final class UIASMTransformer extends ASMTransformer {
      * The fully classified name of the class that is responsible for
      * the sidebar. Uses the saner ASM-style syntax.
      */
-    @StarplaneReobfuscateReference
+    @RemapClassReference(type = SidebarWidget.class)
     @NotNull
-    public static String mainSidebarClass = "snoddasmannen/galimulator/ui/SidebarWidget";
+    public static String mainSidebarClass = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = SidebarWidget.class, name = "openGameControl", methodDesc = @MethodDesc(args = {}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String openGameControlMethod = "snoddasmannen/galimulator/ui/SidebarWidget.openGameControl()V";
+    public static String openGameControlMethod = ReferenceSource.getStringValue();
 
     /**
      * The fully classified name of the RenderItem class.
@@ -53,9 +59,9 @@ public final class UIASMTransformer extends ASMTransformer {
      *
      * @since 2.0.0
      */
-    @StarplaneReobfuscateReference
+    @RemapClassReference(type = RenderItem.class)
     @NotNull
-    public static String renderItemClass = "snoddasmannen/galimulator/rendersystem/RenderItem";
+    public static String renderItemClass = ReferenceSource.getStringValue();
 
     public static final void sideBarBottom(Object widget) {
         if (widget instanceof Widget && SidebarInjector.getImplementation() instanceof SLSidebarInjector) {

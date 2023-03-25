@@ -9,8 +9,14 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import de.geolykt.starloader.starplane.annotations.MethodDesc;
+import de.geolykt.starloader.starplane.annotations.ReferenceSource;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference.ReferenceFormat;
 import de.geolykt.starloader.transformers.ASMTransformer;
+
+import snoddasmannen.galimulator.Space.ActorSpawningPredicate;
+import snoddasmannen.galimulator.actors.StateActorCreator;
 
 /**
  * An {@link ASMTransformer} which has the only goal to transform the {@link SLInstrinsics} class.
@@ -19,8 +25,8 @@ import de.geolykt.starloader.transformers.ASMTransformer;
  */
 public class SLInstrinsicsTransformer extends ASMTransformer {
 
-    @StarplaneReobfuscateReference
-    private static String predicateConstructor = "snoddasmannen/galimulator/Space$ActorSpawningPredicate.<init>(Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V";
+    @RemapMemberReference(ownerType = ActorSpawningPredicate.class, name = "<init>", methodDesc = @MethodDesc(args = {StateActorCreator.class, float.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
+    private static String predicateConstructor = ReferenceSource.getStringValue();
 
     @Override
     public boolean accept(@NotNull ClassNode node) {

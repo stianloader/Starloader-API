@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.Semaphore;
 
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
@@ -32,11 +33,19 @@ import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapse
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratedEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
-import de.geolykt.starloader.impl.StarplaneReobfuscateReference;
+import de.geolykt.starloader.starplane.annotations.MethodDesc;
+import de.geolykt.starloader.starplane.annotations.ReferenceSource;
+import de.geolykt.starloader.starplane.annotations.RemapClassReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference;
+import de.geolykt.starloader.starplane.annotations.RemapMemberReference.ReferenceFormat;
 import de.geolykt.starloader.transformers.ASMTransformer;
 
+import snoddasmannen.galimulator.GalimulatorGestureListener;
+import snoddasmannen.galimulator.MapData;
+import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.Star;
 import snoddasmannen.galimulator.interface_10;
 
 /**
@@ -57,33 +66,33 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SpaceASMTransformer.class);
 
-    @StarplaneReobfuscateReference
     @NotNull
-    public static String mapModeShowsActorsMethod = "snoddasmannen/galimulator/MapMode$MapModes.getShowsActors()Z";
+    @RemapMemberReference(ownerType = MapModes.class, name = "getShowsActors" /* Interesting name */, methodDesc = @MethodDesc(args = {}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
+    public static String mapModeShowsActorsMethod = ReferenceSource.getStringValue();
 
     /**
      * The remapped name of the "saveSync" method.
      *
      * @since 2.0.0
-     * @see StarplaneReobfuscateReference
+     * @see RemapMemberReference
      */
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = Space.class, name = "saveSync", methodDesc = @MethodDesc(args = {String.class, String.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String saveSyncMethod = "snoddasmannen/galimulator/Space.saveSync(Ljava/lang/String;Ljava/lang/String;)V";
+    public static String saveSyncMethod = ReferenceSource.getStringValue();
 
     /**
      * The remapped name of the "MAIN_TICK_LOOP_LOCK" / Simulation loop lock field.
      *
      * @since 2.0.0
-     * @see StarplaneReobfuscateReference
+     * @see RemapMemberReference
      */
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = Space.class, name = "MAIN_TICK_LOOP_LOCK", descType = Semaphore.class, format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String simLoopLockField = "snoddasmannen/galimulator/Space.MAIN_TICK_LOOP_LOCK Ljava/util/concurrent/Semaphore;";
+    public static String simLoopLockField = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
+    @RemapClassReference(type = GalimulatorGestureListener.class)
     @NotNull
-    public static String gestureListenerClass = "snoddasmannen/galimulator/GalimulatorGestureListener";
+    public static String gestureListenerClass = ReferenceSource.getStringValue();
 
     /**
      * The internal name of the class that this transformer seeks to modify.
@@ -94,29 +103,29 @@ public class SpaceASMTransformer extends ASMTransformer {
      * The remapped name of the "generateGalaxy" method.
      *
      * @since 2.0.0
-     * @see StarplaneReobfuscateReference
+     * @see RemapMemberReference
      */
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = Space.class, name = "generateGalaxy", methodDesc = @MethodDesc(args = {int.class, MapData.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String generateGalaxyMethod = "snoddasmannen/galimulator/Space.generateGalaxy(ILsnoddasmannen/galimulator/MapData;)V";
+    public static String generateGalaxyMethod = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = Star.class, name = "renderRegion", desc = "()V", format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String starRenderOverlayMethod = "snoddasmannen/galimulator/Star.renderRegion()V";
+    public static String starRenderOverlayMethod = ReferenceSource.getStringValue();
 
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = Space.class, name = "tickCount", descType = int.class, format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String tickCountField = "snoddasmannen/galimulator/Space.tickCount I";
+    public static String tickCountField = ReferenceSource.getStringValue();
 
     /**
      * The remapped name of the "tick" method.
      *
      * @since 2.0.0
-     * @see StarplaneReobfuscateReference
+     * @see RemapMemberReference
      */
-    @StarplaneReobfuscateReference
+    @RemapMemberReference(ownerType = Space.class, name = "tick", desc = "()I", format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String tickMethod = "snoddasmannen/galimulator/Space.tick()I";
+    public static String tickMethod = ReferenceSource.getStringValue();
 
     /**
      * The internal name of the class you are viewing right now right here.
