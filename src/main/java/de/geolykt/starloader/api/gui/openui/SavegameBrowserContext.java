@@ -105,7 +105,7 @@ public class SavegameBrowserContext implements CanvasContext {
     @Override
     public void onScroll(int canvasX, int canvasY, @NotNull Camera camera, int amount,
             @NotNull Canvas canvas) {
-        this.scrollValue -= amount;
+        this.scrollValue += amount;
     }
 
     /**

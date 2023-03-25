@@ -418,7 +418,7 @@ public class StarMixins implements Star {
 
     @Override
     public void setNeighbours(@NotNull Vector<Star> neighbours) {
-        neighbours = NullUtils.requireNotNull(neighbours);
+        this.neighbours = NullUtils.requireNotNull(neighbours);
     }
 
     @Shadow

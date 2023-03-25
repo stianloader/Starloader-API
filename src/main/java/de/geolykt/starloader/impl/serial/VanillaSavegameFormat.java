@@ -34,10 +34,11 @@ import de.geolykt.starloader.impl.GalimulatorImplementation;
 import snoddasmannen.galimulator.DeviceConfiguration;
 import snoddasmannen.galimulator.EmploymentAgency;
 import snoddasmannen.galimulator.GalFX;
+import snoddasmannen.galimulator.Person;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.SpaceState;
 import snoddasmannen.galimulator.class_45;
-import snoddasmannen.galimulator.guides.class_0;
+import snoddasmannen.galimulator.guides.LandmarkManager;
 
 public class VanillaSavegameFormat implements SavegameFormat {
 
@@ -51,7 +52,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
         Galimulator.GameImplementation galiImpl = Galimulator.getImplementation();
         Galimulator.Unsafe unsafe = galiImpl.getUnsafe();
 
-        // Many magic methods and stuff. See Space#i(String) (as of galimulator-4.9-STABLE)
+        // Many magic methods and stuff. See Space#loadState(String) (as of galimulator-5.0-BETA.?)
         Space.setBackgroundTaskDescription("Loading galaxy: Regenerating regions");
 
         HashMap<Integer, Star> uidToStar = new HashMap<>();
@@ -96,7 +97,8 @@ public class VanillaSavegameFormat implements SavegameFormat {
             star.setAssignedEmpire(owner);
         }
 
-        Space.ap(); // setup quad trees
+        Space.naiveRestoreQuadtree(); // setup quad trees
+
         if (unsafe.getAlliancesUnsafe() == null) {
             unsafe.setAlliancesUnsafe(new Vector<>());
         } else {
@@ -112,9 +114,14 @@ public class VanillaSavegameFormat implements SavegameFormat {
             if (member.isFollowed()) {
                 followedMembers.add(member);
             }
+            if (((Person) member).getJob() != null) {
+                ((Person) member).getJob().a(((Person) member));
+            }
         }
+
         unsafe.setFollowedPeopleUnsafe(followedMembers);
-        class_0.b();
+
+        LandmarkManager.regenerateLandmarks();
 
         Space.getMapData().getGenerator().onLoad();
         GalFX.m.zoom = GalFX.e();
