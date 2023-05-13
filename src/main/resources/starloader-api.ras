@@ -1,0 +1,72 @@
+RAS v1 std
+
+# Methods
+ all        0               ACC_PROTECTED   snoddasmannen/galimulator/rendersystem/RenderItem       b                       ()Lsnoddasmannen/galimulator/rendersystem/RenderItem$RenderCategory;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/AudioManager                  f                       ()V
+ all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/EmpireSpecial                 <init>                  (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/EmploymentAgency$Local1       <init>                  (Lsnoddasmannen/galimulator/EmploymentAgency;ILjava/util/Collection;Lsnoddasmannen/galimulator/Job;)V
+ all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/FlagItem$BuiltinSymbols       <init>                  (Ljava/lang/String;ILjava/lang/String;ZII)V
+ all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/MapMode$MapModes              <init>                  (Ljava/lang/String;ILjava/lang/String;Z)V
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         setupBackgroundEffects  ()V
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    <init>                  (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/ArrayList;)V
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/GalFX                         c                       (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
+ runtime    0               ACC_PUBLIC      snoddasmannen/galimulator/Space$ActorSpawningPredicate  <init>                  (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
+
+# Fields
+ all        ACC_PRIVATE     ACC_PUBLIC      com/example/Main                                        shortcuts               Ljava/util/List;
+ all        ACC_PRIVATE     ACC_PUBLIC      com/example/Main                                        application             Lcom/badlogic/gdx/backends/lwjgl/LwjglApplication;
+ all        0               ACC_PROTECTED   snoddasmannen/galimulator/rendersystem/RenderItem       b                       Lcom/badlogic/gdx/math/Rectangle;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/ui/OptionChooserWidget        d                       J
+ all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/ui/TextInputDialogWidget      c                       Ljava/lang/String;
+ all        ACC_PROTECTED   ACC_PUBLIC      snoddasmannen/galimulator/ui/Widget                     layout                  Lsnoddasmannen/galimulator/ui/WidgetLayout;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/AudioManager                  a                       Lsnoddasmannen/galimulator/class_4;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/AudioManager                  b                       I
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/AudioManager                  c                       Ljava/util/ArrayList;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/AudioManager$AudioSample      sound                   Lcom/badlogic/gdx/audio/Sound;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         actorSpawnPredicates    Ljava/util/ArrayList;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         alliances               Ljava/util/Vector;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         an                      Ljava/util/ArrayList;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         ay                      Z
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         closedWidgets           Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         corporations            Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         disruptedStars          Ljava/util/Vector;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         mapData                 Lsnoddasmannen/galimulator/MapData;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         milliYear               I
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         maxXCache               F
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         maxYCache               F
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         openedWidgets           Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         p                       Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         persons                 Ljava/util/Vector;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         player                  Lsnoddasmannen/galimulator/Player;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         transcended             I
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    actors                  Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    alliances               Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    artifacts               Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    borders                 Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    corporations            Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    disruptedStars          Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    empires                 Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    employmentAgency        Lsnoddasmannen/galimulator/EmploymentAgency;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    stars                   Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    persons                 Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    quests                  Ljava/util/Vector;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    vanity                  Lsnoddasmannen/galimulator/VanityHolder;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Star                          starRenderingRegion     Lcom/badlogic/gdx/graphics/g2d/PolygonSprite;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Galemulator                   h                       Ljava/lang/String;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/GalFX                         RENDERCACHE_LOCAL       Ljava/lang/ThreadLocal;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/GalFX                         m                       Lcom/badlogic/gdx/graphics/OrthographicCamera;
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/GalFX                         v                       Z
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/War                           e1                      Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/War                           e2                      Lsnoddasmannen/galimulator/Lazy$EmpireLazy;
+
+# Classes
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/EmploymentAgency$Local1
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/EmploymentAgency$Local2
+ all        ACC_FINAL       0               snoddasmannen/galimulator/FlagItem$BuiltinSymbols
+ all        ACC_FINAL       0               snoddasmannen/galimulator/MapMode$MapModes
+ all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space$ActorSpawningPredicate
+
+# Compile-time hacks
+ build      ACC_ENUM        0               snoddasmannen/galimulator/EmpireSpecial
+ build      ACC_ENUM        0               snoddasmannen/galimulator/FlagItem$BuiltinSymbols
+ build      ACC_ENUM        0               snoddasmannen/galimulator/MapMode$MapModes

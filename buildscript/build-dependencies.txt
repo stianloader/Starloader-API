@@ -1,5 +1,0 @@
-0
-https://geolykt.de/maven/de/geolykt/starloader/sl-deobf/0.0.2/sl-deobf-0.0.2.jar	ede94763413d0e0d14d7ee6bde25223aaadf7524	sl-deobf-0.0.2.jar	true
-https://maven.quiltmc.org/repository/snapshot/org/quiltmc/quiltflower/1.9.0-SNAPSHOT/quiltflower-1.9.0-20221022.175037-195.jar	6c025e2c50b28d278c085b5c864adb12852d2bbf	quiltflower-1.9.0-20221022.175037-195.jar	true
-
-starplane.jar		ignored	starplane-b0.jar	true

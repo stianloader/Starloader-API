@@ -1,0 +1,109 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+    id 'gsl-starplane' version '0.1.0'
+}
+
+group 'de.geolykt'
+def archivesBaseName = 'starloader-api'
+version '2.0.0-SNAPSHOT'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
+
+repositories {
+    maven {
+        name 'geolykt'
+        url 'https://geolykt.de/maven'
+    }
+    mavenCentral()
+    mavenLocal()
+}
+
+starplane {
+    withRAS(rootProject.file("src/main/resources/starloader-api.ras"))
+}
+
+deployMods {
+    // No external mods need to be used as of yet
+}
+
+runMods {
+    from components["java"]
+    debug false
+}
+
+configurations {
+    compileOnlyApi.extendsFrom(galimulatorDependencies)
+}
+
+dependencies {
+    // The launcher - the heart of this project
+    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230513"
+    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230513"
+
+    compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
+    compileOnlyApi "org.jetbrains:annotations:24.0.1"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.ow2.asm:asm-util:9.5'
+}
+
+javadoc {
+    options {
+        addBooleanOption('html5', true)
+        tags("apiNote:a:API Notice:", "implSpec:a:Implementation Specification:", "implNote:a:Implementation Notice:")
+        links "https://docs.oracle.com/en/java/javase/16/docs/api/"
+    }
+
+    // see https://stackoverflow.com/a/56641766
+    doLast {
+        // Append the fix to the file
+        def searchScript = new File(destinationDir, '/search.js')
+        searchScript.append '\n\n' +
+            'getURLPrefix = function(ui) {\n' +
+            '    return \'\';\n' +
+            '};\n'
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+remap {
+    archiveClassifier = 'remapped'
+    dependsOn jar
+    from jar
+}
+
+build {
+    dependsOn remap
+}
+
+publishing {
+    publications {
+        plugin(MavenPublication) { publication ->
+            groupId project.group
+            artifactId project.archivesBaseName
+            version '2.0.0-SNAPSHOT'
+
+            from components['java']
+
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        mavenLocal()
+        /*maven {
+            url = "/home/Geolykt/maven-alt/repo/"
+        }*/
+    }
+}
