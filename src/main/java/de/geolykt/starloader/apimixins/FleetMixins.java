@@ -43,6 +43,7 @@ public class FleetMixins implements ActorFleet {
         ships.forEach(action);
     }
 
+    @SuppressWarnings("null")
     @Override
     public Collection<StateActor> getActors() {
         return Collections.unmodifiableCollection(ships);

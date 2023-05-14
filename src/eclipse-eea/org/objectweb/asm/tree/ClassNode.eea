@@ -1,0 +1,4 @@
+class org/objectweb/asm/tree/ClassNode
+name
+ Ljava/lang/String;
+ L1java/lang/String;

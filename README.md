@@ -22,23 +22,17 @@ that may arise (for example overwriting static methods) via our Event API.
 
 Warning: **Building SLAPI requires Java 16 or above**
 
-The project must be built through our fork of brachyura. This can be easily done
-by calling `java -jar brachyura-bootstrap-0.jar build`. It will be located in the
+The project can be built via gradle as you are used to. Simply running
+`./gradlew build` on UNIX (on Windows you'd want to use `gradlew.bat`) will
+build the project and everything else that you need. The output will be in the
 `build/libs` folder.
 
 ### IDE Support
 
-The command to generate Eclipse and VSCode project files is
-
-    java -jar brachyura-bootstrap-0.jar jdt
-
-Similarly the command to create IntelliJ project files is
-
-    java -jar brachyura-bootstrap-0.jar idea
-
-And for netbeans you should use
-
-    java -jar brachyura-bootstrap-0.jar netbeans
+Simply import this repo as a gradle project and you are set to go!
+If you want to debug this mod within your eclipse IDE you can run the
+`genEclipseRuns` task - which generates the `runMods.launch` file that
+you can run in order to debug the starloader api.
 
 ### Maven
 
@@ -78,9 +72,6 @@ area stuff. Additionally the code is linking against code that doesn't have a
 known license, which means that it is more legal grey area actions! Although for
 latter I did get a not really legally valid permisson, so it's not much to
 worry about.
-
-`buildscript/starplane.jar` is licensed under the BSD 2-Clause "Simplified"
-License.
 
 ## Event API example
 

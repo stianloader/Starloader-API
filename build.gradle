@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'gsl-starplane' version '0.1.0'
+    id 'eclipse'
 }
 
 group 'de.geolykt'
@@ -22,6 +23,7 @@ repositories {
 
 starplane {
     withRAS(rootProject.file("src/main/resources/starloader-api.ras"))
+    eclipseEEA = rootProject.file("src/eclipse-eea")
 }
 
 deployMods {
