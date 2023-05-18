@@ -1,6 +1,7 @@
 package de.geolykt.starloader.apimixins;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +19,11 @@ public class SettingsscreenMixins {
 
     @Inject(method = "getItems", at = @At("TAIL"))
     public void getItems(CallbackInfoReturnable<ArrayList<Object>> ci) {
-        ci.getReturnValue().add(new ModConfButtonWidget("Mod Settings", GalColor.WHITE, GalColor.WHITE, "Mods"));
-        ci.getReturnValue().add(new UsertestSelection("Run Usertests", GalColor.WHITE, GalColor.WHITE, "Mods"));
+        List<Object> ret = ci.getReturnValue();
+        if (ret == null) {
+            throw new IllegalStateException("ci#getReturnValue yielded null.");
+        }
+        ret.add(new ModConfButtonWidget("Mod Settings", GalColor.WHITE, GalColor.WHITE, "Mods"));
+        ret.add(new UsertestSelection("Run Usertests", GalColor.WHITE, GalColor.WHITE, "Mods"));
     }
 }

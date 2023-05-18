@@ -41,8 +41,10 @@ configurations {
 
 dependencies {
     // The launcher - the heart of this project
-    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230513"
-    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230513"
+    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230514"
+    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230514"
+
+    compileOnly "de.geolykt.starloader:micromixin-annotations:0.0.1-SNAPSHOT"
 
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
     compileOnlyApi "org.jetbrains:annotations:24.0.1"
@@ -79,14 +81,14 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-remap {
+remapJar {
     archiveClassifier = 'remapped'
-    dependsOn jar
-    from jar
+    dependsOn classes
+    from jar.getSource()
 }
 
 build {
-    dependsOn remap
+    dependsOn remapJar
 }
 
 publishing {

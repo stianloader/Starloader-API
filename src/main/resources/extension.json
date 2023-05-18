@@ -3,6 +3,6 @@
   "name": "StarloaderAPI",
   "version": "2.0.0-SNAPSHOT",
   "mixinConfig": "api-mixins.json",
-  "reversibleAccessWidener": "starloader-api.accesswidener",
+  "reversibleAccessSetter": "starloader-api.ras",
   "dependencies": [ ]
 }

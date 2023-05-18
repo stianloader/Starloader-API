@@ -17,7 +17,6 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
-import org.spongepowered.asm.mixin.Shadow;
 
 /**
  * Checks for the integrity of the api mixins classes.
@@ -25,7 +24,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public class TestMixins {
 
     /**
-     * Checks whether there are an assignments on {@link Shadow} fields
+     * Checks whether there are an assignments on {@link org.spongepowered.asm.mixin.Shadow} fields
      * where it does not belong. (i. e. the initial starting value of these fields
      * should be not altered)
      *
