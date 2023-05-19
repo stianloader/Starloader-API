@@ -17,7 +17,7 @@ public interface Screen extends Iterable<Map.Entry<Vector2, ScreenComponent>> {
     /**
      * Adds a child component to this screen.
      * Note: while this method might look attractive, some implementations may not support it.
-     * {@link ScreenBuilder} exposes {@link ScreenBuilder#addComponentProvider(ComponentProvider)},
+     * {@link ScreenBuilder} exposes {@link ScreenBuilder#addComponentSupplier(ComponentSupplier)},
      * which you may want to use instead.
      *
      * @param child The child component to add

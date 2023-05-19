@@ -74,7 +74,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * Adds an achievement to the internal list of achievements, provided the achievement
      * isn't already included in that list.
      *
-     * @param achievementKey The achievement to add
+     * @param achievement The achievement to add
      * @since 2.0.0
      */
     public void awardAchievement(@NotNull EmpireAchievementType achievement);
@@ -274,11 +274,12 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @return The amount of ships the empire is allowed to build, <strong>with</strong> modded modifiers
      */
     public double getShipCapacity();
+
     /**
      * Obtains the {@link Vector} of the {@link Actor Actors} that are
      * currently assigned to the empire. The list is backing the internal actor
      * list, which is why it should NOT be modified directly. Use
-     * {@link #addActor(Actor)} or {@link #removeActor(Actor)} instead.
+     * {@link #addActor(StateActor)} or {@link #removeActor(StateActor)} instead.
      *
      * @return A {@link Vector} of the {@link Actor Actors} that are
      *         assigned to the empire.

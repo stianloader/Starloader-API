@@ -220,9 +220,10 @@ public interface DrawingImpl {
     public RendercacheUtils getRendercacheUtils();
 
     /**
-     * Obtains the {@link BitmapFont} that corresponds to the "SPACE" font type (returned by {@link #getFonts()} and
-     * used for {@link #getFontBitmap(String)}. As of the latest galimulator 5.0 alpha build for October 15th 2022,
-     * the concrete font used is "Signika2.fnt", located in the "data/fonts" directory.
+     * Obtains the {@link BitmapFont} that corresponds to the "SPACE" font type (returned by
+     * {@link #getAvailiableFonts()} and used for {@link #getFontBitmap(String)}. As of the latest galimulator
+     * 5.0 alpha build for October 15th 2022, the concrete font used is "Signika2.fnt", located in the
+     * "data/fonts" directory.
      *
      * <p>Should for whatever reason the font type not exist in future galimulator releases, an adequate replacement
      * needs to be returned - this method shouldn't throw an exception.
@@ -234,9 +235,9 @@ public interface DrawingImpl {
     public BitmapFont getSpaceFont();
 
     /**
-     * Obtains the instance's {@link TextFactory}.
+     * Obtains the instance's {@link de.geolykt.starloader.api.gui.text.TextFactory}.
      *
-     * @return The {@link TextFactory} bound to the implementation
+     * @return The {@link de.geolykt.starloader.api.gui.text.TextFactory} bound to the implementation
      * @deprecated The Text API is deprecated and marked for removal
      */
     @Deprecated(forRemoval = true, since = "2.0.0")

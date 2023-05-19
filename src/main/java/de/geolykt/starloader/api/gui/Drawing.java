@@ -292,10 +292,10 @@ public final class Drawing {
     }
 
     /**
-     * Obtains the instance's {@link TextFactory}.
+     * Obtains the instance's {@link de.geolykt.starloader.api.gui.text.TextFactory}.
      *
-     * @return The {@link TextFactory} bound to the implementation
-     * @deprecated The Text/Component API was deprecated for removal, without a proper replacement.
+     * @return The {@link de.geolykt.starloader.api.gui.text.TextFactory} bound to the implementation
+     * @deprecated The Text/Component API is deprecated for removal, without a planned replacement API.
      */
     @Deprecated(forRemoval = true, since = "2.0.0")
     @NotNull

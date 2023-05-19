@@ -4,9 +4,9 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.serial.MetadataCollector;
+import de.geolykt.starloader.api.serial.SavegameFormat;
 
 /**
  * Event that is fired when a Galaxy is about to save.
@@ -52,8 +52,9 @@ public class GalaxySavingEvent extends Event {
      * Obtains the location where the savegame will be saved. The file will be relative to the current working directory
      * and may not exist at this point of time (as this event is called just before the game is actually saved).
      * It will likely be created later on.
-     * This however may also equal to "unspecified" if {@link #isNatural()} is set to false,
-     * as the {@link Galimulator#saveGameState(java.io.OutputStream)} does not control what is done with the savegame.
+     * This however may also equal to "unspecified" if saved via a {@link SavegameFormat} implementation as
+     * {@link SavegameFormat#saveGameState(java.io.OutputStream, String, String, boolean)} does not control what
+     * is done with the savegame.
      *
      * @return The location of the save game
      * @since 1.5.0

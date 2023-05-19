@@ -117,8 +117,8 @@ public class SavegameBrowserContext implements CanvasContext {
      */
     @NotNull
     @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
-    public SavegameBrowserContext addSavegames(@NotNull List<@NotNull Savegame> savegame) {
-        this.savegames.addAll(savegame);
+    public SavegameBrowserContext addSavegames(@NotNull List<@NotNull Savegame> savegames) {
+        this.savegames.addAll(savegames);
         return this;
     }
 

@@ -94,9 +94,9 @@ public abstract class ScreenBuilder {
      * returned instance should always be newly created and may not be cached.
      * Requires {@link #setTitle(String)} to be invoked before this method as otherwise
      * it will throw an exception.
-     * While not required, it is recommend to use {@link #addComponentProvider(ComponentProvider)}
+     * While not required, it is recommend to use {@link #addComponentSupplier(ComponentSupplier)}
      * beforehand as otherwise the screen will have no components to display. Additionally,
-     * calling addComponentProvider(ComponentProvider) does not have any effects to
+     * calling addComponentSupplier(ComponentSupplier) does not have any effects to
      * the newly created screen if the method was called after build().
      *
      * @return The newly created screen instance

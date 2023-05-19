@@ -29,8 +29,8 @@ public interface Dynbind {
 
     /**
      * The description of the key. This is exposed to the user, so it should be user friendly.
-     * Other than with the {@link Keybind} class, this method cannot return null as there is no
-     * way to tell what the used character is.
+     * This method cannot return null as there would otherwise be no method to indicate what key
+     * should be pressed.
      *
      * @return The description of the key(s) used by this keybind
      */

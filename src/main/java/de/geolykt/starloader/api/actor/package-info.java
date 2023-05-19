@@ -1,11 +1,9 @@
 /**
  * Actor "Wrapper" APIs. These are used so API methods that consume or return Actors
  * can still be used without having to rely on the galimulator jar.
- * Note that unlike other API interfaces like {@link de.geolykt.starloader.api.empire.ActiveEmpire} or
- * {@link de.geolykt.starloader.api.empire.Star}.
- * They are not fully guaranteed to be extended by either galimulator or starloader and extension
- * may choose to extend themselves (at their own cost).
- * If Extensions choose to do so, they should consider the use of the
- * {@link de.geolykt.starloader.api.actor.wrapped.ActorWrapper} class.
+ * Note that like other API interfaces like {@link de.geolykt.starloader.api.empire.ActiveEmpire} or
+ * {@link de.geolykt.starloader.api.empire.Star} extensions should not implement any API interfaces
+ * themselves unless they know what they are doing (at which point the galimulator Actor class
+ * or a subclass thereof should be extended too).
  */
 package de.geolykt.starloader.api.actor;

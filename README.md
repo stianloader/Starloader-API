@@ -20,7 +20,7 @@ that may arise (for example overwriting static methods) via our Event API.
 
 ## Building
 
-Warning: **Building SLAPI requires Java 16 or above**
+Warning: **Building SLAPI requires Java 11 or above**
 
 The project can be built via gradle as you are used to. Simply running
 `./gradlew build` on UNIX (on Windows you'd want to use `gradlew.bat`) will

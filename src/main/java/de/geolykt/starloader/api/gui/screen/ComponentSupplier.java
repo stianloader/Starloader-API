@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A basic component provider interface that allows to dynamically create objects.
- * Unlike {@link ComponentProvider} this interface also passes the instance of the instance
+ * Unlike the former ComponentProvider this interface also passes the instance of the instance
  * of the screen that it is being used on, which makes this interface much more viable.
  *
  * @since 1.5.0

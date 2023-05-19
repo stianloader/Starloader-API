@@ -685,7 +685,7 @@ public final class Galimulator {
          * SLAPI makes no effort in wrapping the underlying data structure until it is
          * implemented in a functional manner.
          *
-         * @param cooperations The internal list of cooperations
+         * @param corporations The internal list of corporations
          * @since 2.0.0
          */
         public void setCorporationsUnsafe(Vector<?> corporations);

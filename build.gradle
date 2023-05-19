@@ -57,7 +57,7 @@ javadoc {
     options {
         addBooleanOption('html5', true)
         tags("apiNote:a:API Notice:", "implSpec:a:Implementation Specification:", "implNote:a:Implementation Notice:")
-        links "https://docs.oracle.com/en/java/javase/16/docs/api/"
+        links "https://docs.oracle.com/en/java/javase/17/docs/api/"
     }
 
     // see https://stackoverflow.com/a/56641766

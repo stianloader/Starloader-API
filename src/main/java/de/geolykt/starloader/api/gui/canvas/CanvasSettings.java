@@ -43,7 +43,7 @@ public final class CanvasSettings {
      *
      * @since 2.0.0
      * @implNote While the semantics of the {@link Color} class mean that this {@link Color} instance can be modified,
-     * it is recommended to not modify it if you are looking to create your own Look & Feel. Some mods may copy the
+     * it is recommended to not modify it if you are looking to create your own Look &amp; Feel. Some mods may copy the
      * value of this field or not use this field at all ({@link #DEFAULT_SEMISOLID} uses an independent instance).
      * As such is may cause some somewhat annoying edge-case behaviour.
      */
