@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +67,7 @@ public class InstanceMixins {
 
     @Overwrite
     public static boolean loadState(String location) {
-        Path path = Path.of(location);
+        Path path = Paths.get(location);
         if (Files.notExists(path)) {
             LOGGER.info("Savegame file does not exist: " + location);
             return false;
@@ -79,9 +80,6 @@ public class InstanceMixins {
         Space.setBackgroundTaskDescription("Loading galaxy");
 
         boolean successful = true;
-        if (path == null) {
-            throw new InternalError();
-        }
         try (InputStream is = Files.newInputStream(path)) {
             Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).loadGameState(is);
         } catch (Throwable t) {

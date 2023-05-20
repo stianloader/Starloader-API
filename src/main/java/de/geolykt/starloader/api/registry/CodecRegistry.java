@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.serial.Codec;
@@ -101,7 +102,8 @@ public class CodecRegistry extends Registry<Codec<?>> {
 
     @Override
     @Nullable
-    @Deprecated(forRemoval = false, since = "1.1.0")
+    @DeprecatedSince("1.1.0")
+    @Deprecated
     public Codec<?> getIntern(@NotNull String key) {
         throw new UnsupportedOperationException("The Registry#getIntern operation is not applicable to codec registries!");
     }
@@ -117,7 +119,8 @@ public class CodecRegistry extends Registry<Codec<?>> {
      */
     @Override
     @NotNull
-    @Deprecated(forRemoval = false, since = "2.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public Codec<?> nextValue(@NotNull Codec<?> value) {
         throw new UnsupportedOperationException("The Registry#nextValue operation is not applicable to codec registries!");
     }
@@ -136,7 +139,8 @@ public class CodecRegistry extends Registry<Codec<?>> {
      */
     @SuppressWarnings("unchecked")
     @Override
-    @Deprecated(forRemoval = false, since = "2.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void register(@NotNull NamespacedKey key, @NotNull Codec<?> value) {
         register(key, (Codec<Void>) value, (Class<Void>) null);
     }

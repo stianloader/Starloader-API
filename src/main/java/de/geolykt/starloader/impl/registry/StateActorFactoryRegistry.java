@@ -81,7 +81,7 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
             return;
         }
         int valueslen = super.values == null ? 0 : super.values.length;
-        var temp = new @NotNull StateActorFactory<?>[valueslen + 1];
+        @NotNull StateActorFactory<?>[] temp = new @NotNull StateActorFactory<?>[valueslen + 1];
         if (valueslen != 0) {
             System.arraycopy(super.values, 0, temp, 0, valueslen);
         }

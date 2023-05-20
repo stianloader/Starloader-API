@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
@@ -42,7 +44,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @NotNull
     private static final CanvasManager CANVAS_MANAGER = new SLCanvasManager();
 
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     private static final de.geolykt.starloader.impl.text.@NotNull StarloaderTextFactory TEXT_FACTORY = new de.geolykt.starloader.impl.text.StarloaderTextFactory();
 
     private Collection<String> fonts;
@@ -130,7 +134,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
         SpriteBatch drawBatch = getMainDrawingBatch();
         boolean beganDrawing = false;
@@ -246,7 +252,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public de.geolykt.starloader.api.gui.text.@NotNull TextFactory getTextFactory() {
         return TEXT_FACTORY;
     }
@@ -269,7 +277,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text) {
         Space.a(new FormattedBulletinWrapper(text));
     }

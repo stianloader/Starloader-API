@@ -3,14 +3,18 @@ package de.geolykt.starloader.impl.text;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.Drawing;
 
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public class JitterTextComponent extends ColoredTextComponent {
 
     protected final float intensity;

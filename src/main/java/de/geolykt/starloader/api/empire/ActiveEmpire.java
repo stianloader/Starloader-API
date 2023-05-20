@@ -6,12 +6,14 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Vector;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Metadatable;
@@ -286,7 +288,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @deprecated This method violates several design choices that
      * are now commonly used. Use {@link #getActors()} instead.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     @NotNull
     public Vector<Actor> getSLActors();
 

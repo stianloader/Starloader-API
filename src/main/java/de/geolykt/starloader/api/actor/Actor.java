@@ -2,8 +2,10 @@ package de.geolykt.starloader.api.actor;
 
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.Locateable;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
@@ -114,7 +116,9 @@ public interface Actor extends Identifiable, Dateable, Locateable, ColorTextured
      * @deprecated This method will be offloaded to an enum or something comparable as the implementation of this method
      * is very poorly maintained
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public boolean isEmperorBuildable();
 
     /**
@@ -132,7 +136,9 @@ public interface Actor extends Identifiable, Dateable, Locateable, ColorTextured
      * @deprecated This method will be offloaded to an enum or something comparable as the implementation of this method
      * is very poorly maintained
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public boolean isSandboxBuildable();
 
     /**

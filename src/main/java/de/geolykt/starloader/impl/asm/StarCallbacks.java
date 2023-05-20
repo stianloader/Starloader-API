@@ -1,5 +1,7 @@
 package de.geolykt.starloader.impl.asm;
 
+import java.util.function.Function;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Color;
@@ -38,7 +40,7 @@ public class StarCallbacks {
         MapMode mapMode = Galimulator.getActiveMapmode();
         if (mapMode instanceof SLMapMode) {
             SLMapMode slmapmode = (SLMapMode) mapMode;
-            var fun = slmapmode.getStarOverlayRegionColorFunction();
+            Function<de.geolykt.starloader.api.empire.@NotNull Star, Color> fun = slmapmode.getStarOverlayRegionColorFunction();
             if (fun != null) {
                 Color c = fun.apply((de.geolykt.starloader.api.empire.Star) galimulatorStar);
                 if (c != null) {

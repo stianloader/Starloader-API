@@ -4,12 +4,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.math.Vector2;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.InternalRandom;
@@ -202,7 +204,9 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @deprecated This method violates several core design principles that were developed
      * later on in the developer lifecycle, use {@link #getNeighbourList()} instead.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     @NotNull
     public Vector<Star> getNeighbours();
 
@@ -272,7 +276,9 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @deprecated The naming of this method is nonsensical. Use {@link #isNeighbour(Star)}
      * instead.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public boolean hasNeighbour(@NotNull Star star);
 
     /**

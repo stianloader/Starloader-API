@@ -2,10 +2,13 @@ package de.geolykt.starloader.api;
 
 import java.awt.image.BufferedImage;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Texture;
+
+import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * Represents a map that can be loaded into the game.
@@ -22,7 +25,9 @@ public interface Map {
      * @deprecated It is best to move away from AWT, especially because this method
      * does not always work. Use {@link #getGDXBackground()} instead.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     @Nullable
     public BufferedImage getAWTBackground();
 

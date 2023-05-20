@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui;
 
+import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -95,7 +96,7 @@ final class SLScreenWidgetPopulator implements Iterator<Map.Entry<Vector2, Scree
         // The components to do not have margins between each other.
         // I believe this isn't an issue as the components can make their margins themselves.
         Vector2 loc = new Vector2(beginX, y);
-        return Map.entry(loc, component);
+        return new AbstractMap.SimpleImmutableEntry<>(loc, component);
     }
 
     @Override

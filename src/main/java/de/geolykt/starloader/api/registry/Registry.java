@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.DebugNagException;
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.StateActorFactory;
@@ -139,7 +140,8 @@ public abstract class Registry<T> {
      * @since 1.1.0
      * @deprecated This is internal API not meant for non-internal use.
      */
-    @Deprecated(forRemoval = false, since = "1.1.0")
+    @DeprecatedSince("1.1.0")
+    @Deprecated
     @Nullable
     public T getIntern(@NotNull String key) {
         return keyedValuesIntern.get(key);

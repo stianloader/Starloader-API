@@ -1,10 +1,15 @@
 package de.geolykt.starloader.impl;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 
 import snoddasmannen.galimulator.TextBulletin;
 
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public class FormattedBulletinWrapper extends TextBulletin {
 
     private final FormattedText text;

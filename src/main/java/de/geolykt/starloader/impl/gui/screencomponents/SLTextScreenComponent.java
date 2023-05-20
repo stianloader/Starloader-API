@@ -3,10 +3,12 @@ package de.geolykt.starloader.impl.gui.screencomponents;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
@@ -21,7 +23,9 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
  * @deprecated Alongside the fact that the screen API's days are numbered, the Text API has been deprecated for
  * removal, making this class nonsensical.
  */
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public class SLTextScreenComponent implements TextScreenComponent {
 
     protected FormattedText currentText;

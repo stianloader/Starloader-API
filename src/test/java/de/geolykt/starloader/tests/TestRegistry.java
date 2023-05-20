@@ -1,11 +1,11 @@
 package de.geolykt.starloader.tests;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -25,19 +25,15 @@ import org.objectweb.asm.tree.MethodNode;
  */
 public class TestRegistry {
 
-    @SuppressWarnings("serial")
-    private static final HashSet<String> ENUMS = new HashSet<>() {
-        {
-            add("snoddasmannen/galimulator/AudioManager$AudioSample.class");
-            add("snoddasmannen/galimulator/EmpireSpecial.class");
-            add("snoddasmannen/galimulator/EmpireState.class");
-            add("snoddasmannen/galimulator/MapMode$MapModes.class");
-            add("snoddasmannen/galimulator/weapons/WeaponsFactory.class");
-            add("snoddasmannen/galimulator/FlagItem$BuiltinSymbols.class");
-            add("snoddasmannen/galimulator/Religion.class");
-            add("snoddasmannen/galimulator/EmpireAchievement$EmpireAchievementType.class");
-        }
-    };
+    private static final Set<String> ENUMS = new HashSet<>(Arrays.asList(
+            "snoddasmannen/galimulator/AudioManager$AudioSample.class",
+            "snoddasmannen/galimulator/EmpireSpecial.class",
+            "snoddasmannen/galimulator/EmpireState.class",
+            "snoddasmannen/galimulator/MapMode$MapModes.class",
+            "snoddasmannen/galimulator/weapons/WeaponsFactory.class",
+            "snoddasmannen/galimulator/FlagItem$BuiltinSymbols.class",
+            "snoddasmannen/galimulator/Religion.class",
+            "snoddasmannen/galimulator/EmpireAchievement$EmpireAchievementType.class"));
 
     private <@NotNull T extends Enum<T>> void requireRegistryCompleteness(ClassNode node, InputStream enumStream) throws Exception {
         ClassNode enumNode = new ClassNode(Opcodes.ASM9);
@@ -69,22 +65,18 @@ public class TestRegistry {
      */
     @Test
     public void testRegistryCompleteness() throws Exception {
-        URL url = ClassLoader.getSystemResource("de/geolykt/starloader/impl/registry/Registries.class");
-        @SuppressWarnings("null")
-        File registriesClass = new File(url.toURI());
-
-        ClassNode clazzNode = new ClassNode(Opcodes.ASM9);
-        FileInputStream fis = new FileInputStream(registriesClass);
-        ClassReader reader = new ClassReader(fis);
-        fis.close();
-        reader.accept(clazzNode, 0);
+        ClassNode classNode = new ClassNode(Opcodes.ASM9);
+        try (InputStream is = ClassLoader.getSystemResourceAsStream("de/geolykt/starloader/impl/registry/Registries.class")) {
+            ClassReader reader = new ClassReader(is);
+            reader.accept(classNode, 0);
+        }
 
         JarFile galimulatorJar = new JarFile(new File("build/gsl-starplane/galimulator-remapped.jar"));
         for (Enumeration<JarEntry> entries = galimulatorJar.entries(); entries.hasMoreElements();) {
             JarEntry entry = entries.nextElement();
             if (ENUMS.contains(entry.getName())) {
                 InputStream stream = galimulatorJar.getInputStream(entry);
-                requireRegistryCompleteness(clazzNode, stream);
+                requireRegistryCompleteness(classNode, stream);
                 stream.close();
             }
         }

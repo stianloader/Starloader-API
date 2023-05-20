@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerChooseOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
@@ -37,7 +38,7 @@ public class NamedIntegerChooserComponent extends LabeledStringChooserComponent 
     @Override
     public void a(final String o) {
         if ("Custom".equals(o)) {
-            var builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(option.get().toString()), option.getName());
+            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(option.get().toString()), option.getName());
             builder.addHook(text -> {
                 Double d;
                 try {

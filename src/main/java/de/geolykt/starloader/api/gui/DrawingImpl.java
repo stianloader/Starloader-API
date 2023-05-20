@@ -2,6 +2,7 @@ package de.geolykt.starloader.api.gui;
 
 import java.util.Collection;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
@@ -136,7 +138,9 @@ public interface DrawingImpl {
      * <br>It is advisable to migrate to {@link AsyncRenderer#fillRect(double, double, double, double, Color, Camera)},
      * although one would need to beware that width and height may be affected by the camera there.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera);
 
     /**
@@ -161,7 +165,9 @@ public interface DrawingImpl {
      * @deprecated Bridges to {@link AsyncRenderer#fillWindow(float, float, float, float, Color, Camera)},
      * which should be preferred over this method as this method will eventually be removed.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public default void fillWindow(float x, float y, float width, float height, @NotNull Color color,
             @NotNull Camera camera) {
         AsyncRenderer.fillWindow(x, y, width, height, color, camera);
@@ -240,7 +246,9 @@ public interface DrawingImpl {
      * @return The {@link de.geolykt.starloader.api.gui.text.TextFactory} bound to the implementation
      * @deprecated The Text API is deprecated and marked for removal
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public de.geolykt.starloader.api.gui.text.@NotNull TextFactory getTextFactory();
 
     /**
@@ -274,7 +282,9 @@ public interface DrawingImpl {
      * to this method. If you wish to use colored text in your bulletins, use GDX Color escapes
      * such has "[red]this text is red![] While this one is in the standard color."
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text);
 
     /**

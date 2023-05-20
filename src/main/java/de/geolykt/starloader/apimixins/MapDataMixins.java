@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.badlogic.gdx.graphics.Texture;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
@@ -32,7 +34,9 @@ public class MapDataMixins implements Map {
     private StarGenerator generator;
 
     @Override
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     @Nullable
     public BufferedImage getAWTBackground() {
         String backgroundImage = this.backgroundImage;

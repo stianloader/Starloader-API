@@ -1,20 +1,25 @@
 package de.geolykt.starloader.impl.text;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public class StarloaderComponentBuilder implements ComponentBuilder {
 
     @SuppressWarnings("null")
@@ -36,7 +41,7 @@ public class StarloaderComponentBuilder implements ComponentBuilder {
     @Override
     @NotNull
     public ComponentBuilder addJitter(@NotNull Color color, double intensity) {
-        jitter.add(Map.entry(color, intensity));
+        jitter.add(new AbstractMap.SimpleImmutableEntry<>(color, intensity));
         return this;
     }
 

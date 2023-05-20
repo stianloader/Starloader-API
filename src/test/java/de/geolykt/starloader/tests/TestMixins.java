@@ -1,11 +1,20 @@
 package de.geolykt.starloader.tests;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
@@ -33,16 +42,36 @@ public class TestMixins {
     @Test
     public void testNoShadowAssignments() throws Exception {
         URL url = ClassLoader.getSystemResource("de/geolykt/starloader/apimixins");
-        @SuppressWarnings("null")
-        File[] children = new File(url.toURI()).listFiles((dir, name) -> !name.equals("package-info.class") && name.endsWith(".class"));
-        if (children == null || children.length == 0) {
+        List<InputStream> childStreams = new ArrayList<>();
+        JarFile toClose = null;
+        if (url.getFile().indexOf('!') != -1) {
+            JarFile file = new JarFile(URLDecoder.decode(url.getFile().substring(url.getFile().indexOf(":") + 1, url.getFile().indexOf("!")), StandardCharsets.UTF_8.name()));
+            Enumeration<JarEntry> entries = file.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                if (entry.getName().endsWith("package-info.class") || !entry.getName().endsWith(".class")) {
+                    continue;
+                }
+                childStreams.add(file.getInputStream(entry));
+            }
+            toClose = file;
+        } else {
+            @SuppressWarnings("null")
+            File root = new File(url.toURI());
+            File[] rootChild = root.listFiles((dir, name) -> !name.equals("package-info.class") && name.endsWith(".class"));
+            if (rootChild != null) {
+                for (File f : rootChild) {
+                    childStreams.add(Files.newInputStream(f.toPath()));
+                }
+            }
+        }
+        if (childStreams.size() == 0) {
             throw new Exception("Unable to obtain mixin classes");
         }
-        for (File mixinClass : children) {
+        for (InputStream mixinStream : childStreams) {
             ClassNode clazzNode = new ClassNode(Opcodes.ASM9);
-            FileInputStream fis = new FileInputStream(mixinClass);
-            ClassReader reader = new ClassReader(fis);
-            fis.close();
+            ClassReader reader = new ClassReader(mixinStream);
+            mixinStream.close();
             reader.accept(clazzNode, 0);
             Set<Map.Entry<String, String>> annotatedFields = new HashSet<>();
             for (FieldNode field : clazzNode.fields) {
@@ -50,7 +79,7 @@ public class TestMixins {
                 if (field.visibleAnnotations != null) {
                     for (AnnotationNode annot : field.visibleAnnotations) {
                         if (annot.desc.equals("Lorg/spongepowered/asm/mixin/Shadow;")) {
-                            annotatedFields.add(Map.entry(field.name, field.desc));
+                            annotatedFields.add(new AbstractMap.SimpleImmutableEntry<>(field.name, field.desc));
                             hasAnnot = true;
                             break; // short-circuit
                         }
@@ -71,7 +100,7 @@ public class TestMixins {
                         if (instruction instanceof FieldInsnNode && (instruction.getOpcode() == Opcodes.PUTFIELD || instruction.getOpcode() == Opcodes.PUTSTATIC)) {
                             FieldInsnNode fieldInsn = (FieldInsnNode) instruction;
                             if (fieldInsn.owner.equals(clazzNode.name)
-                                    && annotatedFields.contains(Map.entry(fieldInsn.name, fieldInsn.desc))) {
+                                    && annotatedFields.contains(new AbstractMap.SimpleImmutableEntry<>(fieldInsn.name, fieldInsn.desc))) {
                                 throw new AssertionError(clazzNode.name + "." + fieldInsn.name + " " + fieldInsn.desc
                                         + " is annotated as @Shadow but has a starting value.");
                             }
@@ -80,6 +109,9 @@ public class TestMixins {
                     }
                 }
             }
+        }
+        if (toClose != null) {
+            toClose.close();
         }
     }
 }

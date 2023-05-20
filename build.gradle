@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'gsl-starplane' version '0.1.0'
+    id 'me.champeau.mrjar' version '0.1.1'
     id 'eclipse'
 }
 
@@ -10,7 +11,9 @@ group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
 version '2.0.0-SNAPSHOT'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '11'
+multiRelease {
+    targetVersions 8, 9
+}
 
 repositories {
     maven {
@@ -53,6 +56,14 @@ dependencies {
     testImplementation 'org.ow2.asm:asm-util:9.5'
 }
 
+// Yes, we are using Java 11 to build. But actually Java 8 for compilation.
+// However, the javadoc tool is absolutely bricked with Java 8 - so we straight up use Java 17.
+tasks.withType(Javadoc) {
+    javadocTool = javaToolchains.javadocToolFor {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 javadoc {
     options {
         addBooleanOption('html5', true)
@@ -83,8 +94,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 remapJar {
     archiveClassifier = 'remapped'
-    dependsOn classes
-    from jar.getSource()
+    fromJar jar
 }
 
 build {

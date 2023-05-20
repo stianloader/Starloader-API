@@ -1,5 +1,9 @@
 package de.geolykt.starloader.api.player;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+
+import de.geolykt.starloader.DeprecatedSince;
+
 import snoddasmannen.galimulator.diplomacy.PlayerRequest;
 
 /**
@@ -7,7 +11,9 @@ import snoddasmannen.galimulator.diplomacy.PlayerRequest;
  *
  * Wrapper container class for diplomatic requests.
  */
-@Deprecated(forRemoval = true, since = "1.2.0")
+@ScheduledForRemoval
+@DeprecatedSince("1.2.0")
+@Deprecated
 // TODO do it!
 // FIXME OUTDATED!
 public final class DiplomacyRequests {

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 
 /**
@@ -153,7 +155,9 @@ public class BasicDialogBuilder {
      * the GUI thread, migrate to {@link #buildAndShowNow()}. If you are running this method outside
      * the GUI thread use {@link #buildAndShow(Consumer)} or {@link #show()}.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     @NotNull
     public BasicDialog buildAndShow() {
         return new de.geolykt.starloader.impl.BasicDialog(title, description, choices, closeListeners, actionListeners,

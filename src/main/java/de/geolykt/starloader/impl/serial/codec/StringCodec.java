@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.serial.Codec;
+import de.geolykt.starloader.impl.JavaInterop;
 
 /**
  * Built-in coder for encoding {@link String Strings} as UTF-8 strings
@@ -44,6 +45,6 @@ public class StringCodec extends Codec<@NotNull String> {
     @Override
     @NotNull
     public String decode(@NotNull DataInputStream input) throws IOException {
-        return decode(input.readAllBytes());
+        return decode(JavaInterop.readAllBytes(input));
     }
 }

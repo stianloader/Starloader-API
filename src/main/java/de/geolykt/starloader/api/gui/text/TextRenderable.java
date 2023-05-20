@@ -1,9 +1,11 @@
 package de.geolykt.starloader.api.gui.text;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.Renderable;
 
 /**
@@ -12,7 +14,9 @@ import de.geolykt.starloader.api.gui.Renderable;
  * of canvases is a much more mature alternative. In retrospect, the Text API was rushed and
  * did not make much sense in galimulator space.
  */
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public interface TextRenderable extends Renderable {
 
     /**

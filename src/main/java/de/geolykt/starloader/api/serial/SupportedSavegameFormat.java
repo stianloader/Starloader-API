@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.serial;
 
+import de.geolykt.starloader.DeprecatedSince;
+
 /**
  * Enumeration of all supported built-in formats that are implemented by SLAPI.
  *
@@ -22,6 +24,7 @@ public enum SupportedSavegameFormat {
      * @deprecated The vanilla format is only supported for backwards compatibility reasons. Usage not actually
      * recommended as it does not support saving persistent metadata.
      */
-    @Deprecated(since = "2.0.0", forRemoval = false)
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     VANILLA;
 }

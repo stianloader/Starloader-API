@@ -21,7 +21,7 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
         if (DEBUG) {
             PrintWriter pw = null;
             try {
-                pw = new PrintWriter("SemaphoreLoopLockLog.csv", StandardCharsets.UTF_8);
+                pw = new PrintWriter("SemaphoreLoopLockLog.csv", StandardCharsets.UTF_8.name());
             } catch (IOException e) {
                 e.printStackTrace();
             }

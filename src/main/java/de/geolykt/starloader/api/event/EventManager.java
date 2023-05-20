@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.DebugNagException;
+import de.geolykt.starloader.impl.JavaInterop;
 
 // I'm open to a refractor for both efficiency and convenience
 public final class EventManager {
@@ -50,7 +51,7 @@ public final class EventManager {
                     DebugNagException.nag("Cannot make method " + method + " accessible as it is static, which is not supported!");
                     continue;
                 }
-                if (!method.canAccess(listener) && !method.trySetAccessible()) {
+                if (!JavaInterop.canAccess(method, listener) && !JavaInterop.trySetAccessible(method)) {
                     DebugNagException.nag("Cannot make method " + method + " accessible!");
                     continue;
                 }

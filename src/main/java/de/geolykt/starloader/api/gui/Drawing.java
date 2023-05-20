@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.gui;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
@@ -182,7 +184,9 @@ public final class Drawing {
      * <br>It is advisable to migrate to {@link AsyncRenderer#fillRect(double, double, double, double, Color, Camera)},
      * although one would need to beware that width and height may be affected by the camera there.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
         implementation.fillRect(x, y, width, height, fillColor, camera);
     }
@@ -210,7 +214,9 @@ public final class Drawing {
      * @deprecated Bridges to {@link AsyncRenderer#fillWindow(float, float, float, float, Color, Camera)},
      * which should be preferred over this method as this method will eventually be removed
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static void fillWindow(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera) {
         AsyncRenderer.fillWindow(x, y, width, height, color, camera);
     }
@@ -297,7 +303,9 @@ public final class Drawing {
      * @return The {@link de.geolykt.starloader.api.gui.text.TextFactory} bound to the implementation
      * @deprecated The Text/Component API is deprecated for removal, without a planned replacement API.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     @NotNull
     public static de.geolykt.starloader.api.gui.text.TextFactory getTextFactory() {
         return implementation.getTextFactory();
@@ -352,7 +360,9 @@ public final class Drawing {
      * to this method. If you wish to use colored text in your bulletins, use GDX Color escapes
      * such has "[red]this text is red![] While this one is in the standard color."
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text) {
         implementation.sendBulletin(text);
     }

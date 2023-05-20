@@ -2,10 +2,12 @@ package de.geolykt.starloader.impl.text;
 
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
@@ -14,7 +16,9 @@ import de.geolykt.starloader.api.gui.text.TextFactory;
 
 import snoddasmannen.galimulator.GalFX;
 
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public class StarloaderTextFactory implements TextFactory {
 
     @Override

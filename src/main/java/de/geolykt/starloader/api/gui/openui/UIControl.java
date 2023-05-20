@@ -4,7 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -62,7 +64,7 @@ public class UIControl {
             return;
         }
         new BasicDialogBuilder("Overwrite savegame", "Do you really wish to overwrite your savegame?")
-            .setChoices(List.of("Yes", "No"))
+            .setChoices(Arrays.asList("Yes", "No"))
             .addCloseListener((cause, selection) -> {
                 if (selection == null || !selection.equalsIgnoreCase("yes")) {
                     return;
@@ -105,7 +107,7 @@ public class UIControl {
         });
 
         try {
-            Path savegameDir = Path.of("").toAbsolutePath();
+            Path savegameDir = Paths.get("").toAbsolutePath();
             List<Path> savegames = Files.walk(savegameDir, 1)
                     .filter(p -> p.getFileName().toString().endsWith(".dat"))
                     .distinct()
@@ -173,7 +175,7 @@ public class UIControl {
         });
 
         try {
-            Path savegameDir = Path.of("").toAbsolutePath();
+            Path savegameDir = Paths.get("").toAbsolutePath();
             List<Path> savegames = Files.walk(savegameDir, 1)
                     .filter(p -> p.getFileName().toString().endsWith(".dat"))
                     .distinct()

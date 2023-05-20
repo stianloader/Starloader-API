@@ -56,7 +56,7 @@ public abstract class StateActorMixins extends ActorMixins implements de.geolykt
     private void sanitizeCurrentLocation() {
         // SLAPI: use distSq instead of dist - avoiding a Math#sqrt call
         if (this.location == null || getDistSq(this.location) > 0.01D) {
-            var oldLocation = this.location;
+            snoddasmannen.galimulator.Star oldLocation = this.location;
             this.location = Space.findStarNear(this.getX(), this.getY(), Space.getMaxX() * 200.0F, (snoddasmannen.galimulator.Empire) null);
             if (oldLocation != this.location) {
                 this.guide.arrivedAt(this.location);

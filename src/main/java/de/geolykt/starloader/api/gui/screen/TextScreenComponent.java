@@ -1,7 +1,9 @@
 package de.geolykt.starloader.api.gui.screen;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 
 /**
@@ -11,7 +13,9 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
  * @deprecated Alongside the fact that the screen API's days are numbered, the Text API has been deprecated for
  * removal, making this class nonsensical.
  */
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public interface TextScreenComponent extends ScreenComponent {
 
     /**

@@ -1,6 +1,9 @@
 package de.geolykt.starloader.api.gui.screen;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
+
+import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * Metadata class for the {@link ScreenComponent} interface that dictates how line wrapping should behave
@@ -44,7 +47,9 @@ public class LineWrappingInfo {
      * @deprecated The name of this method contains a typo, use {@link #wrapDifferentType} instead.
      */
     @NotNull
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static LineWrappingInfo wrapDifferyType() {
         return wrapDifferentType();
     }

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
@@ -38,7 +39,7 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
     @Override
     public void a(final String o) {
         if ("Custom".equals(o.toString()) && !(option instanceof StringChooseOption)) {
-            var builder = Drawing.textInputBuilder("Change value of setting", option.get(), option.getName());
+            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", option.get(), option.getName());
             if (option instanceof StrictStringOption) {
                 builder.addHook(text -> {
                     if (text == null) {

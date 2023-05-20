@@ -4,12 +4,14 @@ import java.util.Objects;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NullUtils;
 
 /**
@@ -23,7 +25,9 @@ public abstract class ScreenBuilder {
      *
      * @deprecated The type of this field has been deprecated for removal.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     private static ComponentCreator componentCreator;
 
     /**
@@ -51,7 +55,9 @@ public abstract class ScreenBuilder {
      * @throws NullPointerException If the component creator was not set.
      * @deprecated The return type has been deprecated for removal.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static @NotNull ComponentCreator getComponentCreator() {
         return NullUtils.requireNotNull(componentCreator);
     }
@@ -62,7 +68,9 @@ public abstract class ScreenBuilder {
      * @param componentCreator The new valid ComponentCreator.
      * @deprecated The return type has been deprecated for removal.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static void setComponentCreator(@NotNull ComponentCreator componentCreator) {
         ScreenBuilder.componentCreator = Objects.requireNonNull(componentCreator);
     }
@@ -111,7 +119,9 @@ public abstract class ScreenBuilder {
      * @param gdxColor The color to use as an GDX Color. It will get transformed into Galimulator's internal Color type later on.
      * @deprecated This method does not follow the proper builder pattern.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void setHeaderColor(@NotNull Color gdxColor) {
         withHeaderColor(gdxColor);
     }
@@ -126,7 +136,9 @@ public abstract class ScreenBuilder {
      * @param enabled Whether to enable the header.
      * @deprecated This method does not follow the proper builder pattern.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void setHeaderEnabled(boolean enabled) {
         withHeaderEnabled(enabled);
     }
@@ -140,7 +152,9 @@ public abstract class ScreenBuilder {
      * @param title The title of the screen.
      * @deprecated This method does not follow the proper builder pattern.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void setTitle(@NotNull String title) {
         withTitle(title);
     }
@@ -154,7 +168,9 @@ public abstract class ScreenBuilder {
      * @param width The width of the screen.
      * @deprecated This method does not follow the proper builder pattern.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void setWidth(int width) {
         withWidth(width);
     }
@@ -171,7 +187,9 @@ public abstract class ScreenBuilder {
      * @param width The width of the screen.
      * @deprecated This method does not follow the proper builder pattern.
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public void setWidthProvider(@Nullable IntSupplier width) {
         withWidthProvider(width);
     }

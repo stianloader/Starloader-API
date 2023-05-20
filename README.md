@@ -36,6 +36,8 @@ you can run in order to debug the starloader api.
 
 ### Maven
 
+Warning: **Publishing SLAPI requires Java 17 or above** (Javadocs needs it)
+
 You can use the maven package `de.geolykt:starloader-api:CURRENT_VERSION_HERE`
 at `https://geolykt.de/maven`
 

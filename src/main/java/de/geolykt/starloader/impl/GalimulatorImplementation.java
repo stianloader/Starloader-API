@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.example.Main;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.Starloader;
 import de.geolykt.starloader.api.Galimulator;
@@ -141,14 +143,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             builder.append("Cause (for beginners): " + cause + "\n");
             builder.append("Installed mods:\n");
             for (Extension ext : Starloader.getExtensionManager().getExtensions()) {
-                // (We use .repeat() to trick our checkstyle config because I have slightly misconfigured it)
-                builder.append(" ".repeat(4) + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
+                builder.append("    " + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
             }
             builder.append("\nStacktrace:\n");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             sw.flush();
-            builder.append(sw.getBuffer().toString().replace("\n", "\n" + " ".repeat(4)));
+            builder.append(sw.getBuffer().toString().replace("\n", "\n    "));
             listener.h = "[LIME]" + builder.toString();
             for (String s : builder.toString().split("\n")) {
                 LoggerFactory.getLogger("CrashReporter").error(s);
@@ -300,7 +301,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public @Nullable ActiveEmpire getPlayerEmpire() {
-        var plyr = Space.getPlayer();
+        snoddasmannen.galimulator.Player plyr = Space.getPlayer();
         if (plyr == null) {
             // It likely can never be null, however before the map is generated,
             // this might return null, so we are going to make sure just in case.
@@ -335,7 +336,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             return null; // Empty stream - what gives?
         }
         if (BoilerplateSavegameFormat.FORMAT_HEADER.length <= offset
-                && Arrays.equals(header, 0, BoilerplateSavegameFormat.FORMAT_HEADER.length, BoilerplateSavegameFormat.FORMAT_HEADER, 0, BoilerplateSavegameFormat.FORMAT_HEADER.length)) {
+                && JavaInterop.equals(header, 0, BoilerplateSavegameFormat.FORMAT_HEADER.length, BoilerplateSavegameFormat.FORMAT_HEADER, 0, BoilerplateSavegameFormat.FORMAT_HEADER.length)) {
             return BoilerplateSavegameFormat.INSTANCE;
         }
         // I am quite sure that the ObjectOutputStream leaves behind some form of header too, but I am too lazy to go that route.
@@ -393,7 +394,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings({ "null" })
     @Override
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public @NotNull List<@NotNull Star> getStars() {
         return getStarsUnsafe();
     }
@@ -421,7 +424,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    @Deprecated(forRemoval = false, since = "1.5.0")
+    @DeprecatedSince("1.5.0")
+    @Deprecated
     public Galimulator.@NotNull Unsafe getUnsafe() {
         return this;
     }
@@ -578,11 +582,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public void saveFile(@NotNull String name, InputStream data) {
+    public void saveFile(@NotNull String name, @NotNull InputStream data) {
         File out = new File(DataFolderProvider.getProvider().provideAsFile(), NullUtils.requireNotNull(name));
         if (!out.exists()) {
             try (FileOutputStream fos = new FileOutputStream(out)) {
-                data.transferTo(fos);
+                JavaInterop.transferTo(data, fos);
                 fos.flush();
             } catch (IOException e) {
                 e.printStackTrace();

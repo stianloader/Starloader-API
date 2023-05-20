@@ -2,8 +2,10 @@ package de.geolykt.starloader.api.gui.screen;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 
 /**
@@ -15,7 +17,9 @@ import de.geolykt.starloader.api.gui.text.FormattedText;
  * {@link de.geolykt.starloader.api.gui.canvas.prefab} package, which intends to do a similar
  * job as this class, although it should be more exhaustive once it is fully developed.
  */
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public interface ComponentCreator {
 
     /**
@@ -25,7 +29,9 @@ public interface ComponentCreator {
      * @return The created Screen component
      * @deprecated The Text/Component API has been deprecated for removal
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public @NotNull TextScreenComponent createTextScreenComponent(@NotNull FormattedText text);
 
     /**
@@ -37,6 +43,8 @@ public interface ComponentCreator {
      * @return The created Screen component
      * @deprecated The Text/Component API has been deprecated for removal
      */
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public @NotNull TextScreenComponent createTextScreenComponent(@NotNull Supplier<@NotNull FormattedText> text);
 }

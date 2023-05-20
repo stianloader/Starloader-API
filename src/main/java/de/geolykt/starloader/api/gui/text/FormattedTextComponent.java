@@ -2,9 +2,12 @@ package de.geolykt.starloader.api.gui.text;
 
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
+
+import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * A subcomponent of a bigger text component.
@@ -14,7 +17,9 @@ import com.badlogic.gdx.graphics.Camera;
  * of canvases is a much more mature alternative. In retrospect, the Text API was rushed and
  * did not make much sense in galimulator space.
  */
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public interface FormattedTextComponent extends TextRenderable {
 
     /**

@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui;
 
+import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,7 +35,7 @@ final class ScreenComponentPositioningMeta<T> {
         @Override
         public Entry<Vector2, A> next() {
             ScreenComponentPositioningMeta<A> meta = backend.next();
-            return Map.<Vector2, A>entry(meta.pos, meta.component);
+            return new AbstractMap.SimpleImmutableEntry<>(meta.pos, meta.component);
         }
 
         @Override

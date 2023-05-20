@@ -22,6 +22,7 @@ import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.impl.DrawingManager;
 import de.geolykt.starloader.impl.GalimulatorConfiguration;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
+import de.geolykt.starloader.impl.JavaInterop;
 import de.geolykt.starloader.impl.SLSidebarInjector;
 import de.geolykt.starloader.impl.asm.BufferedWidgetASMTransformer;
 import de.geolykt.starloader.impl.asm.GLTransformer;
@@ -47,6 +48,7 @@ public class StarloaderAPIExtension extends Extension {
 
     @Override
     public void preInitialize() {
+        getLogger().info("Using Java {} JavaInterop for SLAPI.", JavaInterop.getInteropRelease());
         // We had to move this to preinit as some AWs are bork in SLL 2.0.0 and below, however
         // some of these versions are still supported by the current SLAPI version
         ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());

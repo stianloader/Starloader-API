@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,10 @@ public class SLSidebarInjector extends SidebarInjector {
     public void addButton0(@NotNull Orientation orientation, @NotNull String textureName, @NotNull Runnable action) {
         switch (NullUtils.requireNotNull(orientation)) {
         case TOP:
-            topPrototypes.add(Map.entry(NullUtils.requireNotNull(textureName), NullUtils.requireNotNull(action)));
+            this.topPrototypes.add(new AbstractMap.SimpleImmutableEntry<>(NullUtils.requireNotNull(textureName), NullUtils.requireNotNull(action)));
             break;
         case BOTTOM:
-            bottomPrototypes.add(Map.entry(NullUtils.requireNotNull(textureName), NullUtils.requireNotNull(action)));
+            this.bottomPrototypes.add(new AbstractMap.SimpleImmutableEntry<>(NullUtils.requireNotNull(textureName), NullUtils.requireNotNull(action)));
             break;
         default:
             throw new UnsupportedOperationException("Unsupported injection point");
@@ -39,13 +40,13 @@ public class SLSidebarInjector extends SidebarInjector {
         Objects.requireNonNull(widget, "Widget is null.");
         switch (NullUtils.requireNotNull(o)) {
         case TOP:
-            for (var entry : topPrototypes) {
+            for (Map.Entry<@NotNull String, @NotNull Runnable> entry : this.topPrototypes) {
                 widget.a(new SLSidebarButton(entry.getKey(), 106, 70, entry.getValue()));
                 widget.layout.newline();
             }
             break;
         case BOTTOM:
-            for (var entry : bottomPrototypes) {
+            for (Map.Entry<@NotNull String, @NotNull Runnable> entry : this.bottomPrototypes) {
                 widget.a(new SLSidebarButton(entry.getKey(), 106, 70, entry.getValue()));
                 widget.layout.newline();
             }

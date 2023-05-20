@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
 
@@ -65,7 +66,8 @@ public interface SavegameFormat {
      * @deprecated This method does not acquire any locks due to legacy behaviour - which in most circumstances is probably not the intended behaviour.
      * Use {@link #saveGameState(OutputStream, String, String, boolean)} instead.
      */
-    @Deprecated(forRemoval = false, since = "2.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public default void saveGameState(@NotNull OutputStream out, @Nullable String reason, @Nullable String location) throws IOException {
         saveGameState(out, reason, location, false);
     }

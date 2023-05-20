@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NamespacedKey;
 
 /**
@@ -56,7 +57,8 @@ public abstract class MetadatableRegistry<T, U extends MetadatableRegistry.Metad
      * @deprecated This method has no use as it does not specify the metadata.
      */
     @Override
-    @Deprecated(forRemoval = false, since = "1.1.0")
+    @DeprecatedSince("1.1.0")
+    @Deprecated
     public final void register(@NotNull NamespacedKey key, @NotNull T value) {
         throw new IllegalArgumentException("The metadatable registry requires to know the metadata entry."
                 + "Use the other register method instead.");

@@ -3,15 +3,18 @@ package de.geolykt.starloader.api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
@@ -269,7 +272,9 @@ public final class Galimulator {
          * or {@link Galimulator#getStarList()} instead.
          */
         @NotNull
-        @Deprecated(forRemoval = true, since = "2.0.0")
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        @DeprecatedSince("2.0.0")
+        @Deprecated
         public List<@NotNull Star> getStars();
 
         /**
@@ -297,7 +302,8 @@ public final class Galimulator {
          * @return The unsafe instance
          * @deprecated The resulting unsafe object is unsafe and it's usage not recommend
          */
-        @Deprecated(forRemoval = false, since = "1.5.0")
+        @DeprecatedSince("1.5.0")
+        @Deprecated
         public Galimulator.@NotNull Unsafe getUnsafe();
 
         /**
@@ -379,7 +385,7 @@ public final class Galimulator {
         @SuppressWarnings("null")
         @NonBlocking
         public default void loadSavegameFile(@NotNull String savegameFile) {
-            loadSavegameFile(Path.of(savegameFile));
+            loadSavegameFile(Paths.get(savegameFile));
         }
 
         /**
@@ -472,7 +478,7 @@ public final class Galimulator {
          * @param name The name of the file, the `data/` part must be omitted
          * @param data The data of the file.
          */
-        public void saveFile(@NotNull String name, InputStream data);
+        public void saveFile(@NotNull String name, @NotNull InputStream data);
 
         /**
          * Changes the currently active map mode to a new value.
@@ -561,7 +567,8 @@ public final class Galimulator {
      *
      * @deprecated Full binary compatibility is not guaranteed for this interface.
      */
-    @Deprecated(forRemoval = false, since = "1.5.0")
+    @DeprecatedSince("1.5.0")
+    @Deprecated
     public interface Unsafe {
 
         /**
@@ -1058,7 +1065,9 @@ public final class Galimulator {
      */
     @SuppressWarnings("null")
     @NotNull
-    @Deprecated(forRemoval = true, since = "2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     public static Vector<@NotNull Star> getStars() {
         List<Star> result = impl.getStars();
         if (result instanceof Vector) {
@@ -1289,7 +1298,7 @@ public final class Galimulator {
      * @param name The name of the file, the `data/` part must be ommited
      * @param data The data of the file.
      */
-    public static void saveFile(@NotNull String name, InputStream data) {
+    public static void saveFile(@NotNull String name, @NotNull InputStream data) {
         impl.saveFile(name, data);
     }
 

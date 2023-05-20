@@ -2,13 +2,17 @@ package de.geolykt.starloader.impl.text;
 
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 import de.geolykt.starloader.impl.util.PseudoImmutableArrayList;
 
-@Deprecated(forRemoval = true, since = "2.0.0")
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince("2.0.0")
+@Deprecated
 public class BaseFormattedTextComponent implements FormattedTextComponent {
 
     protected final @NotNull PseudoImmutableArrayList<@NotNull TextComponent> components;

@@ -30,6 +30,7 @@ import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.serial.Encoder;
 import de.geolykt.starloader.api.serial.MetadataCollector;
 import de.geolykt.starloader.api.serial.SavegameFormat;
+import de.geolykt.starloader.impl.JavaInterop;
 import de.geolykt.starloader.impl.util.JoiningInputStream;
 import de.geolykt.starloader.impl.util.LEB128;
 
@@ -71,7 +72,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
     @Override
     public synchronized void loadGameState(@NotNull InputStream in) throws IOException {
         byte[] header = new byte[FORMAT_HEADER.length];
-        if (in.readNBytes(header, 0, header.length) != header.length) {
+        if (JavaInterop.readNBytes(in, header, 0, header.length) != header.length) {
             throw new IOException("Input stream exhausted prematurely");
         }
         if (!Arrays.equals(FORMAT_HEADER, header)) {
@@ -108,7 +109,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
             NamespacedKey encodingKey = keyCache[dataIn.readInt()];
             int len = LEB128.decodeUnsigned(dataIn);
             byte[] data = new byte[len];
-            dataIn.readNBytes(data, 0, len);
+            JavaInterop.readNBytes(dataIn, data, 0, len);
             metadataState.add(metadataKey, encodingKey, data);
         }
 

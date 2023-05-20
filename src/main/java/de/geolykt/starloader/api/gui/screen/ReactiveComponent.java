@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 
+import de.geolykt.starloader.DeprecatedSince;
+
 /**
  * Interface that provides reactive behaviour for mouse movements.
  */
@@ -35,7 +37,8 @@ public interface ReactiveComponent extends ScreenComponent {
      * @param camera     The camera supplied for drawing operations.
      * @deprecated Not yet implemented
      */
-    @Deprecated(forRemoval = false, since = "1.5.0")
+    @DeprecatedSince("1.5.0")
+    @Deprecated
     public void onHover(int screenX, int screenY, int componentX, int componentY, @NotNull Camera camera);
 
     /**

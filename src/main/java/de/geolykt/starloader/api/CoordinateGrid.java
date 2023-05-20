@@ -1,5 +1,6 @@
 package de.geolykt.starloader.api;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.empire.Star;
 
 /**
@@ -36,6 +37,7 @@ public enum CoordinateGrid {
      * widget code, which SLAPI will mirror, even if nonsensical.
      * @since 2.0.0
      */
-    @Deprecated(forRemoval = false, since = "2.0.0")
+    @DeprecatedSince("2.0.0")
+    @Deprecated
     WIDGET;
 }
