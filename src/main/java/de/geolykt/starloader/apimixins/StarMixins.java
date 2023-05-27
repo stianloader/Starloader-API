@@ -133,8 +133,8 @@ public class StarMixins implements Star {
     } // setMinorityFaith
 
     @Shadow
-    public void b(snoddasmannen.galimulator.Empire var0) {
-    } // takeover
+    public void onHostileTakeover(Empire empire) {
+    }
 
     @Shadow
     public @NotNull Vector<Star> c(int var1) { // getNeighboursRecursive
@@ -160,7 +160,7 @@ public class StarMixins implements Star {
         if (old == newOwner) {
             return false; // don't perform a takeover when there is no takeover to be performed
         }
-        b(ExpectedObfuscatedValueException.requireEmpire(newOwner));
+        this.onHostileTakeover(ExpectedObfuscatedValueException.requireEmpire(newOwner));
         return old != getAssignedEmpire();
     }
 

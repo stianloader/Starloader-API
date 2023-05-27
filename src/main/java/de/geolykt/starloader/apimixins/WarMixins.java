@@ -1,5 +1,8 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,8 +28,20 @@ public class WarMixins implements War {
     int startYear;
 
     @Override
+    @NotNull
+    public Collection<@NotNull Empire> getAggressorParty() {
+        return Collections.singleton(this.getEmpireA());
+    }
+
+    @Override
     public int getDateOfLastAction() {
         return lastAction;
+    }
+
+    @Override
+    @NotNull
+    public Collection<@NotNull Empire> getDefenderParty() {
+        return Collections.singleton(this.getEmpireB());
     }
 
     @Override

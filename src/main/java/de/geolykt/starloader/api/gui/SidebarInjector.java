@@ -1,6 +1,9 @@
 package de.geolykt.starloader.api.gui;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
+
+import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 
 import de.geolykt.starloader.api.NullUtils;
 
@@ -80,4 +83,10 @@ public abstract class SidebarInjector {
      * @param action The action to run when the button is clicked
      */
     protected abstract void addButton0(@NotNull Orientation orientation, @NotNull String textureName, @NotNull Runnable action);
+
+    static {
+        if (!(SidebarInjector.class.getClassLoader() instanceof MinestomExtensionClassLoader)) {
+            LoggerFactory.getLogger(SidebarInjector.class).error("Class loaded by improper classloader: {}", SidebarInjector.class.getClassLoader());
+        }
+    }
 }

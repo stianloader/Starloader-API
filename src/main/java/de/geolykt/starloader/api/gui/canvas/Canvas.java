@@ -14,7 +14,10 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
  * <p>This interface isn't meant to be implemented by other mods, instead {@link CanvasContext} should be
  * implemented. To obtain a {@link Canvas} instance, use {@link CanvasManager}.
  *
+ * <p>To open a canvas, {@link #openCanvas()} or {@link CanvasManager#openCanvas(Canvas, CanvasPosition)} can be used.
+ *
  * @since 2.0.0
+ * @see CanvasManager
  */
 public interface Canvas {
 

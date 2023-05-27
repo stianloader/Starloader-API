@@ -4,7 +4,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.gui.Drawing;
-import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.screen.Screen;
 
 /**
@@ -12,18 +11,19 @@ import de.geolykt.starloader.api.gui.screen.Screen;
  * Not to be implemented by other mods.
  *
  * @since 2.0.0
+ * @see Drawing#getCanvasManager()
  */
 public interface CanvasManager {
 
     /**
-     * Obtains the currently active {@link CanvasManager} instance as per {@link DrawingImpl#getCanvasManager()}.
+     * Obtains the currently active {@link CanvasManager} instance as per {@link Drawing#getCanvasManager()}.
      *
      * @return The active {@link CanvasManager} instance
      * @since 2.0.0
      */
     @NotNull
     public static CanvasManager getInstance() {
-        return Drawing.getInstance().getCanvasManager();
+        return Drawing.getCanvasManager();
     }
 
     /**

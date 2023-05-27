@@ -314,8 +314,9 @@ public class EmpireMixins implements ActiveEmpire {
      *
      * @param news The news to broadcast
      */
+    @Unique
     private void broadcastNews(String news) {
-        if (this.Z()) {
+        if (this.isNotable()) {
             Drawing.sendBulletin(getColoredName() + "[WHITE]: " + news + "[]");
         }
     }
@@ -726,7 +727,7 @@ public class EmpireMixins implements ActiveEmpire {
                 // it
                 for (Star star : Galimulator.getStarList()) {
                     if (star.getAssignedEmpire() == this) {
-                        ((snoddasmannen.galimulator.Star) star).d(0); // resets the development within the empire
+                        ((snoddasmannen.galimulator.Star) star).setDevelopment(0);
                     }
                 }
             } else if (stateKey == RegistryKeys.GALIMULATOR_CRUSADING && getEmpireName().contains("Spain")) {
@@ -780,7 +781,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Shadow
-    public boolean Z() { // isNoteable
+    public boolean isNotable() {
         return false;
     }
 

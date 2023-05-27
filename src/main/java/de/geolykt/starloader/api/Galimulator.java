@@ -2,6 +2,7 @@ package de.geolykt.starloader.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -13,8 +14,13 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
+
+import net.minestom.server.extras.selfmodification.HierarchyClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 
 import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.StarloaderAPIExtension;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
@@ -890,7 +896,18 @@ public final class Galimulator {
     public static @NotNull GameImplementation getImplementation() {
         GameImplementation gameImpl = impl;
         if (gameImpl == null) {
-            throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
+            try {
+                Class<?> self = StarloaderAPIExtension.instance.getClass().getClassLoader().loadClass("de.geolykt.starloader.api.Galimulator");
+                Field f = self.getDeclaredField("impl");
+                f.setAccessible(true);
+                gameImpl = impl = (GameImplementation) f.get(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (gameImpl == null) {
+                    throw new IllegalStateException("The implementation was not specified. This is a programmer error. Current classloader: " + Galimulator.class.getClassLoader());
+                }
+            }
         }
         return gameImpl;
     }
@@ -1438,4 +1455,10 @@ public final class Galimulator {
      * Constructor that should not be called because there is no need to have an instance of this class.
      */
     private Galimulator() { }
+
+    static {
+        if (!(Galimulator.class.getClassLoader() instanceof MinestomExtensionClassLoader)) {
+            LoggerFactory.getLogger(Galimulator.class).error("Class loaded by improper classloader: {}", Galimulator.class.getClassLoader());
+        }
+    }
 }

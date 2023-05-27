@@ -3,15 +3,24 @@ package de.geolykt.starloader.api.gui.screen;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
+import de.geolykt.starloader.api.gui.canvas.Canvas;
+
 /**
  * A container of sorts. Includes further components that the User can interact with.
+ *
+ * <p>Instances of {@link Screen} can be created via {@link ScreenBuilder}.
+ *
+ * <p>Note: The screen API is obsolete compared to the more powerful {@link Canvas} API which should be used
+ * instead. More specially, screens are prone to layout issues due to them not being declarative enough.
  */
+@Obsolete(since = "2.0.0")
 public interface Screen extends Iterable<Map.Entry<Vector2, ScreenComponent>> {
 
     /**

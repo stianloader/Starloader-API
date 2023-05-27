@@ -22,7 +22,7 @@ import de.geolykt.starloader.api.gui.screen.ScreenComponent;
  */
 public class LineChart implements ScreenComponent {
 
-    // FIXME I have no fully tested this class with the retractors that occurred with the screen API.
+    // FIXME I have no fully tested this class with the refractors that occurred with the screen API.
     // However I recall it having some issues with the component rendering too high.
     // I have however fixed an error I did, so this issue may no longer be present.
 

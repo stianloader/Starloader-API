@@ -1,10 +1,14 @@
 package de.geolykt.starloader.api.empire;
 
+import java.util.Collection;
+
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.DeprecatedSince;
+
 /**
- * Object that defines a war between two parties. Right now these parties are empires, however this
- * may change in the future with the inclusion of vassals.
+ * Object that defines a war between two parties.
  */
 public interface War extends Dateable {
 
@@ -21,11 +25,47 @@ public interface War extends Dateable {
     }
 
     /**
+     * Obtains an <b>immutable</b> view of empires involved on the "aggressor" side.
+     * Changes in the constellation of empires are reflected in the view. However,
+     * implementors are advised to ensure that iteration of the returned collection
+     * can happen even if a change occurs.
+     *
+     * <p>In a vanilla context this is always a singleton, but mods or future changes in game design
+     * may introduce the ability of large-scale warfare.
+     *
+     * <p>The term aggressor or defender is made up in a vanilla context. However mods or future changes
+     * in game design may add some merit to the naming choice.
+     *
+     * @return An immutable view of empires on the "aggressor" side.
+     * @since 2.0.0
+     */
+    @NotNull
+    public Collection<@NotNull Empire> getAggressorParty();
+
+    /**
      * Obtains the date / year in which the last star was taken. This does not mean that the war ended.
      *
      * @return The date in which the latest taken star was taken
      */
     public int getDateOfLastAction();
+
+    /**
+     * Obtains an <b>immutable</b> view of empires involved on the "defender" side.
+     * Changes in the constellation of empires are reflected in the view. However,
+     * implementors are advised to ensure that iteration of the returned collection
+     * can happen even if a change occurs.
+     *
+     * <p>In a vanilla context this is always a singleton, but mods or future changes in game design
+     * may introduce the ability of large-scale warfare.
+     *
+     * <p>The term aggressor or defender is made up in a vanilla context. However mods or future changes
+     * in game design may add some merit to the naming choice.
+     *
+     * @return An immutable view of empires on the "defender" side.
+     * @since 2.0.0
+     */
+    @NotNull
+    public Collection<@NotNull Empire> getDefenderParty();
 
     /**
      * Obtains the amount of destroyed ships.
@@ -38,19 +78,37 @@ public interface War extends Dateable {
 
     /**
      * Obtains one participant of the war.
-     * Multiple invocations to this method should return the same empire.
+     * Multiple invocations to this method should return the same empire, except if the empire left
+     * the war but there is another empire to continue fighting in the war on the attacking side.
      *
      * @return A participant of the war
+     * @deprecated SLAPI internally introduces the ability for multiple empires to fight on either side.
+     * As such this method may make little sense outside of SLAPI. Corresponds to obtaining an empire
+     * from {@link #getAggressorParty()}. This method will be removed with the 3.0.0 refractor, but can
+     * also get removed earlier than that.
      */
-    public @NotNull Empire getEmpireA();
+    @Deprecated
+    @DeprecatedSince("2.0.0")
+    @ScheduledForRemoval(inVersion = "at will")
+    @NotNull
+    public Empire getEmpireA();
 
     /**
      * Obtains another participant of the war.
-     * Multiple invocations to this method should return the same empire.
+     * Multiple invocations to this method should return the same empire, except if the empire left
+     * the war but there is another empire to continue fighting in the war on the defending side.
      *
      * @return A participant of the war
+     * @deprecated SLAPI internally introduces the ability for multiple empires to fight on either side.
+     * As such this method may make little sense outside of SLAPI. Corresponds to obtaining an empire
+     * from {@link #getDefenderParty()}. This method will be removed with the 3.0.0 refractor, but can
+     * also get removed earlier than that.
      */
-    public @NotNull Empire getEmpireB();
+    @Deprecated
+    @DeprecatedSince("2.0.0")
+    @ScheduledForRemoval(inVersion = "at will")
+    @NotNull
+    public Empire getEmpireB();
 
     /**
      * Obtains the date / year in which the war was started.
@@ -64,8 +122,8 @@ public interface War extends Dateable {
     }
 
     /**
-     * Obtains the amount of stars that {@link #getEmpireA()} has won in the war
-     * subtracted with the stars that it has lost.
+     * Obtains the amount of stars that the {@link #getAggressorParty() aggressor party} has won in the war
+     * subtracted with the stars that it has lost to the {@link #getDefenderParty() defender party}.
      *
      * @return The delta of the stars won and the stars lost.
      */
@@ -84,7 +142,7 @@ public interface War extends Dateable {
     public void noteShipDestruction();
 
     /**
-     * Notes that an empire has taken a star.
+     * Notes that an empire has taken a star within the context of this war.
      *
      * @param empire The empire that took a star from another empire
      * @throws IllegalArgumentException If the given empire does not participate in the war
@@ -100,8 +158,8 @@ public interface War extends Dateable {
     public void setDestroyedShips(int count);
 
     /**
-     * Sets the amount of stars that {@link #getEmpireA()} has won in the war
-     * subtracted with the stars that it has lost.
+     * Sets the amount of stars that the {@link #getAggressorParty() aggressor party} has won in the war
+     * subtracted with the stars that it has lost to the {@link #getDefenderParty() defender party}.
      *
      * @param count The delta of the stars won and the stars lost.
      */

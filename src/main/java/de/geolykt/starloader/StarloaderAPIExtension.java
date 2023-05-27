@@ -2,6 +2,9 @@ package de.geolykt.starloader;
 
 import java.io.File;
 
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.files.FileHandle;
 
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
@@ -46,12 +49,16 @@ import de.geolykt.starloader.mod.Extension;
 @SuppressWarnings("resource")
 public class StarloaderAPIExtension extends Extension {
 
+    @Internal
+    public static StarloaderAPIExtension instance;
+
     @Override
     public void preInitialize() {
         getLogger().info("Using Java {} JavaInterop for SLAPI.", JavaInterop.getInteropRelease());
         // We had to move this to preinit as some AWs are bork in SLL 2.0.0 and below, however
         // some of these versions are still supported by the current SLAPI version
         ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());
+        StarloaderAPIExtension.instance = this;
     }
 
     @Override
@@ -79,6 +86,7 @@ public class StarloaderAPIExtension extends Extension {
     }
 
     static {
+        LoggerFactory.getLogger(StarloaderAPIExtension.class).info("Setting up SLAPI. Classloaded via {}", StarloaderAPIExtension.class.getClassLoader());
         MinestomRootClassLoader.getInstance().addTransformer(new GLTransformer());
         File dataFolder = new File("data");
         DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), NullUtils.requireNotNull(dataFolder.toPath())));

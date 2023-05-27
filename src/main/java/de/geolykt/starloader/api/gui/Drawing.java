@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.gui;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,8 +18,12 @@ import com.badlogic.gdx.math.Vector3;
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.gui.canvas.Canvas;
+import de.geolykt.starloader.api.gui.canvas.CanvasManager;
+import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
+import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
 /**
@@ -222,6 +227,19 @@ public final class Drawing {
     }
 
     /**
+     * Obtains the currently active {@link CanvasManager} instance, which is used to create and open
+     * {@link Canvas canvases} and {@link MultiCanvas multi-canvases}.
+     *
+     * @return The current active {@link CanvasManager}.
+     * @since 2.0.0
+     * @see Canvas
+     */
+    @NotNull
+    public static CanvasManager getCanvasManager() {
+        return Drawing.implementation.getCanvasManager();
+    }
+
+    /**
      * Obtains the main drawing sprite batch. Operations performed on this batch
      * will result in them getting displayed on the user interface.
      *
@@ -395,8 +413,14 @@ public final class Drawing {
     /**
      * Shows this specific screen to the user.
      *
+     * <p>Instances of {@link Screen} can be created via {@link ScreenBuilder}.
+     *
+     * <p>Note: The screen API is obsolete compared to the more powerful {@link Canvas} API which should be used
+     * instead. More specially, screens are prone to layout issues due to them not being declarative enough.
+     *
      * @param screen The screen to display
      */
+    @Obsolete(since = "2.0.0")
     public static void showScreen(@NotNull Screen screen) {
         implementation.showScreen(screen);
     }

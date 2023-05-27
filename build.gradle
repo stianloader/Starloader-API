@@ -121,3 +121,17 @@ publishing {
         }*/
     }
 }
+
+// Unfortunately Eclipse does not have per-sourceset java versions so
+// of course it will have quite the issues when seeing java 9 classes in an otherwise
+// java 8 project. In the end I have opted in using the traditional maven style of dealing with the issue:
+// Ignoring the java 9 source set.
+eclipse {
+    classpath {
+        file {
+            whenMerged {
+                entries.removeIf { it.path == 'src/main/java9' }
+            }
+        }
+    }
+}

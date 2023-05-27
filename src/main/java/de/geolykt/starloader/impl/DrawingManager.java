@@ -281,17 +281,17 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @DeprecatedSince("2.0.0")
     @Deprecated
     public void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text) {
-        Space.a(new FormattedBulletinWrapper(text));
+        Space.postBulletin(new FormattedBulletinWrapper(text));
     }
 
     @Override
     public void sendBulletin(@NotNull String message) {
-        Space.a(new TextBulletin(message));
+        Space.postBulletin(new TextBulletin(message));
     }
 
     @Override
     public void sendOddityBulletin(@NotNull String message) {
-        Space.a(new OddityBulletin(message));
+        Space.postBulletin(new OddityBulletin(message));
     }
 
     @Override
