@@ -2,10 +2,7 @@ package de.geolykt.starloader.api.empire;
 
 import java.util.Collection;
 
-import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
-
-import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * Object that defines a war between two parties.
@@ -40,7 +37,7 @@ public interface War extends Dateable {
      * @since 2.0.0
      */
     @NotNull
-    public Collection<@NotNull Empire> getAggressorParty();
+    public Collection<@NotNull ActiveEmpire> getAggressorParty();
 
     /**
      * Obtains the date / year in which the last star was taken. This does not mean that the war ended.
@@ -65,7 +62,7 @@ public interface War extends Dateable {
      * @since 2.0.0
      */
     @NotNull
-    public Collection<@NotNull Empire> getDefenderParty();
+    public Collection<@NotNull ActiveEmpire> getDefenderParty();
 
     /**
      * Obtains the amount of destroyed ships.
@@ -75,40 +72,6 @@ public interface War extends Dateable {
      * @return The amount of destroyed ships.
      */
     public int getDestroyedShips();
-
-    /**
-     * Obtains one participant of the war.
-     * Multiple invocations to this method should return the same empire, except if the empire left
-     * the war but there is another empire to continue fighting in the war on the attacking side.
-     *
-     * @return A participant of the war
-     * @deprecated SLAPI internally introduces the ability for multiple empires to fight on either side.
-     * As such this method may make little sense outside of SLAPI. Corresponds to obtaining an empire
-     * from {@link #getAggressorParty()}. This method will be removed with the 3.0.0 refractor, but can
-     * also get removed earlier than that.
-     */
-    @Deprecated
-    @DeprecatedSince("2.0.0")
-    @ScheduledForRemoval(inVersion = "at will")
-    @NotNull
-    public Empire getEmpireA();
-
-    /**
-     * Obtains another participant of the war.
-     * Multiple invocations to this method should return the same empire, except if the empire left
-     * the war but there is another empire to continue fighting in the war on the defending side.
-     *
-     * @return A participant of the war
-     * @deprecated SLAPI internally introduces the ability for multiple empires to fight on either side.
-     * As such this method may make little sense outside of SLAPI. Corresponds to obtaining an empire
-     * from {@link #getDefenderParty()}. This method will be removed with the 3.0.0 refractor, but can
-     * also get removed earlier than that.
-     */
-    @Deprecated
-    @DeprecatedSince("2.0.0")
-    @ScheduledForRemoval(inVersion = "at will")
-    @NotNull
-    public Empire getEmpireB();
 
     /**
      * Obtains the date / year in which the war was started.
@@ -147,7 +110,7 @@ public interface War extends Dateable {
      * @param empire The empire that took a star from another empire
      * @throws IllegalArgumentException If the given empire does not participate in the war
      */
-    public void noteStarChange(@NotNull Empire empire) throws IllegalArgumentException;
+    public void noteStarChange(@NotNull ActiveEmpire empire) throws IllegalArgumentException;
 
     /**
      * Sets the amount of ships that were destroyed in the war.

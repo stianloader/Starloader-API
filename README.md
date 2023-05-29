@@ -63,6 +63,7 @@ this requires any contributors of your project to do the same.
 - [Variable Data Folder](https://github.com/Geolykt/VariableDataFolder)
 - [FeedbackVectors](https://github.com/Geolykt/Feedbackvectors)
 - [GalimulatorIRC](https://github.com/Geolykt/GalimulatorIRC)
+- [IvyH](https://github.com/Geolykt/IvyH)
 
 ## Licensing and decompiled code
 

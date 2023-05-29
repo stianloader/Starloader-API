@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.empire.Empire;
+import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.War;
+
+import snoddasmannen.galimulator.Lazy;
 
 @Mixin(snoddasmannen.galimulator.War.class)
 public class WarMixins implements War {
@@ -27,10 +27,17 @@ public class WarMixins implements War {
     @Shadow
     int startYear;
 
+    @Shadow
+    Lazy.EmpireLazy e1;
+
+    @Shadow
+    Lazy.EmpireLazy e2;
+
+    @SuppressWarnings("null")
     @Override
     @NotNull
-    public Collection<@NotNull Empire> getAggressorParty() {
-        return Collections.singleton(this.getEmpireA());
+    public Collection<@NotNull ActiveEmpire> getAggressorParty() {
+        return Collections.singleton((ActiveEmpire) this.e1.get());
     }
 
     @Override
@@ -38,25 +45,16 @@ public class WarMixins implements War {
         return lastAction;
     }
 
+    @SuppressWarnings("null")
     @Override
     @NotNull
-    public Collection<@NotNull Empire> getDefenderParty() {
-        return Collections.singleton(this.getEmpireB());
+    public Collection<@NotNull ActiveEmpire> getDefenderParty() {
+        return Collections.singleton((ActiveEmpire) this.e2.get());
     }
 
     @Override
     public int getDestroyedShips() {
         return shipsDestroyed;
-    }
-
-    @Override
-    public @NotNull Empire getEmpireA() {
-        return NullUtils.requireNotNull(Galimulator.getEmpireByUID(((snoddasmannen.galimulator.War) (Object) this).e1.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
-    }
-
-    @Override
-    public @NotNull Empire getEmpireB() {
-        return NullUtils.requireNotNull(Galimulator.getEmpireByUID(((snoddasmannen.galimulator.War) (Object) this).e2.get_id()), "Couldn't determine empire from lazy object. Perhaps it was disbanded already?");
     }
 
     @Override
@@ -75,7 +73,7 @@ public class WarMixins implements War {
     }
 
     @Override
-    public void noteStarChange(@NotNull Empire empire) throws IllegalArgumentException {
+    public void noteStarChange(@NotNull ActiveEmpire empire) throws IllegalArgumentException {
         int uid = empire.getUID();
         if (((snoddasmannen.galimulator.War) (Object) this).e1.get_id() == uid) {
             conqueredStarBalance++;
