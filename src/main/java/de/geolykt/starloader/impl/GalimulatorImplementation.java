@@ -98,6 +98,21 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     /**
      * Renders a crash report to the screen and log. This action cannot be undone.
      *
+     * @param cause The description of the cause of the issue.
+     * @param save True if the current game state should be written to disk
+     * @since 2.0.0
+     */
+    public static void crash(@NotNull String cause, boolean save) {
+        try {
+            throw new AssertionError("GalimulatorImplementation.crash() called: " + cause);
+        } catch (AssertionError e) {
+            GalimulatorImplementation.crash(e, cause, save);
+        }
+    }
+
+    /**
+     * Renders a crash report to the screen and log. This action cannot be undone.
+     *
      * @param e The stacktrace that should be displayed. Stacktraces are powerful tools to debug issues
      * @param cause The description of the cause of the issue.
      * @param save True if the current game state should be written to disk
@@ -153,6 +168,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             listener.h = "[LIME]" + builder.toString();
             for (String s : builder.toString().split("\n")) {
                 LoggerFactory.getLogger("CrashReporter").error(s);
+            }
+            try {
+                Galimulator.getSimulationLoopLock().acquireSoftControl();
+                Galimulator.getSimulationLoopLock().acquireHardControl();
+            } catch (InterruptedException interrupt) {
             }
         }
     }

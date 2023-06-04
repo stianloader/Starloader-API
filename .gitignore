@@ -17,3 +17,6 @@ data
 
 # Performance debugging files
 *.csv
+
+# JVM crash files
+hs_err_pid*.log

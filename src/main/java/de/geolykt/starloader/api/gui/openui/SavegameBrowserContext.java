@@ -98,7 +98,7 @@ public class SavegameBrowserContext implements CanvasContext {
         int yOffset = this.scrollValue * 25;
         int clickIndex = (canvasY - yOffset) / BUTTON_HEIGHT;
         if (this.savegames.size() >= clickIndex && clickIndex >= 0) { // TODO also display the WidgetFadeEffect (which we would need to emulate)
-            consumer.accept(this.savegames.get(clickIndex));
+            this.consumer.accept(this.savegames.get(clickIndex));
         }
     }
 

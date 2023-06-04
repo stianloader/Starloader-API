@@ -17,6 +17,7 @@ import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.api.gui.screen.Screen;
+import de.geolykt.starloader.impl.GalimulatorImplementation;
 
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
@@ -136,10 +137,14 @@ public class SLCanvasManager implements CanvasManager {
     @Override
     @NotNull
     public Canvas closeCanvas(@NotNull Canvas canvas) {
+        if (GalFX.RENDERCACHE_LOCAL.get() != null) {
+            GalimulatorImplementation.crash("You cannot dispose a widget outside the main (drawing) thread. This hints at a thread management problem and could cause hard to reproduce and very sporadic race condition errors.", true);
+        }
         if (canvas instanceof Widget) {
-            BufferedWidgetWrapper bww = widgetWrappers.get(canvas);
+            BufferedWidgetWrapper bww = this.widgetWrappers.get(canvas);
             if (bww == null) {
-                return canvas;
+                throw new IllegalStateException("Unable to find BufferedWidgetWrapper instance for canvas " + canvas);
+                //return canvas;
             }
             Space.closeWidget(bww);
         } else {

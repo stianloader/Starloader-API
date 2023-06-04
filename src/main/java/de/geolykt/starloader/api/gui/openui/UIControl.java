@@ -70,10 +70,19 @@ public class UIControl {
                     return;
                 }
                 Path location = ((PathSavegame) savegame).getLocationPath();
+                int acquistitions = Galimulator.getSimulationLoopLock().getLocalAcquisitions();
                 try {
+                    if (acquistitions != 2) {
+                        Galimulator.getSimulationLoopLock().acquireHardControl();
+                    }
                     Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE)
-                        .saveGameState(NullUtils.requireNotNull(Files.newOutputStream(location)), "User-issued save", location.getFileName().toString(), true);
-                } catch (IOException e) {
+                        .saveGameState(NullUtils.requireNotNull(Files.newOutputStream(location)), "User-issued save", location.getFileName().toString(), false);
+                    if (acquistitions == 1) {
+                        Galimulator.getSimulationLoopLock().releaseSoft();
+                    } else if (acquistitions == 0) {
+                        Galimulator.getSimulationLoopLock().releaseHard();
+                    }
+                } catch (IOException | InterruptedException e) {
                     throw new RuntimeException("Cannot save game!", e); // This should crash the game - kind of a double-edged sword but whatever
                 }
             })

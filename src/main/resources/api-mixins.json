@@ -11,6 +11,7 @@
     "ApplicationMixins",
     "AudioManagerMixins",
     "AudioSampleMixins",
+    "BufferedWidgetWrapperMixins",
     "BuiltinSymbolsMixins",
     "DiploRequestMixins",
     "DisruptMissileMixins",

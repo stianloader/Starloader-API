@@ -36,17 +36,17 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
     public BasicDialog(@NotNull String title, @NotNull String description, @Nullable List<@NotNull String> choices,
             @NotNull ArrayList<@NotNull BasicDialogCloseListener> closeListeners,
             @NotNull ArrayList<@NotNull WidgetActionListener> actionListeners, int duration, boolean playSFX) {
-        dialog = Space.openOptionChooser(title, description, choices, duration, null, true);
-        dialog.a((Widget.WIDGET_MESSAGE msg) -> {
+        this.dialog = Space.openOptionChooser(title, description, choices, duration, null, true);
+        this.dialog.a((Widget.WIDGET_MESSAGE msg) -> {
             if (msg == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
                 closed = true;
             }
         });
-        dialog.registerSelectionListener((Object obj) -> {
+        this.dialog.registerSelectionListener((Object obj) -> {
             closed = true;
         });
-        dialog.a(new DialogCloseListenerWrapper(closeListeners, playSFX));
-        dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));
+        this.dialog.registerSelectionListener(new DialogCloseListenerWrapper(closeListeners, playSFX));
+        this.dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));
     }
 
     /**
