@@ -1,3 +1,13 @@
+// The currently used version of TR (0.8.6) does not remap @Desc annotations.
+// Hence we need to use a bugfix that is available on TR 0.8.7
+buildscript {
+    configurations.all {
+        resolutionStrategy {
+            force 'net.fabricmc:tiny-remapper:0.8.7'
+        }
+    }
+}
+
 plugins {
     id 'java'
     id 'java-library'
@@ -44,8 +54,8 @@ configurations {
 
 dependencies {
     // The launcher - the heart of this project
-    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230514"
-    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230514"
+    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230604"
+    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230604"
 
     compileOnly "de.geolykt.starloader:micromixin-annotations:0.0.1-SNAPSHOT"
 

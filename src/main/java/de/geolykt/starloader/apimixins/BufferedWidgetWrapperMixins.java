@@ -32,7 +32,7 @@ public class BufferedWidgetWrapperMixins {
         LoggerFactory.getLogger(BufferedWidgetWrapperMixins.class).debug("Disposing {} as {}", this.a, this);
     }
 
-    @Inject(target = @Desc("draw"), at = @At("HEAD"), require = 1, cancellable = true)
+    @Inject(method = "draw()V", at = @At("HEAD"), require = 1, cancellable = true)
     public void onDraw(CallbackInfo ci) {
         if (this.e == null) {
             GalimulatorImplementation.crash("This buffered widget wrapper instance has been disposed and as such cannot be drawn on again. This usually hints at incorrect disposal of widgets. Make sure to remove them from the open widget list after disposing them. Child widget: " + this.a, true);

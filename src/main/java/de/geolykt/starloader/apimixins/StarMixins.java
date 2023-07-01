@@ -447,7 +447,7 @@ public class StarMixins implements Star {
         y = vect.y;
     }
 
-    @Inject(method = "b(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "onHostileTakeover(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
     public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
         StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(),
                 NullUtils.requireNotNull((ActiveEmpire) empire));
