@@ -84,8 +84,8 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
         try {
             this.onMouseUp0(x, getHeight() - y);
             tap(x, getHeight() - y, false);
-        } catch (Exception e) {
-            GalimulatorImplementation.crash(e, "Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true);
+        } catch (Throwable t) {
+            GalimulatorImplementation.crash(t, "Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true);
         }
     }
 

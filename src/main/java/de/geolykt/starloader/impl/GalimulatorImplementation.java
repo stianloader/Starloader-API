@@ -77,6 +77,17 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      */
     protected static final Logger LOGGER = LoggerFactory.getLogger(GalimulatorImplementation.class);
 
+    /**
+     * A {@link ThreadLocal} variable that stores whether the current thread is the main thread.
+     *
+     * @since 2.0.0
+     * @see #isRenderThread()
+     */
+    private static final ThreadLocal<Boolean> RENDER_THREAD = ThreadLocal.withInitial(() -> {
+        String name = Thread.currentThread().getName();
+        return name.equals("main") || name.contains("LWJGL Application") || name.contains("GLThread");
+    });
+
     @NotNull
     private static final List<SavegameFormat> SAVEGAME_FORMATS = new ArrayList<>(Arrays.asList(VanillaSavegameFormat.INSTANCE, BoilerplateSavegameFormat.INSTANCE));
 
@@ -120,13 +131,17 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      */
     public static void crash(@NotNull Throwable e, @NotNull String cause, boolean save) {
         try {
-            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST); // Sometimes the game can crash while rendering, at which point a scissor might be applied. To render the entire crash message we might need to disable the scissor though.
-            Galimulator.pauseGame(); // Pause the game on crash so the simulation loop doesn't continue to run in the background.
-            GLScissorState.glScissor(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
-            GLScissorState.forgetScissor();
+            if (!GalimulatorImplementation.isRenderThread()) {
+                Gdx.app.postRunnable(Galimulator::pauseGame);
+            } else {
+                Galimulator.pauseGame(); // Pause the game on crash so the simulation loop doesn't continue to run in the background.
+                Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST); // Sometimes the game can crash while rendering, at which point a scissor might be applied. To render the entire crash message we might need to disable the scissor though.
+                GLScissorState.glScissor(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+                GLScissorState.forgetScissor();
+            }
         } catch (Throwable ignored) {
         }
-        Galemulator listener = (Galemulator) Main.application.getApplicationListener();
+        Galemulator listener = (Galemulator) Gdx.app.getApplicationListener();
 
         if (save) {
             // TODO deobf
@@ -160,6 +175,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             for (Extension ext : Starloader.getExtensionManager().getExtensions()) {
                 builder.append("    " + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
             }
+            try {
+                Class.forName("com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application");
+                builder.append("\n[RED]Alert: LWJGL 3 detected.[][LIME]\n");
+            } catch (ClassNotFoundException ignored) {
+            }
             builder.append("\nStacktrace:\n");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
@@ -175,6 +195,17 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             } catch (InterruptedException interrupt) {
             }
         }
+    }
+
+    /**
+     * Obtains whether the current thread is the main thread.
+     * This is based on a ThreadLocal populated based on the Thread's name.
+     *
+     * @return True if the current thread is capable of rendering.
+     * @since 2.0.0
+     */
+    public static boolean isRenderThread() {
+        return GalimulatorImplementation.RENDER_THREAD.get();
     }
 
     /**

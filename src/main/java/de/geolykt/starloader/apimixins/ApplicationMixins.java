@@ -5,6 +5,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.badlogic.gdx.Gdx;
+
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
@@ -14,10 +16,13 @@ import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
+import de.geolykt.starloader.impl.gui.SLInputAdapter;
 import de.geolykt.starloader.impl.registry.StateActorFactoryRegistry;
 
 import snoddasmannen.galimulator.Galemulator;
+import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.class_11;
 import snoddasmannen.galimulator.actors.StateActorCreator;
 
 @Mixin(Galemulator.class)
@@ -29,6 +34,12 @@ public class ApplicationMixins {
     @Inject(method = "create", at = @At("HEAD"))
     public void start(CallbackInfo ci) {
         try {
+            if (Boolean.getBoolean("de.geolykt.starloader.lwjgl3ify.killOnReturn")) {
+                // We are probably (read: definetly) running on LWJGL3, so we need to run LJWGL3 compatibility code
+                Settings.a(); // Initialize settings
+                class_11.a(); // Initialize steam
+            }
+            Gdx.input.setInputProcessor(new SLInputAdapter());
             Throwable t = EventManager.handleEventExcept(new ApplicationStartEvent());
             if (t != null) {
                 throw t;
