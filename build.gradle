@@ -26,11 +26,11 @@ multiRelease {
 }
 
 repositories {
+    mavenCentral()
     maven {
         name 'geolykt'
         url 'https://geolykt.de/maven'
     }
-    mavenCentral()
     mavenLocal()
 }
 
@@ -54,8 +54,8 @@ configurations {
 
 dependencies {
     // The launcher - the heart of this project
-    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230604"
-    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230604"
+    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230706"
+    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230706"
 
     compileOnly "de.geolykt.starloader:micromixin-annotations:0.0.1-SNAPSHOT"
 
