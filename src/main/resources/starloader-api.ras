@@ -13,7 +13,6 @@ RAS v1 std
  runtime    0               ACC_PUBLIC      snoddasmannen/galimulator/Space$ActorSpawningPredicate  <init>                  (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
 
 # Fields
- all        ACC_PRIVATE     ACC_PUBLIC      com/example/Main                                        shortcuts               Ljava/util/List;
  all        0               ACC_PROTECTED   snoddasmannen/galimulator/rendersystem/RenderItem       b                       Lcom/badlogic/gdx/math/Rectangle;
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/ui/OptionChooserWidget        d                       J
  all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/ui/TextInputDialogWidget      c                       Ljava/lang/String;

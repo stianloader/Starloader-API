@@ -37,11 +37,11 @@ public final class JavaInterop {
         return 9;
     }
 
-    public static int mismatch(byte[] a, byte[] b) {
+    public static final int mismatch(byte[] a, byte[] b) {
         return Arrays.mismatch(a, b);
     }
 
-    public static int mismatch(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
+    public static final int mismatch(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
         return Arrays.mismatch(a, aFromIndex, aToIndex, b, bFromIndex, bToIndex);
     }
 

@@ -2,6 +2,7 @@ package de.geolykt.starloader;
 
 import java.io.File;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +50,21 @@ import de.geolykt.starloader.mod.Extension;
 @SuppressWarnings("resource")
 public class StarloaderAPIExtension extends Extension {
 
+    private static Extension instance;
+
+    @NotNull
     @Internal
-    public static StarloaderAPIExtension instance;
+    public static Extension getInstance() {
+        Extension e = StarloaderAPIExtension.instance;
+        if (e == null) {
+            throw new IllegalStateException("Instance is not yet set. The instance is only known once the constructor is called.");
+        }
+        return e;
+    }
+
+    public StarloaderAPIExtension() {
+        StarloaderAPIExtension.instance = this;
+    }
 
     @Override
     public void preInitialize() {
@@ -58,7 +72,6 @@ public class StarloaderAPIExtension extends Extension {
         // We had to move this to preinit as some AWs are bork in SLL 2.0.0 and below, however
         // some of these versions are still supported by the current SLAPI version
         ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());
-        StarloaderAPIExtension.instance = this;
     }
 
     @Override

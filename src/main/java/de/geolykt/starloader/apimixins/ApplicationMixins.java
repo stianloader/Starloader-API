@@ -13,10 +13,12 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
+import de.geolykt.starloader.api.gui.KeystrokeInputHandler;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
 import de.geolykt.starloader.impl.gui.SLInputAdapter;
+import de.geolykt.starloader.impl.gui.keybinds.KeybindHelper;
 import de.geolykt.starloader.impl.registry.StateActorFactoryRegistry;
 
 import snoddasmannen.galimulator.Galemulator;
@@ -44,6 +46,7 @@ public class ApplicationMixins {
             if (t != null) {
                 throw t;
             }
+            KeybindHelper.registerAll(KeystrokeInputHandler.getInstance());
         } catch (Throwable e) {
             GalimulatorImplementation.crash(e, "Failed to start up. Likely mod caused. (Do you have incompatible mods?)", false);
         }

@@ -6,10 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.example.Main;
+
+import de.geolykt.starloader.api.gui.KeystrokeInputHandler;
 
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.Shortcut;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.Widget;
 
@@ -46,18 +46,14 @@ public class SLInputAdapter extends InputAdapter {
     }
 
     @Override
-    public boolean keyDown(int integer) {
-        for(Shortcut var3 : Main.shortcuts) {
-            var3.checkAndDoStuff(integer);
-        }
+    public boolean keyUp(int keycode) {
+        KeystrokeInputHandler.getInstance().onKeyRelease(keycode);
         return true;
     }
 
     @Override
-    public boolean keyTyped(char character) {
-        for(Shortcut var3 : Main.shortcuts) {
-            var3.checkAndDoStuff(character);
-        }
+    public boolean keyDown(int keycode) {
+        KeystrokeInputHandler.getInstance().onKeyPress(keycode);
         return true;
     }
 }

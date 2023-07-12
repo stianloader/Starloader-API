@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.example.Main;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
@@ -40,7 +39,6 @@ import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
-import de.geolykt.starloader.api.gui.Dynbind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
@@ -599,14 +597,17 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public void registerKeybind(@NotNull Dynbind bind) {
+    @Deprecated
+    @ScheduledForRemoval
+    @DeprecatedSince(value = "2.0.0")
+    public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.@NotNull Dynbind bind) {
         Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
-        Main.shortcuts.add(new SLDynbind(bind));
+        LoggerFactory.getLogger(getClass()).error("Failed to register keybind '{}': The Dynbind API is no longer implemented!", bind.getDescription());
     }
 
     @Override
     public void registerMouseInputListener(@NotNull MouseInputListener listener) {
-        listeners.add(Objects.requireNonNull(listener, "listener cannot be null"));
+        this.listeners.add(Objects.requireNonNull(listener, "listener cannot be null"));
     }
 
     @Override

@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
-import net.minestom.server.extras.selfmodification.HierarchyClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 
 import de.geolykt.starloader.DeprecatedSince;
@@ -31,7 +30,7 @@ import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
-import de.geolykt.starloader.api.gui.Dynbind;
+import de.geolykt.starloader.api.gui.Keybind;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.serial.SavegameFormat;
@@ -433,8 +432,12 @@ public final class Galimulator {
          *
          * @param bind The keybind to register.
          * @since 1.3.0
+         * @deprecated The Dynbind interface was replaced by the new and improved {@link Keybind} interface.
          */
-        public void registerKeybind(@NotNull Dynbind bind);
+        @Deprecated
+        @ScheduledForRemoval
+        @DeprecatedSince(value = "2.0.0")
+        public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.@NotNull Dynbind bind);
 
         /**
          * Registers a {@link MouseInputListener}.
@@ -897,7 +900,7 @@ public final class Galimulator {
         GameImplementation gameImpl = impl;
         if (gameImpl == null) {
             try {
-                Class<?> self = StarloaderAPIExtension.instance.getClass().getClassLoader().loadClass("de.geolykt.starloader.api.Galimulator");
+                Class<?> self = StarloaderAPIExtension.getInstance().getClass().getClassLoader().loadClass("de.geolykt.starloader.api.Galimulator");
                 Field f = self.getDeclaredField("impl");
                 f.setAccessible(true);
                 gameImpl = impl = (GameImplementation) f.get(null);
@@ -1254,8 +1257,12 @@ public final class Galimulator {
      *
      * @param bind The keybind to register.
      * @since 1.3.0
+     * @deprecated The Dynbind interface was replaced by the new and improved {@link Keybind} interface.
      */
-    public static void registerKeybind(@NotNull Dynbind bind) {
+    @Deprecated
+    @ScheduledForRemoval
+    @DeprecatedSince(value = "2.0.0")
+    public static void registerKeybind(@NotNull de.geolykt.starloader.api.gui.@NotNull Dynbind bind) {
         impl.registerKeybind(bind);
     }
 

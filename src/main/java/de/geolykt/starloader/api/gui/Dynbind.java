@@ -1,8 +1,11 @@
 package de.geolykt.starloader.api.gui;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 import com.badlogic.gdx.Input;
+
+import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * Dynamic Keybind - short Dynbind.
@@ -15,7 +18,11 @@ import com.badlogic.gdx.Input;
  * However, such a change will likely result in yet another version of a hotkey interface.
  *
  * @since 1.3.0
+ * @deprecated Replaced by the much more versatile {@link Keybind} interface in conjunction with {@link KeystrokeInputHandler}.
  */
+@Deprecated
+@ScheduledForRemoval
+@DeprecatedSince(value = "2.0.0")
 public interface Dynbind {
 
     /**
