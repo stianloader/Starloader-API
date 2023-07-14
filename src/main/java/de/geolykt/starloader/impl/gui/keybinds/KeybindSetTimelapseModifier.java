@@ -39,4 +39,12 @@ public class KeybindSetTimelapseModifier implements Keybind {
     public void executeAction() {
         Galemulator.setTimelapseModifier(1 << this.factor);
     }
+
+    @Override
+    public int compareTo(Keybind o) {
+        if (o instanceof KeybindSetTimelapseModifier) {
+            return Integer.compare(this.factor, ((KeybindSetTimelapseModifier) o).factor);
+        }
+        return Keybind.super.compareTo(o);
+    }
 }

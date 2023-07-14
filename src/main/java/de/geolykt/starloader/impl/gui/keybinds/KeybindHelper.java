@@ -23,7 +23,7 @@ public class KeybindHelper {
     public static final NamespacedKey ZOOM_IN = new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_zoom_in");
 
     @NotNull
-    public static final NamespacedKey ZOOM_OUT = new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_zoom_in");
+    public static final NamespacedKey ZOOM_OUT = new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_zoom_out");
 
     @NotNull
     public static final NamespacedKey CENTER_CAMERA = new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_center_camera");
@@ -87,9 +87,6 @@ public class KeybindHelper {
 
     @NotNull
     public static final NamespacedKey STEP_100 = new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_step_100");
-
-    @NotNull
-    public static final NamespacedKey XXXXXXXXXXX = new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_");
 
     public static void registerAll(@NotNull KeystrokeInputHandler handler) {
         int oldCount = handler.getKeybinds().size();

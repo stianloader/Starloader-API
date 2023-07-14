@@ -7,6 +7,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -25,6 +26,7 @@ import de.geolykt.starloader.starplane.annotations.RemapMemberReference.Referenc
 import de.geolykt.starloader.transformers.ASMTransformer;
 
 import snoddasmannen.galimulator.rendersystem.RenderItem;
+import snoddasmannen.galimulator.ui.AboutWidget;
 import snoddasmannen.galimulator.ui.SidebarWidget;
 import snoddasmannen.galimulator.ui.Widget;
 
@@ -32,6 +34,16 @@ import snoddasmannen.galimulator.ui.Widget;
  * Code transformer that applies to the UI package and various other UI-related calls.
  */
 public final class UIASMTransformer extends ASMTransformer {
+
+    @RemapClassReference(type = AboutWidget.class)
+    @NotNull
+    private static final String ABOUT_WIDGET_CLASS = ReferenceSource.getStringValue();
+
+    @RemapMemberReference(ownerType = Widget.class, name = "addChild", methodDesc = @MethodDesc(args = Widget.class, ret = Widget.class), format = ReferenceFormat.NAME)
+    private static final String ADD_CHILD_NAME = ReferenceSource.getStringValue();
+
+    @RemapMemberReference(ownerType = Widget.class, name = "addChild", methodDesc = @MethodDesc(args = Widget.class, ret = Widget.class), format = ReferenceFormat.DESCRIPTOR)
+    private static final String ADD_CHILD_DESC = ReferenceSource.getStringValue();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UIASMTransformer.class);
 
@@ -44,14 +56,16 @@ public final class UIASMTransformer extends ASMTransformer {
     /**
      * The fully classified name of the class that is responsible for
      * the sidebar. Uses the saner ASM-style syntax.
+     *
+     * @since 2.0.0
      */
     @RemapClassReference(type = SidebarWidget.class)
     @NotNull
-    public static String mainSidebarClass = ReferenceSource.getStringValue();
+    public static final String MAIN_SIDEBAR_CLASS = ReferenceSource.getStringValue();
 
     @RemapMemberReference(ownerType = SidebarWidget.class, name = "openGameControl", methodDesc = @MethodDesc(args = {}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
-    public static String openGameControlMethod = ReferenceSource.getStringValue();
+    public static final String OPEN_GAME_CONTROL_METHOD = ReferenceSource.getStringValue();
 
     /**
      * The fully classified name of the RenderItem class.
@@ -61,7 +75,7 @@ public final class UIASMTransformer extends ASMTransformer {
      */
     @RemapClassReference(type = RenderItem.class)
     @NotNull
-    public static String renderItemClass = ReferenceSource.getStringValue();
+    public static final String RENDER_ITEM_CLASS = ReferenceSource.getStringValue();
 
     public static final void sideBarBottom(Object widget) {
         if (widget instanceof Widget && SidebarInjector.getImplementation() instanceof SLSidebarInjector) {
@@ -77,11 +91,14 @@ public final class UIASMTransformer extends ASMTransformer {
 
     @Override
     public boolean accept(@NotNull ClassNode node) {
-        if (node.name.equals(mainSidebarClass)) {
+        if (node.name.equals(MAIN_SIDEBAR_CLASS)) {
             transformSidebarClass(node);
             return true;
-        } else if (node.name.equals(renderItemClass)) {
+        } else if (node.name.equals(RENDER_ITEM_CLASS)) {
             node.interfaces.add(Type.getInternalName(RenderObject.class));
+            return true;
+        } else if (node.name.equals(ABOUT_WIDGET_CLASS)) {
+            transformAboutClass(node);
             return true;
         }
         return false;
@@ -94,7 +111,9 @@ public final class UIASMTransformer extends ASMTransformer {
 
     @Override
     public boolean isValidTarget(@NotNull String internalName) {
-        return internalName.equals(mainSidebarClass) || internalName.equals(renderItemClass);
+        return internalName.equals(MAIN_SIDEBAR_CLASS)
+                || internalName.equals(RENDER_ITEM_CLASS)
+                || internalName.equals(ABOUT_WIDGET_CLASS);
     }
 
     private void sidebarInjectHelper(@NotNull String flag, @NotNull String methodName, @NotNull ClassNode source) {
@@ -116,7 +135,7 @@ public final class UIASMTransformer extends ASMTransformer {
             }
         }
         if (initializerMethod == null || flagInsn == null) {
-            LOGGER.error("UI transformer failed to find potential injection candidate in sidebar class " + mainSidebarClass);
+            LOGGER.error("UI transformer failed to find potential injection candidate in sidebar class " + MAIN_SIDEBAR_CLASS);
             return; // We are out of here
         }
         AbstractInsnNode currentInstruction = flagInsn.getNext();
@@ -145,11 +164,78 @@ public final class UIASMTransformer extends ASMTransformer {
         }
     }
 
+    private void transformAboutClass(@NotNull ClassNode source) {
+        MethodNode constructor = null;
+        for (MethodNode method : source.methods) {
+            if (method.name.equals("<init>")) {
+                if (constructor != null) {
+                    LOGGER.warn("Multiple constructors detected for class " + ABOUT_WIDGET_CLASS + ". Transformer will not apply");
+                    return;
+                }
+                constructor = method;
+            }
+        }
+        if (constructor == null) {
+            LOGGER.warn("No constructor detected for class " + ABOUT_WIDGET_CLASS + ". Transformer will not apply");
+            return;
+        }
+        MethodInsnNode getShortcutsInsn = null;
+        for (AbstractInsnNode insn = constructor.instructions.getFirst(); insn != null; insn = insn.getNext()) {
+            if (insn.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                MethodInsnNode methodInsn = (MethodInsnNode) insn;
+                if (methodInsn.name.equals("getShortcuts")) {
+                    getShortcutsInsn = methodInsn;
+                    break;
+                }
+            }
+        }
+        MethodInsnNode addChildInsn = null;
+        for (AbstractInsnNode insn = getShortcutsInsn; insn != null; insn = insn.getNext()) {
+            if (insn.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                MethodInsnNode methodInsn = (MethodInsnNode) insn;
+                if (methodInsn.name.equals(ADD_CHILD_NAME) && methodInsn.desc.equals(ADD_CHILD_DESC)) {
+                    addChildInsn = methodInsn;
+                    break;
+                }
+            }
+        }
+        LineNumberNode cutFrom = null;
+        for (AbstractInsnNode insn = getShortcutsInsn; insn != null; insn = insn.getPrevious()) {
+            if (insn instanceof LineNumberNode) {
+                cutFrom = (LineNumberNode) insn;
+                break;
+            }
+        }
+        LineNumberNode cutTo = null;
+        for (AbstractInsnNode insn = addChildInsn; insn != null; insn = insn.getNext()) {
+            if (insn instanceof LineNumberNode) {
+                cutTo = (LineNumberNode) insn;
+                break;
+            }
+        }
+        if (cutFrom == null) {
+            LOGGER.warn("Unable to determine cutFrom instruction for class " + ABOUT_WIDGET_CLASS + ". Transformer will not apply. getShortcutsInsn: {}", getShortcutsInsn);
+            return;
+        }
+        if (cutTo == null) {
+            LOGGER.warn("Unable to determine cutTo instruction for class " + ABOUT_WIDGET_CLASS + ". Transformer will not apply. addChildInsn: {}; {}:{}", addChildInsn, ADD_CHILD_NAME, ADD_CHILD_DESC);
+            return;
+        }
+        AbstractInsnNode cutInsn = cutFrom.getNext();
+        while (cutInsn != cutTo) {
+            AbstractInsnNode t = cutInsn.getNext();
+            constructor.instructions.remove(cutInsn);
+            cutInsn = t;
+        }
+        constructor.instructions.insertBefore(cutTo, new VarInsnNode(Opcodes.ALOAD, 0));
+        constructor.instructions.insertBefore(cutTo, new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/impl/asm/TransformCallbacks", "about$shortcutListReplace", "(L" + ABOUT_WIDGET_CLASS + ";)V"));
+    }
+
     public void transformSidebarClass(@NotNull ClassNode source) {
         sidebarInjectHelper("FileButton.png", "sideBarTop", source);
         sidebarInjectHelper("peoplebutton.png", "sideBarBottom", source);
 
-        String openGameControlMethodName = openGameControlMethod.split("[\\.\\(]", 3)[1];
+        String openGameControlMethodName = OPEN_GAME_CONTROL_METHOD.split("[\\.\\(]", 3)[1];
         for (MethodNode method : source.methods) {
             if (method.desc.equals("()V") && method.name.equals(openGameControlMethodName) && (method.access & Opcodes.ACC_STATIC) != 0) {
                 method.instructions.clear();

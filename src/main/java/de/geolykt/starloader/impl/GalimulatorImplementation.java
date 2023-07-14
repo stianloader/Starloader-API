@@ -597,15 +597,6 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    @Deprecated
-    @ScheduledForRemoval
-    @DeprecatedSince(value = "2.0.0")
-    public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.@NotNull Dynbind bind) {
-        Objects.requireNonNull(bind, "the parameter \"bind\" must not be null");
-        LoggerFactory.getLogger(getClass()).error("Failed to register keybind '{}': The Dynbind API is no longer implemented!", bind.getDescription());
-    }
-
-    @Override
     public void registerMouseInputListener(@NotNull MouseInputListener listener) {
         this.listeners.add(Objects.requireNonNull(listener, "listener cannot be null"));
     }

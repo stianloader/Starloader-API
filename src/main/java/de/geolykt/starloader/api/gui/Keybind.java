@@ -18,7 +18,12 @@ import de.geolykt.starloader.api.NamespacedKey;
  *
  * @since 2.0.0
  */
-public interface Keybind {
+public interface Keybind extends Comparable<Keybind> {
+
+    @Override
+    public default int compareTo(Keybind o) {
+        return this.getDescription().compareToIgnoreCase(o.getDescription());
+    }
 
     /**
      * Obtains the description of this keybind.

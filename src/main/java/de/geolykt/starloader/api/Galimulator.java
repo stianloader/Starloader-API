@@ -428,18 +428,6 @@ public final class Galimulator {
         public void recalculateVoronoiGraphs();
 
         /**
-         * Registers the given keybind to the list of active keybinds.
-         *
-         * @param bind The keybind to register.
-         * @since 1.3.0
-         * @deprecated The Dynbind interface was replaced by the new and improved {@link Keybind} interface.
-         */
-        @Deprecated
-        @ScheduledForRemoval
-        @DeprecatedSince(value = "2.0.0")
-        public void registerKeybind(@NotNull de.geolykt.starloader.api.gui.@NotNull Dynbind bind);
-
-        /**
          * Registers a {@link MouseInputListener}.
          * The priority of a {@link MouseInputListener} registered through this method is defined by the point of time
          * of this method call compared to the time of registration of the other listeners.
@@ -1250,20 +1238,6 @@ public final class Galimulator {
      */
     public static void recalculateVoronoiGraphs() {
         impl.recalculateVoronoiGraphs();
-    }
-
-    /**
-     * Registers the given keybind to the list of active keybinds.
-     *
-     * @param bind The keybind to register.
-     * @since 1.3.0
-     * @deprecated The Dynbind interface was replaced by the new and improved {@link Keybind} interface.
-     */
-    @Deprecated
-    @ScheduledForRemoval
-    @DeprecatedSince(value = "2.0.0")
-    public static void registerKeybind(@NotNull de.geolykt.starloader.api.gui.@NotNull Dynbind bind) {
-        impl.registerKeybind(bind);
     }
 
     /**

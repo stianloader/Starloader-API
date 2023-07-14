@@ -31,7 +31,7 @@ public class GestureListenerASMTransformer extends ASMTransformer {
     @RemapMemberReference(ownerType = Widget.class, name = "containsPoint", methodDesc = @MethodDesc(args = {Vector2.class}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
     private static String containsPoint = ReferenceSource.getStringValue();
 
-    @RemapMemberReference(ownerType = Widget.class, name = "onMouseDown", methodDesc = @MethodDesc(args = {float.class, float.class}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
+    @RemapMemberReference(ownerType = Widget.class, name = "interceptMouseDown", methodDesc = @MethodDesc(args = {float.class, float.class}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
     private static String onMouseDown = ReferenceSource.getStringValue();
 
     @RemapClassReference(type = GalimulatorGestureListener.class)
