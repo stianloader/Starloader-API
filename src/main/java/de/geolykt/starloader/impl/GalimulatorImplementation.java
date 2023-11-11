@@ -11,9 +11,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
@@ -48,6 +50,7 @@ import de.geolykt.starloader.api.sound.SoundHandler;
 import de.geolykt.starloader.api.utils.RandomNameType;
 import de.geolykt.starloader.api.utils.TickLoopLock;
 import de.geolykt.starloader.impl.actors.GlobalSpawningPredicatesContainer;
+import de.geolykt.starloader.impl.asm.SpaceASMTransformer;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
 import de.geolykt.starloader.impl.gui.GLScissorState;
 import de.geolykt.starloader.impl.serial.BoilerplateSavegameFormat;
@@ -76,6 +79,20 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     protected static final Logger LOGGER = LoggerFactory.getLogger(GalimulatorImplementation.class);
 
     /**
+     * A small hack {@link Runnable} that serves as a marker to represent a tick barrier within {@link #SCHEDULED_TASKS_NEXT_TICK}.
+     * That is all tasks before that barrier belong to the current tick, where as all tasks after the barrier belong to the next tick.
+     * This behaviour is required in order for calls to {@link #runTaskOnNextTick(Runnable)} work as intended within
+     * a {@link #runTaskOnNextTick(Runnable)} task.
+     *
+     * <p>Executing this runnable does nothing, although this is an implementation detail.
+     *
+     * @since 2.0.0
+     * @see #fireScheduledTasks()
+     */
+    @NotNull
+    private static final Runnable NEXT_TICK_TASK = () -> {};
+
+    /**
      * A {@link ThreadLocal} variable that stores whether the current thread is the main thread.
      *
      * @since 2.0.0
@@ -88,6 +105,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @NotNull
     private static final List<SavegameFormat> SAVEGAME_FORMATS = new ArrayList<>(Arrays.asList(VanillaSavegameFormat.INSTANCE, BoilerplateSavegameFormat.INSTANCE));
+
+    @NotNull
+    private static final Deque<@NotNull Runnable> SCHEDULED_TASKS_NEXT_TICK = new ConcurrentLinkedDeque<>();
 
     @NotNull
     private final SpawnPredicatesContainer globalSpawningPredicates = new GlobalSpawningPredicatesContainer();
@@ -192,6 +212,24 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 Galimulator.getSimulationLoopLock().acquireHardControl();
             } catch (InterruptedException interrupt) {
             }
+        }
+    }
+
+    /**
+     * Execute all tasks that have been scheduled up to this point. All tasks that are scheduled while this method is called are
+     * delegated to the next time this method is called.
+     *
+     * <p>As usual with anything in the impl package, this method is not official API.
+     * The fact that this is documented does not change that. This method is solely intended to be called from
+     * {@link SpaceASMTransformer#logicalTickEarly()}
+     *
+     * @since 2.0.0
+     */
+    public static void fireScheduledTasks() {
+        SCHEDULED_TASKS_NEXT_TICK.addLast(NEXT_TICK_TASK);
+        Runnable r;
+        while ((r = SCHEDULED_TASKS_NEXT_TICK.removeFirst()) != NEXT_TICK_TASK) {
+            r.run();
         }
     }
 
@@ -609,6 +647,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void runTaskOnNextFrame(Runnable task) {
         Gdx.app.postRunnable(task);
+    }
+
+    @Override
+    public void runTaskOnNextTick(@NotNull Runnable runnable) {
+        SCHEDULED_TASKS_NEXT_TICK.add(runnable);
     }
 
     @Override

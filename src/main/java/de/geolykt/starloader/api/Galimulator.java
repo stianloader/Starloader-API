@@ -16,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 
 import de.geolykt.starloader.DeprecatedSince;
@@ -30,6 +33,8 @@ import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
+import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
+import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent.Phase;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.serial.SavegameFormat;
@@ -447,15 +452,33 @@ public final class Galimulator {
         /**
          * Schedule a task that should run on the next <b>frame</b>. More concretely, it should run before the next frame is drawn, however
          * other tasks may run before that. If two tasks are scheduled at the same frame, the task that is scheduled first should run
-         * before. All scheduled tasks need to be run on the main thread.
+         * before. All scheduled tasks need to be run on the main graphical/LWJGL thread; The simulation loop lock (as per
+         * {@link #getSimulationLoopLock()}) is not acquired.
          *
          * <p>This methods schedules task to be run on the next graphical frame,
-         * not on the next simulation tick.
+         * not on the next simulation tick. For that, use {@link #runTaskOnNextTick(Runnable)} instead.
+         *
+         * <p>Calling this method is equivalent to using {@link Application#postRunnable(Runnable)}.
          *
          * @param task The task to run on the next tick
          * @since 2.0.0
          */
         public void runTaskOnNextFrame(Runnable task);
+
+        /**
+         * Run a given action on the next <b>simulation</b> tick.
+         * The simulation loop lock (see {@link #getSimulationLoopLock()}) will not be acquired at that point of time.
+         *
+         * <p>To schedule a task on the next frame, use {@link #runTaskOnNextFrame(Runnable)} instead.
+         *
+         * <p>Warning: This method is pause-insensitive - that is it can also be called while the game is in slow-motion
+         * or paused. As such, the task WILL be called before any {@link LogicalTickEvent} handler but is roughly equivalent
+         * to {@link Phase#PRE_GRAPHICAL}.
+         *
+         * @param runnable The task to execute
+         * @since 2.0.0
+         */
+        public void runTaskOnNextTick(@NotNull Runnable runnable);
 
         /**
          * Saves a file inside the data folder.
@@ -1264,16 +1287,38 @@ public final class Galimulator {
     /**
      * Schedule a task that should run on the next frame. More concretely, it should run before the next frame is drawn, however
      * other tasks may run before that. If two tasks are scheduled at the same frame, the task that is scheduled first should run
-     * before. All scheduled tasks need to be run on the main thread.
+     * before. All scheduled tasks need to be run on the main graphical/LWJGL thread; The simulation loop lock (as per
+     * {@link #getSimulationLoopLock()}) is not acquired.
      *
      * <p>This methods schedules task to be run on the next graphical frame,
-     * not on the next simulation tick.
+     * not on the next simulation tick. For that, use {@link #runTaskOnNextTick(Runnable)} instead.
+     *
+     * <p>Calling this method is equivalent to using {@link Application#postRunnable(Runnable)}.
      *
      * @param task The task to run on the next tick
      * @since 2.0.0
      */
     public static void runTaskOnNextFrame(Runnable task) {
         impl.runTaskOnNextFrame(task);
+    }
+
+    /**
+     * Run a given action on the next <b>simulation</b> tick.
+     * The simulation loop lock (see {@link #getSimulationLoopLock()}) will not be acquired at that point of time.
+     *
+     * <p>To schedule a task on the next frame, use {@link Application#postRunnable(Runnable)} instead.
+     *
+     * <p>This method is explicitly safe to execute outside the main thread.
+     *
+     * <p>Warning: This method is pause-insensitive - that is it can also be called while the game is in slow-motion
+     * or paused. As such, the task WILL be called before any {@link LogicalTickEvent} handler but is roughly equivalent
+     * to {@link Phase#PRE_GRAPHICAL}.
+     *
+     * @param runnable The task to execute
+     * @since 2.0.0
+     */
+    public static void runTaskOnNextTick(@NotNull Runnable runnable) {
+        Galimulator.impl.runTaskOnNextTick(runnable);
     }
 
     /**

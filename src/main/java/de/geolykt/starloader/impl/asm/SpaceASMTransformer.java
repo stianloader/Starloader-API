@@ -33,6 +33,7 @@ import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapse
 import de.geolykt.starloader.api.event.lifecycle.GalaxyGeneratedEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
+import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.starplane.annotations.MethodDesc;
 import de.geolykt.starloader.starplane.annotations.ReferenceSource;
 import de.geolykt.starloader.starplane.annotations.RemapClassReference;
@@ -144,7 +145,6 @@ public class SpaceASMTransformer extends ASMTransformer {
             // I have never seen this nag yet, so it can likely be assumed that the assumption is right.
             DebugNagException.nag("This method is thought to be only used for GC after a empire has no stars!");
         }
-        EventManager.handleEvent(e);
         return e.isCancelled();
     }
 
@@ -152,6 +152,7 @@ public class SpaceASMTransformer extends ASMTransformer {
      * Called at the very beginning of the global tick method.
      */
     public static final void logicalTickEarly() {
+        GalimulatorImplementation.fireScheduledTasks();
         EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE_GRAPHICAL));
     }
 
