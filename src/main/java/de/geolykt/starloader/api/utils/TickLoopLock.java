@@ -20,6 +20,47 @@ import java.util.concurrent.locks.ReentrantLock;
 public interface TickLoopLock {
 
     /**
+     * A {@link LockScope} is an object that represents a lock that is held for a given time.
+     * They can be created via {@link TickLoopLock#acquireHardControlWithResources()} or
+     * {@link TickLoopLock#acquireSoftControlWithResources()}. This object is meant to be used
+     * in combination with try-with-resources as the {@link LockScope#close()} method will return
+     * the {@link TickLoopLock} to a desired amount of acquired permits afterwards by releasing
+     * the needed amount of permits. <b>It will not acquire permits to do.</b>
+     *
+     * @since 2.0.0
+     * @implSpec Even though the API documentation considers this object to be a short-lived one,
+     * the implementation may make instances of this interface long-lived for performance reasons.
+     * This means that instances of this interface may be shared and represent multiple scopes internally,
+     * but the API lacks the means to distinguish them.
+     */
+    public static interface LockScope extends AutoCloseable {
+
+        /**
+         * Closes the lock scope, releasing the needed amount of permits to return to the former state
+         * as per {@link #getDesiredAcquisitionsCount()}. The amount of released permits can also be 0
+         * if the lock is already in it's desired state.
+         *
+         * <p>This method will <b>never</b> acquire any permits to return to the desired state and instead
+         * will throw a {@link IllegalMonitorStateException}.
+         *
+         * @throws IllegalMonitorStateException If returning to the original amount of locally acquired permits
+         * was to require acquiring permits.
+         * @since 2.0.0
+         */
+        @Override
+        public void close() throws IllegalMonitorStateException;
+
+        /**
+         * Convenience method to return the amount of locally acquired permits before the {@link LockScope} was created.
+         * This is also the amount of permits that are desired to be present immediately after the scope ends.
+         *
+         * @return The amount of permits acquired locally before the scope was created.
+         * @since 2.0.0
+         */
+        public int getDesiredAcquisitionsCount();
+    }
+
+    /**
      * Acquires all permits. If any permit is not available, the method blocks until it is
      * {@link Thread#interrupt() interrupted} or the remaining permits were acquired.
      *
@@ -37,6 +78,26 @@ public interface TickLoopLock {
     public void acquireHardControl() throws InterruptedException;
 
     /**
+     * Acquire "hard" control over the tick loops as per {@link #acquireHardControl()} and return an {@link AutoCloseable}
+     * which will release the hard control if the control was acquired - that is it will revert to the state before the lock
+     * was acquired.
+     *
+     * <p>This method is mainly intended to be used in conjunction with try-with-resources (hence the name of the method)
+     * which if used correctly can reduce the amount of erroneous releases of locks.
+     *
+     * <p>Note that due to technical reasons, the lock might get explicitly released while it is held even though the {@link AutoCloseable#close()}
+     * was not invoked implicitly nor explicitly. However, once the close method is invoked, an {@link IllegalMonitorStateException} will be thrown
+     * if the lock state does not meet the desired state.
+     *
+     * @return An {@link AutoCloseable} that once {@link AutoCloseable#close() closed}, will return the amount of {@link #getLocalAcquisitions()
+     * locally acquired permits} to what it was at the state before this method was invoked.
+     * @see #acquireHardControl()
+     * @throws InterruptedException When the thread is interrupted while waiting to acquire the permit
+     * @since 2.0.0
+     */
+    public LockScope acquireHardControlWithResources() throws InterruptedException;
+
+    /**
      * Acquires a single permit. If the permit is not available, the method blocks until it is
      * {@link Thread#interrupt() interrupted} or a permit was acquired.
      *
@@ -50,6 +111,26 @@ public interface TickLoopLock {
      * @since 2.0.0
      */
     public void acquireSoftControl() throws InterruptedException;
+
+    /**
+     * Acquire "soft" control over the tick loops as per {@link #acquireSoftControl()} and return an {@link AutoCloseable}
+     * which will release the soft control if the control was acquired - that is it will revert to the state before the lock
+     * was acquired.
+     *
+     * <p>This method is mainly intended to be used in conjunction with try-with-resources (hence the name of the method)
+     * which if used correctly can reduce the amount of erroneous releases of locks.
+     *
+     * <p>Note that due to technical reasons, the lock might get explicitly released while it is held even though the {@link AutoCloseable#close()}
+     * was not invoked implicitly nor explicitly. However, once the close method is invoked, an {@link IllegalMonitorStateException} will be thrown
+     * if the lock state does not meet the desired state.
+     *
+     * @return An {@link AutoCloseable} that once {@link AutoCloseable#close() closed}, will return the amount of {@link #getLocalAcquisitions()
+     * locally acquired permits} to what it was at the state before this method was invoked.
+     * @see #acquireSoftControl()
+     * @throws InterruptedException When the thread is interrupted while waiting to acquire the permit
+     * @since 2.0.0
+     */
+    public LockScope acquireSoftControlWithResources() throws InterruptedException;
 
     /**
      * Obtains the amount of free permits available for the {@link Semaphore}.

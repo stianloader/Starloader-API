@@ -11,8 +11,36 @@ import de.geolykt.starloader.api.utils.TickLoopLock;
 
 public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
+    private final class SemaphoreLockScope implements LockScope {
+
+        private final int desiredPermits;
+
+        public SemaphoreLockScope(int desiredPermits) {
+            this.desiredPermits = desiredPermits;
+        }
+
+        @Override
+        public void close() throws IllegalMonitorStateException {
+            final int currentPermits = SemaphoreLoopLock.this.getLocalAcquisitions();
+            if (currentPermits < this.desiredPermits) {
+                throw new IllegalMonitorStateException("Before the scope was terminated, permits were erroneously released, "
+                        + "which is why to return to the original state of " + this.desiredPermits + " acquired permits "
+                        + (this.desiredPermits - currentPermits) + " permits would need to be acquired as currently only "
+                        + currentPermits + " permits are held locally.");
+            } else if (currentPermits > this.desiredPermits) {
+                SemaphoreLoopLock.this.release(currentPermits - this.desiredPermits);
+            }
+        }
+
+        @Override
+        public int getDesiredAcquisitionsCount() {
+            return this.desiredPermits;
+        }
+    }
+
     private static final long serialVersionUID = 3555178371578225965L;
     private final ThreadLocal<MutableInteger> acquisitions = ThreadLocal.withInitial(MutableInteger::new);
+    private final LockScope scopes[];
     private static final boolean DEBUG = Boolean.getBoolean("de.geolykt.starloader.impl.util.SemaphoreLoopLock.DEBUG");
     private static final AtomicLong DEBUG_ID_COUNTER = new AtomicLong();
     private static final PrintWriter DEBUG_OUT;
@@ -34,6 +62,10 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     public SemaphoreLoopLock(int permits) {
         super(permits);
+        this.scopes = new LockScope[permits];
+        for (int i = 0; i < permits; i++) {
+            this.scopes[i] = new SemaphoreLockScope(i);
+        }
     }
 
     private static synchronized void writeDebug(String ln) {
@@ -81,12 +113,26 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
     }
 
     @Override
+    public LockScope acquireHardControlWithResources() throws InterruptedException {
+        final int targetAcquisitions = this.getLocalAcquisitions();
+        this.acquireHardControl();
+        return this.scopes[targetAcquisitions];
+    }
+
+    @Override
     public void acquireSoftControl() throws InterruptedException {
         if (getLocalAcquisitions() > 0) {
             return;
         } else {
             acquire(1);
         }
+    }
+
+    @Override
+    public LockScope acquireSoftControlWithResources() throws InterruptedException {
+        final int targetAcquisitions = this.getLocalAcquisitions();
+        this.acquireSoftControl();
+        return this.scopes[targetAcquisitions];
     }
 
     @Override
