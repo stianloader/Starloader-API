@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import de.geolykt.starloader.api.gui.KeystrokeInputHandler;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
+import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
+import de.geolykt.starloader.api.gui.modconf.FloatOption;
+import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.impl.gui.WidgetMouseReleaseListener;
 import de.geolykt.starloader.impl.gui.keybinds.KeybindListMenu;
 
@@ -28,6 +31,18 @@ import snoddasmannen.galimulator.ui.Widget;
 public class TransformCallbacks {
 
     private TransformCallbacks() {
+    }
+
+    /**
+     * The default implementation of {@link IntegerOption#addValueChangeListener(java.util.function.IntConsumer)},
+     * {@link FloatOption#addValueChangeListener(de.geolykt.starloader.api.utils.FloatConsumer)}
+     * and {@link ConfigurationOption#addValueChangeListener(java.util.function.Consumer)}.
+     *
+     * @param obj The instance of the option class
+     * @since 2.0.0
+     */
+    public static void abi$raiseABIError(@NotNull Object obj) {
+        throw new UnsupportedOperationException("This implementation (" + obj.getClass().getName() + ") does not implement the needed SLAPI 2.0 API.");
     }
 
     /**

@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -13,6 +15,20 @@ import org.jetbrains.annotations.Nullable;
  * Collection of QoL null safety-related utility methods.
  */
 public final class NullUtils {
+
+    /**
+     * "Shut-up" wrapper around {@link Arrays#asList(Object...)}.
+     *
+     * @param <T> The type of the array to back
+     * @param arr The array to back
+     * @return A list backed by the specific array.
+     * @since 2.0.0
+     */
+    @SafeVarargs
+    @SuppressWarnings("null")
+    public static <T> @NotNull Collection<T> asList(T @NotNull... arr) {
+        return Arrays.asList(arr);
+    }
 
     /**
      * Similar to {@link Optional#ofNullable(Object)} but with correct annotations.

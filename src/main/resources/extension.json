@@ -4,5 +4,8 @@
   "version": "2.0.0-SNAPSHOT",
   "mixinConfig": "api-mixins.json",
   "reversibleAccessSetter": "starloader-api.ras",
-  "dependencies": [ ]
+  "dependencies": [ ],
+  "codeModifiers": [
+    "de.geolykt.starloader.impl.asm.ABICompatibilityTransformer"
+  ]
 }

@@ -11,11 +11,15 @@ import de.geolykt.starloader.api.NullUtils;
  * Main class for ModConf functionality.
  * The base implementation makes so that this integrates nicely with the vanilla system and does not cause any
  * issues with other extensions as they can make use of ModConf instead.
+ *
+ * @since 1.3.0
  */
 public final class ModConf {
 
     /**
      * Implementation specification for static methods used by the {@link ModConf} class.
+     *
+     * @since 1.3.0
      */
     public static interface ModConfSpec {
 

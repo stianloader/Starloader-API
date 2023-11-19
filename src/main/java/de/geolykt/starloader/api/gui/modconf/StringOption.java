@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
  *<br/>
  * This interface can be safely implemented by Extensions as the graphical components are relayed
  * to other components.
+ *
+ * @since 1.3.0
  */
 public interface StringOption extends ConfigurationOption<String> {
 

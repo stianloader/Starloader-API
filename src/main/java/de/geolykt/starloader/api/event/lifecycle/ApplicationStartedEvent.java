@@ -16,6 +16,8 @@ public class ApplicationStartedEvent extends Event {
 
     /**
      * Whether the constructor has been called at least once already.
+     *
+     * @since 1.3.0
      */
     protected static boolean started = false;
 
@@ -32,6 +34,7 @@ public class ApplicationStartedEvent extends Event {
      * of this event has been invoked yet.
      *
      * @return The started flag
+     * @since 1.3.0
      */
     public static boolean hasStarted() {
         return started;

@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 /**
  * An {@link ArrayList} that behaves like an ImmutableList when it comes to add/remove
- * operations but includes ways of adding (but not removing) values in a non-standard matter.
+ * operations but includes ways of adding (but not removing) values in a non-standard manner.
  *
  * @param <E> The data type that is held in this list
  */

@@ -8,6 +8,8 @@ package de.geolykt.starloader.api.gui.modconf;
  *<br/>
  * This interface can be safely implemented by Extensions as the graphical components are relayed
  * to other components.
+ *
+ * @since 1.3.0
  */
 public interface StringChooseOption extends StrictStringOption {
 

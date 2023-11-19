@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * This interface can be safely implemented by Extensions as the graphical components are relayed
  * to other components.
  *
+ * @since 1.3.0
  * @param <T> The exact data type that is used by this configuration object
  */
 public interface NumberOption<T extends Number> extends ConfigurationOption<T> {

@@ -5,6 +5,8 @@ package de.geolykt.starloader.api.gui.modconf;
  *
  * <p>This interface can be safely implemented by Extensions as the graphical components are relayed
  * to other components.
+ *
+ * @since 1.3.0
  */
 public interface BooleanOption extends ConfigurationOption<Boolean> {
 }

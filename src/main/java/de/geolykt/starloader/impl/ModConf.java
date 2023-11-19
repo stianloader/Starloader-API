@@ -4,7 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +19,7 @@ import de.geolykt.starloader.api.gui.modconf.ConfigurationSection;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
+import de.geolykt.starloader.api.utils.FloatConsumer;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
 import de.geolykt.starloader.impl.gui.ModConfScreen;
@@ -24,6 +28,8 @@ import de.geolykt.starloader.impl.util.PseudoImmutableArrayList;
 /**
  * Default implementation of the ModConf classes that is used within this
  * Starloader API Implementation.
+ *
+ * @since 1.3.0
  */
 public class ModConf implements ModConfSpec {
 
@@ -32,16 +38,21 @@ public class ModConf implements ModConfSpec {
      * again a few hundred times.
      *
      * @param <T> The data value used by {@link ConfigurationOption}.
+     * @since 1.3.0
      */
     public abstract static class SLBaseOption<T> implements ConfigurationOption<T> {
 
         /**
          * The section that this option currently resides in.
+         *
+         * @since 1.3.0
          */
         protected final @NotNull ConfigurationSection cfgSect;
 
         /**
          * The name of the option. Should be user-friendly but not all too long.
+         *
+         * @since 1.3.0
          */
         protected final @NotNull String name;
 
@@ -51,6 +62,7 @@ public class ModConf implements ModConfSpec {
          * @param name    The user-friendly name of this option. See {@link #getName()}
          *                for more info
          * @param cfgSect The parent section used by {@link #getParent()}
+         * @since 1.3.0
          */
         protected SLBaseOption(@NotNull String name, @NotNull ConfigurationSection cfgSect) {
             this.name = name;
@@ -76,17 +88,23 @@ public class ModConf implements ModConfSpec {
 
     /**
      * Simplistic implementation of the {@link BooleanOption} interface.
+     *
+     * @since 1.3.0
      */
-    public static class SLBooleanOption extends SLBaseOption<Boolean> implements BooleanOption {
+    public static class SLBooleanOption extends SLObjectOption<Boolean> implements BooleanOption {
 
         /**
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
+         *
+         * @since 1.3.0
          */
         protected @NotNull Boolean currentVal;
 
         /**
          * The currently valid value.
+         *
+         * @since 1.3.0
          */
         protected final @NotNull Boolean defaultVal;
 
@@ -118,6 +136,7 @@ public class ModConf implements ModConfSpec {
          */
         @Override
         public void set(@NotNull Boolean value) {
+            this.onSet(value);
             currentVal = value;
         }
     }
@@ -125,16 +144,22 @@ public class ModConf implements ModConfSpec {
     /**
      * The implementation of the {@link ConfigurationSection} interface which is
      * used by this class.
+     *
+     * @since 1.3.0
      */
     public static class SLConfigSection implements ConfigurationSection {
 
         /**
          * The child options of this section.
+         *
+         * @since 1.3.0
          */
         protected final @NotNull PseudoImmutableArrayList<@NotNull ConfigurationOption<?>> children = new PseudoImmutableArrayList<>(16);
 
         /**
          * The user-friendly name of the section.
+         *
+         * @since 1.3.0
          */
         protected final @NotNull String name;
 
@@ -142,6 +167,7 @@ public class ModConf implements ModConfSpec {
          * Constructor.
          *
          * @param name The user-friendly name of the section
+         * @since 1.3.0
          */
         public SLConfigSection(@NotNull String name) {
             this.name = name;
@@ -234,25 +260,41 @@ public class ModConf implements ModConfSpec {
 
     /**
      * Simplistic implementation of the {@link FloatOption} interface.
+     *
+     * @since 1.3.0
      */
     public static class SLFLoatOption extends SLBaseOption<Float> implements FloatOption {
 
         /**
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
+         *
+         * @since 1.3.0
          */
         protected float defaultVal;
+
+        /**
+         * The listeners which have until now been registered via {@link #addValueChangeListener(FloatConsumer)}.
+         *
+         * @since 2.0.0
+         */
+        @NotNull
+        protected final Collection<@NotNull FloatConsumer> listeners = new CopyOnWriteArrayList<>();
 
         protected float max;
         protected float min;
 
         /**
          * The recommended values shown to the user when the user decides to change the value.
+         *
+         * @since 1.3.0
          */
         protected @NotNull Collection<@NotNull Float> recommended;
 
         /**
          * The currently valid value.
+         *
+         * @since 1.3.0
          */
         protected float value;
 
@@ -264,6 +306,11 @@ public class ModConf implements ModConfSpec {
             this.min = min;
             this.max = max;
             this.recommended = recommended;
+        }
+
+        @Override
+        public void addValueChangeListener(@NotNull FloatConsumer listener) {
+            this.listeners.add(listener);
         }
 
         /**
@@ -312,6 +359,9 @@ public class ModConf implements ModConfSpec {
                 throw new IllegalArgumentException(
                         String.format(Locale.ROOT, "Value out of bounds: %f (min %f, max %f)", value, min, max));
             }
+            for (FloatConsumer consumer : this.listeners) {
+                consumer.accept(value);
+            }
             this.value = value;
         }
     }
@@ -324,18 +374,33 @@ public class ModConf implements ModConfSpec {
         /**
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
+         *
+         * @since 1.3.0
          */
         protected int defaultVal;
 
+        /**
+         * The listeners which have until now been registered via {@link #addValueChangeListener(IntConsumer)}.
+         *
+         * @since 2.0.0
+         */
+        @NotNull
+        protected final Collection<@NotNull IntConsumer> listeners = new CopyOnWriteArrayList<>();
+
         protected int max;
         protected int min;
+
         /**
          * The recommended values shown to the user when the user decides to change the value.
+         *
+         * @since 1.3.0
          */
         protected @NotNull Collection<@NotNull Integer> recommended;
 
         /**
          * The currently valid value.
+         *
+         * @since 1.3.0
          */
         protected int value;
 
@@ -347,6 +412,11 @@ public class ModConf implements ModConfSpec {
             this.min = min;
             this.max = max;
             this.recommended = recommended;
+        }
+
+        @Override
+        public void addValueChangeListener(@NotNull IntConsumer listener) {
+            this.listeners.add(listener);
         }
 
         /**
@@ -395,7 +465,55 @@ public class ModConf implements ModConfSpec {
                 throw new IllegalArgumentException(
                         String.format(Locale.ROOT, "Value out of bounds: %d (min %d, max %d)", value, min, max));
             }
+            for (IntConsumer consumer : this.listeners) {
+                consumer.accept(value);
+            }
             this.value = value;
+        }
+    }
+
+    /**
+     * Class that unifies value-independent methods so they are not implemented
+     * again a few hundred times.
+     *
+     * <p>However, unlike {@link SLBaseOption} this also adds listener methods for the
+     * <b>generic</b> consumers. As not all subclasses of {@link SLBaseOption} (such as {@link SLIntOption})
+     * use generic consumers as listeners, this class exists.
+     *
+     * @param <T> The data value used by {@link ConfigurationOption}.
+     * @since 2.0.0
+     */
+    public abstract static class SLObjectOption<T> extends SLBaseOption<T> {
+
+        /**
+         * Constructor.
+         *
+         * @param name    The user-friendly name of this option. See {@link #getName()}
+         *                for more info
+         * @param cfgSect The parent section used by {@link #getParent()}
+         * @since 2.0.0
+         */
+        protected SLObjectOption(@NotNull String name, @NotNull ConfigurationSection cfgSect) {
+            super(name, cfgSect);
+        }
+
+        /**
+         * The listeners which have until now been registered via {@link #addValueChangeListener(Consumer)}.
+         *
+         * @since 2.0.0
+         */
+        @NotNull
+        protected final Collection<@NotNull Consumer<T>> listeners = new CopyOnWriteArrayList<>();
+
+        @Override
+        public void addValueChangeListener(@NotNull Consumer<T> listener) {
+            this.listeners.add(listener);
+        }
+
+        protected void onSet(@NotNull T newValue) {
+            for (Consumer<T> consumer : this.listeners) {
+                consumer.accept(newValue);
+            }
         }
     }
 
@@ -404,11 +522,15 @@ public class ModConf implements ModConfSpec {
      * interface states, this implementation verifies the validity of the inserted
      * values. The {@link StrictStringOption#isValid(String)} operation is delegated
      * to a {@link Function}.
+     *
+     * @since 1.3.0
      */
     public static class SLStrictStringOption extends SLStringOption implements StrictStringOption {
 
         /**
          * The function that is used to compute {@link #isValid(String)}.
+         *
+         * @since 1.3.0
          */
         protected final Predicate<@NotNull String> valitityTest;
 
@@ -443,22 +565,30 @@ public class ModConf implements ModConfSpec {
      * Simplistic implementation of the {@link StringOption} interface. As the
      * interface states, this implementation does not verify strings for validity,
      * however sub-classes may do that.
+     *
+     * @since 1.3.0
      */
-    public static class SLStringOption extends SLBaseOption<String> implements StringOption {
+    public static class SLStringOption extends SLObjectOption<String> implements StringOption {
 
         /**
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
+         *
+         * @since 1.3.0
          */
         protected @NotNull String currentVal;
 
         /**
          * The currently valid value.
+         *
+         * @since 1.3.0
          */
         protected final @NotNull String defaultVal;
 
         /**
          * The recommended values shown to the user when the user decides to change the value.
+         *
+         * @since 1.3.0
          */
         protected @NotNull Collection<@NotNull String> recommended;
 
@@ -496,6 +626,7 @@ public class ModConf implements ModConfSpec {
          */
         @Override
         public void set(@NotNull String value) {
+            this.onSet(value);
             currentVal = value;
         }
     }
@@ -503,6 +634,8 @@ public class ModConf implements ModConfSpec {
     /**
      * Utility method that throws an exception if the application has already started.
      * Does not do anything else outside of that.
+     *
+     * @since 1.3.0
      */
     protected static final void checkState() {
         if (ApplicationStartedEvent.hasStarted()) {
@@ -515,11 +648,15 @@ public class ModConf implements ModConfSpec {
     /**
      * The name of the currently registered sections. Used for easy state
      * validation.
+     *
+     * @since 1.3.0
      */
     protected final HashSet<@NotNull String> sectionNames = new HashSet<>();
 
     /**
      * The currently registered sections.
+     *
+     * @since 1.3.0
      */
     protected final @NotNull PseudoImmutableArrayList<@NotNull ConfigurationSection> sections = new PseudoImmutableArrayList<>(16);
 
