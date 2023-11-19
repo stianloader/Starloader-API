@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
@@ -339,8 +340,18 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings({ "null" })
     @Override
+    @Deprecated
+    @DeprecatedSince("2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public @NotNull List<@NotNull ActiveEmpire> getEmpires() {
-        return getEmpiresUnsafe(); // TODO change this to a clone after the Spec permits us that
+        return getEmpiresUnsafe();
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Collection<@NotNull ActiveEmpire> getEmpiresView() {
+        return Collections.unmodifiableList(getEmpiresUnsafe());
     }
 
     @SuppressWarnings("rawtypes")

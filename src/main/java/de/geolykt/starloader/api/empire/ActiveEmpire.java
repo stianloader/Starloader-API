@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
@@ -245,7 +246,19 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return The motto of the empire
      */
-    public @NotNull String getMotto();
+    @NotNull
+    public String getMotto();
+
+    /**
+     * Obtains the UID (as per {@link Identifiable#getUID()}) of the parent empire.
+     * The parent empire is the ancestral empire that "spawned" (as per {@link #spawnOffspring(Star)}) this empire.
+     *
+     * <p>Returns -1 if this is the neutral empire or if for some other reason there is no such parent empire.
+     *
+     * @return The UID of the parent empire
+     * @since 2.0.0
+     */
+    public int getParentUID();
 
     /**
      * Obtains the most recently lost stars.
@@ -255,7 +268,8 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return The stars that were recently lost.
      */
-    public @NotNull Collection<Star> getRecentlyLostStars();
+    @NotNull
+    public Collection<Star> getRecentlyLostStars();
 
     /**
      * The religion of an empire. It may change after an empire has been founded so

@@ -56,6 +56,7 @@ import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.impl.registry.Registries;
 
+import snoddasmannen.galimulator.EmpireAnnals;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.GalColor;
@@ -75,13 +76,13 @@ public class EmpireMixins implements ActiveEmpire {
     private Vector agents; // actors - this is indeed the right name - i know, it is misleading
 
     @Shadow
-    protected transient Random internalSessionRandom; // internalRandom
+    private transient snoddasmannen.galimulator.Alliance alliance;
+
+    @Shadow
+    private ArrayList<EmpireAnnals> annals;
 
     @Shadow
     int birthMilliYear; // foundationYear
-
-    @Shadow
-    public transient Deque<Star> recentlyLostStars;
 
     @Shadow
     int capitalId;
@@ -107,13 +108,13 @@ public class EmpireMixins implements ActiveEmpire {
     private Government government;
 
     @Shadow
-    private transient snoddasmannen.galimulator.Alliance alliance;
+    public int id; // uniqueId
+
+    @Shadow
+    protected transient Random internalSessionRandom; // internalRandom
 
     @Shadow
     private transient float j; // averageWealth
-
-    @Shadow
-    public int id; // uniqueId
 
     @Shadow
     private int lastResearchedYear;
@@ -128,6 +129,9 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Shadow
     String name; // name
+
+    @Shadow
+    public transient Deque<Star> recentlyLostStars;
 
     @Shadow
     private Religion religion;
@@ -154,7 +158,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Shadow
     public void a(@Nullable Religion var0) { // setReligion
-        religion = var0;
+        this.religion = var0;
     }
 
     /**
@@ -489,8 +493,17 @@ public class EmpireMixins implements ActiveEmpire {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull String getMotto() {
-        return motto;
+    @NotNull
+    public String getMotto() {
+        return this.motto;
+    }
+
+    @Override
+    public int getParentUID() {
+        if (this.annals.size() <= 1) {
+            return -1; // Neutral empire?
+        }
+        return this.annals.get(this.annals.size() - 2).empireId;
     }
 
     @Override

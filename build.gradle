@@ -101,6 +101,10 @@ build {
     dependsOn remapJar
 }
 
+publish {
+    dependsOn publishToMavenLocal // Gradle doesn't quite like this line but otherwise I get issues when publishing so what gives?
+}
+
 publishing {
     publications {
         plugin(MavenPublication) { publication ->

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 
@@ -51,6 +51,8 @@ import de.geolykt.starloader.api.utils.TickLoopLock;
  * on updating an extension.
  * <br/>
  * It also contains miscellaneous methods that do not really fall under a category.
+ *
+ * @since 1.0.0
  */
 public final class Galimulator {
 
@@ -60,6 +62,8 @@ public final class Galimulator {
      * of implementing the Starloader API on non-galimulator games or with nonstandard mappings.
      * <br/>
      * This class should not be implemented by anything but the API Implementation.
+     *
+     * @since 1.2.0
      */
     public static interface GameImplementation {
 
@@ -126,9 +130,30 @@ public final class Galimulator {
          * This will be resolved in the 2.0.0 release
          *
          * @return A {@link List} of {@link ActiveEmpire empires} that are known
+         * @since 1.2.0
+         * @deprecated This method returns a the internal empire list as-is without making it immutable
+         * or cloning it. However, this approach is deemed improper API design by modern standards.
+         * Use {@link #getEmpiresView()} instead, or if using the internal empire list is absolutely necessary
+         * use {@link Unsafe#getEmpiresUnsafe()}.
          */
         @NotNull
+        @Deprecated
+        @DeprecatedSince("2.0.0")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public List<@NotNull ActiveEmpire> getEmpires();
+
+        /**
+         * Return a read-only <b>view</b> (that is changes in the underlying collection get mirrored),
+         * of all correctly registered {@link ActiveEmpire alive empires}.
+         *
+         * @return A read-only view of all alive empires.
+         * @since 2.0.0
+         * @implNote While the current implementation returns a List, future implementations cannot guarantee
+         * such behaviour as determining the order of the collection in this way is rather performance-damaging,
+         * hence this method returns a {@link Collection}, casting to {@link List} is discouraged.
+         */
+        @NotNull
+        public Collection<@NotNull ActiveEmpire> getEmpiresView();
 
         /**
          * Get the year in-game. The year is rarely a negative number and should not get
@@ -873,14 +898,33 @@ public final class Galimulator {
      * being more performance friendly
      *
      * @return A {@link Vector} of {@link ActiveEmpire empires} that are known
+     * @deprecated This API breaches several design principles present in modern releases of SLAPI.
      */
     @SuppressWarnings("null")
+    @Deprecated
+    @DeprecatedSince("2.0.0")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public static @NotNull Vector<@NotNull ActiveEmpire> getEmpires() {
         List<ActiveEmpire> result = impl.getEmpires();
         if (result instanceof Vector) {
             return (Vector<ActiveEmpire>) result;
         }
         return new Vector<>(result);
+    }
+
+    /**
+     * Return a read-only <b>view</b> (that is changes in the underlying collection get mirrored),
+     * of all correctly registered {@link ActiveEmpire alive empires}.
+     *
+     * @return A read-only view of all alive empires.
+     * @since 2.0.0
+     * @implNote While the current implementation returns a List, future implementations cannot guarantee
+     * such behaviour as determining the order of the collection in this way is rather performance-damaging,
+     * hence this method returns a {@link Collection}, casting to {@link List} is discouraged.
+     */
+    @NotNull
+    public static Collection<@NotNull ActiveEmpire> getEmpiresView() {
+        return Galimulator.impl.getEmpiresView();
     }
 
     /**

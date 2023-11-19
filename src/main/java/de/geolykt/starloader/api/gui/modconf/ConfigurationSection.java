@@ -65,7 +65,7 @@ public interface ConfigurationSection {
 
     /**
      * Registers a custom option to this section. This is useful if the developer has custom get/set logic
-     * or when the interface that is wanted is not implemented by the SLAPI (such as {@link IntegerChooseOption}.
+     * or when the interface that is wanted is not implemented by the SLAPI.
      *
      * @param option The option to add
      * @since 1.3.0
