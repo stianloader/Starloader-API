@@ -2,14 +2,14 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'gsl-starplane' version '0.1.0'
+    id 'gsl-starplane' version '0.1.0-a20231128'
     id 'me.champeau.mrjar' version '0.1.1'
     id 'eclipse'
 }
 
 group 'de.geolykt'
 def archivesBaseName = 'starloader-api'
-version '2.0.0-SNAPSHOT'
+version '2.0.0'
 
 multiRelease {
     targetVersions 8, 9
@@ -18,8 +18,8 @@ multiRelease {
 repositories {
     mavenCentral()
     maven {
-        name 'geolykt'
-        url 'https://geolykt.de/maven'
+        name 'stianloader-maven'
+        url 'https://stianloader.org/maven'
     }
     mavenLocal()
 }
@@ -44,16 +44,28 @@ configurations {
 
 dependencies {
     // The launcher - the heart of this project
-    compileOnlyApi "de.geolykt.starloader:launcher:4.0.0-20230713"
-    devRuntime "de.geolykt.starloader:launcher:4.0.0-20230713"
+    // Note: SLL 4.0.0-a20231126 depends on Micromixin 4.0.0-a20231126, which has bugged metadata. We update it to use 4.0.0-a20231128, which is correct.
+    compileOnlyApi("de.geolykt.starloader:launcher:4.0.0-a20231126") {
+        exclude group: 'de.geolykt.starloader', module: 'micromixin-transformer'
+        exclude group: 'de.geolykt.starloader', module: 'micromixin-runtime'
+        exclude group: 'de.geolykt.starloader', module: 'micromixin-annotations'
+    }
 
-    compileOnly "de.geolykt.starloader:micromixin-annotations:0.0.1-SNAPSHOT"
+    devRuntime("de.geolykt.starloader:launcher:4.0.0-a20231126") {
+        exclude group: 'de.geolykt.starloader', module: 'micromixin-transformer'
+        exclude group: 'de.geolykt.starloader', module: 'micromixin-runtime'
+        exclude group: 'de.geolykt.starloader', module: 'micromixin-annotations'
+    }
+    devRuntime "de.geolykt.starloader:micromixin-transformer:0.1.0-a20231128"
+    devRuntime "de.geolykt.starloader:micromixin-runtime:0.1.0-a20231128"
 
+    compileOnly "de.geolykt.starloader:micromixin-annotations:0.1.0-a20231128"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
-    compileOnlyApi "org.jetbrains:annotations:24.0.1"
+
+    compileOnlyApi "org.jetbrains:annotations:24.1.0"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.ow2.asm:asm-util:9.5'
+    testImplementation 'org.ow2.asm:asm-util:9.6'
 }
 
 // Yes, we are using Java 11 to build. But actually Java 8 for compilation.
@@ -110,7 +122,7 @@ publishing {
         plugin(MavenPublication) { publication ->
             groupId project.group
             artifactId project.archivesBaseName
-            version '2.0.0-SNAPSHOT'
+            version '2.0.0'
 
             from components['java']
 
@@ -119,10 +131,14 @@ publishing {
         }
     }
     repositories {
-        mavenLocal()
-        /*maven {
-            url = "/home/Geolykt/maven-alt/repo/"
-        }*/
+        if (System.getProperty('publishRepo') != null) {
+            maven {
+                url System.getProperty('publishRepo')
+                allowInsecureProtocol = true
+            }
+        } else {
+            mavenLocal()
+        }
     }
 }
 

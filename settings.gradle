@@ -4,8 +4,8 @@ pluginManagement {
         mavenLocal()
         mavenCentral()
         maven {
-            name = 'Geolykt'
-            url = 'https://geolykt.de/maven/'
+            name = 'stianloader-maven'
+            url = 'https://stianloader.org/maven/'
         }
         maven {
             name 'fabric'
