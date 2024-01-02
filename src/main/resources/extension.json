@@ -6,6 +6,7 @@
   "reversibleAccessSetter": "starloader-api.ras",
   "dependencies": [ ],
   "codeModifiers": [
-    "de.geolykt.starloader.impl.asm.ABICompatibilityTransformer"
+    "de.geolykt.starloader.impl.asm.ABICompatibilityTransformer",
+    "de.geolykt.starloader.impl.asm.GalemulatorASMTransformer"
   ]
 }

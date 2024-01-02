@@ -21,6 +21,10 @@ repositories {
         name 'stianloader-maven'
         url 'https://stianloader.org/maven'
     }
+    maven {
+        name 'jitpack'
+        url 'https://jitpack.io'
+    }
     mavenLocal()
 }
 
@@ -40,6 +44,10 @@ runMods {
 
 configurations {
     compileOnlyApi.extendsFrom(galimulatorDependencies)
+    implementation.extendsFrom(uberDependencies)
+    uberDependencies {
+        canBeResolved = true
+    }
 }
 
 dependencies {
@@ -66,6 +74,10 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.ow2.asm:asm-util:9.6'
+
+    uberDependencies('com.github.raeleus.TenPatch:tenpatch:5.2.3') {
+        exclude group: 'com.badlogicgames.gdx', module: 'gdx'
+    }
 }
 
 // Yes, we are using Java 11 to build. But actually Java 8 for compilation.
@@ -102,6 +114,21 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     archiveClassifier = 'javadoc'
     from javadoc.destinationDir
+}
+
+task uberJar(type: Jar, dependsOn: remapJar) {
+    archiveClassifier = 'remapped-all'
+    from {
+        configurations['uberDependencies'].collect {
+            zipTree(it)
+        }
+    }
+    from {
+        remapJar.outputs.files.collect {
+            zipTree(it)
+        }
+    }
+    manifest = jar.manifest
 }
 
 remapJar {

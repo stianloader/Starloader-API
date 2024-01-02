@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
@@ -30,6 +31,7 @@ import de.geolykt.starloader.api.gui.rendercache.RenderCacheState;
 import de.geolykt.starloader.api.gui.rendercache.RendercacheUtils;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.impl.gui.canvas.SLCanvasManager;
+import de.geolykt.starloader.impl.gui.s2d.MenuHandler;
 
 import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
@@ -292,6 +294,11 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     public void sendOddityBulletin(@NotNull String message) {
         Space.postBulletin(new OddityBulletin(message));
+    }
+
+    @Override
+    public void setShownStage(@Nullable Stage stage) {
+        MenuHandler.setActiveStage(stage);
     }
 
     @Override

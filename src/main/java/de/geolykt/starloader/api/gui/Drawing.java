@@ -3,8 +3,10 @@ package de.geolykt.starloader.api.gui;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +16,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
@@ -411,6 +414,24 @@ public final class Drawing {
     }
 
     /**
+     * Display a given {@link Stage}, overwriting the currently active stage.
+     * This method does not pause the game nor does it unpause it. This may need to be done manually.
+     * This method is also not blocking and may not be called asynchronously!
+     *
+     * <p>The currently active stage will be disposed and if the vanilla galimulator logic is active,
+     * all input processors will be temporarily stored when displaying a custom stage and will be put back on
+     * if the vanilla drawing logic is being used again.
+     *
+     * @param stage The stage to display, or null to make use of the standard drawing logic (i.e. vanilla galimulator).
+     * @since 2.0.0-a20240102
+     */
+    @AvailableSince(value = "2.0.0-a20240102")
+    @NonBlocking
+    public static void setShownStage(@Nullable Stage stage) {
+        Drawing.implementation.setShownStage(stage);
+    }
+
+    /**
      * Shows this specific screen to the user.
      *
      * <p>Instances of {@link Screen} can be created via {@link ScreenBuilder}.
@@ -418,11 +439,13 @@ public final class Drawing {
      * <p>Note: The screen API is obsolete compared to the more powerful {@link Canvas} API which should be used
      * instead. More specially, screens are prone to layout issues due to them not being declarative enough.
      *
+     * <p>Not to be confused with {@link #setShownStage(Stage)}.
+     *
      * @param screen The screen to display
      */
     @Obsolete(since = "2.0.0")
     public static void showScreen(@NotNull Screen screen) {
-        implementation.showScreen(screen);
+        Drawing.implementation.showScreen(screen);
     }
 
     /**
@@ -447,6 +470,6 @@ public final class Drawing {
      * @param text The text to display.
      */
     public static void toast(@NotNull String text) {
-        implementation.toast(text);
+        Drawing.implementation.toast(text);
     }
 }

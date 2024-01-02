@@ -2,7 +2,9 @@ package de.geolykt.starloader.api.gui;
 
 import java.util.Collection;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
@@ -303,6 +306,20 @@ public interface DrawingImpl {
      * @param message The message to send
      */
     public void sendOddityBulletin(@NotNull String message);
+
+    /**
+     * Display a given {@link Stage}, overwriting the currently active stage.
+     * This method does not pause the game nor does it unpause it. This may need to be done manually.
+     * This method is also not blocking and may not be called asynchronously!
+     *
+     * <p>The currently active stage will be disposed.
+     *
+     * @param stage The stage to display, or null to make use of the standard drawing logic (i.e. vanilla galimulator).
+     * @since 2.0.0-a20240102
+     */
+    @AvailableSince(value = "2.0.0-a20240102")
+    @NonBlocking
+    public void setShownStage(@Nullable Stage stage);
 
     /**
      * Shows this specific screen to the user.
