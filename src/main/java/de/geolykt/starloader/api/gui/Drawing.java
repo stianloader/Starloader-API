@@ -6,10 +6,12 @@ import java.util.Objects;
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -339,7 +341,19 @@ public final class Drawing {
      */
     @NotNull
     public static TextureProvider getTextureProvider() {
-        return implementation.getTextureProvider();
+        return Drawing.implementation.getTextureProvider();
+    }
+
+    /**
+     * Queries whether this method is the main thread. The implementation bases this
+     * off from the current Thread's name. The value is cached in a {@link ThreadLocal}.
+     *
+     * @return True if this thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public static boolean isRenderThread() {
+        return Drawing.asyncImplementation.isRenderThread();
     }
 
     /**
@@ -353,7 +367,7 @@ public final class Drawing {
      * @return The bound texture.
      */
     public static @NotNull Texture loadTexture(@NotNull String path) {
-        return implementation.loadTexture(path);
+        return Drawing.implementation.loadTexture(path);
     }
 
     /**

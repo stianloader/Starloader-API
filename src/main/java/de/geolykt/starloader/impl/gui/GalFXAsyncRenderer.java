@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.geolykt.starloader.api.gui.AsyncRenderer;
+import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.rendercache.AlignedTextRenderItem;
 import de.geolykt.starloader.impl.gui.rendercache.CenteredTextRenderItem;
 
@@ -68,5 +70,11 @@ public class GalFXAsyncRenderer implements AsyncRenderer {
     public void fillWindow0(float x, float y, float width, float height, @NotNull Color color,
             @NotNull Camera camera) {
         GalFX.drawWindow(x, y, width, height, new GalColor(color), camera);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public boolean isRenderThread() {
+        return GalimulatorImplementation.isRenderThread();
     }
 }

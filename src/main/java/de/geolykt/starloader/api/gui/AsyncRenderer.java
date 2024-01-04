@@ -1,8 +1,10 @@
 package de.geolykt.starloader.api.gui;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -373,4 +375,14 @@ public interface AsyncRenderer {
      * @since 2.0.0
      */
     public void fillWindow0(float x, float y, float width, float height, @NotNull Color color, @NotNull Camera camera);
+
+    /**
+     * Queries whether this method is the main thread. The implementation bases this
+     * off from the current Thread's name. The value is cached in a {@link ThreadLocal}.
+     *
+     * @return True if this thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
+     * @since 2.0.0
+     */
+    @Contract(pure = true)
+    public boolean isRenderThread();
 }

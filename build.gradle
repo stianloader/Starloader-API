@@ -52,20 +52,8 @@ configurations {
 
 dependencies {
     // The launcher - the heart of this project
-    // Note: SLL 4.0.0-a20231126 depends on Micromixin 4.0.0-a20231126, which has bugged metadata. We update it to use 4.0.0-a20231128, which is correct.
-    compileOnlyApi("de.geolykt.starloader:launcher:4.0.0-a20231126") {
-        exclude group: 'de.geolykt.starloader', module: 'micromixin-transformer'
-        exclude group: 'de.geolykt.starloader', module: 'micromixin-runtime'
-        exclude group: 'de.geolykt.starloader', module: 'micromixin-annotations'
-    }
-
-    devRuntime("de.geolykt.starloader:launcher:4.0.0-a20231126") {
-        exclude group: 'de.geolykt.starloader', module: 'micromixin-transformer'
-        exclude group: 'de.geolykt.starloader', module: 'micromixin-runtime'
-        exclude group: 'de.geolykt.starloader', module: 'micromixin-annotations'
-    }
-    devRuntime "de.geolykt.starloader:micromixin-transformer:0.1.0-a20231128"
-    devRuntime "de.geolykt.starloader:micromixin-runtime:0.1.0-a20231128"
+    compileOnlyApi("de.geolykt.starloader:launcher:4.0.0-a20231223")
+    devRuntime("de.geolykt.starloader:launcher:4.0.0-a20231223")
 
     compileOnly "de.geolykt.starloader:micromixin-annotations:0.1.0-a20231128"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
