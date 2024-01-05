@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
@@ -443,9 +445,17 @@ public final class Galimulator {
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
          * It will also not cause the loading screen to show up.
          *
-         * @implNote Warning: while it sounds laughable, this operation is NOT thread safe and WILL crash if called on another thread.
-         * It is advisable to call this method on the next tick.
+         * @see #resumeGame()
+         * @see #setPaused(boolean)
+         * @implNote Under galimulator 4.X this operation was not thread safe and would cause a crash if called on another thread.
+         * If such compatibility is needed, this method should be called on the next tick via {@link Application#postRunnable(Runnable)}.
+         * Under galimulator 5.X, this problem does not occur. The sibling method {@link #resumeGame()} is unaffected.
+         *
+         * @deprecated While the javadocs of this method state that no impact on graphical components exist, this is not the case
+         * as this method causes the "step" widget to show. Calling this method while already paused has undocumented behaviour
+         * due to that. {@link #setPaused(boolean)} has this behaviour documented more cleanly.
          */
+        @Obsolete(since = "2.0.0-a20240105")
         public void pauseGame();
 
         /**
@@ -471,7 +481,11 @@ public final class Galimulator {
 
         /**
          * Resumes the game. This method basically reverts {@link #pauseGame()}
+         *
+         * <p>This method is obsolete, using {@link #setPaused(boolean)} with the argument of false is recommended
+         * as an alternative. However this method is not acutely a candidate for deprecation.
          */
+        @Obsolete(since = "2.0.0-20240105")
         public void resumeGame();
 
         /**
@@ -549,6 +563,19 @@ public final class Galimulator {
          * @param map The currently active map
          */
         public void setMap(@NotNull Map map);
+
+        /**
+         * Pause or resume the game, depending on the state of the boolean.
+         * If already paused or resumed, do nothing.
+         *
+         * <p>This method can be safely called on a different thread.
+         *
+         * @param paused True to pause, false to resume
+         * @since 2.0.0-a20240105
+         */
+        @NonBlocking
+        @ApiStatus.AvailableSince("2.0.0-a20240105")
+        public void setPaused(boolean paused);
 
         /**
          * Sets the amount of empires that have transcended in during the game.
@@ -1289,11 +1316,18 @@ public final class Galimulator {
      * It will also not cause the loading screen to show up.
      *
      * @see #resumeGame()
-     * @implNote Warning: while it sounds laughable, this operation is NOT thread safe and WILL crash if called on another thread.
-     * It is advisable to call this method on the next tick.
+     * @see #setPaused(boolean)
+     * @implNote Under galimulator 4.X this operation was not thread safe and would cause a crash if called on another thread.
+     * If such compatibility is needed, this method should be called on the next tick via {@link Application#postRunnable(Runnable)}.
+     * Under galimulator 5.X, this problem does not occur. The sibling method {@link #resumeGame()} is unaffected.
+     *
+     * @deprecated While the javadocs of this method state that no impact on graphical components exist, this is not the case
+     * as this method causes the "step" widget to show. Calling this method while already paused has undocumented behaviour
+     * due to that. {@link #setPaused(boolean)} has this behaviour documented more cleanly.
      */
+    @Obsolete(since = "2.0.0-a20240105")
     public static void pauseGame() {
-        impl.pauseGame();
+        Galimulator.impl.pauseGame();
     }
 
     /**
@@ -1323,7 +1357,11 @@ public final class Galimulator {
 
     /**
      * Resumes the game. This method basically reverts {@link #pauseGame()}
+     *
+     * <p>This method is obsolete, using {@link #setPaused(boolean)} with the argument of false is recommended
+     * as an alternative. However this method is not acutely a candidate for deprecation.
      */
+    @Obsolete(since = "2.0.0-20240105")
     public static void resumeGame() {
         impl.resumeGame();
     }
@@ -1451,6 +1489,24 @@ public final class Galimulator {
     public static void setNoiseProvider(@NotNull NoiseProvider provider) {
         NullUtils.requireNotNull(provider);
         Galimulator.noiseImpl = provider;
+    }
+
+    /**
+     * Pause or resume the game, depending on the state of the boolean.
+     * If already paused or resumed, do nothing.
+     *
+     * <p>This method can be safely called on a different thread.
+     *
+     * <p>When pausing, that is migrating from an unpaused state to a paused one,
+     * the "step" widget will be shown.
+     *
+     * @param paused True to pause, false to resume
+     * @since 2.0.0-a20240105
+     */
+    @NonBlocking
+    @ApiStatus.AvailableSince("2.0.0-a20240105")
+    public static void setPaused(boolean paused) {
+        Galimulator.impl.setPaused(paused);
     }
 
     /**

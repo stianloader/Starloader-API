@@ -151,9 +151,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     public static void crash(@NotNull Throwable e, @NotNull String cause, boolean save) {
         try {
             if (!GalimulatorImplementation.isRenderThread()) {
-                Gdx.app.postRunnable(Galimulator::pauseGame);
+                Galimulator.setPaused(true);
             } else {
-                Galimulator.pauseGame(); // Pause the game on crash so the simulation loop doesn't continue to run in the background.
+                Galimulator.setPaused(true); // Pause the game on crash so the simulation loop doesn't continue to run in the background.
                 Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST); // Sometimes the game can crash while rendering, at which point a scissor might be applied. To render the entire crash message we might need to disable the scissor though.
                 GLScissorState.glScissor(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
                 GLScissorState.forgetScissor();
@@ -780,6 +780,15 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     public void setNeutralEmpire(@NotNull ActiveEmpire empire) {
         Space.neutralEmpire = ExpectedObfuscatedValueException.requireEmpire(NullUtils.requireNotNull(empire));
+    }
+
+    @Override
+    public void setPaused(boolean paused) {
+        if (this.isPaused() && paused) {
+            // Prevent potentially unwanted logic to occur in this edge case (as the game will attempt to display the "step" widget again)
+            return;
+        }
+        Space.setPaused(paused);
     }
 
     @SuppressWarnings("rawtypes")
