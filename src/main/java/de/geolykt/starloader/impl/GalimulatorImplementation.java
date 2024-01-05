@@ -203,7 +203,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             sw.flush();
-            builder.append(sw.getBuffer().toString().replace("\n", "\n    "));
+            builder.append(sw.getBuffer().toString().replace("\t", "    "));
             listener.h = "[LIME]" + builder.toString();
             for (String s : builder.toString().split("\n")) {
                 LoggerFactory.getLogger("CrashReporter").error(s);
