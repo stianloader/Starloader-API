@@ -17,7 +17,7 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
 
     protected static Vector<@NotNull Object> getOptions(StringOption option) {
         final Vector<@NotNull Object> options = new Vector<>(option.getRecommendedValues());
-        if (!(option instanceof StrictStringOption)) {
+        if (!(option instanceof StringChooseOption)) {
             options.add("Custom");
         }
         return options;
@@ -64,7 +64,7 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
             builder.build();
             return;
         }
-        option.set(NullUtils.requireNotNull(o.toString()));
+        this.option.set(NullUtils.requireNotNull(o.toString()));
     }
 
     public @NotNull ModConfScreen getParentScreen() {

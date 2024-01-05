@@ -10,7 +10,7 @@ import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * A configuration option that is backing an integer and has a lower and upper
- * bound set.
+ * bound set (as defined via {@link NumberOption#getMinimum()} and {@link NumberOption#getMaximum()}).
  *<br/>
  * This interface can be safely implemented by Extensions as the graphical components are relayed
  * to other components.
