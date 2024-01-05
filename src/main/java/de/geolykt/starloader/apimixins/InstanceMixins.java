@@ -15,8 +15,6 @@ import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.badlogic.gdx.Gdx;
-
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.actor.ActorConstructionSite;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
@@ -95,7 +93,7 @@ public class InstanceMixins {
 
         Drawing.sendBulletin("Welcome back to the galaxy");
         if (EnumSettings.PAUSE_AFTER_LOADING.getValue() == Boolean.TRUE) {
-            Gdx.app.postRunnable(Galimulator::pauseGame);
+            Galimulator.setPaused(true);
         }
         return successful;
     }

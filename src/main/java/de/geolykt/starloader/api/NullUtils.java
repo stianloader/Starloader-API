@@ -8,8 +8,11 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * Collection of QoL null safety-related utility methods.
@@ -37,16 +40,14 @@ public final class NullUtils {
      * @param <T> The object type used by the optional
      * @param object The object to wrap
      * @return The newly created optional
+     * @deprecated New GeolEEA releases have mapped out the relevant methods in the Optional class.
+     * As such this helper method is superfluous overhead.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240105")
     public static @NotNull <T> Optional<T> asOptional(@Nullable T object) {
-        if (object == null) {
-            return emptyOptional();
-        }
-        Optional<@NotNull T> opt = Optional.of(object);
-        if (opt == null) {
-            throw new InternalError(); // not possible but anyways here because logic
-        }
-        return opt;
+        return Optional.ofNullable(object);
     }
 
     /**
@@ -56,13 +57,14 @@ public final class NullUtils {
      *
      * @param <T> The type that the optional stores
      * @return The newly created optional
+     * @deprecated New GeolEEA releases have mapped out the relevant methods in the Optional class.
+     * As such this helper method is superfluous overhead.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240105")
     public static @NotNull <T> Optional<T> emptyOptional() {
-        Optional<T> opt = Optional.empty();
-        if (opt == null) {
-            throw new InternalError(); // Not possible, but let's have it there either way
-        }
-        return opt;
+        return Optional.empty();
     }
 
     /**

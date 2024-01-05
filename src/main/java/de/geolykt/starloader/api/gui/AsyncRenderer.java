@@ -1,8 +1,8 @@
 package de.geolykt.starloader.api.gui;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Camera;
@@ -381,8 +381,8 @@ public interface AsyncRenderer {
      * off from the current Thread's name. The value is cached in a {@link ThreadLocal}.
      *
      * @return True if this thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
-     * @since 2.0.0
+     * @since 2.0.0-a20240104
      */
-    @Contract(pure = true)
+    @AvailableSince("2.0.0-a20240104")
     public boolean isRenderThread();
 }

@@ -349,9 +349,10 @@ public final class Drawing {
      * off from the current Thread's name. The value is cached in a {@link ThreadLocal}.
      *
      * @return True if this thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
-     * @since 2.0.0
+     * @since 2.0.0-a20240104
      */
     @Contract(pure = true)
+    @AvailableSince("2.0.0-a20240104")
     public static boolean isRenderThread() {
         return Drawing.asyncImplementation.isRenderThread();
     }

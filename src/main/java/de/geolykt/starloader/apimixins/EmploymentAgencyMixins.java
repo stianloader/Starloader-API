@@ -101,7 +101,7 @@ public class EmploymentAgencyMixins {
                         new EmperorOption((EmploymentAgency) (Object) this, finalSuggestions.get(0), job, true).b();
                         return null;
                     }
-                    Galimulator.pauseGame();
+                    Galimulator.setPaused(true);
                     BasicDialogBuilder dialogBuilder = new BasicDialogBuilder("Select new emperor", emperorDeadSuccessorDesc, Arrays.asList(emperorDeadSuccessorKey));
                     dialogBuilder.addCloseListener((cause, text) -> {
                         if (emperorDeadSuccessorKey.equals(text)) {

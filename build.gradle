@@ -44,7 +44,7 @@ runMods {
 
 configurations {
     compileOnlyApi.extendsFrom(galimulatorDependencies)
-    implementation.extendsFrom(uberDependencies)
+    compileOnly.extendsFrom(uberDependencies)
     uberDependencies {
         canBeResolved = true
     }

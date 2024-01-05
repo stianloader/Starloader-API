@@ -38,12 +38,12 @@ public final class SLWeaponsManager implements WeaponsManager {
 
     @Override
     public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull NamespacedKey key) {
-        return NullUtils.asOptional((WeaponType) Registry.WEAPON_TYPES.get(NullUtils.requireNotNull(key)));
+        return Optional.ofNullable((WeaponType) Registry.WEAPON_TYPES.get(NullUtils.requireNotNull(key)));
     }
 
     @Override
     public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull String key) {
-        return NullUtils.asOptional((WeaponType) WeaponsFactory.a(NullUtils.requireNotNull(key)));
+        return Optional.ofNullable((WeaponType) WeaponsFactory.a(NullUtils.requireNotNull(key)));
     }
 
     @Override

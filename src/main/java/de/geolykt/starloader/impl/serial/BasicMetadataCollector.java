@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.serial.Encoder;
 import de.geolykt.starloader.api.serial.MetadataCollector;
@@ -29,23 +28,23 @@ public class BasicMetadataCollector implements MetadataCollector {
     @Override
     @NotNull
     public Optional<byte @NotNull []> getSerializedForm(@NotNull NamespacedKey key) {
-        Object o = metadata.get(key);
+        Object o = this.metadata.get(key);
         if (o == null) {
-            return NullUtils.emptyOptional();
+            return Optional.empty();
         }
         Encoder<Object> encoder = Registry.CODECS.getEncoder(o);
         if (encoder == null) {
             throw new UnsupportedOperationException("Cannot serialize an object of instance "
                     + o.getClass() + " which is the deserialized form of " + key + ". Did a mod forget to register a codec?");
         }
-        return NullUtils.requireNotNull(Optional.of(encoder.encode(encoder)));
+        return Optional.of(encoder.encode(encoder));
     }
 
-    @SuppressWarnings({ "unchecked", "null" })
+    @SuppressWarnings({ "unchecked" })
     @Override
     @NotNull
     public <T> Optional<T> getDeserializedForm(@NotNull NamespacedKey key) {
-        return Optional.ofNullable((T) metadata.get(key));
+        return Optional.ofNullable((T) this.metadata.get(key));
     }
 
     @Override

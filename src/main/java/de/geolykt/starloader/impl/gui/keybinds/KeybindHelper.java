@@ -136,11 +136,7 @@ public class KeybindHelper {
         handler.registerKeybind(new KeybindRotate("Rotate the galaxy clockwise", ROTATE_CLOCKWISE, 45F), new int[] {Keys.Y});
         handler.registerKeybind(new KeybindRotate("Rotate the galaxy counter-clockwise", ROTATE_ANTICLOCKWISE, -45F), new int[] {Keys.U});
         handler.registerKeybind(new LambdaKeybind("Pause & Unpause the game", PAUSE, () -> {
-            if (Galimulator.isPaused()) {
-                Galimulator.resumeGame();
-            } else {
-                Galimulator.pauseGame();
-            }
+            Galimulator.setPaused(!Galimulator.isPaused());
         }), new int[]{Keys.SPACE});
         handler.registerKeybind(new LambdaKeybind("Step forward 100 steps", STEP_100, () -> {
             Space.h(100);
