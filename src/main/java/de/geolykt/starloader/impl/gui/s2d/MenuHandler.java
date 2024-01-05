@@ -16,22 +16,11 @@ public class MenuHandler {
 
     private static InputProcessor stashedInputProcessor;
 
-    public static void create() {
-    }
-
     public static void dispose() {
         Stage activeStage = MenuHandler.activeStage;
         if (activeStage != null) {
             activeStage.dispose();
         }
-    }
-
-    public static boolean pause() {
-        return false;
-    }
-
-    public static void postcreate() {
-        
     }
 
     public static boolean render() {
@@ -53,10 +42,6 @@ public class MenuHandler {
         }
     }
 
-    public static boolean resume() {
-        return false;
-    }
-
     public static void setActiveStage(@Nullable Stage stage) {
         Stage activeStage = MenuHandler.activeStage;
 
@@ -70,12 +55,13 @@ public class MenuHandler {
         }
 
         if (activeStage == null) {
-            MenuHandler.stashedInputProcessor = Gdx.app.getInput().getInputProcessor();
+            MenuHandler.stashedInputProcessor = Gdx.input.getInputProcessor();
+            Gdx.input.setInputProcessor(stage);
         } else if (stage == null) {
-            Gdx.app.getInput().setInputProcessor(MenuHandler.stashedInputProcessor);
+            Gdx.input.setInputProcessor(MenuHandler.stashedInputProcessor);
             activeStage.dispose();
             MenuHandler.stashedInputProcessor = null;
-        } else {;
+        } else {
             Gdx.input.setInputProcessor(stage);
             activeStage.dispose();
         }

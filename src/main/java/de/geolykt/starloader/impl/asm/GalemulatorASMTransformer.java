@@ -40,17 +40,14 @@ public class GalemulatorASMTransformer extends ASMTransformer {
                 }
                 continue;
             }
-            if (method.name.equals("create")) {
-                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, MAIN_MENU_HANDLER_CLASS, "create", "()V"));
-                method.instructions.add(new MethodInsnNode(Opcodes.INVOKESTATIC, MAIN_MENU_HANDLER_CLASS, "postcreate", "()V"));
-            } else if (method.name.equals("dispose")) {
+            if (method.name.equals("dispose")) {
                 method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, MAIN_MENU_HANDLER_CLASS, "dispose", "()V"));
-            } else if (method.name.equals("pause") || method.name.equals("render") || method.name.equals("resume")) {
+            } else if (method.name.equals("render")) {
                 LabelNode label = new LabelNode();
                 method.instructions.insert(label);
                 method.instructions.insert(new InsnNode(Opcodes.RETURN));
                 method.instructions.insert(new JumpInsnNode(Opcodes.IFEQ, label));
-                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, MAIN_MENU_HANDLER_CLASS, method.name, "()Z"));
+                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, MAIN_MENU_HANDLER_CLASS, "render", "()Z"));
             }
         }
         this.transformed = true;
