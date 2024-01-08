@@ -96,8 +96,13 @@ public class SavegameBrowserContext implements CanvasContext {
     @Override
     public void onClick(int canvasX, int canvasY, @NotNull Camera camera, @NotNull Canvas canvas) {
         int yOffset = this.scrollValue * 25;
-        int clickIndex = (canvasY - yOffset) / BUTTON_HEIGHT;
-        if (this.savegames.size() >= clickIndex && clickIndex >= 0) { // TODO also display the WidgetFadeEffect (which we would need to emulate)
+        int relativeY = canvasY - yOffset;
+        if (relativeY < 0) {
+            // Clicked below any UI elements
+            return;
+        }
+        int clickIndex = relativeY / BUTTON_HEIGHT;
+        if (this.savegames.size() > clickIndex) { // TODO also display the WidgetFadeEffect (which we would need to emulate)
             this.consumer.accept(this.savegames.get(clickIndex));
         }
     }
