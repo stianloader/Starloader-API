@@ -118,6 +118,7 @@ publishing {
 
             artifact sourcesJar
             artifact javadocJar
+            artifact remapJar
         }
     }
     repositories {
