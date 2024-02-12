@@ -237,6 +237,7 @@ public class StarlaneGenerationBenchmarks extends Usertest {
             LoggerFactory.getLogger(StarlaneGenerationBenchmarks.class).info("Tick loop lock obtained");
             while (true) {
                 for (GeneratorBenchmarkRow benchmark : benchmarks) {
+                    Space.Y.clear();
                     Space.generateGalaxy(benchmark.starCount, new MapData(ProceduralStarGenerator.valueOf(benchmark.generator)));
                     for (int i = 0; i < generators.length; i++) {
                         StarlaneGenerator generator = generators[i];

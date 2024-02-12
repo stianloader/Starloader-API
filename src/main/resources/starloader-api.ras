@@ -38,6 +38,7 @@ RAS v1 std
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         persons                 Ljava/util/Vector;
  all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         player                  Lsnoddasmannen/galimulator/Player;
  all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         transcended             I
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space                         Y                       Ljava/util/Vector;
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    actors                  Ljava/util/Vector;
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    alliances               Ljava/util/Vector;
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    artifacts               Ljava/util/Vector;
