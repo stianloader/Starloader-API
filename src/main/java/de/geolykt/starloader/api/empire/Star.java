@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -192,6 +193,7 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      */
     @NotNull
     @Contract(pure = true)
+    @UnmodifiableView
     public List<@NotNull Star> getNeighbourList();
 
     /**

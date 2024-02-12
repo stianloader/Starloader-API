@@ -7,6 +7,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import de.geolykt.starloader.api.utils.TickLoopLock;
 
 public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
@@ -161,6 +163,23 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
             super.acquireUninterruptibly(permits);
             acquisitions.get().increment(permits);
         }
+    }
+
+    /**
+     * Force the release of a given amounts of permits, ignoring how many permits are held by the executing thread.
+     *
+     * <p>This method is inherently unsafe and needs to be used with utter caution. Appropriate usecases are when releasing
+     * permits on behalf of another thread - for example in the case of a thread death.
+     *
+     * <p>This method behaves identically to {@link Semaphore#release(int)}.
+     *
+     * @param permits The amounts of permits to release.
+     * @since 2.0.0
+     * @see Semaphore#release(int)
+     */
+    @ApiStatus.Internal
+    public void forceRelease(int permits) {
+        super.release(permits);
     }
 
     @Override

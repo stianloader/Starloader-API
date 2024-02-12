@@ -110,7 +110,7 @@ public class KeybindHelper {
         handler.registerKeybind(new KeybindMove("Scroll right", MOVE_RIGHT, 50F, 0F), new int[] {Keys.RIGHT});
         handler.registerKeybind(new KeybindMove("Scroll up", MOVE_UP, 0F, 50F), new int[] {Keys.UP});
         handler.registerKeybind(new KeybindMove("Scroll down", MOVE_DOWN, 0F, -50F), new int[] {Keys.DOWN});
-        handler.registerKeybind(new LambdaKeybind("Toggle fullscreen", FULLSCREEN, GalFX::o), new int[]{Keys.F});
+        handler.registerKeybind(new LambdaKeybind("Toggle fullscreen", FULLSCREEN, GalFX::p), new int[]{Keys.F});
         handler.registerKeybind(new LambdaKeybind("Upload modded items", UPLOAD_MODDED_ITEMS, () -> {
             Space.showWidget(ModUploadWidget.class);
         }), new int[]{Keys.M});
