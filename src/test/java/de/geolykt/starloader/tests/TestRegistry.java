@@ -33,7 +33,8 @@ public class TestRegistry {
             "snoddasmannen/galimulator/weapons/WeaponsFactory.class",
             "snoddasmannen/galimulator/FlagItem$BuiltinSymbols.class",
             "snoddasmannen/galimulator/Religion.class",
-            "snoddasmannen/galimulator/EmpireAchievement$EmpireAchievementType.class"));
+            "snoddasmannen/galimulator/EmpireAchievement$EmpireAchievementType.class",
+            "snoddasmannen/galimulator/Space$ConnectionMethod.class"));
 
     private <@NotNull T extends Enum<T>> void requireRegistryCompleteness(ClassNode node, InputStream enumStream) throws Exception {
         ClassNode enumNode = new ClassNode(Opcodes.ASM9);

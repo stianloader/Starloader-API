@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.empire.StarlaneGenerator;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 import de.geolykt.starloader.api.gui.MapMode;
@@ -59,7 +60,8 @@ public final class RegistryExpander {
          * @param height The MAXIMUM height of the component, or 0 for no limitations
          * @return The created {@link FlagSymbol} instance.
          */
-        public @NotNull FlagSymbol addFlagSymbol(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite,
+        @NotNull
+        public FlagSymbol addFlagSymbol(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite,
                 boolean mustBeSquare, int width, int height);
 
         /**
@@ -69,7 +71,7 @@ public final class RegistryExpander {
          * is processed, but it is highly recommended to call it before the event is run, ideally in the extension's initialiser.
          *
          * <p>More specifically, unlike
-         * {@link #addEmpireSpecial(NamespacedKey, String, String, String, String, Color, float, float, float, float, boolean) addEmpireSpecial} and
+         * {@link #addEmpireSpecial(NamespacedKey, String, String, String, String, Color, float, float, float, float, boolean) addEmpireSpecial} or
          * {@link #addFlagSymbol(NamespacedKey, String, String, boolean, int, int) addFlagSymbol}, this method explicitly
          * supports getting called early. Due to this characteristic the created {@link MapMode} instance is not returned
          * and should not be immediately obtained. It is best to determine Map modes based on comparison of {@link MapMode#getRegistryKey()}
@@ -107,12 +109,41 @@ public final class RegistryExpander {
         @NotNull
         public MapModeRegistryPrototype addMapMode(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
                 @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction);
+
+        /**
+         * Registers a starlane generator to the {@link Registry#STARLANE_GENERATORS starlane generator registry} without the need of binding into
+         * galimulator directly. This method cannot be called after the {@link RegistryRegistrationEvent} was called for {@link Registry#STARLANE_GENERATORS}.
+         * If it is done anyways, an {@link IllegalStateException} will be thrown. It still can be called while the event
+         * is processed, but it is highly recommended to call it before the event is run, ideally in the extension's initialiser.
+         *
+         * <p>More specifically, unlike
+         * {@link #addEmpireSpecial(NamespacedKey, String, String, String, String, Color, float, float, float, float, boolean) addEmpireSpecial} or
+         * {@link #addFlagSymbol(NamespacedKey, String, String, boolean, int, int) addFlagSymbol}, this method explicitly
+         * supports getting called early. Due to this characteristic the created {@link StarlaneGenerator} instance is not returned
+         * and should not be immediately obtained. It is best to determine starlane generators based on comparison of {@link RegistryKeyed#getRegistryKey()}
+         * and not via instance comparison.
+         *
+         * <p>In the event that vanilla galimulator supports sandboxing starlane generators in a way that they can be called
+         * without problems outside of map generation, the implementation of the method will be implemented on a best-effort
+         * basis. That is it will refuse the generation of starlanes outside of map generation. However it is not the intention
+         * to unnecessarily break ABI as long as such a change remains an isolated case and thus does not warrant a bump of the
+         * major version SemVer-wise. The same applies to the event in which modded galimulator adopts sandboxed starlane
+         * generators.
+         *
+         * @param key The registry key of the enum to register
+         * @param enumName The unique enum-like name of the map mode. Used for {@link Enum#name()} along other methods
+         * @param displayName The user-friendly name of the generator
+         * @param callback A callback that is executed whenever starlanes need to be generated (corresponds to {@link StarlaneGenerator#generateStarlanes()})
+         * @since 2.0.0
+         */
+        public void addStarlaneGenerator(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String displayName, @NotNull Runnable callback);
     }
 
     /**
      * The currently active implementation used for static methods in this class.
      */
-    private static @Nullable Implementation impl;
+    @Nullable
+    private static Implementation impl;
 
     /**
      * Adds an empire special to the internal empire special registry.
@@ -153,13 +184,92 @@ public final class RegistryExpander {
     }
 
     /**
+     * Registers a map mode to the map mode registry without the need of binding into galimulator directly.
+     * This method cannot be called after the {@link RegistryRegistrationEvent} was called for {@link Registry#MAP_MODES}.
+     * If it is done anyways, an {@link IllegalStateException} will be thrown. It still can be called while the event
+     * is processed, but it is highly recommended to call it before the event is run, ideally in the extension's initialiser.
+     *
+     * <p>More specifically, unlike
+     * {@link #addEmpireSpecial(NamespacedKey, String, String, String, String, Color, float, float, float, float, boolean) addEmpireSpecial} or
+     * {@link #addFlagSymbol(NamespacedKey, String, String, boolean, int, int) addFlagSymbol}, this method explicitly
+     * supports getting called early. Due to this characteristic the created {@link MapMode} instance is not returned
+     * and should not be immediately obtained. It is best to determine Map modes based on comparison of {@link MapMode#getRegistryKey()}
+     * and not instance comparison.
+     *
+     * <p>The map mode on it's own will do nothing unless starOverlayRegionColorFunction is set.
+     * As such it is up to the extension to create the needed drawing logic for the map mode.
+     * That being said the extension does not need to reinvent the wheel - galimulator will still do most drawing
+     * logic even when a non-vanilla map mode is being used.
+     *
+     * <p>The map mode will always be accessible by the player in the map mode choosing menu. Should that not be the desired
+     * behaviour ASM logic or a PR to SLAPI may be needed.
+     *
+     * <ul>
+     * <li>"starOverlayRegionColorFunction" is the function that assigns the overlay region of a star to a color.
+     * These regions are not rendered if the star region rendering setting is disabled. This  function may be called very often
+     * so caching might be needed on the function's side. This parameter is there to reduce the burden of extensions
+     * when it comes to actually making the map mode useful and such functionality is the most needed type of map modes</li>
+     * </ul>
+     * <ul>
+     * <li>The parameter is null if there should be no obvious colouring of star regions.</li>
+     * <li>The function will return null for any non-null star if the star's overlaid region should not be painted
+     * in any obvious color. The function may throw an exception if it is fed in a null star.</li>
+     * <li>If neither of the above conditions apply, the function must return a non-null color which should be used to
+     * paint the overlaying region in a certain color.</li>
+     * </ul>
+     * @param key The registry key of the enum to register
+     * @param enumName The unique enum-like name of the map mode. Used for {@link Enum#name()} along other methods
+     * @param sprite The sprite to use for the map mode in the map mode selection menu.
+     * @param showActors True if actors (ships) should be shown, false if they should be hidden
+     * @param starOverlayRegionColorFunction The overlaying function to use to color the star regions while the map mode is active
+     * @return The {@link MapModeRegistryPrototype} that was created through this method
+     * @since 2.0.0
+     */
+    @NotNull
+    public static MapModeRegistryPrototype addMapMode(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String sprite, boolean showActors,
+            @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction) {
+        return RegistryExpander.requireImplementation().addMapMode(key, enumName, sprite, showActors, starOverlayRegionColorFunction);
+    }
+
+    /**
+     * Registers a starlane generator to the {@link Registry#STARLANE_GENERATORS starlane generator registry} without the need of binding into
+     * galimulator directly. This method cannot be called after the {@link RegistryRegistrationEvent} was called for {@link Registry#STARLANE_GENERATORS}.
+     * If it is done anyways, an {@link IllegalStateException} will be thrown. It still can be called while the event
+     * is processed, but it is highly recommended to call it before the event is run, ideally in the extension's initialiser.
+     *
+     * <p>More specifically, unlike
+     * {@link #addEmpireSpecial(NamespacedKey, String, String, String, String, Color, float, float, float, float, boolean) addEmpireSpecial} or
+     * {@link #addFlagSymbol(NamespacedKey, String, String, boolean, int, int) addFlagSymbol}, this method explicitly
+     * supports getting called early. Due to this characteristic the created {@link StarlaneGenerator} instance is not returned
+     * and should not be immediately obtained. It is best to determine starlane generators based on comparison of {@link RegistryKeyed#getRegistryKey()}
+     * and not via instance comparison.
+     *
+     * <p>In the event that vanilla galimulator supports sandboxing starlane generators in a way that they can be called
+     * without problems outside of map generation, the implementation of the method will be implemented on a best-effort
+     * basis. That is it will refuse the generation of starlanes outside of map generation. However it is not the intention
+     * to unnecessarily break ABI as long as such a change remains an isolated case and thus does not warrant a bump of the
+     * major version SemVer-wise. The same applies to the event in which modded galimulator adopts sandboxed starlane
+     * generators.
+     *
+     * @param key The registry key of the enum to register
+     * @param enumName The unique enum-like name of the map mode. Used for {@link Enum#name()} along other methods
+     * @param displayName The user-friendly name of the generator
+     * @param callback A callback that is executed whenever starlanes need to be generated (corresponds to {@link StarlaneGenerator#generateStarlanes()})
+     * @since 2.0.0
+     */
+    public static void addStarlaneGenerator(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String displayName, @NotNull Runnable callback) {
+        RegistryExpander.requireImplementation().addStarlaneGenerator(key, enumName, displayName, callback);
+    }
+
+    /**
      * Obtains the implementation of the static methods of this class if possible.
      * If there is no such implementation it will return null.
      *
      * @return The currently active implementation
      */
-    public static @Nullable Implementation getImplementation() {
-        return impl;
+    @Nullable
+    public static Implementation getImplementation() {
+        return RegistryExpander.impl;
     }
 
     /**
@@ -185,14 +295,14 @@ public final class RegistryExpander {
      * @since 1.6.0
      */
     public static void setImplementation(@NotNull Implementation implementation) {
-        if (impl != null) {
+        if (RegistryExpander.impl != null) {
             throw new IllegalStateException("Implementation already set.");
         }
-        impl = Objects.requireNonNull(implementation, "implementation may not be null");
+        RegistryExpander.impl = Objects.requireNonNull(implementation, "implementation may not be null");
     }
 
     /**
-     * The constructor of this class, should not be called as there is little need for taht.
+     * The constructor of this class, should not be called as there is little need for that.
      */
     private RegistryExpander() {
     }

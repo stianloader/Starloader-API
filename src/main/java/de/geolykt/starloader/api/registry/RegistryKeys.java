@@ -145,12 +145,20 @@ public final class RegistryKeys {
     /**
      * The registry key for the "Someism" religion. This registry key actually is identical identity-wise to
      * {@link RegistryKeys#GALIMULATOR_REL_STIAN} as that is the internal name of the religion. This field only
-     * exists as only a really small circle of people will know the internal name of the religion. Due to SLAPI
-     * Mirroring such naming choices, the {@link NamespacedKey#getKey() key's name} of the key is "RELIGION_STIAN".
+     * exists as only a really small circle of people will know the internal name of the religion (in other words
+     * this field exists for convenience reasons). Due to SLAPI Mirroring such naming choices, the
+     * {@link NamespacedKey#getKey() key's name} of the key is "RELIGION_STIAN".
      *
      * @since 2.0.0
      */
     public static final @NotNull NamespacedKey GALIMULATOR_REL_SOMEISM = GALIMULATOR_REL_STIAN;
+
+    // Starlane generation methods, since 2.0.0
+    public static final @NotNull NamespacedKey GALIMULATOR_STARLANES_STANDARD = new GalimulatorResourceKey("STARLANES_STANDARD");
+    public static final @NotNull NamespacedKey GALIMULATOR_STARLANES_WEBBED = new GalimulatorResourceKey("STARLANES_WEBBED");
+    public static final @NotNull NamespacedKey GALIMULATOR_STARLANES_STARS_ON_A_STRING = new GalimulatorResourceKey("STARLANE_STARS_ON_A_STRING");
+    public static final @NotNull NamespacedKey GALIMULATOR_STARLANES_QUICK = new GalimulatorResourceKey("STARLANES_QUICK");
+    public static final @NotNull NamespacedKey GALIMULATOR_STARLANES_TOTAL_CONNECTION = new GalimulatorResourceKey("STARLANES_TOTAL_CONNECTION");
 }
 
 /**

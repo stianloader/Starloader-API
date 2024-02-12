@@ -56,13 +56,13 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
         @Override
         @Nullable
         public MapMode asMapMode() {
-            return mapMode;
+            return this.mapMode;
         }
 
         @Override
         @Nullable
         public Function<@NotNull Star, @Nullable Color> getStarOverlayRegionColorFunction() {
-            return starOverlayRegionColorFunction;
+            return this.starOverlayRegionColorFunction;
         }
 
         @Override
@@ -76,10 +76,34 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
         }
     }
 
+    static class SLStarlaneGeneratorPrototype {
+        @NotNull
+        final Runnable callback;
+        @NotNull
+        final String enumName;
+        @NotNull
+        final NamespacedKey key;
+        @NotNull
+        final String name;
+
+        public SLStarlaneGeneratorPrototype(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String name, @NotNull Runnable callback) {
+            this.key = key;
+            this.enumName = enumName;
+            this.name = name;
+            this.callback  = callback;
+        }
+    }
+
+    // The following booleans exist as the registry expander cannot be for certain about whether the registries are frozen or not without a bit of magic.
+    // In the end some random fields were the magic glue that was decided upon.
     boolean frozenMapModeRegistry = false;
+    boolean frozenStarlaneRegistry = false;
 
     @NotNull
     final List<SLMapModePrototype> mapModePrototypes = new ArrayList<>();
+
+    @NotNull
+    final List<SLStarlaneGeneratorPrototype> starlaneGeneratorPrototypes = new ArrayList<>();
 
     @Override
     public void addEmpireSpecial(@NotNull NamespacedKey key, @NotNull String enumName, @NotNull String name,
@@ -110,12 +134,23 @@ public class SLRegistryExpander implements RegistryExpander.Implementation {
     public MapModeRegistryPrototype addMapMode(@NotNull NamespacedKey key, @NotNull String enumName,
             @NotNull String sprite, boolean showActors,
             @Nullable Function<@NotNull Star, @Nullable Color> starOverlayRegionColorFunction) {
-        if (frozenMapModeRegistry) {
+        if (this.frozenMapModeRegistry) {
             throw new IllegalStateException("The MapMode registry is already frozen."
-                    + " The MapModes class might've loaded too early - whatever the cause - the registry cannot be mutated.");
+                    + " The MapModes class might've loaded too early; whatever the cause - the registry cannot be mutated.");
         }
         SLMapModePrototype prototype = new SLMapModePrototype(key, enumName, sprite, showActors, starOverlayRegionColorFunction);
         this.mapModePrototypes.add(prototype);
         return prototype;
+    }
+
+    @Override
+    public void addStarlaneGenerator(@NotNull NamespacedKey key, @NotNull String enumName,
+            @NotNull String displayName, @NotNull Runnable callback) {
+        if (this.frozenStarlaneRegistry) {
+            throw new IllegalStateException("The starlane generator registry is already frozen."
+                    + " The Space$ConnectionMethod class might've loaded too early; whatever the cause - the registry cannot be mutated.");
+        }
+        SLStarlaneGeneratorPrototype prototype = new SLStarlaneGeneratorPrototype(key, enumName, displayName, callback);
+        this.starlaneGeneratorPrototypes.add(prototype);
     }
 }

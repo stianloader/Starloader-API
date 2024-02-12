@@ -31,6 +31,14 @@ public class RegistryRegistrationEvent extends Event {
     public static final String REGISTRY_RELIGION = "RELIGION";
 
     /**
+     * The name of the starlane generator registry, i.e. {@link Registry#STARLANE_GENERATORS}.
+     * Also known as a connection methods.
+     * 
+     * @since 2.0.0
+     */
+    public static final String REGISTRY_STARLANE_GENERATORS = "STARLANE_GENERATORS";
+
+    /**
      * The name of the registry corresponding to {@link Registry#STATE_ACTOR_FACTORIES}.
      *
      * @since 2.0.0

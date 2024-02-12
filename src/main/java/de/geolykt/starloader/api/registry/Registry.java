@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.DeprecatedSince;
@@ -16,6 +18,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
+import de.geolykt.starloader.api.empire.StarlaneGenerator;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 import de.geolykt.starloader.api.gui.MapMode;
 
@@ -80,6 +83,13 @@ public abstract class Registry<T> {
     public static Registry<? extends Enum<?>> RELIGIONS;
 
     /**
+     * Enum registry for supported connection methods.
+     *
+     * @since 2.0.0
+     */
+    public static Registry<StarlaneGenerator> STARLANE_GENERATORS;
+
+    /**
      * Registry for {@link StateActorFactory state actor creators}. Unlike most other registries, this registry
      * is not an enum registry and as such it can be modified at any time after startup.
      *
@@ -124,8 +134,9 @@ public abstract class Registry<T> {
      * @return The value associated under the key
      */
     @Nullable
+    @Contract(pure = true)
     public T get(@NotNull NamespacedKey key) {
-        return keyedValues.get(key);
+        return this.keyedValues.get(key);
     }
 
     /**
@@ -143,8 +154,10 @@ public abstract class Registry<T> {
     @DeprecatedSince("1.1.0")
     @Deprecated
     @Nullable
+    @Contract(pure = true)
+    @ApiStatus.Internal
     public T getIntern(@NotNull String key) {
-        return keyedValuesIntern.get(key);
+        return this.keyedValuesIntern.get(key);
     }
 
     /**
@@ -156,6 +169,8 @@ public abstract class Registry<T> {
      * @since 2.0.0
      */
     @Contract(pure = true)
+    @NotNull
+    @UnmodifiableView
     public Set<@NotNull NamespacedKey> getKeys() {
         return Collections.unmodifiableSet(this.keyedValues.keySet());
     }
@@ -165,8 +180,9 @@ public abstract class Registry<T> {
      *
      * @return The amount of registered objects in the registry.
      */
+    @Contract(pure = true)
     public int getSize() {
-        return values.length;
+        return this.values.length;
     }
 
     /**
@@ -199,6 +215,7 @@ public abstract class Registry<T> {
      * @since 1.6
      */
     @NotNull
+    @Contract(pure = true)
     public T nextValue(@NotNull T value) {
         if (values == null || values.length == 0) {
             throw new IllegalStateException("Registry not intialized or empty.");
@@ -240,6 +257,7 @@ public abstract class Registry<T> {
      * @since 2.0.0
      */
     @NotNull
+    @Contract(pure = true)
     public T require(@NotNull NamespacedKey key) {
         return NullUtils.requireNotNull(get(key), "Key \"" + key + "\" is not associated with a value!");
     }

@@ -8,6 +8,7 @@ RAS v1 std
  all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/FlagItem$BuiltinSymbols       <init>                  (Ljava/lang/String;ILjava/lang/String;ZII)V
  all        ACC_PRIVATE     ACC_PROTECTED   snoddasmannen/galimulator/MapMode$MapModes              <init>                  (Ljava/lang/String;ILjava/lang/String;Z)V
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/Space                         setupBackgroundEffects  ()V
+ all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/Space$ConnectionMethod        <init>                  (Ljava/lang/String;ILjava/lang/String;)V
  all        0               ACC_PUBLIC      snoddasmannen/galimulator/SpaceState                    <init>                  (Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Lsnoddasmannen/galimulator/Empire;IILsnoddasmannen/galimulator/VanityHolder;Ljava/util/Vector;Lsnoddasmannen/galimulator/Player;Lsnoddasmannen/galimulator/MapData;ZLsnoddasmannen/galimulator/EmploymentAgency;Ljava/util/Vector;Lsnoddasmannen/galimulator/History;Ljava/util/List;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/Vector;Ljava/util/ArrayList;)V
  all        ACC_PRIVATE     ACC_PUBLIC      snoddasmannen/galimulator/GalFX                         c                       (Lsnoddasmannen/galimulator/GalFX$FONT_TYPE;)Lcom/badlogic/gdx/graphics/g2d/BitmapFont;
  runtime    0               ACC_PUBLIC      snoddasmannen/galimulator/Space$ActorSpawningPredicate  <init>                  (Lsnoddasmannen/galimulator/actors/StateActorCreator;F)V
@@ -68,3 +69,4 @@ RAS v1 std
  build      ACC_ENUM        0               snoddasmannen/galimulator/EmpireSpecial
  build      ACC_ENUM        0               snoddasmannen/galimulator/FlagItem$BuiltinSymbols
  build      ACC_ENUM        0               snoddasmannen/galimulator/MapMode$MapModes
+ build      ACC_ENUM        0               snoddasmannen/galimulator/Space$ConnectionMethod

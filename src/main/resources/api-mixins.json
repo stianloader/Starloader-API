@@ -13,6 +13,7 @@
     "AudioSampleMixins",
     "BufferedWidgetWrapperMixins",
     "BuiltinSymbolsMixins",
+    "ConnectionMethodMixins",
     "DiploRequestMixins",
     "DisruptMissileMixins",
     "EmpireAchievementMixins",

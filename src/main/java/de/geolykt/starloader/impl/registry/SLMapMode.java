@@ -32,7 +32,7 @@ public class SLMapMode extends MapModes {
 
     @NotNull
     public Function<@NotNull Star, @NotNull ClickInteractionResponse> getClickAction() {
-        return prototype.clickAction;
+        return this.prototype.clickAction;
     }
 
     /**
@@ -53,6 +53,6 @@ public class SLMapMode extends MapModes {
      */
     @Nullable
     public Function<@NotNull Star, @Nullable Color> getStarOverlayRegionColorFunction() {
-        return prototype.starOverlayRegionColorFunction;
+        return this.prototype.starOverlayRegionColorFunction;
     }
 }

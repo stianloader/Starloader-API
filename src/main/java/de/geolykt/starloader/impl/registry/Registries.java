@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.empire.StarlaneGenerator;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
@@ -22,6 +23,7 @@ import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.FlagItem.BuiltinSymbols;
 import snoddasmannen.galimulator.MapMode.MapModes;
 import snoddasmannen.galimulator.Religion;
+import snoddasmannen.galimulator.Space.ConnectionMethod;
 import snoddasmannen.galimulator.weapons.WeaponsFactory;
 
 /**
@@ -59,11 +61,50 @@ public final class Registries {
         AudioSampleWrapper.MISSILE = new StarloaderAudioSample("missile.wav", AudioSample.MISSILE);
     }
 
+    /**
+     * Initialize registries connected to star connection methods, which are responsible for generating starlanes.
+     * It also emits the required events.
+     *
+     * @since 2.0.0
+     */
+    @SuppressWarnings("unchecked")
+    public static void initConnectionMethods() {
+        Registries.LOGGER.info("Registering star connection methods (also known as Starlane generators)");
+        SimpleEnumRegistry<ConnectionMethod> generatorRegistry = new SimpleEnumRegistry<>(ConnectionMethod.class);
+        @SuppressWarnings("null")
+        @NotNull ConnectionMethod[] methods = new @NotNull ConnectionMethod[] {
+                ConnectionMethod.STANDARD,
+                ConnectionMethod.WEBBED,
+                ConnectionMethod.STARS_ON_A_STRING,
+                ConnectionMethod.QUICK,
+                ConnectionMethod.TOTAL_CONNECTION
+        };
+        generatorRegistry.registerBulk(new @NotNull NamespacedKey[] {
+            RegistryKeys.GALIMULATOR_STARLANES_STANDARD,
+            RegistryKeys.GALIMULATOR_STARLANES_WEBBED,
+            RegistryKeys.GALIMULATOR_STARLANES_STARS_ON_A_STRING,
+            RegistryKeys.GALIMULATOR_STARLANES_QUICK,
+            RegistryKeys.GALIMULATOR_STARLANES_TOTAL_CONNECTION
+        }, methods);
+        SLRegistryExpander expander = (SLRegistryExpander) RegistryExpander.requireImplementation();
+        expander.starlaneGeneratorPrototypes.removeIf(prototype -> {
+            generatorRegistry.register(prototype.key, new SLStarlaneGenerator(generatorRegistry.getSize(), prototype));
+            return true;
+        });
+        Registry.STARLANE_GENERATORS = (Registry<StarlaneGenerator>) (Registry<?>) generatorRegistry;
+        EventManager.handleEvent(new RegistryRegistrationEvent(generatorRegistry, ConnectionMethod.class, RegistryRegistrationEvent.REGISTRY_STARLANE_GENERATORS));
+        expander.frozenStarlaneRegistry = true;
+        expander.starlaneGeneratorPrototypes.removeIf(prototype -> {
+            generatorRegistry.register(prototype.key, new SLStarlaneGenerator(generatorRegistry.getSize(), prototype));
+            return true;
+        });
+        generatorRegistry.freeze();
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void initEmpireAchievements() {
         LOGGER.info("Registering empire achievements");
         SimpleEnumRegistry<EmpireAchievementType> achievementRegistry = new SimpleEnumRegistry<>(EmpireAchievementType.class);
-        @SuppressWarnings("null")
         @NotNull EmpireAchievementType[] achivements = new @NotNull EmpireAchievementType[] {
             EmpireAchievementType.FIVEMILOLD,
             EmpireAchievementType.TENMILOLD,
@@ -99,7 +140,7 @@ public final class Registries {
             RegistryKeys.GALIMULATOR_ACHIEVEMENT_DOMINATEDGALAXY
         }, achivements);
         Registry.EMPIRE_ACHIVEMENTS = (Registry) achievementRegistry;
-        EventManager.handleEvent(new RegistryRegistrationEvent(achievementRegistry, EmpireAchievementType.class, RegistryRegistrationEvent.REGISTRY_FLAG_SYMBOL));
+        EventManager.handleEvent(new RegistryRegistrationEvent(achievementRegistry, EmpireAchievementType.class, RegistryRegistrationEvent.REGISTRY_EMPIRE_ACHIEVEMENTS));
     }
 
     /**
