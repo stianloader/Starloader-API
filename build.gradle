@@ -46,10 +46,10 @@ dependencies {
     // The launcher - the heart of this project; Note that we now adopt a "bring your own launcher" model
     // so we don't actually force the usage of micromixin on others; Other projects can make use of more modern
     // launcher versions or even other variants such as those making use of the spongeian mixin implementation
-    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240118"
-    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240118"
+    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240227"
+    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240227"
 
-    compileOnly "org.stianloader:micromixin-annotations:0.2.0-a20240118"
+    compileOnly "org.stianloader:micromixin-annotations:0.4.0-a20240227"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
 
     compileOnlyApi "org.jetbrains:annotations:24.1.0"
@@ -142,6 +142,8 @@ eclipse {
         file {
             whenMerged {
                 entries.removeIf { it.path == 'src/main/java9' }
+                entries.removeIf { it.path == project.file('build/classes/java/main').getAbsolutePath() }
+                entries.removeIf { it.path == project.file('build/classes/java/java9').getAbsolutePath() }
             }
         }
     }

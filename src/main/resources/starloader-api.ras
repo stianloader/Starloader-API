@@ -71,3 +71,6 @@ RAS v1 std
  build      ACC_ENUM        0               snoddasmannen/galimulator/FlagItem$BuiltinSymbols
  build      ACC_ENUM        0               snoddasmannen/galimulator/MapMode$MapModes
  build      ACC_ENUM        0               snoddasmannen/galimulator/Space$ConnectionMethod
+
+# Hack used to make a mixin (BufferedWidgetWrapperMixin) compile properly, but isn't actually required at runtime
+ build      0               ACC_PUBLIC      snoddasmannen/galimulator/ui/Widget                     t                       F

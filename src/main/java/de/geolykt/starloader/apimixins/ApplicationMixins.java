@@ -2,6 +2,7 @@ package de.geolykt.starloader.apimixins;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -19,6 +20,7 @@ import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
 import de.geolykt.starloader.impl.gui.SLInputAdapter;
 import de.geolykt.starloader.impl.gui.keybinds.KeybindHelper;
+import de.geolykt.starloader.impl.gui.s2d.MenuHandler;
 import de.geolykt.starloader.impl.registry.StateActorFactoryRegistry;
 
 import snoddasmannen.galimulator.Galemulator;
@@ -30,14 +32,23 @@ import snoddasmannen.galimulator.actors.StateActorCreator;
 @Mixin(Galemulator.class)
 public class ApplicationMixins {
 
-    /**
-     * @param ci The callback info. Required for injection but ignored within the method.
-     */
-    @Inject(method = "create", at = @At("HEAD"))
-    public void start(CallbackInfo ci) {
+    @Inject(target = @Desc("render"), at = @At("HEAD"), cancellable = true)
+    private void onRender(CallbackInfo ci) {
+        if (MenuHandler.render()) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(target = @Desc(value = "resize", args = { int.class, int.class }), at = @At("HEAD"))
+    private void onResize(int w, int h, CallbackInfo ci) {
+        MenuHandler.resize(w, h);
+    }
+
+    @Inject(target = @Desc("create"), at = @At("HEAD"))
+    private void start(CallbackInfo ci) {
         try {
             if (Boolean.getBoolean("de.geolykt.starloader.lwjgl3ify.killOnReturn")) {
-                // We are probably (read: definetly) running on LWJGL3, so we need to run LJWGL3 compatibility code
+                // We are probably (read: definitely) running on LWJGL3, so we need to run LJWGL3 compatibility code
                 Settings.a(); // Initialize settings
                 class_11.a(); // Initialize steam
             }
@@ -52,11 +63,8 @@ public class ApplicationMixins {
         }
     }
 
-    /**
-     * @param ci The callback info. Required for injection but ignored within the method.
-     */
-    @Inject(method = "create", at = @At("TAIL"))
-    public void startComplete(CallbackInfo ci) {
+    @Inject(target = @Desc("create"), at = @At("TAIL"))
+    private void startComplete(CallbackInfo ci) {
         try {
             Registry.STATE_ACTOR_FACTORIES = new StateActorFactoryRegistry();
             EventManager.handleEvent(new RegistryRegistrationEvent(Registry.STATE_ACTOR_FACTORIES, StateActorCreator.class, RegistryRegistrationEvent.REGISTRY_STATE_ACTOR_FACTORY));
@@ -73,11 +81,9 @@ public class ApplicationMixins {
         }
     }
 
-    /**
-     * @param ci The callback info. Required for injection but ignored within the method.
-     */
-    @Inject(method = "dispose", at = @At("HEAD"))
-    public void stop(CallbackInfo ci) {
+    @Inject(target = @Desc("dispose"), at = @At("HEAD"))
+    private void stop(CallbackInfo ci) {
         EventManager.handleEvent(new ApplicationStopEvent());
+        MenuHandler.dispose();
     }
 }

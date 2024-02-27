@@ -11,6 +11,8 @@ galimulator-desktop.jar
 # Ignore files and folders produced by runExtensions
 run/
 data
+mods
+
 # Galimulator savegames
 *.dat
 /target/

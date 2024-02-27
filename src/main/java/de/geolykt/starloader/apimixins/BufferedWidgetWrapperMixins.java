@@ -11,15 +11,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.impl.GalimulatorImplementation;
+import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
+import de.geolykt.starloader.impl.gui.WidgetMouseReleaseListener;
 
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.Widget;
 
 @Mixin(BufferedWidgetWrapper.class)
-public class BufferedWidgetWrapperMixins {
+public class BufferedWidgetWrapperMixins implements AsyncWidgetInput, WidgetMouseReleaseListener {
     @Shadow
-    Widget a;
+    Widget a; // Child
 
     @Shadow
     SpriteBatch e;
@@ -38,5 +40,17 @@ public class BufferedWidgetWrapperMixins {
             GalimulatorImplementation.crash("This buffered widget wrapper instance has been disposed and as such cannot be drawn on again. This usually hints at incorrect disposal of widgets. Make sure to remove them from the open widget list after disposing them. Child widget: " + this.a, true);
             ci.cancel();
         }
+    }
+
+    @Override
+    public void onMouseUp(double x, double y) {
+        if (this.a instanceof WidgetMouseReleaseListener) {
+            ((WidgetMouseReleaseListener) this.a).onMouseUp(x, y + this.a.t);
+        }
+    }
+
+    @Override
+    public boolean isAsyncClick() {
+        return this.a instanceof AsyncWidgetInput && ((AsyncWidgetInput) this.a).isAsyncClick();
     }
 }

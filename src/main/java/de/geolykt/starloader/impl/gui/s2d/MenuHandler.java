@@ -24,6 +24,7 @@ public class MenuHandler {
     }
 
     public static boolean render() {
+        // Return true to suppress the "standard" galimulator stage
         Stage activeStage = MenuHandler.activeStage;
         if (activeStage != null) {
             float delta = Gdx.graphics.getDeltaTime();
