@@ -64,13 +64,15 @@ public class WeaponsFactoryMixins implements WeaponType {
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull String getName() {
-        return name;
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
+    @NotNull
+    public String getName() {
+        return this.name;
     }
 
     @Override
     public @NotNull NamespacedKey getRegistryKey() {
-        NamespacedKey key = registryKey;
+        NamespacedKey key = this.registryKey;
         if (key == null) {
             throw new IllegalStateException("The registry key is not already set!");
         }
@@ -79,9 +81,9 @@ public class WeaponsFactoryMixins implements WeaponType {
 
     @Override
     public void setRegistryKey(@NotNull NamespacedKey key) {
-        if (registryKey != null) {
+        if (this.registryKey != null) {
             throw new IllegalStateException("The registry key is already set!");
         }
-        registryKey = key;
+        this.registryKey = key;
     }
 }

@@ -7,10 +7,6 @@ pluginManagement {
             name = 'stianloader-maven'
             url = 'https://stianloader.org/maven/'
         }
-        maven {
-            name 'fabric'
-            url 'https://maven.fabricmc.net/'
-        }
     }
 }
 

@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
@@ -70,13 +71,14 @@ public class FactionMixins implements Faction {
     }
 
     @Override
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public int getStarCount() {
-        return starCount;
+        return this.starCount;
     }
 
     @Override
     public int getHost() {
-        return host.get_id();
+        return this.host.get_id();
     }
 
     @Override

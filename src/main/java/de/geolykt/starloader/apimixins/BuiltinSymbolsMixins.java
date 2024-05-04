@@ -89,6 +89,7 @@ public class BuiltinSymbolsMixins implements FlagSymbol {
 
     @SuppressWarnings("null")
     @Override
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public @NotNull TextureRegion getTexture() {
         return texture;
     }

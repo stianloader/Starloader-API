@@ -90,12 +90,13 @@ public class PersonMixins implements DynastyMember {
 
     @Override
     public @NotNull String getFullName() {
-        return NullUtils.requireNotNull(asGalimulatorPerson().q());
+        return NullUtils.requireNotNull(this.asGalimulatorPerson().q());
     }
 
     @Override
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public float getPrestige() {
-        return prestige;
+        return this.prestige;
     }
 
     @Override

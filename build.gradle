@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'gsl-starplane' version '0.1.0-a20240405.1'
+    id 'gsl-starplane' version '0.2.0-a20240504'
     id 'me.champeau.mrjar' version '0.1.1'
     id 'eclipse'
 }
@@ -46,16 +46,16 @@ dependencies {
     // The launcher - the heart of this project; Note that we now adopt a "bring your own launcher" model
     // so we don't actually force the usage of micromixin on others; Other projects can make use of more modern
     // launcher versions or even other variants such as those making use of the spongeian mixin implementation
-    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240227"
-    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240227"
+    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240413"
+    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240413"
 
-    compileOnly "org.stianloader:micromixin-annotations:0.4.0-a20240227"
+    compileOnly "org.stianloader:micromixin-annotations:0.4.0-a20240428"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
 
     compileOnlyApi "org.jetbrains:annotations:24.1.0"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.ow2.asm:asm-util:9.6'
+    testImplementation 'org.ow2.asm:asm-util:9.7'
 }
 
 // Yes, we are using Java 11 to build. But actually Java 8 for compilation.
@@ -97,6 +97,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 remapJar {
     archiveClassifier = 'remapped'
     fromJar jar
+    inputs.file jar.archiveFile
 }
 
 build {

@@ -46,8 +46,10 @@ public class WeaponMixins implements Weapon {
     }
 
     @Override
-    public @NotNull String getName() {
-        return NullUtils.requireNotNull(snodWeapon().getName());
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
+    @NotNull
+    public String getName() {
+        return NullUtils.requireNotNull(this.snodWeapon().getName());
     }
 
     @Override

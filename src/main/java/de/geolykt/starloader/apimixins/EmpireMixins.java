@@ -494,6 +494,7 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("null")
     @Override
     @NotNull
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public String getMotto() {
         return this.motto;
     }
@@ -528,12 +529,13 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings({ "unchecked", "null" })
     @Override
     public @NotNull Vector<Actor> getSLActors() {
-        return agents;
+        return this.agents;
     }
 
     @Override
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public int getStarCount() {
-        return starCount;
+        return this.starCount;
     }
 
     @Override
@@ -667,6 +669,7 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public void setMotto(@NotNull String motto) {
         this.motto = motto;
     }

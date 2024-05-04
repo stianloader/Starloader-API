@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -281,12 +282,13 @@ public class StarMixins implements Star {
 
     @Override
     public int getUID() {
-        return id;
+        return this.id;
     }
 
     @Override
+    @Unique(silent = true) // @Unique behaves like @Intrinsic here
     public float getWealth() {
-        return wealth;
+        return this.wealth;
     }
 
     @Override
