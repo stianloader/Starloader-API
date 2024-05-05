@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -164,7 +165,7 @@ public class StarMixins implements Star {
         }
 
         while (!bfsNextStars.isEmpty() && --depth != 0) {
-            bfsVisitedStars.clear();
+            bfsVisitingStars.clear();
             List<Star> swapCache = bfsVisitingStars;
             bfsVisitingStars = bfsNextStars;
             bfsNextStars = swapCache;
