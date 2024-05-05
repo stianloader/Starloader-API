@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IntSet;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.CoordinateGrid;
@@ -123,10 +124,10 @@ public class StarMixins implements Star {
 
     @Override
     public void addTickCallback(TickCallback<Star> callback) {
-        if (tickCallbacks == null) {
-            tickCallbacks = new ArrayList<>();
+        if (this.tickCallbacks == null) {
+            this.tickCallbacks = new ArrayList<>();
         }
-        tickCallbacks.add(callback);
+        this.tickCallbacks.add(callback);
     }
 
     @Shadow
@@ -137,9 +138,51 @@ public class StarMixins implements Star {
     public void onHostileTakeover(Empire empire) {
     }
 
-    @Shadow
-    public @NotNull Vector<Star> c(int var1) { // getNeighboursRecursive
-        return new Vector<>();
+    @Overwrite(aliases = "c")
+    @NotNull
+    @Override
+    public Vector<Star> getNeighboursRecursive(int depth) {
+        return this.slapi$getNeighboursRecursive(depth);
+    }
+
+    @NotNull
+    private Vector<Star> slapi$getNeighboursRecursive(int depth) {
+        if (depth == 0) {
+            return new Vector<>();
+        } else if (depth == 1) {
+            return new Vector<>(this.neighbours);
+        }
+
+        Vector<Star> visitedStars = new Vector<>();
+        List<Star> bfsVisitingStars = new ArrayList<>();
+        List<Star> bfsNextStars = new ArrayList<>();
+        IntSet bfsVisitedStars = new IntSet();
+
+        for (Star neighbour : this.neighbours) {
+            bfsNextStars.add(neighbour);
+            bfsVisitedStars.add(neighbour.getUID());
+        }
+
+        while (!bfsNextStars.isEmpty() && --depth != 0) {
+            bfsVisitedStars.clear();
+            List<Star> swapCache = bfsVisitingStars;
+            bfsVisitingStars = bfsNextStars;
+            bfsNextStars = swapCache;
+
+            for (Star visiting : bfsVisitingStars) {
+                visitedStars.add(visiting);
+                for (Star neighbour : visiting.getNeighbourList()) {
+                    if (!bfsVisitedStars.add(neighbour.getUID())) {
+                        continue;
+                    }
+                    bfsNextStars.add(neighbour);
+                }
+            }
+        }
+
+        visitedStars.addAll(bfsNextStars);
+
+        return visitedStars;
     }
 
     @Override
@@ -172,7 +215,7 @@ public class StarMixins implements Star {
 
     @Override
     public int getAssignedEmpireUID() {
-        return ownerid;
+        return this.ownerid;
     }
 
     @Override
@@ -254,12 +297,7 @@ public class StarMixins implements Star {
     @SuppressWarnings("null")
     @Override
     public @NotNull Vector<Star> getNeighbours() {
-        return neighbours;
-    }
-
-    @Override
-    public @NotNull Vector<Star> getNeighboursRecursive(int recurseDepth) {
-        return c(recurseDepth);
+        return this.neighbours;
     }
 
     @Shadow

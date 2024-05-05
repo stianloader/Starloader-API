@@ -39,8 +39,7 @@ import snoddasmannen.galimulator.rendersystem.RenderCache;
 
 /**
  * Mixin to intercept any calls to the static methods within the Galimulator
- * (Space) class. Since sponge's mixins do not support injecting into static
- * methods, it will also perform optimisations to them, if needed.
+ * (Space) class.
  */
 @Mixin(Space.class)
 public class InstanceMixins {
