@@ -22,13 +22,14 @@ import de.geolykt.starloader.starplane.annotations.RemapClassReference;
 import de.geolykt.starloader.transformers.ASMTransformer;
 
 /**
- * Transformer whose sole purpose it is to keep the ABI (Application binary interface) stable across releases of SLAPI where possible
- * and appropriate.
+ * Transformer whose sole purpose it is to keep the ABI (Application binary interface) stable across releases of SLAPI where
+ * possible and appropriate.
  *
- * <p>Note that ABI is different to API. ABI refers to the compiled programs. This transformer cannot handle API breakage that result
- * in compilation failures; instead, it tries to mitigate the runtime effects, allowing older mods to still run.
+ * <p>Note that ABI is different to API. ABI refers to the compiled programs. This transformer cannot mitigate any API breakage
+ * that results in a compilation failure; instead, it tries to mitigate the runtime effects, allowing older mods to still run.
  *
  * <p>Like most other SLAPI transformers, the priority of this transformer is at a low -9900.
+ *
  * @since 2.0.0
  */
 public class ABICompatibilityTransformer extends ASMTransformer {

@@ -19,18 +19,18 @@ import snoddasmannen.galimulator.Space.ActorSpawningPredicate;
 import snoddasmannen.galimulator.actors.StateActorCreator;
 
 /**
- * An {@link ASMTransformer} which has the only goal to transform the {@link SLInstrinsics} class.
+ * An {@link ASMTransformer} which has the only goal to transform the {@link SLIntrinsics} class.
  *
  * @since 2.0.0
  */
-public class SLInstrinsicsTransformer extends ASMTransformer {
+public class SLIntrinsicsTransformer extends ASMTransformer {
 
     @RemapMemberReference(ownerType = ActorSpawningPredicate.class, name = "<init>", methodDesc = @MethodDesc(args = {StateActorCreator.class, float.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
     private static String predicateConstructor = ReferenceSource.getStringValue();
 
     @Override
     public boolean accept(@NotNull ClassNode node) {
-        if (!node.name.equals("de/geolykt/starloader/impl/asm/SLInstrinsics")) {
+        if (!node.name.equals("de/geolykt/starloader/impl/asm/SLIntrinsics")) {
             return false;
         }
         for (MethodNode method : node.methods) {
@@ -56,6 +56,6 @@ public class SLInstrinsicsTransformer extends ASMTransformer {
 
     @Override
     public boolean isValidTarget(@NotNull String internalName) {
-        return internalName.equals("de/geolykt/starloader/impl/asm/SLInstrinsics");
+        return internalName.equals("de/geolykt/starloader/impl/asm/SLIntrinsics");
     }
 }

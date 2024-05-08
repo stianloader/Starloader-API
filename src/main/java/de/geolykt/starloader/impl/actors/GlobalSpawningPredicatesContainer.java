@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
-import de.geolykt.starloader.impl.asm.SLInstrinsics;
+import de.geolykt.starloader.impl.asm.SLIntrinsics;
 
 import snoddasmannen.galimulator.Native;
 import snoddasmannen.galimulator.Space;
@@ -39,14 +39,14 @@ public class GlobalSpawningPredicatesContainer implements SpawnPredicatesContain
 
         // JAVAC does not like this
         for (Native starNative : Native.get_a()) {
-            natives.put(starNative, SLInstrinsics.createPredicate(starNative.e(), 0.5F));
+            natives.put(starNative, SLIntrinsics.createPredicate(starNative.e(), 0.5F));
         }
 
         Vector<ShipType> buildableTypes = ShipFactory.getBuildableTypes();
         fallbackPredicates = new ArrayList<>(buildableTypes.size());
 
         for (int i = 0; i < buildableTypes.size(); i++) {
-            fallbackPredicates.add(SLInstrinsics.createPredicate(buildableTypes.get(i), 1.0F));
+            fallbackPredicates.add(SLIntrinsics.createPredicate(buildableTypes.get(i), 1.0F));
         }
 
         fallbackShuffled = new ArrayList<>(fallbackPredicates);

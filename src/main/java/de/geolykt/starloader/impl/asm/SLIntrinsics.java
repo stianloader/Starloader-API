@@ -13,7 +13,7 @@ import snoddasmannen.galimulator.actors.StateActorCreator;
  *
  * @since 2.0.0
  */
-public final class SLInstrinsics {
+public final class SLIntrinsics {
 
     /**
      * Create a {@link StateActorSpawnPredicate} that uses the given creator and has a given chance to trigger.
@@ -25,6 +25,6 @@ public final class SLInstrinsics {
      */
     @NotNull
     public static final StateActorSpawnPredicate<?> createPredicate(StateActorCreator creator, float triggerChance) {
-        throw new UnsupportedOperationException("The SLInstrinsics class is meant to be transformed at runtime.");
+        throw new UnsupportedOperationException("The SLIntrinsics class is meant to be transformed at runtime.");
     }
 }
