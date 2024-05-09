@@ -63,6 +63,18 @@ public class SpaceASMTransformer extends ASMTransformer {
     private static final String ACTIVE_EMPIRE_CLASS = "de/geolykt/starloader/api/empire/ActiveEmpire";
 
     /**
+     * A field which can be used by more invasive mods to disable transformers that expect
+     * the {@link Star#renderRegion()} method to be laid out like in vanilla galimulator.
+     *
+     * <p>As it is often the case, this field is mostly a hack and shouldn't be used
+     * unless absolutely necessary. In laymen's terms: It is not public API.
+     * Handle with care.
+     *
+     * @since 2.0.0-a20240509
+     */
+    private static boolean assumeVanillaRegionRenderingLogic = true;
+
+    /**
      * The logger object that should be used used throughout this class.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SpaceASMTransformer.class);
@@ -132,6 +144,27 @@ public class SpaceASMTransformer extends ASMTransformer {
      * The internal name of the class you are viewing right now right here.
      */
     private static final String TRANSFORMER_CLASS = "de/geolykt/starloader/impl/asm/SpaceASMTransformer";
+
+    /**
+     * This method can be used by more invasive mods to disable transformers that expect
+     * the {@link Star#renderRegion()} method to be laid out like in vanilla galimulator.
+     *
+     * <p>As it is often the case, this method is mostly a hack and shouldn't be used
+     * unless absolutely necessary. In laymen's terms: It is not public API.
+     * Handle with care.
+     *
+     * <p>Further, this method does not perform any sanity check what the {@link Star}
+     * class hasn't yet been classloaded, so setting this flag may not have an effect
+     * if the transformation already occurred.
+     *
+     * @since 2.0.0-a20240509
+     */
+    public static void assumeVanillaRegionRenderingLogic(boolean flag) {
+        if (flag == SpaceASMTransformer.assumeVanillaRegionRenderingLogic) {
+            return;
+        }
+        SpaceASMTransformer.assumeVanillaRegionRenderingLogic = flag;
+    }
 
     /**
      * Emits the {@link EmpireCollapseEvent}. A call to this method is automatically injected by the {@link #addEmpireCollapseListener(MethodNode)} method.
@@ -395,6 +428,10 @@ public class SpaceASMTransformer extends ASMTransformer {
                         DebugNagException.nag("Duplicate method?");
                         throw new IllegalStateException("Unexpected error while transforming class: Duplicate method");
                     }
+                    if (!SpaceASMTransformer.assumeVanillaRegionRenderingLogic) {
+                        transformed = true;
+                        continue;
+                    }
                     LabelNode jumpTarget = null;
                     for (AbstractInsnNode insn : method.instructions) {
                         if (insn.getOpcode() == Opcodes.GOTO) {
@@ -503,6 +540,6 @@ public class SpaceASMTransformer extends ASMTransformer {
         return fqn.equals(SPACE_CLASS)
                 || fqn.equals("snoddasmannen/galimulator/factions/Faction")
                 || fqn.equals("snoddasmannen/galimulator/Star")
-                || fqn.equals(gestureListenerClass);
+                || fqn.equals(SpaceASMTransformer.gestureListenerClass);
     }
 }
