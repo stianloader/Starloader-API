@@ -128,20 +128,23 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     /**
      * Renders a crash report to the screen and log. This action cannot be undone.
      *
+     * <p>Warning: This is not public API. Use {@link Galimulator#panic(String, boolean)}
+     * instead.
+     *
      * @param cause The description of the cause of the issue.
      * @param save True if the current game state should be written to disk
      * @since 2.0.0
      */
     public static void crash(@NotNull String cause, boolean save) {
-        try {
-            throw new AssertionError("GalimulatorImplementation.crash() called: " + cause);
-        } catch (AssertionError e) {
-            GalimulatorImplementation.crash(e, cause, save);
-        }
+        Throwable backtrace = new AssertionError("GalimulatorImplementation.crash() called: " + cause).fillInStackTrace();
+        GalimulatorImplementation.crash(backtrace, cause, save);
     }
 
     /**
      * Renders a crash report to the screen and log. This action cannot be undone.
+     *
+     * <p>Warning: This is not public API. Use {@link Galimulator#panic(String, boolean, Throwable)}
+     * instead.
      *
      * @param e The stacktrace that should be displayed. Stacktraces are powerful tools to debug issues
      * @param cause The description of the cause of the issue.
@@ -180,7 +183,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                     t.printStackTrace();
                 } finally {
                     if (!threadDied) {
-                        crash(e, cause, false);
+                        GalimulatorImplementation.crash(e, cause, false);
                     }
                 }
             }, "crash-saving-thread");
@@ -587,7 +590,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 LOGGER.info("Restored from disk, stack depth was: " + Space.saveStackdepth);
             } catch (InterruptedException interrupted) {
                 if (!acquiredLocks) {
-                    crash(interrupted, "Interrupted loading thread while acquiring main tick loop lock - this is almost definetly caused by mods.", false);
+                    Galimulator.panic("Interrupted loading thread while acquiring main tick loop lock - this is almost definetly caused by mods.", false, interrupted);
                 } else {
                     LOGGER.info("Loading was interrupted!", interrupted);
                 }
@@ -598,7 +601,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 suppressedException = t;
             } finally {
                 if (!acquiredLocks) {
-                    // The GalimulatorImplementation.crash() method has been invoked
+                    // The Galimulator.panic(...) method has been invoked
                     return;
                 }
                 if (suppressedException != null) {
@@ -610,7 +613,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                         generateSuccess = true;
                     } catch (Throwable t) {
                         t.addSuppressed(suppressedException);
-                        crash(t, "Unable to generate galaxy after failed loading attempt.", false);
+                        Galimulator.panic("Unable to generate galaxy after failed loading attempt.", false, t);
                     } finally {
                         Space.getMainTickLoopLock().release(2);
                     }
@@ -633,6 +636,16 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             throw new IllegalArgumentException("There is no star with the given UID: " + id);
         }
         return (Star) Space.stars.get(id + 1);
+    }
+
+    @Override
+    public void panic(@NotNull String message, boolean save) {
+        GalimulatorImplementation.crash(message, save);
+    }
+
+    @Override
+    public void panic(@NotNull String message, boolean save, @NotNull Throwable cause) {
+        GalimulatorImplementation.crash(cause, message, save);
     }
 
     @Override

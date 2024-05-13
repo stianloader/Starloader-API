@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
@@ -17,7 +18,6 @@ import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.api.gui.screen.Screen;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
 
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
@@ -138,7 +138,7 @@ public class SLCanvasManager implements CanvasManager {
     @NotNull
     public Canvas closeCanvas(@NotNull Canvas canvas) {
         if (GalFX.RENDERCACHE_LOCAL.get() != null) {
-            GalimulatorImplementation.crash("You cannot dispose a widget outside the main (drawing) thread. This hints at a thread management problem and could cause hard to reproduce and very sporadic race condition errors.", true);
+            Galimulator.panic("You cannot dispose a widget outside the main (drawing) thread. This hints at a thread management problem and could cause hard to reproduce and very sporadic race condition errors.", true);
         }
         if (canvas instanceof Widget) {
             BufferedWidgetWrapper bww = this.widgetWrappers.get(canvas);

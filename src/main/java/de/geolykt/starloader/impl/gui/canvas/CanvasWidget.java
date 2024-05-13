@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
@@ -18,7 +19,6 @@ import de.geolykt.starloader.api.gui.canvas.CanvasContext;
 import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.ChildObjectOrientation;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
 import de.geolykt.starloader.impl.gui.GLScissorState;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
@@ -74,18 +74,14 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
             if (widget instanceof CanvasWidget) {
                 CanvasWidget cw = (CanvasWidget) widget;
                 if (!cw.getContext().allowNonsensicalDimensions() && !this.getContext().allowNonsensicalDimensions()) {
-                    try {
-                        throw new IllegalArgumentException("Child widget larger than parent widget. Child dimensions: " + widget.getWidth() + "/" + widget.getHeight() + ", parent dimensions: " + this.getWidth() + "/" + this.getHeight());
-                    } catch (IllegalArgumentException e) {
-                        GalimulatorImplementation.crash(e, "Added a widget larger than it's parent. This can be caused by the header or just a crude error.", true);
-                    }
+                    String backtraceMessage = "Child widget larger than parent widget. Child dimensions: " + widget.getWidth() + "/" + widget.getHeight() + ", parent dimensions: " + this.getWidth() + "/" + this.getHeight();
+                    Throwable backtrace = new IllegalArgumentException(backtraceMessage).fillInStackTrace();
+                    Galimulator.panic("Added a widget larger than it's parent. This can be caused by the header or just a crude error.", true, backtrace);
                 }
             } else if (!this.getContext().allowNonsensicalDimensions()) {
-                try {
-                    throw new IllegalArgumentException("Child widget larger than parent widget");
-                } catch (IllegalArgumentException e) {
-                    GalimulatorImplementation.crash(e, "Added a widget larger than it's parent. This can be caused by the header or just a crude error.", true);
-                }
+                String backtraceMessage = "Child widget larger than parent widget. Child dimensions: " + widget.getWidth() + "/" + widget.getHeight() + ", parent dimensions: " + this.getWidth() + "/" + this.getHeight();
+                Throwable backtrace = new IllegalArgumentException(backtraceMessage).fillInStackTrace();
+                Galimulator.panic("Added a widget larger than it's parent. This can be caused by the header or just a crude error.", true, backtrace);
             }
         }
         return super.addChild(widget);

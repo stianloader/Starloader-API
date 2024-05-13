@@ -8,12 +8,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.ReflectionStateActorFactory;
 import de.geolykt.starloader.api.actor.StateActor;
 import de.geolykt.starloader.api.empire.Star;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
 
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.actors.ShipFactory.ShipType;
@@ -57,7 +57,7 @@ public class ShipTypeMixins<T extends StateActor> implements ReflectionStateActo
             Space.actors.add((snoddasmannen.galimulator.actors.Actor) actor);
             return actor;
         } catch (Exception e) {
-            GalimulatorImplementation.crash(e, "Unable to create an instance of a ship type (" + getTypeName() + ")", true);
+            Galimulator.panic("Unable to create an instance of a ship type (" + getTypeName() + ")", true, e);
             return NullUtils.provideNull();
         }
     }

@@ -298,7 +298,7 @@ public class StarlaneGenerationBenchmarks extends Usertest {
                 Gdx.app.postRunnable(() -> {
                     Drawing.setShownStage(null);
                     ((SemaphoreLoopLock) Galimulator.getSimulationLoopLock()).forceRelease(2);
-                    GalimulatorImplementation.crash(e, "Uncaught exception while benchmarking. This is likely mod caused, report this to the respective mod developers.", false);
+                    Galimulator.panic("Uncaught exception while benchmarking. This is likely mod caused, report this to the respective mod developers.", false, e);
                 });
             }
         });

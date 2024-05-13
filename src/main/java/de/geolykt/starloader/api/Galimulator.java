@@ -11,12 +11,14 @@ import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Application;
@@ -35,6 +37,8 @@ import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
+import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
+import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent.Phase;
 import de.geolykt.starloader.api.gui.MapMode;
@@ -440,6 +444,116 @@ public final class Galimulator {
          */
         @NotNull
         public Star lookupStar(int id);
+
+        /**
+         * "Panic" (also frequently known as "crashing") the game, causing it to show
+         * a panic message alongside a stacktrace of the caller.
+         *
+         * <p>For all intents and purposes, a panic is irrevocable - that is it
+         * cannot be undone. As such, this method should always be used as a last resort
+         * when other methods of handling an error state cannot work or would lead to
+         * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+         *
+         * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
+         * handles error conditions in a way similar to this one for crashes in the main
+         * simulation loop and some crashes in the rendering logic. Especially when spawning
+         * additional threads or when otherwise working with asynchronous tasks then the
+         * likelihood of error handling being almost nonexistent is high so calling
+         * {@link GameImplementation#panic(String, boolean)} in these cases is appropriate
+         * as it improves the ability to efficiently debug the game.
+         *
+         * <p>{@link GameImplementation#panic(String, boolean)} displays and logs the error
+         * message using an appropriate {@link Logger}, resulting in the crash message
+         * to be searchable in log files. Further, the list of used mods will be displayed,
+         * further improving the ability of finding the root cause of mod incompatibility
+         * issues. Other methods of handling fatal error states are likely to not include these
+         * features and thus can be harder to trace down (especially the logging aspect is
+         * important as users who may report errors might not always have the console on,
+         * while SLL always does logging in the background for as long as {@link Logger} instances
+         * are being used).
+         *
+         * <p><b>DO NOT USE</b> this method to handle non-fatal errors. More often
+         * than not one can simply use {@link Logger#error(String)} or {@link Logger#warn(String)}
+         * to log an error and proceed.
+         *
+         * <p>This method is not blocking, that is it will exit and won't throw an exception while
+         * doing so. Having some way of aborting execution if this method is invokes may as such
+         * be preferable. That being said, this method will try to block and pause the simulation
+         * loop if possible in order to mitigate collateral damage. However, it is still possible
+         * that some logic continues to run in the background after executing this method. This is
+         * a limitation with how errors can be handled in java. As a nuclear option
+         * {@link System#exit(int)} <em>can</em> be used, but if {@link System#exit(int)} is to be
+         * used, then it's usage <b>must</b> be logged (even if nothing enforces it, but it's
+         * otherwise hard to debug system exits).
+         *
+         * <p>For some things such as during {@link ApplicationStartEvent} or
+         * {@link ApplicationStartedEvent}, this method will automatically be called in case of an
+         * error. Explicitly calling this method is advised against, instead an appropriate exception
+         * should be thrown within the event handler.
+         *
+         * @param message The crash message to display.
+         * @param save Whether to save the game's state to disk before crashing.
+         * @see Logger#error(String)
+         * @since 2.0.0-a20240513
+         */
+        @AvailableSince("2.0.0-a20240513")
+        public void panic(@NotNull String message, boolean save);
+
+        /**
+         * "Panic" (also frequently known as "crashing") the game, causing it to show
+         * a panic message alongside a the stacktrace of the provided {@link Throwable}.
+         *
+         * <p>For all intents and purposes, a panic is irrevocable - that is it
+         * cannot be undone. As such, this method should always be used as a last resort
+         * when other methods of handling an error state cannot work or would lead to
+         * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+         *
+         * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
+         * handles error conditions in a way similar to this one for crashes in the main
+         * simulation loop and some crashes in the rendering logic. Especially when spawning
+         * additional threads or when otherwise working with asynchronous tasks then the
+         * likelihood of error handling being almost nonexistent is high so calling
+         * {@link GameImplementation#panic(String, boolean, Throwable)} in these cases
+         * is appropriate as it improves the ability to efficiently debug the game.
+         *
+         * <p>{@link GameImplementation#panic(String, boolean, Throwable)} displays and logs
+         * the error message using an appropriate {@link Logger}, resulting in the crash message
+         * to be searchable in log files. Further, the list of used mods will be displayed,
+         * further improving the ability of finding the root cause of mod incompatibility
+         * issues. Other methods of handling fatal error states are likely to not include these
+         * features and thus can be harder to trace down (especially the logging aspect is
+         * important as users who may report errors might not always have the console on,
+         * while SLL always does logging in the background for as long as {@link Logger} instances
+         * are being used).
+         *
+         * <p><b>DO NOT USE</b> this method to handle non-fatal errors. More often
+         * than not one can simply use {@link Logger#error(String)} or {@link Logger#warn(String)}
+         * to log an error and proceed.
+         *
+         * <p>This method is not blocking, that is it will exit and won't throw an exception while
+         * doing so. Having some way of aborting execution if this method is invokes may as such
+         * be preferable. That being said, this method will try to block and pause the simulation
+         * loop if possible in order to mitigate collateral damage. However, it is still possible
+         * that some logic continues to run in the background after executing this method. This is
+         * a limitation with how errors can be handled in java. As a nuclear option
+         * {@link System#exit(int)} <em>can</em> be used, but if {@link System#exit(int)} is to be
+         * used, then it's usage <b>must</b> be logged (even if nothing enforces it, but it's
+         * otherwise hard to debug system exits).
+         *
+         * <p>For some things such as during {@link ApplicationStartEvent} or
+         * {@link ApplicationStartedEvent}, this method will automatically be called in case of an
+         * error. Explicitly calling this method is advised against, instead an appropriate exception
+         * should be thrown within the event handler.
+         *
+         * @param message The crash message to display.
+         * @param save Whether to save the game's state to disk before crashing.
+         * @param cause A {@link Throwable} that caused the panic state; used to define the displayed stacktrace.
+         * @see Logger#error(String, Throwable)
+         * @see Throwable#printStackTrace()
+         * @since 2.0.0-a20240513
+         */
+        @AvailableSince("2.0.0-a20240513")
+        public void panic(@NotNull String message, boolean save, @NotNull Throwable cause);
 
         /**
          * Pauses the game. This only pauses the logical components of the application and will not impact the graphical components.
@@ -1309,6 +1423,120 @@ public final class Galimulator {
     @NotNull
     public static Star lookupStar(int id) {
         return impl.lookupStar(id);
+    }
+
+    /**
+     * "Panic" (also frequently known as "crashing") the game, causing it to show
+     * a panic message alongside a stacktrace of the caller.
+     *
+     * <p>For all intents and purposes, a panic is irrevocable - that is it
+     * cannot be undone. As such, this method should always be used as a last resort
+     * when other methods of handling an error state cannot work or would lead to
+     * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+     *
+     * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
+     * handles error conditions in a way similar to this one for crashes in the main
+     * simulation loop and some crashes in the rendering logic. Especially when spawning
+     * additional threads or when otherwise working with asynchronous tasks then the
+     * likelihood of error handling being almost nonexistent is high so calling
+     * {@link Galimulator#panic(String, boolean)} in these cases is appropriate as it
+     * improves the ability to efficiently debug the game.
+     *
+     * <p>{@link Galimulator#panic(String, boolean)} displays and logs the error
+     * message using an appropriate {@link Logger}, resulting in the crash message
+     * to be searchable in log files. Further, the list of used mods will be displayed,
+     * further improving the ability of finding the root cause of mod incompatibility
+     * issues. Other methods of handling fatal error states are likely to not include these
+     * features and thus can be harder to trace down (especially the logging aspect is
+     * important as users who may report errors might not always have the console on,
+     * while SLL always does logging in the background for as long as {@link Logger} instances
+     * are being used).
+     *
+     * <p><b>DO NOT USE</b> this method to handle non-fatal errors. More often
+     * than not one can simply use {@link Logger#error(String)} or {@link Logger#warn(String)}
+     * to log an error and proceed.
+     *
+     * <p>This method is not blocking, that is it will exit and won't throw an exception while
+     * doing so. Having some way of aborting execution if this method is invokes may as such
+     * be preferable. That being said, this method will try to block and pause the simulation
+     * loop if possible in order to mitigate collateral damage. However, it is still possible
+     * that some logic continues to run in the background after executing this method. This is
+     * a limitation with how errors can be handled in java. As a nuclear option
+     * {@link System#exit(int)} <em>can</em> be used, but if {@link System#exit(int)} is to be
+     * used, then it's usage <b>must</b> be logged (even if nothing enforces it, but it's
+     * otherwise hard to debug system exits).
+     *
+     * <p>For some things such as during {@link ApplicationStartEvent} or
+     * {@link ApplicationStartedEvent}, this method will automatically be called in case of an
+     * error. Explicitly calling this method is advised against, instead an appropriate exception
+     * should be thrown within the event handler.
+     *
+     * @param message The crash message to display.
+     * @param save Whether to save the game's state to disk before crashing.
+     * @see Logger#error(String)
+     * @since 2.0.0-a20240513
+     */
+    @AvailableSince("2.0.0-a20240513")
+    public static void panic(@NotNull String message, boolean save) {
+        Galimulator.impl.panic(message, save);
+    }
+
+    /**
+     * "Panic" (also frequently known as "crashing") the game, causing it to show
+     * a panic message alongside a the stacktrace of the provided {@link Throwable}.
+     *
+     * <p>For all intents and purposes, a panic is irrevocable - that is it
+     * cannot be undone. As such, this method should always be used as a last resort
+     * when other methods of handling an error state cannot work or would lead to
+     * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+     *
+     * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
+     * handles error conditions in a way similar to this one for crashes in the main
+     * simulation loop and some crashes in the rendering logic. Especially when spawning
+     * additional threads or when otherwise working with asynchronous tasks then the
+     * likelihood of error handling being almost nonexistent is high so calling
+     * {@link Galimulator#panic(String, boolean, Throwable)} in these cases is appropriate
+     * as it improves the ability to efficiently debug the game.
+     *
+     * <p>{@link Galimulator#panic(String, boolean, Throwable)} displays and logs the error
+     * message using an appropriate {@link Logger}, resulting in the crash message
+     * to be searchable in log files. Further, the list of used mods will be displayed,
+     * further improving the ability of finding the root cause of mod incompatibility
+     * issues. Other methods of handling fatal error states are likely to not include these
+     * features and thus can be harder to trace down (especially the logging aspect is
+     * important as users who may report errors might not always have the console on,
+     * while SLL always does logging in the background for as long as {@link Logger} instances
+     * are being used).
+     *
+     * <p><b>DO NOT USE</b> this method to handle non-fatal errors. More often
+     * than not one can simply use {@link Logger#error(String)} or {@link Logger#warn(String)}
+     * to log an error and proceed.
+     *
+     * <p>This method is not blocking, that is it will exit and won't throw an exception while
+     * doing so. Having some way of aborting execution if this method is invokes may as such
+     * be preferable. That being said, this method will try to block and pause the simulation
+     * loop if possible in order to mitigate collateral damage. However, it is still possible
+     * that some logic continues to run in the background after executing this method. This is
+     * a limitation with how errors can be handled in java. As a nuclear option
+     * {@link System#exit(int)} <em>can</em> be used, but if {@link System#exit(int)} is to be
+     * used, then it's usage <b>must</b> be logged (even if nothing enforces it, but it's
+     * otherwise hard to debug system exits).
+     *
+     * <p>For some things such as during {@link ApplicationStartEvent} or
+     * {@link ApplicationStartedEvent}, this method will automatically be called in case of an
+     * error. Explicitly calling this method is advised against, instead an appropriate exception
+     * should be thrown within the event handler.
+     *
+     * @param message The crash message to display.
+     * @param save Whether to save the game's state to disk before crashing.
+     * @param cause A {@link Throwable} that caused the panic state; used to define the displayed stacktrace.
+     * @see Logger#error(String, Throwable)
+     * @see Throwable#printStackTrace()
+     * @since 2.0.0-a20240513
+     */
+    @AvailableSince("2.0.0-a20240513")
+    public static void panic(@NotNull String message, boolean save, @NotNull Throwable cause) {
+        Galimulator.impl.panic(message, save, cause);
     }
 
     /**

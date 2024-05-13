@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.gui.Drawing;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
@@ -56,13 +56,13 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
         try {
             onRender();
         } catch (Exception e) {
-            GalimulatorImplementation.crash(e, "Exception occured while rendering a widget. This suggests a mod-caused error while drawing a canvas or screen.", true);
+            Galimulator.panic("Exception occured while rendering a widget. This suggests a mod-caused error while drawing a canvas or screen.", true, e);
         } finally {
             if (startedDrawing) {
                 batch.end();
                 GalFX.v = false;
             }
-            basicDrawLock = false;
+            this.basicDrawLock = false;
         }
     }
 
@@ -85,7 +85,10 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
             this.onMouseUp0(x, getHeight() - y);
             tap(x, getHeight() - y, false);
         } catch (Throwable t) {
-            GalimulatorImplementation.crash(t, "Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true);
+            if (t instanceof ThreadDeath) {
+                throw (ThreadDeath) t;
+            }
+            Galimulator.panic("Exception occured while processing a mouse press event (mouse release). Most likely mod releated", true, t);
         }
     }
 

@@ -15,6 +15,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.geolykt.starloader.StarloaderAPIExtension;
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
@@ -44,7 +45,7 @@ public class GalFXMixins {
         if (!handle.exists()) {
             if (path.equals("sprites/flower.png")) {
                 GalFXMixins.slapi$texturecrash = true;
-                GalimulatorImplementation.crash("Unable to find fallback texture (" + path + "). The corresponding file was most likely deleted.", true);
+                Galimulator.panic("Unable to find fallback texture (" + path + "). The corresponding file was most likely deleted.", true);
                 throw new IllegalStateException("GalFXMixins.slapi$texturecrash is set.");
             }
             if (GalFXMixins.missingTextures.add(path)) {

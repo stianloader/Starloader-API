@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
@@ -118,7 +119,7 @@ public class KeystrokeInputHandler {
         }
 
         if (!this.pressedKeyCount.compareAndSet(keysPressed, keysPressed + 1)) {
-            GalimulatorImplementation.crash("Race condition detected: The keystroke input handler is not multi-threadable. Avoid calling any of it's methods outside the LWJGL input thread. This is definetly mod-caused and although this error occurs sporadically it should be reported to the respective mod authors.", true);
+            Galimulator.panic("Race condition detected: The keystroke input handler is not multi-threadable. Avoid calling any of it's methods outside the LWJGL input thread. This is definetly mod-caused and although this error occurs sporadically it should be reported to the respective mod authors.", true);
             return;
         }
 
@@ -224,7 +225,7 @@ public class KeystrokeInputHandler {
         }
 
         if (!this.pressedKeyCount.compareAndSet(keysPressed, --keysPressed)) {
-            GalimulatorImplementation.crash("Race condition detected: The keystroke input handler is not multi-threadable. Avoid calling any of it's methods outside the LWJGL input thread. This is definetly mod-caused and although this error occurs sporadically it should be reported to the respective mod authors.", true);
+            Galimulator.panic("Race condition detected: The keystroke input handler is not multi-threadable. Avoid calling any of it's methods outside the LWJGL input thread. This is definetly mod-caused and although this error occurs sporadically it should be reported to the respective mod authors.", true);
             return;
         }
 

@@ -58,8 +58,11 @@ public class ApplicationMixins {
                 throw t;
             }
             KeybindHelper.registerAll(KeystrokeInputHandler.getInstance());
-        } catch (Throwable e) {
-            GalimulatorImplementation.crash(e, "Failed to start up. Likely mod caused. (Do you have incompatible mods?)", false);
+        } catch (Throwable t) {
+            if (t instanceof ThreadDeath) {
+                throw (ThreadDeath) t;
+            }
+            Galimulator.panic("Failed to start up. Likely mod caused. (Do you have incompatible mods?)", false, t);
         }
     }
 
@@ -77,7 +80,7 @@ public class ApplicationMixins {
             if (t instanceof ThreadDeath) {
                 throw (ThreadDeath) t;
             }
-            GalimulatorImplementation.crash(t, "Failed to start up. Likely mod caused. (Do you have incompatible mods?)", false);
+            Galimulator.panic("Failed to start up. Likely mod caused. (Do you have incompatible mods?)", false, t);
         }
     }
 
