@@ -37,7 +37,7 @@ import de.geolykt.starloader.impl.util.LEB128;
 import snoddasmannen.galimulator.Space;
 
 /**
- * A simple wrapper around Vanilla's savegame format that adds savegame metadata as well as slapi metadata.
+ * A simple wrapper around Vanilla's savegame format that adds savegame metadata as well as SLAPI metadata.
  * Invocation of any methods of this class outside of the main thread while the main tick loop is not halted
  * may lead to unexpected behaviour.
  * This implementation will automatically fall back to vanilla savegames if the savegame is determined to not be
@@ -137,7 +137,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
             DataOutputStream dataOut = new DataOutputStream(out);
             dataOut.write(FORMAT_HEADER); // Format Header
             dataOut.writeInt(0); // Version
-            dataOut.writeInt(Galimulator.getStarList().size()); // Amount of stars
+            dataOut.writeInt(Galimulator.getUniverse().getStarsView().size()); // Amount of stars
             dataOut.writeInt(Galimulator.getGameYear()); // Game year
             dataOut.writeBoolean(Galimulator.hasUsedSandbox()); // Sandbox
             dataOut.writeLong(System.currentTimeMillis()); // Time

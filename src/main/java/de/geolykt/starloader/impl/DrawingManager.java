@@ -53,7 +53,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
 
     private Collection<String> fonts;
 
-    @SuppressWarnings({ "null", "deprecation" })
+    @SuppressWarnings({ "null", "deprecation", "unused" })
     @Override
     @NotNull
     public Vector3 convertCoordinates(@NotNull CoordinateGrid from, @NotNull CoordinateGrid to, float x, float y) {

@@ -37,7 +37,6 @@ import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.KeystrokeInputHandler;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeys;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.keybinds.KeybindHelper;
 import de.geolykt.starloader.impl.registry.Registries;
 import de.geolykt.starloader.impl.util.SemaphoreLoopLock;
@@ -259,7 +258,7 @@ public class StarlaneGenerationBenchmarks extends Usertest {
 //                            execute.notify();
                             return;
                         }
-                        for (Star s : Galimulator.getStarList()) {
+                        for (Star s : Galimulator.getUniverse().getStarsView()) {
                             for (Star neighbour : s.getNeighbourList().toArray(new @NotNull Star[0])) {
                                 s.removeNeighbour(neighbour);
                                 neighbour.removeNeighbour(s);
@@ -269,7 +268,7 @@ public class StarlaneGenerationBenchmarks extends Usertest {
                         generator.generateStarlanes();
                         long time = System.currentTimeMillis() - start;
                         int laneCount = 0;
-                        for (Star s : Galimulator.getStarList()) {
+                        for (Star s : Galimulator.getUniverse().getStarsView()) {
                             for (Star neighbour : s.getNeighbourList()) {
                                 if (s.getUID() < neighbour.getUID()) {
                                     laneCount++;

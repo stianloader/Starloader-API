@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,7 @@ import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
 import de.geolykt.starloader.api.actor.WeaponsManager;
+import de.geolykt.starloader.api.dimension.Dimension;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Empire;
@@ -78,7 +80,11 @@ public final class Galimulator {
          *
          * @param starA the first Star to connect to the second star
          * @param starB the second Star to connect
+         * @deprecated This method was replaced by {@link Dimension#connectStars(Star, Star)}
          */
+        @Deprecated
+        @ScheduledForRemoval
+        @DeprecatedSince("2.0.0-a20240519")
         public void connectStars(@NotNull Star starA, @NotNull Star starB);
 
         /**
@@ -87,7 +93,11 @@ public final class Galimulator {
          *
          * @param starA the first Star to disconnect from the second star
          * @param starB the second Star to disconnect
+         * @deprecated This method was replaced by {@link Dimension#disconnectStars(Star, Star)}
          */
+        @Deprecated
+        @ScheduledForRemoval
+        @DeprecatedSince("2.0.0-a20240519")
         public void disconnectStars(@NotNull Star starA, @NotNull Star starB);
 
         /**
@@ -157,8 +167,13 @@ public final class Galimulator {
          * @implNote While the current implementation returns a List, future implementations cannot guarantee
          * such behaviour as determining the order of the collection in this way is rather performance-damaging,
          * hence this method returns a {@link Collection}, casting to {@link List} is discouraged.
+         * @deprecated Scheduled for removal. Use {@link Dimension#getEmpiresView()} instead.
          */
         @NotNull
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        @UnmodifiableView
         public Collection<@NotNull ActiveEmpire> getEmpiresView();
 
         /**
@@ -173,6 +188,11 @@ public final class Galimulator {
          * as of SLAPI 2.0 latter naming scheme is the recommended one, older documentations
          * might still use the former.
          *
+         * <p>For the sake of brevity, in SLAPI, all dimensions share the same timeline.
+         * This is to reduce the chances of mods getting confused by sudden jumps in
+         * the current time. Hence, in multi-dimensional terms, {@link #getGameYear()} should
+         * be seen more as a global tick counter. It should strictly be ever-increasing.
+         *
          * @return The in-game year.
          */
         public int getGameYear();
@@ -181,8 +201,14 @@ public final class Galimulator {
          * Obtains the currently active map.
          *
          * @return The currently active map
+         * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+         * to be worked on in the future).
          */
-        public @NotNull Map getMap();
+        @NotNull
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        public Map getMap();
 
         /**
          * Obtains the nearest Star that is near the given board coordinates and within the given
@@ -193,9 +219,13 @@ public final class Galimulator {
          * @param searchRadius The search radius
          * @return The nearest star, or null if there is no star at the location.
          * @since 2.0.0
+         * @deprecated Replaced by {@link Dimension#getNearestStar(float, float, float)}
          */
         @Nullable
         @Contract(pure = true)
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public Star getNearestStar(float boardX, float boardY, float searchRadius);
 
         /**
@@ -205,16 +235,26 @@ public final class Galimulator {
          * side effects, which is why that should be avoided.
          *
          * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
+         * @deprecated Replaced by {@link Dimension#getNeutralEmpire()}
          */
-        public @NotNull ActiveEmpire getNeutralEmpire();
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        @NotNull
+        public ActiveEmpire getNeutralEmpire();
 
         /**
          * Obtains the empire the player is controlling. If there is no player or no
          * empire in control of the player, then it returns null.
          *
          * @return The {@link ActiveEmpire} owned by the player, or null
+         * @deprecated Replaced by {@link Dimension#getPlayerEmpire()}
          */
-        public @Nullable ActiveEmpire getPlayerEmpire();
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        @Nullable
+        public ActiveEmpire getPlayerEmpire();
 
         /**
          * Obtains the closest-matching {@link SavegameFormat} instance that can decode a given
@@ -280,9 +320,13 @@ public final class Galimulator {
          * @param boardY The Y coordinate
          * @return The star at the given location, or null if there is none
          * @since 2.0.0
+         * @deprecated Replaced by {@link Dimension#getStarAt(float, float)}
          */
         @Nullable
         @Contract(pure = true)
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public Star getStarAt(float boardX, float boardY);
 
         /**
@@ -292,9 +336,13 @@ public final class Galimulator {
          * @return An immutable {@link List} of {@link Star stars} that are known
          * @since 2.0.0
          * @see Unsafe#getStarsUnsafe()
+         * @deprecated Replaced by {@link Dimension#getStarsView()}
          */
         @Contract(pure = true, value = "-> new")
         @NotNull
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public List<@NotNull Star> getStarList();
 
         /**
@@ -452,7 +500,7 @@ public final class Galimulator {
          * <p>For all intents and purposes, a panic is irrevocable - that is it
          * cannot be undone. As such, this method should always be used as a last resort
          * when other methods of handling an error state cannot work or would lead to
-         * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+         * a less graceful application state (e.g. "freeze", "hang" or "deadlock").
          *
          * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
          * handles error conditions in a way similar to this one for crashes in the main
@@ -506,7 +554,7 @@ public final class Galimulator {
          * <p>For all intents and purposes, a panic is irrevocable - that is it
          * cannot be undone. As such, this method should always be used as a last resort
          * when other methods of handling an error state cannot work or would lead to
-         * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+         * a less graceful application state (e.g. "freeze", "hang" or "deadlock").
          *
          * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
          * handles error conditions in a way similar to this one for crashes in the main
@@ -675,7 +723,12 @@ public final class Galimulator {
          * Sets the currently active map.
          *
          * @param map The currently active map
+         * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+         * to be worked on in the future).
          */
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public void setMap(@NotNull Map map);
 
         /**
@@ -733,7 +786,12 @@ public final class Galimulator {
          *
          * @param map The map where the scenario to edit lies within
          * @since 2.0.0
+         * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+         * to be worked on in the future).
          */
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240519")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map);
 
         /**
@@ -959,11 +1017,23 @@ public final class Galimulator {
     private static NoiseProvider noiseImpl;
 
     /**
+     * The current universe. In the SLAPI context, the universe is the sole
+     * active {@link Dimension}.
+     *
+     * @since 2.0.0-a20240519
+     */
+    private static Dimension universe;
+
+    /**
      * Connect two stars with each other. The preferred way of connecting two stars.
      *
      * @param starA the first Star to connect to the second star
      * @param starB the second Star to connect
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#connectStars(Star, Star)}.
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public static void connectStars(@NotNull Star starA, @NotNull Star starB) {
         impl.connectStars(starA, starB);
     }
@@ -974,7 +1044,11 @@ public final class Galimulator {
      *
      * @param starA the first Star to disconnect from the second star
      * @param starB the second Star to disconnect
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#disconnectStars(Star, Star)}.
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public static void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
         impl.disconnectStars(starA, starB);
     }
@@ -1062,7 +1136,11 @@ public final class Galimulator {
      * @implNote While the current implementation returns a List, future implementations cannot guarantee
      * such behaviour as determining the order of the collection in this way is rather performance-damaging,
      * hence this method returns a {@link Collection}, casting to {@link List} is discouraged.
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#getEmpiresView()}.
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     @NotNull
     public static Collection<@NotNull ActiveEmpire> getEmpiresView() {
         return Galimulator.impl.getEmpiresView();
@@ -1114,8 +1192,14 @@ public final class Galimulator {
      * Obtains the currently active map.
      *
      * @return The currently active map
+     * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+     * to be worked on in the future).
      */
-    public static @NotNull Map getMap() {
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @NotNull
+    public static Map getMap() {
         return impl.getMap();
     }
 
@@ -1128,7 +1212,11 @@ public final class Galimulator {
      * @param searchRadius The search radius
      * @return The nearest star, or null if there is no star at the location.
      * @since 2.0.0
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#getNearestStar(float, float, float)}.
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     @Nullable
     @Contract(pure = true)
     public static Star getNearestStar(float boardX, float boardY, float searchRadius) {
@@ -1142,8 +1230,14 @@ public final class Galimulator {
      * side effects, which is why that should be avoided.
      *
      * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#getNeutralEmpire()}.
      */
-    public static @NotNull ActiveEmpire getNeutralEmpire() {
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @NotNull
+    @Contract(pure = true)
+    public static ActiveEmpire getNeutralEmpire() {
         return impl.getNeutralEmpire();
     }
 
@@ -1162,12 +1256,37 @@ public final class Galimulator {
     }
 
     /**
+     * The current universe. In the SLAPI context, the universe is the sole
+     * active {@link Dimension}.
+     *
+     * <p>This method returns null if no universe was registered.
+     * This is usually only the case if performing logic far too early (for
+     * example within the static initializer block of the mod entrypoint class)
+     *
+     * <p>Universes are reset when reloading savegames.
+     *
+     * @return The {@link Dimension} which acts as the universe of the current board.
+     * @since 2.0.0-a20240519
+     */
+    @Nullable
+    @AvailableSince("2.0.0-a20240519")
+    public static Dimension getNullableUniverse() {
+        return Galimulator.universe;
+    }
+
+    /**
      * Obtains the empire the player is controlling. If there is no player or no
      * empire in control of the player, then it returns null.
      *
      * @return The {@link ActiveEmpire} owned by the player, or null
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#getPlayerEmpire()}.
      */
-    public static @Nullable ActiveEmpire getPlayerEmpire() {
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @Nullable
+    @Contract(pure = true)
+    public static ActiveEmpire getPlayerEmpire() {
         return impl.getPlayerEmpire();
     }
 
@@ -1246,7 +1365,11 @@ public final class Galimulator {
      * @param boardY The Y coordinate
      * @return The star at the given location, or null if there is none
      * @since 2.0.0
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#getStarAt(float, float)}.
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     @Nullable
     @Contract(pure = true)
     public static Star getStarAt(float boardX, float boardY) {
@@ -1260,7 +1383,11 @@ public final class Galimulator {
      * @return An immutable {@link List} of {@link Star stars} that are known
      * @since 2.0.0
      * @see Unsafe#getStarsUnsafe()
+     * @deprecated Deprecated for removal; Replaced by {@link Dimension#getStarsView()}.
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     @NotNull
     @Contract(pure = true, value = "-> new")
     public static List<@NotNull Star> getStarList() {
@@ -1311,6 +1438,26 @@ public final class Galimulator {
      */
     public static int getTranscendedEmpires() {
         return impl.getTranscendedEmpires();
+    }
+
+
+    /**
+     * The current universe. In the SLAPI context, the universe is the sole
+     * active {@link Dimension}.
+     *
+     * <p>This method throws an exception if no universe was registered.
+     * This is usually only the case if performing logic far too early (for
+     * example within the static initializer block of the mod entrypoint class)
+     *
+     * <p>Universes are reset when reloading savegames.
+     *
+     * @return The {@link Dimension} which acts as the universe of the current board.
+     * @since 2.0.0-a20240519
+     */
+    @NotNull
+    @AvailableSince("2.0.0-a20240519")
+    public static Dimension getUniverse() {
+        return NullUtils.requireNotNull(Galimulator.universe);
     }
 
     /**
@@ -1432,7 +1579,7 @@ public final class Galimulator {
      * <p>For all intents and purposes, a panic is irrevocable - that is it
      * cannot be undone. As such, this method should always be used as a last resort
      * when other methods of handling an error state cannot work or would lead to
-     * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+     * a less graceful application state (e.g. "freeze", "hang" or "deadlock").
      *
      * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
      * handles error conditions in a way similar to this one for crashes in the main
@@ -1488,7 +1635,7 @@ public final class Galimulator {
      * <p>For all intents and purposes, a panic is irrevocable - that is it
      * cannot be undone. As such, this method should always be used as a last resort
      * when other methods of handling an error state cannot work or would lead to
-     * a less graceful application state (e.g. "freeze", "hang" or "deadlock).
+     * a less graceful application state (e.g. "freeze", "hang" or "deadlock").
      *
      * <p>Vanilla galimulator (as of release 5.0.2 as of May 2024) only automatically
      * handles error conditions in a way similar to this one for crashes in the main
@@ -1703,7 +1850,12 @@ public final class Galimulator {
      * Sets the currently active map.
      *
      * @param map The currently active map
+     * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+     * to be worked on in the future).
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public static void setMap(@NotNull Map map) {
         impl.setMap(map);
     }
@@ -1744,6 +1896,25 @@ public final class Galimulator {
      */
     public static void setTranscendedEmpires(int count) {
         impl.setTranscendedEmpires(count);
+    }
+
+    /**
+     * The current universe. In the SLAPI context, the universe is the sole
+     * active {@link Dimension}.
+     *
+     * <p>This method returns null if no universe was registered.
+     * This is usually only the case if performing logic far too early (for
+     * example within the static initializer block of the mod entrypoint class)
+     *
+     * <p>Universes are reset when reloading savegames.
+     *
+     * @param universe The {@link Dimension} which acts as the new universe of
+     * the current board.
+     * @since 2.0.0-a20240519
+     */
+    @AvailableSince("2.0.0-a20240519")
+    public static void setUniverse(@Nullable Dimension universe) {
+        Galimulator.universe = universe;
     }
 
     /**
@@ -1789,7 +1960,12 @@ public final class Galimulator {
      *
      * @param map The map where the scenario to edit lies within
      * @since 2.0.0
+     * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+     * to be worked on in the future).
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240519")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public static void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
         impl.showScenarioMetadataEditor(map);
     }

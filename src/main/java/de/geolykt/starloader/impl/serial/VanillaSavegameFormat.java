@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
@@ -147,7 +146,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
 
         GalimulatorImplementation galiImpl = (GalimulatorImplementation) Galimulator.getImplementation();
         Space.setBackgroundTaskDescription("Loading galaxy: Importing data");
-        galiImpl.setMap((Map) NullUtils.requireNotNull(spaceState.mapData));
+        galiImpl.setMap((de.geolykt.starloader.api.Map) NullUtils.requireNotNull(spaceState.mapData));
         galiImpl.setGameYear(spaceState.milliYear);
         galiImpl.setNeutralEmpire(NullUtils.requireNotNull((ActiveEmpire) spaceState.neutralEmpire));
         galiImpl.setPlayer(spaceState.player);

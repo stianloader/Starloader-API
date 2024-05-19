@@ -15,7 +15,6 @@ import com.badlogic.gdx.InputProcessor;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.impl.GalimulatorImplementation;
 
 /**
  * The {@link KeystrokeInputHandler} controls the state of {@link Keybind Keybinds} and

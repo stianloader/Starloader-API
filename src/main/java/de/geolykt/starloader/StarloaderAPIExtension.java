@@ -34,6 +34,7 @@ import de.geolykt.starloader.impl.asm.SLIntrinsicsTransformer;
 import de.geolykt.starloader.impl.asm.SpaceASMTransformer;
 import de.geolykt.starloader.impl.asm.StateActorCreatorTransformer;
 import de.geolykt.starloader.impl.asm.UIASMTransformer;
+import de.geolykt.starloader.impl.dimension.UniverseDimension;
 import de.geolykt.starloader.impl.gui.GalFXAsyncRenderer;
 import de.geolykt.starloader.impl.gui.SLScreenBuilder;
 import de.geolykt.starloader.impl.gui.effects.SLEffectImplFactory;
@@ -107,6 +108,7 @@ public class StarloaderAPIExtension extends Extension {
         MinestomRootClassLoader.getInstance().addTransformer(new StateActorCreatorTransformer());
         MinestomRootClassLoader.getInstance().addTransformer(new SLIntrinsicsTransformer());
         MinestomRootClassLoader.getInstance().addTransformer(new GestureListenerASMTransformer());
+        Galimulator.setUniverse(new UniverseDimension());
         Galimulator.setImplementation(new GalimulatorImplementation());
         Galimulator.setNoiseProvider(new SLNoiseProvider());
         Galimulator.setConfiguration(new GalimulatorConfiguration());

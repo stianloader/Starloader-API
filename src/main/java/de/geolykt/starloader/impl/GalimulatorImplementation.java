@@ -32,7 +32,6 @@ import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.Starloader;
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.Map;
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
@@ -262,17 +261,15 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void connectStars(@NotNull Star starA, @NotNull Star starB) {
-        starA.addNeighbour(starB);
-        starB.addNeighbour(starA);
+        Galimulator.getUniverse().connectStars(starA, starB);
     }
 
     @Override
     public void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
-        starA.removeNeighbour(starB);
-        starB.removeNeighbour(starA);
+        Galimulator.getUniverse().disconnectStars(starA, starB);
     }
 
-    @SuppressWarnings("null")
+    @SuppressWarnings({ "null", "unused" })
     @Override
     @NotNull
     public String generateRandomName(@NotNull RandomNameType type) {
@@ -354,7 +351,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @NotNull
     public Collection<@NotNull ActiveEmpire> getEmpiresView() {
-        return Collections.unmodifiableList(getEmpiresUnsafe());
+        return Galimulator.getUniverse().getEmpiresView();
     }
 
     @SuppressWarnings("rawtypes")
@@ -377,21 +374,22 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull Map getMap() {
-        return (Map) Space.getMapData();
+    @Deprecated
+    public @NotNull de.geolykt.starloader.api.@NotNull Map getMap() {
+        return (de.geolykt.starloader.api.Map) Space.getMapData();
     }
 
     @Override
     @Nullable
     @Contract(pure = true)
     public Star getNearestStar(float boardX, float boardY, float searchRadius) {
-        return (Star) Space.findStarNear(boardX, boardY, searchRadius, null); // TODO Not fully efficient (uses Math#sqrt)
+        return Galimulator.getUniverse().getNearestStar(boardX, boardY, searchRadius);
     }
 
-    @SuppressWarnings("null")
     @Override
-    public @NotNull ActiveEmpire getNeutralEmpire() {
-        return (ActiveEmpire) Space.neutralEmpire;
+    @NotNull
+    public ActiveEmpire getNeutralEmpire() {
+        return Galimulator.getUniverse().getNeutralEmpire();
     }
 
     @SuppressWarnings("rawtypes")
@@ -401,14 +399,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public @Nullable ActiveEmpire getPlayerEmpire() {
-        snoddasmannen.galimulator.Player plyr = Space.getPlayer();
-        if (plyr == null) {
-            // It likely can never be null, however before the map is generated,
-            // this might return null, so we are going to make sure just in case.
-            return null;
-        }
-        return (ActiveEmpire) plyr.getEmpire();
+    @Nullable
+    public ActiveEmpire getPlayerEmpire() {
+        return Galimulator.getUniverse().getPlayerEmpire();
     }
 
     @Override
@@ -444,7 +437,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         return null;
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "deprecation", "unused" })
     @Override
     @NotNull
     public SavegameFormat getSavegameFormat(@NotNull SupportedSavegameFormat format) {
@@ -483,7 +476,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Nullable
     @Contract(pure = true)
     public Star getStarAt(float boardX, float boardY) {
-        return getNearestStar(boardX, boardY, snoddasmannen.galimulator.Star.globalSizeFactor * 2);
+        return Galimulator.getUniverse().getStarAt(boardX, boardY);
     }
 
     @SuppressWarnings("null")
@@ -783,7 +776,8 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public void setMap(@NotNull Map map) {
+    @Deprecated
+    public void setMap(@NotNull de.geolykt.starloader.api.@NotNull Map map) {
         if (!(map instanceof snoddasmannen.galimulator.MapData)) {
             throw new ExpectedObfuscatedValueException();
         }
@@ -868,6 +862,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
+    @Deprecated
     public void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
         Space.showDialog(((MapData) map).getMetadata(), true, null, false);
     }

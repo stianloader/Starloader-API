@@ -12,7 +12,13 @@ import de.geolykt.starloader.DeprecatedSince;
 
 /**
  * Represents a map that can be loaded into the game.
+ *
+ * @deprecated Deprecated for removal without a replacement (the replacement is scheduled
+ * to be worked on in the future).
  */
+@Deprecated
+@DeprecatedSince("2.0.0-a20240519")
+@ScheduledForRemoval(inVersion = "3.0.0")
 public interface Map {
 
     /**
