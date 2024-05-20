@@ -2,13 +2,16 @@ package de.geolykt.starloader.api.dimension;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
@@ -156,4 +159,51 @@ public interface Dimension {
     @UnmodifiableView
     @AvailableSince("2.0.0-a20240519")
     public Collection<@NotNull Star> getStarsView();
+
+    /**
+     * Obtains all stars within a rectangle which is bounded by two points within this
+     * dimension. The type of the returned collection is left unspecified and is up to
+     * the implementors: In laymen's terms, it should be expected that very certain
+     * mods (usually performance-related) may alter the type of the collection returned
+     * by this method. The only guarantee is that it stays a {@link Collection}.
+     *
+     * <p>The return value of this method may be used for iteration, but should not be
+     * used for {@link Collection#contains(Object)} or mutation (e.g.
+     * {@link Collection#add(Object)} or {@link Collection#remove(Object)} among others).
+     * The returned collection must not contain duplicates. The returned collection
+     * may be immutable, but it is also possible that the collection can be mutated
+     * for performance reasons (e.g. cache locality). Please expect the returned
+     * collection to be immutable for this cause. If modifications need to occur,
+     * the collection must be cloned beforehand.
+     *
+     * <p>Internally (in vanilla SLAPI, though the concept is likely to be similar when
+     * more invasive mods come into play) this method is powered using a QuadTree for
+     * indexing, meaning that performance of this method should be relatively good
+     * even when using larger amounts of stars. Note that performance will unsurprisingly
+     * be worse in vanilla SLAPI compared to modded galimulator with performance mods.
+     * Mods such as fast-galaxy-generation rewrite inefficient portions of the QuadTree
+     * querying code to utilise caching, thus impacting the performance of
+     * {@link Dimension#getStarsWithin(float, float, float, float)}. Additionally, this
+     * mod may alter the type returned by this method (per default it is a
+     * {@link Vector java.util.Vector}). In order to reduce performance overhead when
+     * such performance improving mods are installed, mods should not try to implement
+     * their own QuadTree-like structures unless absolutely necessary.
+     *
+     * <p>The coordinates of the points supplied to this method are in the
+     * {@link CoordinateGrid#BOARD board space}. Rotated rectangles are not supported
+     * by this method and need to be implemented using other means (these other
+     * means could use this method to get the stars within a super-rectangle and filtering
+     * out entries that do not fit in the rotated rectangle).
+     *
+     * @param x1 The x-coordinate of the first point describing the rectangle.
+     * @param y1 The y-coordinate of the first point describing the rectangle.
+     * @param x2 The x-coordinate of the second point describing the rectangle.
+     * @param y2 The y-coordinate of the second point describing the rectangle.
+     * @return All stars of this dimension that are within the defined rectangle.
+     * @since 2.0.0-a20240520
+     */
+    @NotNull
+    @Unmodifiable
+    @AvailableSince(value = "2.0.0-a20240520")
+    public Collection<@NotNull Star> getStarsWithin(float x1, float y1, float x2, float y2);
 }

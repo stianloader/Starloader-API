@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
+
+import com.badlogic.gdx.math.Rectangle;
 
 import de.geolykt.starloader.api.dimension.Dimension;
 import de.geolykt.starloader.api.empire.ActiveEmpire;
@@ -72,5 +75,17 @@ public class UniverseDimension implements Dimension {
     @UnmodifiableView
     public Collection<@NotNull Star> getStarsView() {
         return Collections.unmodifiableList((List<Star>) (List<?>) Space.stars);
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    @Unmodifiable
+    public Collection<@NotNull Star> getStarsWithin(float x1, float y1, float x2, float y2) {
+        float minX = Math.min(x1, x2);
+        float maxX = Math.max(x1, x2);
+        float minY = Math.min(y1, y2);
+        float maxY = Math.max(y1, y2);
+        return Space.a(new Rectangle(minX, minY, maxX - minX, maxY - minY));
     }
 }
