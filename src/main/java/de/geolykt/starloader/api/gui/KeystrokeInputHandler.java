@@ -30,7 +30,7 @@ public class KeystrokeInputHandler {
         private final Keybind keybind;
         private int @NotNull[] requiredKeystrokes;
 
-        public KeybindEntry(@NotNull Keybind keybind, int @NotNull[] requiredKeystrokes) {
+        public KeybindEntry(@NotNull Keybind keybind, int @NotNull... requiredKeystrokes) {
             this.down = false;
             this.keybind = keybind;
             this.requiredKeystrokes = requiredKeystrokes;
@@ -237,9 +237,9 @@ public class KeystrokeInputHandler {
         // but I am quite sure that noone will continue this project without me and I should start
         // being more serious about my life at this point.
         // To be honest, it harrows me to think that not even a year is left until the mayhem starts.
-        //   - and with the galimulator modding would end.
+        //   - and with that the galimulator modding would end;
         // perhaps even the galimulator community as a whole. After all I don't expect anyone besides Estrect being
-        // capable of holding it up. And even with the combined strength of Estrect is probably will not suffice.
+        // capable of holding it up. And even with the combined strength of Estrect it probably will not suffice.
 
         for (int i = searchIndex; i < keysPressed; i++) {
             this.pressedKeys[i] = this.pressedKeys[i + 1];
@@ -268,7 +268,7 @@ public class KeystrokeInputHandler {
      * @since 2.0.0
      * @see Keys
      */
-    public void registerKeybind(@NotNull Keybind keybind, int @NotNull[] requiredKeystrokes) {
+    public void registerKeybind(@NotNull Keybind keybind, int @NotNull... requiredKeystrokes) {
         this.unregisterKeybind(keybind.getID());
         this.entries.add(new KeybindEntry(keybind, requiredKeystrokes));
     }

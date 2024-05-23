@@ -6,8 +6,8 @@ import de.geolykt.starloader.api.NamespacedKey;
 
 /**
  * A keybind is an action that is performed when the user performs a given set of keystrokes.
- * The action, which is defined by {@link #executeAction()}, is only fired when the last required key is
- * pressed. If pressing the key can cause two seperate keybinds to react, the keybind with the most
+ * The action, which is defined by {@link Keybind#executeAction()}, is only fired when the last required key is
+ * pressed. If pressing the key can cause two separate keybinds to react, the keybind with the most
  * required input keystrokes in invoked, the other one is ignored. If both keybinds have the same amount
  * of input keystrokes, the last pressed keys are used to differentiate which keybind should be invoked.
  *
@@ -16,7 +16,10 @@ import de.geolykt.starloader.api.NamespacedKey;
  * <p>As such, no two (or more) keybinds can be invoked at the same time if only one additional keystroke
  * was performed.
  *
+ * <p>Keybinds can be registered using {@link KeystrokeInputHandler#registerKeybind(Keybind, int...)}.
+ *
  * @since 2.0.0
+ * @see KeystrokeInputHandler
  */
 public interface Keybind extends Comparable<Keybind> {
 
