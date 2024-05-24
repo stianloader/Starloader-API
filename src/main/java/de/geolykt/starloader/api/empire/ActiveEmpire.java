@@ -205,9 +205,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @return A formatted string the is the colored name of the empire
      */
     public default @NotNull String getColoredName() {
-        Color c = getGDXColor();
+        Color c = this.getGDXColor();
         // The * 255 is intended, as the range of `%02X` is 0 - 255 (both inclusive)
-        return NullUtils.format("[#%02X%02X%02X]%s[]", (int) c.r * 255, (int) c.g * 255, (int) c.b * 255, getEmpireName());
+        return NullUtils.format("[#%02X%02X%02X]%s[]", (int) (c.r * 255), (int) (c.g * 255), (int) (c.b * 255), this.getEmpireName());
     }
 
     /**
