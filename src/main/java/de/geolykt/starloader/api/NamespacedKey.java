@@ -47,15 +47,15 @@ public class NamespacedKey {
     private String namespaceString; // initialised in a lazy manner
 
     public NamespacedKey(@NotNull Extension namespace, @NotNull String key) {
-        namespaceNamesake = namespace;
-        namespaceString = null; // this is lazy as the empire description is only provided later on after a plugin was made.
-        keyString = key;
+        this.namespaceNamesake = namespace;
+        this.namespaceString = null; // this is lazy as the empire description is only provided later on after a plugin was made.
+        this.keyString = key;
     }
 
     protected NamespacedKey(@NotNull String namespace, @NotNull String key) {
-        namespaceString = namespace;
-        keyString = key;
-        namespaceNamesake = null;
+        this.namespaceString = namespace;
+        this.keyString = key;
+        this.namespaceNamesake = null;
     }
 
     /**
@@ -63,7 +63,7 @@ public class NamespacedKey {
      * This is a workaround to a flaw within the starloader extensions structure.
      */
     private void calculateNamespace() {
-        Extension a = namespaceNamesake;
+        Extension a = this.namespaceNamesake;
         if (a == null) {
             throw new IllegalStateException("Both namespace and it's namesake is null.");
         }
@@ -71,7 +71,7 @@ public class NamespacedKey {
             throw new IllegalStateException("The descriptor of the namesake is not yet initialized."
                     + "Consider using the namespaced key in the init block of the extension.");
         }
-        namespaceString = a.getDescription().getName();
+        this.namespaceString = a.getDescription().getName();
     }
 
     @Override
@@ -79,11 +79,18 @@ public class NamespacedKey {
         if (obj == this) {
             return true;
         } else if (obj instanceof NamespacedKey) {
-            if (namespaceString == null) {
-                calculateNamespace();
+            if (this.namespaceString == null) {
+                this.calculateNamespace();
             }
-            return keyString.equals(((NamespacedKey) obj).keyString)
-                    && namespaceString.equals(((NamespacedKey) obj).namespaceString);
+
+            NamespacedKey other = (NamespacedKey) obj;
+
+            if (other.namespaceString == null) {
+                other.calculateNamespace();
+            }
+
+            return this.keyString.equals(other.keyString)
+                    && this.namespaceString.equals(other.namespaceString);
         } else {
             return false;
         }
@@ -96,38 +103,40 @@ public class NamespacedKey {
      */
     @NotNull
     public String getKey() {
-        return keyString;
+        return this.keyString;
     }
 
     @SuppressWarnings("null")
     @NotNull
     public String getNamespace() {
-        if (namespaceString == null) {
-            calculateNamespace();
+        if (this.namespaceString == null) {
+            this.calculateNamespace();
         }
-        return namespaceString;
+        return this.namespaceString;
     }
 
     @Override
     public int hashCode() {
-        if (namespaceString == null) {
-            calculateNamespace();
+        if (this.namespaceString == null) {
+            this.calculateNamespace();
         }
-        return Objects.hash(namespaceString, keyString);
+        return Objects.hash(this.namespaceString, this.keyString);
     }
 
     public boolean matches(@NotNull Extension namespace, @NotNull String key) {
-        if (namespaceString == null) {
-            calculateNamespace();
+        if (this.namespaceString == null) {
+            this.calculateNamespace();
         }
-        return keyString.equals(key) && namespaceString.equals(namespace.getDescription().getName());
+
+        return this.keyString.equals(key) && this.namespaceString.equals(namespace.getDescription().getName());
     }
 
     public boolean matches(@NotNull String namespace, @NotNull String key) {
-        if (namespaceString == null) {
-            calculateNamespace();
+        if (this.namespaceString == null) {
+            this.calculateNamespace();
         }
-        return namespaceString.equals(namespace) && keyString.equals(key);
+
+        return this.namespaceString.equals(namespace) && this.keyString.equals(key);
     }
 
     @Override

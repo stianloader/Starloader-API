@@ -90,6 +90,6 @@ public class KeybindListMenu implements CanvasContext {
     @Override
     public void onScroll(int canvasX, int canvasY, @NotNull Camera camera, int amount,
             @NotNull Canvas canvas) {
-        this.scroll -= amount;
+        this.scroll += amount;
     }
 }
