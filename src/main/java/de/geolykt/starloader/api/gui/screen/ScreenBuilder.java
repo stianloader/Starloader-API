@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NullUtils;
+import de.geolykt.starloader.api.gui.Drawing;
 
 /**
  * Builder class to create {@link Screen} objects.
@@ -106,6 +107,9 @@ public abstract class ScreenBuilder {
      * beforehand as otherwise the screen will have no components to display. Additionally,
      * calling addComponentSupplier(ComponentSupplier) does not have any effects to
      * the newly created screen if the method was called after build().
+     *
+     * <p>Important: To display the screen, {@link Drawing#showScreen(Screen)} needs to
+     * be called. This method does not automatically do that.
      *
      * @return The newly created screen instance
      */

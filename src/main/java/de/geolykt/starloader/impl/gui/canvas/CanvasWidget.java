@@ -223,7 +223,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
     @Override
     protected boolean scroll(int x, int y, int amount) {
         boolean ret = super.scroll(x, y, amount);
-        ctx.onScroll(x, y, internalCamera, amount, this);
+        this.ctx.onScroll(x, y, internalCamera, amount, this);
         return ret;
     }
 
@@ -232,12 +232,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
     protected void tap(double x, double y, boolean isLongTap) {
         super.tap(x, y, isLongTap);
         if (!isLongTap) {
-            if (getPositioning() == WIDGET_POSITIONING.LAYOUT) {
-                // Extremely gross hack to get stuff working
-                ctx.onClick((int) x, (int) (getHeight() - y), internalCamera, this);
-            } else {
-                ctx.onClick((int) x, (int) y, internalCamera, this);
-            }
+            this.ctx.onClick((int) x, (int) y, this.internalCamera, this);
         }
     }
 }

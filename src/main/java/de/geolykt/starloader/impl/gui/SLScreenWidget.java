@@ -62,7 +62,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     /**
      * A dynamic provider for the width of the screen. This has to be null if {@link #width} is a non -1 value, but
-     * cannot be null if {@link #width} has a -1 value.
+     * cannot be null if {@link #width} has a value of -1.
      */
     @Nullable
     protected final IntSupplier widthProvider;
@@ -91,12 +91,12 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         this.headerColor = Objects.requireNonNull(headerColor, "Null header color");
         this.components = new ArrayList<>();
         for (ComponentSupplier provider : components2) {
-            provider.supplyComponent(this, components);
+            provider.supplyComponent(this, this.components);
         }
         this.headless = headless;
         if (!headless) {
-            setTitleColor(headerColor);
-            setTitle(title);
+            this.setTitleColor(headerColor);
+            this.setTitle(title);
         }
     }
 
@@ -119,12 +119,12 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         this.headerColor = Objects.requireNonNull(headerColor, "Null header color");
         this.components = new ArrayList<>();
         for (ComponentSupplier provider : Objects.requireNonNull(componentProviders, "Null component providers")) {
-            provider.supplyComponent(this, components);
+            provider.supplyComponent(this, this.components);
         }
         this.headless = headless;
         if (!headless) {
-            setTitleColor(headerColor);
-            setTitle(title);
+            this.setTitleColor(headerColor);
+            this.setTitle(title);
         }
     }
 
@@ -144,7 +144,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public @NotNull List<@NotNull ScreenComponent> getChildren() {
-        return new ArrayList<>(components);
+        return new ArrayList<>(this.components);
     }
 
     @Override
@@ -152,9 +152,9 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         int height = 0;
         int lineheight = 0;
         int linewidth = 0;
-        final int maxWidth = getInnerWidth();
+        final int maxWidth = this.getInnerWidth();
         ScreenComponent previousComponent = null;
-        for (ScreenComponent component : components) {
+        for (ScreenComponent component : this.components) {
             LineWrappingInfo lwrapinfo = component.getLineWrappingInfo();
             if (previousComponent == null) {
                 if (lwrapinfo.isWrapEndOfObject()) {
@@ -195,27 +195,28 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
                 }
             }
         }
-        if (!headless) {
-            height += 20;
+        if (!this.headless) {
+            height += 25;
         }
         return height + lineheight;
     }
 
     @Override
     public int getInnerWidth() {
-        return getWidth() - 20;
+        return this.getWidth() - 20;
     }
 
     @Override
-    public @NotNull String getTitle() {
-        return title;
+    @NotNull
+    public String getTitle() {
+        return this.title;
     }
 
     @Override
     public int getWidth() {
         IntSupplier widthProvider = this.widthProvider;
         if (widthProvider == null) {
-            return width;
+            return this.width;
         } else {
             return widthProvider.getAsInt();
         }
@@ -223,7 +224,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public boolean isHeadless() {
-        return headless;
+        return this.headless;
     }
 
     @Override
@@ -238,18 +239,18 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     public void onRender() {
-        drawBackground(getBackgroundColor());
-        if (!headless) {
-            drawHeader();
+        this.drawBackground(this.getBackgroundColor());
+        if (!this.headless) {
+            this.drawHeader();
         }
-        renderSLChildComponents();
+        this.renderSLChildComponents();
     }
 
     /**
      * Shorthand for "drawBackground(getBackgroundColor())". This method is used in the {@link #onRender()} implementation.
      */
     protected final void paintBackground() {
-        drawBackground(getBackgroundColor());
+        this.drawBackground(this.getBackgroundColor());
     }
 
     protected void renderSLChildComponents() {
@@ -258,19 +259,19 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         }
         @SuppressWarnings("null")
         @NotNull Iterator<ScreenComponent> hackvar = this.components.iterator();
-        Camera c = NullUtils.requireNotNull(getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
-        int height = getHeight();
-        Iterator<Map.Entry<Vector2, ScreenComponent>> populator = new SLScreenWidgetPopulator(height, isHeadless(), getInnerWidth(), hackvar, false);
+        Camera c = NullUtils.requireNotNull(this.getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
+        int height = this.getHeight();
+        Iterator<Map.Entry<Vector2, ScreenComponent>> populator = new SLScreenWidgetPopulator(height, this.isHeadless(), getInnerWidth(), hackvar, false);
 
-        componentPositioningMeta.clear();
-        lastRenderHeight = height;
+        this.componentPositioningMeta.clear();
+        this.lastRenderHeight = height;
         while (populator.hasNext()) {
             Map.Entry<Vector2, ScreenComponent> componentEntry = populator.next();
             Vector2 pos = componentEntry.getKey();
             ScreenComponent component = componentEntry.getValue();
             try {
                 int width = component.renderAt((int) pos.x, (int) pos.y, c); // TODO originally the render operation had offsets, but not anymore. Explore why this may have been dumb to remove. (#getInnerWidth does not make any sense anymore dummy.)
-                componentPositioningMeta.add(new ScreenComponentPositioningMeta<>(pos, width, component.getHeight(), component));
+                this.componentPositioningMeta.add(new ScreenComponentPositioningMeta<>(pos, width, component.getHeight(), component));
             } catch (Exception e) {
                 // Throwing an exception here would cause serious UI issues
                 e.printStackTrace();
@@ -281,8 +282,11 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     protected boolean scroll(int x, int y, int amount) {
-        Camera c = NullUtils.requireNotNull(getCamera());
-        double actualY = lastRenderHeight - y - 25.0D;
+        Camera c = NullUtils.requireNotNull(this.getCamera());
+        double actualY = this.lastRenderHeight - y;
+        if (!this.headless) {
+            actualY += 25D;
+        }
 
         for (ScreenComponentPositioningMeta<ScreenComponent> posMeta : this.componentPositioningMeta) {
             if (!(posMeta.component instanceof ReactiveComponent)) {
@@ -306,8 +310,11 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     protected void tap(double x, double y, boolean isLongTap) {
-        Camera c = NullUtils.requireNotNull(getCamera());
-        double actualY = lastRenderHeight - y - 25.0D; // GDX and galimulator are a bit strange, but it makes sense once you get the gist.
+        Camera c = NullUtils.requireNotNull(this.getCamera());
+        double actualY = this.lastRenderHeight - y;
+        if (!this.headless) {
+            actualY -= 25D;
+        }
         for (ScreenComponentPositioningMeta<ScreenComponent> posMeta : this.componentPositioningMeta) {
             if (!(posMeta.component instanceof ReactiveComponent)) {
                 continue;

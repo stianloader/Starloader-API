@@ -72,5 +72,7 @@ RAS v1 std
  build      ACC_ENUM        0               snoddasmannen/galimulator/MapMode$MapModes
  build      ACC_ENUM        0               snoddasmannen/galimulator/Space$ConnectionMethod
 
+# Hack used to make another mixin (SLScreenWidgetMixins) compile, but is similarly not required at runtime
+ build      ACC_PROTECTED   ACC_PUBLIC      snoddasmannen/galimulator/ui/Widget                     internalCamera          Lcom/badlogic/gdx/graphics/Camera;
 # Hack used to make a mixin (BufferedWidgetWrapperMixin) compile properly, but isn't actually required at runtime
  build      0               ACC_PUBLIC      snoddasmannen/galimulator/ui/Widget                     t                       F

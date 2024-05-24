@@ -8,8 +8,11 @@ plugins {
 }
 
 group 'de.geolykt'
-def archivesBaseName = 'starloader-api'
 version '2.0.0'
+
+base {
+    archivesName = 'starloader-api'
+}
 
 multiRelease {
     targetVersions 8, 9
@@ -46,8 +49,8 @@ dependencies {
     // The launcher - the heart of this project; Note that we now adopt a "bring your own launcher" model
     // so we don't actually force the usage of micromixin on others; Other projects can make use of more modern
     // launcher versions or even other variants such as those making use of the spongeian mixin implementation
-    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240413"
-    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240413"
+    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240512"
+    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240512"
 
     compileOnly "org.stianloader:micromixin-annotations:0.4.0-a20240428"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
@@ -112,7 +115,7 @@ publishing {
     publications {
         plugin(MavenPublication) { publication ->
             groupId project.group
-            artifactId project.archivesBaseName
+            artifactId project.base.archivesName.get()
             version '2.0.0'
 
             from components['java']

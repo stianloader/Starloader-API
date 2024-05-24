@@ -28,51 +28,51 @@ public class OpenGameControlMenu {
     private final LinkedHashMap<@NotNull String, Runnable> actions = new LinkedHashMap<>();
 
     public OpenGameControlMenu() {
-        actions.put("[RED]Cancel[]", () -> {
-            canvas.closeCanvas(); // Beware: You cannot use "canvas::closeCanvas" as canvas is not final (as it depends on the actions)!
+        this.actions.put("[RED]Cancel[]", () -> {
+            this.canvas.closeCanvas(); // Beware: You cannot use "canvas::closeCanvas" as canvas is not final (as it depends on the actions)!
         });
-        actions.put("Create new Galaxy", () -> {
+        this.actions.put("Create new Galaxy", () -> {
             Galimulator.showGalaxyCreationScreen();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Load autosave", () -> {
+        this.actions.put("Load autosave", () -> {
             Galimulator.loadSavegameFile("state.dat");
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Save scenario", () -> {
+        this.actions.put("Save scenario", () -> {
             Galimulator.showScenarioSaveScreen();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Edit scenario", () -> {
+        this.actions.put("Edit scenario", () -> {
             Galimulator.showScenarioMetadataEditor(Galimulator.getMap());
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Online scenarios", () -> {
+        this.actions.put("Online scenarios", () -> {
             Galimulator.showOnlineScenarioBrowser();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Load scenario from clipboard", () -> {
+        this.actions.put("Load scenario from clipboard", () -> {
             Galimulator.loadClipboardScenario();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Share a mod", () -> {
+        this.actions.put("Share a mod", () -> {
             Galimulator.showModUploadScreen();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Save galaxy", () -> {
+        this.actions.put("Save galaxy", () -> {
             UIControl.openGalaxySaveMenu();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("Load galaxy", () -> {
+        this.actions.put("Load galaxy", () -> {
             UIControl.openGalaxyLoadMenu();
-            canvas.closeCanvas();
+            this.canvas.closeCanvas();
         });
-        actions.put("[PURPLE]Exit[] game", Gdx.app::exit);
+        this.actions.put("[PURPLE]Exit[] game", Gdx.app::exit);
     }
 
     public boolean registerButton(@NotNull String text, @NotNull Runnable action) {
-        if (actions.putIfAbsent(text, action) == null) {
-            dirty = true;
+        if (this.actions.putIfAbsent(text, action) == null) {
+            this.dirty = true;
             return true;
         }
         return false;
@@ -87,14 +87,14 @@ public class OpenGameControlMenu {
     @NotNull
     public Canvas getCanvas() {
 
-        Canvas c = canvas;
-        if (c != null && !dirty) {
+        Canvas c = this.canvas;
+        if (c != null && !this.dirty) {
             return c;
         }
         CanvasManager cmgr = CanvasManager.getInstance();
 
         List<@NotNull Canvas> buttons = new ArrayList<>();
-        actions.forEach((text, action) -> {
+        this.actions.forEach((text, action) -> {
             if (action == null) {
                 throw new NullPointerException("\"action\" is null");
             }
@@ -107,7 +107,7 @@ public class OpenGameControlMenu {
         }
 
         c = cmgr.multiCanvas(cmgr.dummyContext(600, buttons.size() * 55, true), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.BOTTOM_TO_TOP, subcanvases);
-        canvas = c = cmgr.withMargins(5, 5, 5, 5, c, new CanvasSettings("Game control"));
+        this.canvas = c = cmgr.withMargins(5, 5, 5, 5, c, new CanvasSettings("Game control"));
         return c;
     }
 }

@@ -42,10 +42,10 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
 
     @Override
     public final void draw() {
-        if (basicDrawLock) {
+        if (this.basicDrawLock) {
             throw new IllegalStateException("Either a draw call completed abnormally or there is recursion going on!");
         }
-        basicDrawLock = true;
+        this.basicDrawLock = true;
         SpriteBatch batch = Drawing.getDrawingBatch();
         boolean startedDrawing;
         if ((startedDrawing = !batch.isDrawing())) {
@@ -54,9 +54,11 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
         }
 
         try {
-            onRender();
+            this.onRender();
         } catch (Exception e) {
             Galimulator.panic("Exception occured while rendering a widget. This suggests a mod-caused error while drawing a canvas or screen.", true, e);
+        } catch (IncompatibleClassChangeError e) {
+            Galimulator.panic("An IncompatibleClassChangeError occured while rendering a widget. This suggests a mod-caused error while drawing a canvas or screen. IncompatibleClassChangeErrors can be caused by using incompatible versions of mods or due to faults during the remapping process.", true, e);
         } finally {
             if (startedDrawing) {
                 batch.end();
@@ -82,8 +84,8 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
     @Override
     public void onMouseUp(double x, double y) {
         try {
-            this.onMouseUp0(x, getHeight() - y);
-            tap(x, getHeight() - y, false);
+            this.onMouseUp0(x, y);
+            this.tap(x, y, false);
         } catch (Throwable t) {
             if (t instanceof ThreadDeath) {
                 throw (ThreadDeath) t;
@@ -98,14 +100,14 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
         // Panning and dragging is also included in this method, but exact behaviour is not known
         // I am not even sure what the usecase is behind that distinction
         if (amount <= -40 || amount >= 40) {
-            scroll((int) x, (int) y, (int) amount / -40);
+            this.scroll((int) x, (int) y, (int) amount / -40);
         }
     }
 
     @Override
     public void b(double x, double y) {
         super.b(x, y);
-        tap(x, getHeight() - y, true);
+        this.tap(x, getHeight() - y, true);
     }
 
     /**
@@ -118,7 +120,7 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
             throw new IllegalStateException("Either a dispatchMessage call completed abnormally or there is recursion going on!");
         }
         basicMessageLock = true;
-        recieveMessage(Objects.requireNonNull(message));
+        this.recieveMessage(Objects.requireNonNull(message));
         basicMessageLock = false;
     }
 
@@ -177,7 +179,7 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
     @Override
     public final void hover(float x, float y, boolean unknown) {
         super.hover(x, y, unknown);
-        hover((int) x, (int) y);
+        this.hover((int) x, (int) y);
     }
 
     protected void hover(int x, int y) {
@@ -257,6 +259,11 @@ public abstract class SLAbstractWidget extends Widget implements WidgetMouseRele
      */
     protected void setTitleColor(@NotNull GalColor color) {
         this.setHeaderColor(Objects.requireNonNull(color, "Color cannot be null."));
+    }
+
+    @Override
+    public boolean interceptMouseDown(float float0, float float1) {
+        return super.interceptMouseDown(float0, float1);
     }
 
     /**

@@ -30,6 +30,6 @@ public class RunnableCanvasButton extends AbstractCanvasButton {
 
     @Override
     public void onClick() {
-        action.run();
+        this.action.run();
     }
 }

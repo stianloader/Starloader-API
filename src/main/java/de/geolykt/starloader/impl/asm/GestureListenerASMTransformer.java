@@ -41,12 +41,12 @@ public class GestureListenerASMTransformer extends ASMTransformer {
 
     @Override
     public boolean accept(@NotNull ClassNode node) {
-        if (!node.name.equals(target)) {
+        if (!node.name.equals(GestureListenerASMTransformer.target)) {
             return false;
         }
-        String onMouseDownName = onMouseDown.split("[\\.\\(]", 3)[1];
-        String widgetClass = onMouseDown.split("[\\.\\(]", 3)[0];
-        String containsPointName = containsPoint.split("[\\.\\(]", 3)[1];
+        String onMouseDownName = GestureListenerASMTransformer.onMouseDown.split("[\\.\\(]", 3)[1];
+        String widgetClass = GestureListenerASMTransformer.onMouseDown.split("[\\.\\(]", 3)[0];
+        String containsPointName = GestureListenerASMTransformer.containsPoint.split("[\\.\\(]", 3)[1];
         for (MethodNode method : node.methods) {
             // Conveniently the method names and descriptors cannot be obfuscated for inherited methods
             if (!method.name.equals("touchDown") || !method.desc.equals("(FFII)Z")) {
@@ -139,33 +139,7 @@ public class GestureListenerASMTransformer extends ASMTransformer {
 
             method.instructions.insert(jumpNotContaining, inject);
         }
-        for (MethodNode method : node.methods) {
-            // Conveniently the method names and descriptors cannot be obfuscated for inherited methods
-            if (!method.name.equals("tap") || !method.desc.equals("(FFII)Z")) {
-                continue;
-            }
-            AbstractInsnNode insn = method.instructions.getFirst();
-            while (insn != null) {
-                if (insn instanceof MethodInsnNode) {
-                    MethodInsnNode minsn = (MethodInsnNode) insn;
-                    if (minsn.owner.equals(widgetClass) && minsn.name.equals(containsPointName) && minsn.desc.equals("(Lcom/badlogic/gdx/math/Vector2;)Z")) {
-                        break;
-                    }
-                }
-                insn = insn.getNext();
-            }
-            if (insn == null) {
-                throw new IllegalStateException("Unable to find method!");
-            }
-            MethodInsnNode invokeContainsPoint = (MethodInsnNode) insn;
-            JumpInsnNode jumpNotContains = (JumpInsnNode) invokeContainsPoint.getNext();
-            if (jumpNotContains.getOpcode() != Opcodes.IFEQ) {
-                throw new IllegalStateException("Unexpected opcode");
-            }
 
-            method.instructions.insert(invokeContainsPoint, new MethodInsnNode(Opcodes.INVOKESTATIC, "de/geolykt/starloader/impl/asm/TransformCallbacks", "gesturelistener$tap", "(Lsnoddasmannen/galimulator/ui/Widget;Lcom/badlogic/gdx/math/Vector2;)Z"));
-            method.instructions.remove(invokeContainsPoint);
-        }
         return true;
     }
 
