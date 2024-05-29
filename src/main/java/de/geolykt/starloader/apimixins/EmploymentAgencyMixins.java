@@ -19,11 +19,10 @@ import org.spongepowered.asm.mixin.Unique;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.people.EmperorDeathEvent;
-import de.geolykt.starloader.api.event.people.PlayerEmperorDeathEvent;
 import de.geolykt.starloader.api.gui.BasicDialog;
 import de.geolykt.starloader.api.gui.BasicDialogBuilder;
 import de.geolykt.starloader.impl.EmperorOption;
@@ -62,7 +61,7 @@ public class EmploymentAgencyMixins {
     @Overwrite
     private Person a(final Job job, final int n) {
         List<Person> potentialCandidates;
-        if (job.getType() == JobType.EMPEROR && (job.getEmployer() == Galimulator.getNeutralEmpire() || job.getPreviousHolder() != null)) {
+        if (job.getType() == JobType.EMPEROR && (job.getEmployer() == Galimulator.getUniverse().getNeutralEmpire() || job.getPreviousHolder() != null)) {
             potentialCandidates = job.n();
             if (potentialCandidates.isEmpty()) {
                 potentialCandidates = this.b(n);
@@ -75,7 +74,7 @@ public class EmploymentAgencyMixins {
         }
         Person.f = 0;
         if (job.getType() == JobType.EMPEROR) {
-            if (Galimulator.getPlayerEmpire() == job.getEmployer().getJobEmpire()) {
+            if (Galimulator.getUniverse().getPlayerEmpire() == job.getEmployer().getJobEmpire()) {
                 // Player empire
                 potentialCandidates.removeIf(person -> person.a(job) <= 0 || Claim.b(person, job) == null);
                 if (!potentialCandidates.isEmpty()) {
@@ -86,7 +85,8 @@ public class EmploymentAgencyMixins {
                         }
                         candidates.add((DynastyMember) o);
                     }
-                    PlayerEmperorDeathEvent evt = new PlayerEmperorDeathEvent(candidates);
+                    @SuppressWarnings("deprecation")
+                    EmperorDeathEvent evt = new de.geolykt.starloader.api.event.people.PlayerEmperorDeathEvent(candidates);
                     EventManager.handleEvent(evt);
                     List<@NotNull DynastyMember> finalSuggestions = evt.getSuccessors();
                     if (finalSuggestions.isEmpty()) {
@@ -135,7 +135,7 @@ public class EmploymentAgencyMixins {
                     }
                     candidates.add((DynastyMember) o);
                 }
-                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, NullUtils.requireNotNull((ActiveEmpire) job.getEmployer()));
+                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, NullUtils.requireNotNull((Empire) job.getEmployer()));
                 EventManager.handleEvent(evt);
                 List<@NotNull DynastyMember> finalSuggestions = evt.getSuccessors();
                 if (finalSuggestions.size() == 1) {

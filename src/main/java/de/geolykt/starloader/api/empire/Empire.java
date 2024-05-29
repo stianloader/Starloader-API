@@ -1,16 +1,32 @@
 package de.geolykt.starloader.api.empire;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
 
 /**
  * Base interface for any empires that exist in the game, whether collapsed or
  * not.
+ *
+ * @deprecated Scheduled for removal. There is no replacement at this point in time.
+ * Cause for this action is the fact that this {@link Empire} interface and the
+ * {@link ActiveEmpire} interface may be easily confused for beginners. In the future,
+ * only {@link de.geolykt.starloader.api.dimension.Empire} will exist, which represent
+ * "alive" - that is non-collapsed - empires. Former empires will be represented under
+ * an alternative name going forward. This action is ultimately rooted in the fact that
+ * both {@link Empire} and {@link ActiveEmpire} were written before a lot of knowledge
+ * about galimulator's internals was known. Combined with the fact that before galimulator
+ * 4.8 many classes were obfuscated, this unfortunate naming blunder was created
+ * due to erroneous application of OOP principles where it shouldn't have been applied.
  */
+@Deprecated
+@ScheduledForRemoval(inVersion = "3.0.0")
+@DeprecatedSince(value = "2.0.0")
 public interface Empire extends Dateable, Identifiable {
 
     /**

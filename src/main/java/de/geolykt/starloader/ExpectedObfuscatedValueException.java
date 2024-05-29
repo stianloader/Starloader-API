@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import de.geolykt.starloader.api.actor.Actor;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.gui.MapMode;
 
 import snoddasmannen.galimulator.Empire;
@@ -20,7 +19,8 @@ public class ExpectedObfuscatedValueException extends IllegalArgumentException {
 
     private static final long serialVersionUID = 3416275195459560258L;
 
-    public static @NotNull Empire requireEmpire(@NotNull ActiveEmpire empire) {
+    @NotNull
+    public static Empire requireEmpire(@NotNull de.geolykt.starloader.api.dimension.@NotNull Empire empire) {
         if (!(empire instanceof Empire)) {
             throw new ExpectedObfuscatedValueException();
         }

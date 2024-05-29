@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.Locateable;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Dateable;
 import de.geolykt.starloader.api.resource.ColorTextured;
 
@@ -62,9 +62,24 @@ public interface Actor extends Identifiable, Dateable, Locateable, ColorTextured
      * can defect from their host empire.
      *
      * @return The host empire.
+     * @deprecated The {@link de.geolykt.starloader.api.empire.ActiveEmpire} interface is scheduled for removal.
+     * Use {@link #getEmpire()} instead.
+     */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @NotNull
+    public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getOwningEmpire();
+
+    /**
+     * Obtains the empire that "owns" the actor; this state may change with time as actors
+     * can defect from their host empire.
+     *
+     * @return The owner empire.
+     * @since 2.0.0
      */
     @NotNull
-    public ActiveEmpire getOwningEmpire();
+    public Empire getEmpire();
 
     /**
      * Alias for {@link Dateable#getFoundationYear()};

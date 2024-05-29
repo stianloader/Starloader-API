@@ -9,7 +9,6 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,7 +25,7 @@ import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Faction;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
@@ -37,7 +36,6 @@ import de.geolykt.starloader.api.event.star.StarOwnershipTakeoverEvent;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 
-import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.Religion;
 
 @SuppressWarnings("unused")
@@ -135,57 +133,6 @@ public class StarMixins implements Star {
     public void b(Religion var1) {
     } // setMinorityFaith
 
-    @Shadow
-    public void onHostileTakeover(Empire empire) {
-    }
-
-    @Overwrite(aliases = "c")
-    @NotNull
-    @Override
-    public Vector<Star> getNeighboursRecursive(int depth) {
-        return this.slapi$getNeighboursRecursive(depth);
-    }
-
-    @NotNull
-    private Vector<Star> slapi$getNeighboursRecursive(int depth) {
-        if (depth == 0) {
-            return new Vector<>();
-        } else if (depth == 1) {
-            return new Vector<>(this.neighbours);
-        }
-
-        Vector<Star> visitedStars = new Vector<>();
-        List<Star> bfsVisitingStars = new ArrayList<>();
-        List<Star> bfsNextStars = new ArrayList<>();
-        IntSet bfsVisitedStars = new IntSet();
-
-        for (Star neighbour : this.neighbours) {
-            bfsNextStars.add(neighbour);
-            bfsVisitedStars.add(neighbour.getUID());
-        }
-
-        while (!bfsNextStars.isEmpty() && --depth != 0) {
-            bfsVisitingStars.clear();
-            List<Star> swapCache = bfsVisitingStars;
-            bfsVisitingStars = bfsNextStars;
-            bfsNextStars = swapCache;
-
-            for (Star visiting : bfsVisitingStars) {
-                visitedStars.add(visiting);
-                for (Star neighbour : visiting.getNeighbourList()) {
-                    if (!bfsVisitedStars.add(neighbour.getUID())) {
-                        continue;
-                    }
-                    bfsNextStars.add(neighbour);
-                }
-            }
-        }
-
-        visitedStars.addAll(bfsNextStars);
-
-        return visitedStars;
-    }
-
     @Override
     public void clearStarlaneCache() {
         this.b.clear();
@@ -200,18 +147,31 @@ public class StarMixins implements Star {
     } // removeNeighbour
 
     @Override
-    public boolean doTakeover(@NotNull ActiveEmpire newOwner) {
-        ActiveEmpire old = getAssignedEmpire();
+    public boolean doTakeover(@NotNull de.geolykt.starloader.api.dimension.@NotNull Empire newOwner) {
+        de.geolykt.starloader.api.dimension.Empire old = this.getEmpire();
         if (old == newOwner) {
             return false; // don't perform a takeover when there is no takeover to be performed
         }
-        this.onHostileTakeover(ExpectedObfuscatedValueException.requireEmpire(newOwner));
-        return old != getAssignedEmpire();
+        this.onHostileTakeover((snoddasmannen.galimulator.Empire) newOwner);
+        return old != this.getEmpire();
     }
 
     @Override
-    public @NotNull ActiveEmpire getAssignedEmpire() {
-        return NullUtils.requireNotNull((ActiveEmpire) getOwningEmpire());
+    @Deprecated
+    public boolean doTakeover(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire newOwner) {
+        de.geolykt.starloader.api.empire.ActiveEmpire old = this.getAssignedEmpire();
+        if (old == newOwner) {
+            return false; // don't perform a takeover when there is no takeover to be performed
+        }
+        this.onHostileTakeover(ExpectedObfuscatedValueException.requireEmpire((Empire) newOwner));
+        return old != this.getAssignedEmpire();
+    }
+
+    @Override
+    @NotNull
+    @Deprecated
+    public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getAssignedEmpire() {
+        return NullUtils.requireNotNull((de.geolykt.starloader.api.empire.ActiveEmpire) getOwningEmpire());
     }
 
     @Override
@@ -227,9 +187,15 @@ public class StarMixins implements Star {
     }
 
     @Override
+    @NotNull
+    public de.geolykt.starloader.api.dimension.@NotNull Empire getEmpire() {
+        return (de.geolykt.starloader.api.dimension.Empire) this.getOwningEmpire();
+    }
+
+    @Override
     @Nullable
     public Faction getFaction() {
-        return (Faction) faction;
+        return (Faction) this.faction;
     }
 
     @Override
@@ -240,29 +206,30 @@ public class StarMixins implements Star {
 
     @Override
     public float getHeat() {
-        return heat;
+        return this.heat;
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
     public Random getInternalRandom() {
-        return d;
+        return this.d;
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
     public NamespacedKey getMajorityFaith() {
-        return ((RegistryKeyed) faith).getRegistryKey();
+        return ((RegistryKeyed) this.faith).getRegistryKey();
     }
 
     @Override
-    public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
-        if (metadata == null) {
-            metadata = new HashMap<>();
+    @Nullable
+    public Object getMetadata(@NotNull NamespacedKey key) {
+        if (this.metadata == null) {
+            return null;
         }
-        return metadata.get(key);
+        return this.metadata.get(key);
     }
 
     @Override
@@ -285,31 +252,39 @@ public class StarMixins implements Star {
     @SuppressWarnings("unchecked")
     @Override
     public Vector<Integer> getNeighbourIDs() {
-        return intLanes;
+        return this.intLanes;
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
     public List<@NotNull Star> getNeighbourList() {
-        return Collections.unmodifiableList(neighbours);
+        return Collections.unmodifiableList(this.neighbours);
     }
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull Vector<Star> getNeighbours() {
+    @NotNull
+    public Vector<Star> getNeighbours() {
         return this.neighbours;
+    }
+
+    @Overwrite(aliases = "c")
+    @NotNull
+    @Override
+    public Vector<Star> getNeighboursRecursive(int depth) {
+        return this.slapi$getNeighboursRecursive(depth);
     }
 
     @Shadow
     @NotNull
-    public snoddasmannen.galimulator.Empire getOwningEmpire() { // getEmpire
-        return (Empire) Galimulator.getNeutralEmpire();
+    public snoddasmannen.galimulator.@NotNull Empire getOwningEmpire() { // getEmpire
+        return (snoddasmannen.galimulator.Empire) Galimulator.getUniverse().getNeutralEmpire();
     }
 
     @Override
     public float getSprawlLevel() {
-        return sprawlLevel;
+        return this.sprawlLevel;
     }
 
     @SuppressWarnings("null")
@@ -365,18 +340,32 @@ public class StarMixins implements Star {
         this.r = null; // recalculate the vector
     }
 
+    @Shadow
+    public void onHostileTakeover(snoddasmannen.galimulator.Empire empire) {
+    }
+
     @Override
     public void removeNeighbour(@NotNull Star star) {
         disconnect((snoddasmannen.galimulator.Star) star);
     }
 
     @Override
-    public void setAssignedEmpire(@NotNull ActiveEmpire empire) {
-        snoddasmannen.galimulator.Empire newEmp = ExpectedObfuscatedValueException.requireEmpire(empire);
+    @Deprecated
+    public void setAssignedEmpire(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire empire) {
+        snoddasmannen.galimulator.Empire newEmp = ExpectedObfuscatedValueException.requireEmpire((Empire) empire);
         snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
         oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
         newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
         setOwnerEmpire(newEmp);
+    }
+
+    @Override
+    public void setEmpire(@NotNull de.geolykt.starloader.api.dimension.@NotNull Empire empire) {
+        snoddasmannen.galimulator.Empire newEmp = (snoddasmannen.galimulator.Empire) empire;
+        snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) this.getEmpire();
+        oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
+        newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
+        this.setOwnerEmpire(newEmp);
     }
 
     @Override
@@ -477,6 +466,46 @@ public class StarMixins implements Star {
         this.wealth = wealth;
     }
 
+    @NotNull
+    private Vector<Star> slapi$getNeighboursRecursive(int depth) {
+        if (depth == 0) {
+            return new Vector<>();
+        } else if (depth == 1) {
+            return new Vector<>(this.neighbours);
+        }
+
+        Vector<Star> visitedStars = new Vector<>();
+        List<Star> bfsVisitingStars = new ArrayList<>();
+        List<Star> bfsNextStars = new ArrayList<>();
+        IntSet bfsVisitedStars = new IntSet();
+
+        for (Star neighbour : this.neighbours) {
+            bfsNextStars.add(neighbour);
+            bfsVisitedStars.add(neighbour.getUID());
+        }
+
+        while (!bfsNextStars.isEmpty() && --depth != 0) {
+            bfsVisitingStars.clear();
+            List<Star> swapCache = bfsVisitingStars;
+            bfsVisitingStars = bfsNextStars;
+            bfsNextStars = swapCache;
+
+            for (Star visiting : bfsVisitingStars) {
+                visitedStars.add(visiting);
+                for (Star neighbour : visiting.getNeighbourList()) {
+                    if (!bfsVisitedStars.add(neighbour.getUID())) {
+                        continue;
+                    }
+                    bfsNextStars.add(neighbour);
+                }
+            }
+        }
+
+        visitedStars.addAll(bfsNextStars);
+
+        return visitedStars;
+    }
+
     @Override
     public void syncCoordinates() {
         Vector2 vect = r;
@@ -490,8 +519,8 @@ public class StarMixins implements Star {
 
     @Inject(method = "onHostileTakeover(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
     public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
-        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, getAssignedEmpire(),
-                NullUtils.requireNotNull((ActiveEmpire) empire));
+        StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, this.getEmpire(),
+                NullUtils.requireNotNull((de.geolykt.starloader.api.dimension.Empire) empire));
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
             info.cancel();
@@ -505,10 +534,10 @@ public class StarMixins implements Star {
      */
     @Inject(method = "tick()V", at = @At("HEAD"))
     public void tick(CallbackInfo info) {
-        if (tickCallbacks == null) {
+        if (this.tickCallbacks == null) {
             return;
         }
-        for (TickCallback<Star> callback : tickCallbacks) {
+        for (TickCallback<Star> callback : this.tickCallbacks) {
             callback.tick(this);
         }
     }

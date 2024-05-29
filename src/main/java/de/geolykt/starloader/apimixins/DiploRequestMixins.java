@@ -6,13 +6,12 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.DiplomacyRequestEvent;
 import de.geolykt.starloader.api.player.DiplomacyRequest;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 
-import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.diplomacy.PlayerRequest;
 
 @Mixin(PlayerRequest.class)
@@ -24,21 +23,21 @@ public class DiploRequestMixins implements DiplomacyRequest {
     }
 
     @Shadow
-    public boolean a(final Empire empire) { // isNotTranscending
-        return ((ActiveEmpire) empire).getState().equals(RegistryKeys.GALIMULATOR_TRANSCENDING);
+    public boolean a(final snoddasmannen.galimulator.Empire empire) { // isNotTranscending
+        return !((Empire) empire).getState().equals(RegistryKeys.GALIMULATOR_TRANSCENDING);
     }
 
     @Shadow
-    public String b(final Empire empire) {
+    public String b(final snoddasmannen.galimulator.Empire empire) {
         return empire.toString();
     }
 
     @Overwrite
-    public String c(final Empire empire) {
+    public String c(final snoddasmannen.galimulator.Empire empire) {
         if (empire == null) {
             return "What a strange question.";
         }
-        DiplomacyRequestEvent event = new DiplomacyRequestEvent((ActiveEmpire) empire, this);
+        DiplomacyRequestEvent event = new DiplomacyRequestEvent((Empire) empire, this);
         EventManager.handleEvent(event);
         if (event.getResponse() != null) {
             return event.getResponse();
@@ -47,22 +46,35 @@ public class DiploRequestMixins implements DiplomacyRequest {
     }
 
     @Override
-    public String doValidatedly(@NotNull ActiveEmpire target) {
-        return c(ExpectedObfuscatedValueException.requireEmpire(target));
+    @Deprecated
+    public String doValidatedly(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire target) {
+        return this.c(ExpectedObfuscatedValueException.requireEmpire((Empire) target));
     }
 
     @Override
     public String getText() {
-        return getName();
+        return this.getName();
     }
 
     @Override
-    public boolean isValid(@NotNull ActiveEmpire target) {
-        return a(ExpectedObfuscatedValueException.requireEmpire(target));
+    @Deprecated
+    public boolean isValid(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire target) {
+        return this.a(ExpectedObfuscatedValueException.requireEmpire((Empire) target));
     }
 
     @Override
-    public String performAction(@NotNull ActiveEmpire target) {
-        return b(ExpectedObfuscatedValueException.requireEmpire(target));
+    @Deprecated
+    public String performAction(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire target) {
+        return this.b(ExpectedObfuscatedValueException.requireEmpire((Empire) target));
+    }
+
+    @Override
+    public boolean isValid(@NotNull Empire target) {
+        return this.a((snoddasmannen.galimulator.Empire) target);
+    }
+
+    @Override
+    public String performAction(@NotNull Empire target) {
+        return this.b((snoddasmannen.galimulator.Empire) target);
     }
 }

@@ -33,9 +33,8 @@ import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.dimension.Dimension;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
-import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
@@ -122,18 +121,23 @@ public final class Galimulator {
         public @NotNull MapMode getActiveMapmode();
 
         /**
-         * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however
+         * Returns the ActiveEmpire mapped to the given unique ID. If however
          * there is no matching empire, the neutral empire is to be returned. Default
          * implementation notice: The implementation of this method is very inefficient
          * as it iterates over all known empires at worst. It is advisable that the extensions
          * make use of caching.
          *
          * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
-         * @return The {@link ActiveEmpire} bound to the unique ID
+         * @return The {@link Empire} bound to the unique ID
          * @since 1.5.0
+         * @deprecated The {@link de.geolykt.starloader.api.empire.ActiveEmpire} interface is scheduled for removal.
+         * Use {@link #lookupEmpire(int)} instead.
          */
+        @Deprecated
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        @DeprecatedSince("2.0.0")
         @Nullable
-        public ActiveEmpire getEmpireByUID(int uid);
+        public de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getEmpireByUID(int uid);
 
         /**
          * Gets the currently registered active empires. Note that like many other
@@ -145,7 +149,7 @@ public final class Galimulator {
          * Right now a Vector is required by the Galimulator class due to poor foresight.
          * This will be resolved in the 2.0.0 release
          *
-         * @return A {@link List} of {@link ActiveEmpire empires} that are known
+         * @return A {@link List} of {@link Empire empires} that are known
          * @since 1.2.0
          * @deprecated This method returns a the internal empire list as-is without making it immutable
          * or cloning it. However, this approach is deemed improper API design by modern standards.
@@ -156,11 +160,11 @@ public final class Galimulator {
         @Deprecated
         @DeprecatedSince("2.0.0")
         @ScheduledForRemoval(inVersion = "3.0.0")
-        public List<@NotNull ActiveEmpire> getEmpires();
+        public List<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getEmpires();
 
         /**
          * Return a read-only <b>view</b> (that is changes in the underlying collection get mirrored),
-         * of all correctly registered {@link ActiveEmpire alive empires}.
+         * of all correctly registered {@link Empire alive empires}.
          *
          * @return A read-only view of all alive empires.
          * @since 2.0.0
@@ -174,7 +178,7 @@ public final class Galimulator {
         @DeprecatedSince("2.0.0-a20240519")
         @ScheduledForRemoval(inVersion = "3.0.0")
         @UnmodifiableView
-        public Collection<@NotNull ActiveEmpire> getEmpiresView();
+        public Collection<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getEmpiresView();
 
         /**
          * Get the year in-game. The year is rarely a negative number and should not get
@@ -234,27 +238,27 @@ public final class Galimulator {
          * mechanism. Additionally merging or destroying the empire might have serious
          * side effects, which is why that should be avoided.
          *
-         * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
+         * @return The {@link Empire} that is the neutral non-playable empire.
          * @deprecated Replaced by {@link Dimension#getNeutralEmpire()}
          */
         @Deprecated
         @DeprecatedSince("2.0.0-a20240519")
         @ScheduledForRemoval(inVersion = "3.0.0")
         @NotNull
-        public ActiveEmpire getNeutralEmpire();
+        public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getNeutralEmpire();
 
         /**
          * Obtains the empire the player is controlling. If there is no player or no
          * empire in control of the player, then it returns null.
          *
-         * @return The {@link ActiveEmpire} owned by the player, or null
+         * @return The {@link Empire} owned by the player, or null
          * @deprecated Replaced by {@link Dimension#getPlayerEmpire()}
          */
         @Deprecated
         @DeprecatedSince("2.0.0-a20240519")
         @ScheduledForRemoval(inVersion = "3.0.0")
         @Nullable
-        public ActiveEmpire getPlayerEmpire();
+        public de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getPlayerEmpire();
 
         /**
          * Obtains the closest-matching {@link SavegameFormat} instance that can decode a given
@@ -475,6 +479,20 @@ public final class Galimulator {
         public default void loadSavegameFile(@NotNull String savegameFile) {
             loadSavegameFile(Paths.get(savegameFile));
         }
+
+        /**
+         * Returns the {@link Empire} mapped to the given unique ID. If however
+         * there is no matching empire, the neutral empire is to be returned. Default
+         * implementation notice: The implementation of this method is very inefficient
+         * as it iterates over all known empires at worst. It is advisable that the extensions
+         * make use of caching.
+         *
+         * @param uid The UID of the empire, as defined by {@link Empire#getUID()}.
+         * @return The {@link Empire} bound to the unique ID, or {@link Dimension#getNeutralEmpire() neutral} as a fallback.
+         * @since 2.0.0
+         */
+        @NotNull
+        public Empire lookupEmpire(int uid);
 
         /**
          * Obtains the {@link Star} instance that is associated by the given ID.
@@ -861,7 +879,7 @@ public final class Galimulator {
          *
          * @return The empires currently active
          */
-        public Vector<ActiveEmpire> getEmpiresUnsafe();
+        public Vector<Empire> getEmpiresUnsafe();
 
         /**
          * Obtains the internal vector of followed people without cloning it.
@@ -953,7 +971,7 @@ public final class Galimulator {
          *
          * @param empires The empires currently active
          */
-        public void setEmpiresUnsafe(Vector<ActiveEmpire> empires);
+        public void setEmpiresUnsafe(Vector<Empire> empires);
 
         /**
          * Sets the internal list of followed people. Using this when it does not apply is generally
@@ -970,8 +988,23 @@ public final class Galimulator {
          * which is why it is set to be in the unsafe class.
          *
          * @param empire The empire that is not the neutral empire
+         * @deprecated The {@link de.geolykt.starloader.api.empire.ActiveEmpire} interface is scheduled for removal.
          */
-        public void setNeutralEmpire(@NotNull ActiveEmpire empire);
+        @Deprecated
+        @ScheduledForRemoval(inVersion = "3.0.0")
+        @DeprecatedSince("2.0.0")
+        public void setNeutralEmpire(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire empire);
+
+        /**
+         * Sets the neutral empire used by the game.
+         * The neutral empire MUST be an instance of galimulator's underlying
+         * empire class. This method can be under some circumstances be destructive,
+         * which is why it is set to be in the unsafe class.
+         *
+         * @param empire The empire that is not the neutral empire
+         * @since 2.0.0
+         */
+        public void setNeutralEmpire(@NotNull Empire empire);
 
         /**
          * Sets the internal list of people without cloning it.
@@ -1092,17 +1125,23 @@ public final class Galimulator {
     }
 
     /**
-     * Returns the {@link ActiveEmpire} mapped to the given unique ID. If however
+     * Returns the {@link Empire} mapped to the given unique ID. If however
      * there is no matching empire, the neutral empire is to be returned. Default
      * implementation notice: The implementation of this method is very inefficient
      * as it iterates over all known empires at worst. It is advisable that the extensions
      * make use of caching.
      *
      * @param uid The UID of the empire, as defined by {@link Empire#getUID()}
-     * @return The {@link ActiveEmpire} bound to the unique ID
+     * @return The {@link Empire} bound to the unique ID
+     * @deprecated The {@link de.geolykt.starloader.api.empire.ActiveEmpire} interface is scheduled for removal.
+     * Use {@link #lookupEmpire(int)} instead.
      */
-    public static @Nullable ActiveEmpire getEmpireByUID(int uid) {
-        return impl.getEmpireByUID(uid);
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Nullable
+    public static de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getEmpireByUID(int uid) {
+        return Galimulator.impl.getEmpireByUID(uid);
     }
 
     /**
@@ -1112,24 +1151,24 @@ public final class Galimulator {
      * This behaviour is intended as it can be useful in many situations as well as
      * being more performance friendly
      *
-     * @return A {@link Vector} of {@link ActiveEmpire empires} that are known
+     * @return A {@link Vector} of {@link Empire empires} that are known
      * @deprecated This API breaches several design principles present in modern releases of SLAPI.
      */
     @SuppressWarnings("null")
     @Deprecated
     @DeprecatedSince("2.0.0")
     @ScheduledForRemoval(inVersion = "3.0.0")
-    public static @NotNull Vector<@NotNull ActiveEmpire> getEmpires() {
-        List<ActiveEmpire> result = impl.getEmpires();
+    public static @NotNull Vector<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getEmpires() {
+        List<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> result = Galimulator.impl.getEmpires();
         if (result instanceof Vector) {
-            return (Vector<ActiveEmpire>) result;
+            return (Vector<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire>) result;
         }
         return new Vector<>(result);
     }
 
     /**
      * Return a read-only <b>view</b> (that is changes in the underlying collection get mirrored),
-     * of all correctly registered {@link ActiveEmpire alive empires}.
+     * of all correctly registered {@link Empire alive empires}.
      *
      * @return A read-only view of all alive empires.
      * @since 2.0.0
@@ -1142,7 +1181,7 @@ public final class Galimulator {
     @DeprecatedSince("2.0.0-a20240519")
     @ScheduledForRemoval(inVersion = "3.0.0")
     @NotNull
-    public static Collection<@NotNull ActiveEmpire> getEmpiresView() {
+    public static Collection<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getEmpiresView() {
         return Galimulator.impl.getEmpiresView();
     }
 
@@ -1229,7 +1268,7 @@ public final class Galimulator {
      * mechanism. Additionally merging or destroying the empire might have serious
      * side effects, which is why that should be avoided.
      *
-     * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
+     * @return The {@link Empire} that is the neutral non-playable empire.
      * @deprecated Deprecated for removal; Replaced by {@link Dimension#getNeutralEmpire()}.
      */
     @Deprecated
@@ -1237,8 +1276,8 @@ public final class Galimulator {
     @ScheduledForRemoval(inVersion = "3.0.0")
     @NotNull
     @Contract(pure = true)
-    public static ActiveEmpire getNeutralEmpire() {
-        return impl.getNeutralEmpire();
+    public static de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getNeutralEmpire() {
+        return Galimulator.impl.getNeutralEmpire();
     }
 
     /**
@@ -1278,7 +1317,7 @@ public final class Galimulator {
      * Obtains the empire the player is controlling. If there is no player or no
      * empire in control of the player, then it returns null.
      *
-     * @return The {@link ActiveEmpire} owned by the player, or null
+     * @return The {@link Empire} owned by the player, or null
      * @deprecated Deprecated for removal; Replaced by {@link Dimension#getPlayerEmpire()}.
      */
     @Deprecated
@@ -1286,8 +1325,8 @@ public final class Galimulator {
     @ScheduledForRemoval(inVersion = "3.0.0")
     @Nullable
     @Contract(pure = true)
-    public static ActiveEmpire getPlayerEmpire() {
-        return impl.getPlayerEmpire();
+    public static de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getPlayerEmpire() {
+        return Galimulator.impl.getPlayerEmpire();
     }
 
     /**
@@ -1554,6 +1593,22 @@ public final class Galimulator {
     }
 
     /**
+     * Returns the {@link Empire} mapped to the given unique ID. If however
+     * there is no matching empire, the neutral empire is to be returned. Default
+     * implementation notice: The implementation of this method is very inefficient
+     * as it iterates over all known empires at worst. It is advisable that the extensions
+     * make use of caching.
+     *
+     * @param uid The UID of the empire, as defined by {@link Empire#getUID()}.
+     * @return The {@link Empire} bound to the unique ID, or {@link Dimension#getNeutralEmpire() neutral} as a fallback.
+     * @since 2.0.0
+     */
+    @NotNull
+    public static Empire lookupEmpire(int uid) {
+        return Galimulator.impl.lookupEmpire(uid);
+    }
+
+    /**
      * Obtains the {@link Star} instance that is associated by the given ID.
      * If there is no star with the given ID an {@link IllegalArgumentException}
      * is thrown.
@@ -1569,7 +1624,7 @@ public final class Galimulator {
      */
     @NotNull
     public static Star lookupStar(int id) {
-        return impl.lookupStar(id);
+        return Galimulator.impl.lookupStar(id);
     }
 
     /**

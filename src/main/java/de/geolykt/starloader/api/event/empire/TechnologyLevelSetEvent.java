@@ -1,8 +1,10 @@
 package de.geolykt.starloader.api.event.empire;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.event.Cancellable;
 
 /**
@@ -13,12 +15,24 @@ public class TechnologyLevelSetEvent extends EmpireEvent implements Cancellable 
     /**
      * Cancellation flag. Use {@link Cancellable#setCancelled(boolean)} or
      * {@link Cancellable#isCancelled()} instead.
+     *
+     * @deprecated The fact that this field is exposed is a breach of several newer design principles.
+     * Use {@link #isCancelled()} or {@link #setCancelled(boolean)} instead.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
     protected boolean cancelled = false;
 
     /**
      * The proposed new technology level of the empire.
+     *
+     * @deprecated The fact that this field is exposed is a breach of several newer design principles.
+     * Use {@link #getNewLevel()} instead.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
     protected int level;
 
     /**
@@ -27,10 +41,27 @@ public class TechnologyLevelSetEvent extends EmpireEvent implements Cancellable 
      *
      * @param empire   The affected empire
      * @param newLevel The new technology level of the empire
+     * @deprecated Use {@link #TechnologyLevelSetEvent(Empire, int)} instead.
      */
-    public TechnologyLevelSetEvent(@NotNull ActiveEmpire empire, int newLevel) {
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    public TechnologyLevelSetEvent(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire empire, int newLevel) {
         super(empire);
-        level = newLevel;
+        this.level = newLevel;
+    }
+
+    /**
+     * Constructor. Mind that the level is capped between 1 and 999 in the base
+     * vanilla game.
+     *
+     * @param empire   The affected empire
+     * @param newLevel The new technology level of the empire
+     * @since 2.0.0
+     */
+    public TechnologyLevelSetEvent(@NotNull Empire empire, int newLevel) {
+        super(empire);
+        this.level = newLevel;
     }
 
     /**
@@ -40,12 +71,12 @@ public class TechnologyLevelSetEvent extends EmpireEvent implements Cancellable 
      * @return the new technology level
      */
     public int getNewLevel() {
-        return level;
+        return this.level;
     }
 
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        return this.cancelled;
     }
 
     @Override

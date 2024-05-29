@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.empire.Alliance;
-import de.geolykt.starloader.api.empire.Empire;
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
@@ -133,9 +132,13 @@ public class LineChart implements ScreenComponent {
         return 2.0F;
     }
 
-    protected @NotNull Color getColor(@NotNull Object o) {
-        if (o instanceof Empire) {
-            return ((Empire) o).getGDXColor();
+    @SuppressWarnings("deprecation")
+    @NotNull
+    protected Color getColor(@NotNull Object o) {
+        if (o instanceof de.geolykt.starloader.api.empire.Empire) {
+            return ((de.geolykt.starloader.api.empire.Empire) o).getGDXColor();
+        } else if (o instanceof de.geolykt.starloader.api.dimension.Empire) {
+            return ((de.geolykt.starloader.api.dimension.Empire) o).getGDXColor();
         } else if (o instanceof Alliance) {
             return ((Alliance) o).getGDXColor();
         } else {
@@ -147,22 +150,24 @@ public class LineChart implements ScreenComponent {
 
     @Override
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     @Override
-    public @NotNull LineWrappingInfo getLineWrappingInfo() {
-        return lwinfo;
+    @NotNull
+    public LineWrappingInfo getLineWrappingInfo() {
+        return this.lwinfo;
     }
 
     @Override
-    public @NotNull Screen getParentScreen() {
-        return parent;
+    @NotNull
+    public Screen getParentScreen() {
+        return this.parent;
     }
 
     @Override
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     @Override

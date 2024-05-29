@@ -168,6 +168,7 @@ public abstract class Registry<T> {
      * @return An immutable view of all keys
      * @since 2.0.0
      */
+    @SuppressWarnings("null") // realistically, noone should be subclassing NamespacedKey - right??
     @Contract(pure = true)
     @NotNull
     @UnmodifiableView

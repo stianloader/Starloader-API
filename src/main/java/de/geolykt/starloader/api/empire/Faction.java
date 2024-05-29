@@ -1,7 +1,9 @@
 package de.geolykt.starloader.api.empire;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.event.empire.factions.FactionRebelEvent;
 
 /**
@@ -11,6 +13,15 @@ import de.geolykt.starloader.api.event.empire.factions.FactionRebelEvent;
  *
  */
 public interface Faction extends Dateable {
+
+    /**
+     * Obtains the empire that is hosted by this faction.
+     *
+     * @return The faction's host empire.
+     * @since 2.0.0
+     */
+    @NotNull
+    public de.geolykt.starloader.api.dimension.@NotNull Empire getFactionHost();
 
     /**
      * Obtains the UID of the host empire.
@@ -23,15 +34,21 @@ public interface Faction extends Dateable {
      * Obtains the empire that is hosted by this faction.
      *
      * @return The faction's host empire.
+     * @deprecated The {@link ActiveEmpire} interface is scheduled for removal.
      */
-    public @NotNull ActiveEmpire getHostEmpire();
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @NotNull
+    public ActiveEmpire getHostEmpire();
 
     /**
      * Obtains the name of the faction.
      *
      * @return the name of the faction
      */
-    public @NotNull String getName();
+    @NotNull
+    public String getName();
 
     /**
      * Obtains the amount of stars owned by this faction.

@@ -1,8 +1,10 @@
 package de.geolykt.starloader.api.event.empire;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.event.Cancellable;
 
 /**
@@ -35,27 +37,34 @@ public class EmpireCollapseEvent extends EmpireEvent implements Cancellable {
     }
 
     private boolean cancelState = false;
-    protected @NotNull EmpireCollapseCause cause;
+    @NotNull
+    protected EmpireCollapseCause cause;
 
     /**
      * Constructor.
      *
-     * @param collapsedEmpire The empire that collapsed
-     * @param collapseCause   The cause of the collapse
+     * @param collapsedEmpire The empire that collapsed.
+     * @param collapseCause   The cause of the collapse.
+     * @deprecated Use {@link #EmpireCollapseEvent(Empire, EmpireCollapseCause)} instead,
      */
-    public EmpireCollapseEvent(@NotNull ActiveEmpire collapsedEmpire, @NotNull EmpireCollapseCause collapseCause) {
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @Deprecated
+    @DeprecatedSince("2.0.0")
+    public EmpireCollapseEvent(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire collapsedEmpire, @NotNull EmpireCollapseCause collapseCause) {
         super(collapsedEmpire);
-        cause = collapseCause;
+        this.cause = collapseCause;
     }
 
-    @Override
-    public boolean isCancelled() {
-        return cancelState;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        cancelState = cancelled;
+    /**
+     * Constructor.
+     *
+     * @param collapsedEmpire The empire that collapsed.
+     * @param collapseCause   The cause of the collapse.
+     * @since 2.0.0
+     */
+    public EmpireCollapseEvent(@NotNull Empire collapsedEmpire, @NotNull EmpireCollapseCause collapseCause) {
+        super(collapsedEmpire);
+        this.cause = collapseCause;
     }
 
     /**
@@ -63,7 +72,18 @@ public class EmpireCollapseEvent extends EmpireEvent implements Cancellable {
      *
      * @return The {@link EmpireCollapseCause} that is assigned to this event
      */
-    public @NotNull EmpireCollapseCause getCause() {
+    @NotNull
+    public EmpireCollapseCause getCause() {
         return cause;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancelState;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelState = cancelled;
     }
 }

@@ -1,11 +1,13 @@
 package de.geolykt.starloader.api.empire.people;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Dateable;
 
 /**
@@ -19,10 +21,10 @@ public interface DynastyMember extends Dateable, Identifiable {
      */
     @Override
     public default int getAge() {
-        if (hasDied()) {
-            return getDeathYear() - getFoundationYear();
+        if (this.hasDied()) {
+            return this.getDeathYear() - this.getFoundationYear();
         } else {
-            return Galimulator.getGameYear() - getFoundationYear();
+            return Galimulator.getGameYear() - this.getFoundationYear();
         }
     }
 
@@ -36,7 +38,7 @@ public interface DynastyMember extends Dateable, Identifiable {
      * @see #getAge()
      */
     public default int getBirthYear() {
-        return getFoundationYear();
+        return this.getFoundationYear();
     }
 
     /**
@@ -51,7 +53,8 @@ public interface DynastyMember extends Dateable, Identifiable {
      *
      * @return The cause of the death, or null if the member is not dead
      */
-    public @Nullable String getDeathReason();
+    @Nullable
+    public String getDeathReason();
 
     /**
      * Obtains the time of death in milliyears as specified by {@link Galimulator#getGameYear()}.
@@ -66,8 +69,13 @@ public interface DynastyMember extends Dateable, Identifiable {
      * After death this should return null, however it should not return null while the member is alive.
      *
      * @return The empire that employs this pawn
+     * @deprecated The {@link de.geolykt.starloader.api.empire.ActiveEmpire} interface is scheduled for removal.
      */
-    public @Nullable ActiveEmpire getEmpire();
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @Nullable
+    public de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getEmpire();
 
     /**
      * Obtains the full name of the member.
@@ -75,7 +83,8 @@ public interface DynastyMember extends Dateable, Identifiable {
      *
      * @return The full name of the dynasty member
      */
-    public @NotNull String getFullName();
+    @NotNull
+    public String getFullName();
 
     /**
      * Obtains the prestige of this member, which contributes to the merit of them which in turn helps them get better jobs.
@@ -84,6 +93,16 @@ public interface DynastyMember extends Dateable, Identifiable {
      * @return The prestige of the member
      */
     public float getPrestige();
+
+    /**
+     * Gets the empire in which the member is currently active in.
+     * After death this should return null, however it should not return null while the member is alive.
+     *
+     * @return The empire that employs this pawn
+     * @since 2.0.0
+     */
+    @Nullable
+    public Empire getResidenceEmpire();
 
     /**
      * Whether the member is no longer contributing to society.

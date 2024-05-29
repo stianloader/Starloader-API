@@ -22,6 +22,7 @@ import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.WeaponsManager;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
@@ -334,29 +335,24 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public @Nullable ActiveEmpire getEmpireByUID(int uid) {
-        return (ActiveEmpire) Space.e(uid);
+    @Deprecated
+    @Nullable
+    public de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getEmpireByUID(int uid) {
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) Space.e(uid);
     }
 
-    @SuppressWarnings({ "null" })
+    @SuppressWarnings("all")
     @Override
     @Deprecated
     @DeprecatedSince("2.0.0")
     @ScheduledForRemoval(inVersion = "3.0.0")
-    public @NotNull List<@NotNull ActiveEmpire> getEmpires() {
-        return getEmpiresUnsafe();
-    }
-
-    @SuppressWarnings("null")
-    @Override
-    @NotNull
-    public Collection<@NotNull ActiveEmpire> getEmpiresView() {
-        return Galimulator.getUniverse().getEmpiresView();
+    public @NotNull List<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getEmpires() {
+        return (Vector<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire>) (Vector<?>) this.getEmpiresUnsafe();
     }
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Vector<ActiveEmpire> getEmpiresUnsafe() {
+    public Vector<Empire> getEmpiresUnsafe() {
         return NullUtils.requireNotNull((Vector) Space.empires);
     }
 
@@ -388,8 +384,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     @NotNull
-    public ActiveEmpire getNeutralEmpire() {
-        return Galimulator.getUniverse().getNeutralEmpire();
+    @Deprecated
+    public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getNeutralEmpire() {
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) Galimulator.getUniverse().getNeutralEmpire();
     }
 
     @SuppressWarnings("rawtypes")
@@ -400,8 +397,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     @Nullable
-    public ActiveEmpire getPlayerEmpire() {
-        return Galimulator.getUniverse().getPlayerEmpire();
+    @Deprecated
+    public de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getPlayerEmpire() {
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) Galimulator.getUniverse().getPlayerEmpire();
     }
 
     @Override
@@ -760,7 +758,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void setEmpiresUnsafe(Vector<ActiveEmpire> empires) {
+    public void setEmpiresUnsafe(Vector<Empire> empires) {
         Space.empires = NullUtils.requireNotNull((Vector) empires);
     }
 
@@ -785,8 +783,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
-    public void setNeutralEmpire(@NotNull ActiveEmpire empire) {
-        Space.neutralEmpire = ExpectedObfuscatedValueException.requireEmpire(NullUtils.requireNotNull(empire));
+    @Deprecated
+    public void setNeutralEmpire(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire empire) {
+        Space.neutralEmpire = ExpectedObfuscatedValueException.requireEmpire((Empire) NullUtils.requireNotNull(empire));
     }
 
     @Override
@@ -876,5 +875,26 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
                 Space.j(var2);
             });
         }
+    }
+
+    @Override
+    public void setNeutralEmpire(@NotNull Empire empire) {
+        Space.neutralEmpire = (snoddasmannen.galimulator.Empire) empire;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Empire lookupEmpire(int uid) {
+        return (Empire) Space.e(uid);
+    }
+
+    @SuppressWarnings("all")
+    @Override
+    @NotNull
+    @Deprecated
+    public @UnmodifiableView Collection<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getEmpiresView() {
+        return (Collection<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire>) (Collection<?>)
+                Collections.unmodifiableCollection(Space.empires);
     }
 }

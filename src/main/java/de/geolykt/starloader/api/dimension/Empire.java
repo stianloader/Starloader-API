@@ -1,49 +1,41 @@
-package de.geolykt.starloader.api.empire;
+package de.geolykt.starloader.api.dimension;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
-import java.util.Vector;
 
-import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.Identifiable;
 import de.geolykt.starloader.api.InternalRandom;
 import de.geolykt.starloader.api.Metadatable;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.ActorFleet;
 import de.geolykt.starloader.api.actor.Flagship;
 import de.geolykt.starloader.api.actor.StateActor;
+import de.geolykt.starloader.api.empire.Alliance;
+import de.geolykt.starloader.api.empire.Dateable;
+import de.geolykt.starloader.api.empire.EmpireAchievement;
 import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
+import de.geolykt.starloader.api.empire.ShipCapacityModifier;
+import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.TickCallback;
 import de.geolykt.starloader.api.gui.FlagComponent;
 
 /**
- * Interface for any empire that is still in the game.
+ * Represents an empire which is resident under an unspecified dimension
+ * (most like {@link Galimulator#getUniverse()} for now).
  *
- * @deprecated Scheduled for removal; replaced by @link de.geolykt.starloader.api.dimension.Empire}.
- * Cause for this action is the fact that this {@link Empire} interface and the
- * {@link ActiveEmpire} interface may be easily confused for beginners. In the future,
- * only {@link de.geolykt.starloader.api.dimension.Empire} will exist, which represent
- * "alive" - that is non-collapsed - empires. Former empires will be represented under
- * an alternative name going forward. This action is ultimately rooted in the fact that
- * both {@link Empire} and {@link ActiveEmpire} were written before a lot of knowledge
- * about galimulator's internals was known. Combined with the fact that before galimulator
- * 4.8 many classes were obfuscated, this unfortunate naming blunder was created
- * due to erroneous application of OOP principles where it shouldn't have been applied.
+ * @since 2.0.0
  */
-public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
-
+public interface Empire extends Dateable, Identifiable, Metadatable, InternalRandom {
     /**
      * Assigns a {@link StateActor} to the empire.
      *
@@ -59,6 +51,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * to create a new savegame protocol that has such issues cleared.
      *
      * @param modifier The modifier to add
+     * @since 2.0.0
      */
     public void addCapacityModifier(@NotNull ShipCapacityModifier modifier);
 
@@ -67,12 +60,13 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * {@link IllegalArgumentException} if the key is not registered under it's
      * respective registry. Furthermore the implementation should do nothing if the
      * special is already assigned. This method should return false if
-     * {@link ActiveEmpire#hasSpecial(NamespacedKey)} returns true. Additionally it
+     * {@link Empire#hasSpecial(NamespacedKey)} returns true. Additionally it
      * should return false if the event that added the special was cancelled.
      *
      * @param empireSpecial The registry key of the special.
      * @param force         Whether to suppress the events that are fired otherwise
-     * @return Whether the special was really removed.
+     * @return Whether the special was really added.
+     * @since 2.0.0
      */
     public boolean addSpecial(@NotNull NamespacedKey empireSpecial, boolean force);
 
@@ -81,8 +75,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * whenever the empire is ticked.
      *
      * @param callback The callback to add
+     * @since 2.0.0
      */
-    public void addTickCallback(TickCallback<ActiveEmpire> callback);
+    public void withTickCallback(TickCallback<Empire> callback);
 
     /**
      * Adds an achievement to the internal list of achievements, provided the achievement
@@ -103,6 +98,20 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public void awardAchievement(@NotNull NamespacedKey achievementKey);
 
     /**
+     * Creates an offspring empire at the given star.
+     * The specified star will not be used for any operations, however is required
+     * and marked as not null for futureproofing. This means that the returned
+     * empire will <b>not</b> own any stars at the beginning.
+     * The offspring empire will consider this {@link Empire} instance as it's parent empire.
+     *
+     * @param location The location of the empire.
+     * @return the newly created offspring empire
+     * @since 2.0.0
+     */
+    @NotNull
+    public Empire createChild(@NotNull Star location);
+
+    /**
      * Decreases the technology level by one, however creates the appropriate events
      * beforehand and checks whether they have been cancelled or not. Depending on
      * the parameters the player can be notified about the event and the event may
@@ -115,6 +124,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *               in a more natural manner
      * @param force  Whether to suppress the events that are fired otherwise
      * @return False if the event got cancelled or if the technology level is at 1
+     * @since 2.0.0
      */
     public boolean decreaseTechnologyLevel(boolean notify, boolean force);
 
@@ -142,10 +152,23 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public Collection<StateActor> getActors();
 
     /**
+     * The age of an empire is counted in years and ceases to stop increasing once
+     * the empire has collapsed.
+     *
+     * @return The age of the empire
+     * @since 2.0.0
+     */
+    @Override
+    public default int getAge() {
+        return (this.hasCollapsed() ? this.getCollapseYear() : Galimulator.getGameYear()) - this.getFoundationYear();
+    }
+
+    /**
      * Obtains the wrapper representation of the Alliance the empire currently is
      * in.
      *
      * @return The Alliance the empire currently is in, or null if not applicable
+     * @since 2.0.0
      */
     @Nullable
     public Alliance getAlliance();
@@ -155,6 +178,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * The modded modifiers are <strong>not</strong> accounted for in this calculation.
      *
      * @return The amount of ships the empire is allowed to build, <strong>without</strong> modded modifiers
+     * @since 2.0.0
      */
     public double getBaseShipCapacity();
 
@@ -163,6 +187,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * The returned list should be a shallow clone from the standard one, though the order should be kept.
      *
      * @return A list of currently present modifiers
+     * @since 2.0.0
      */
     @NotNull
     public List<ShipCapacityModifier> getCapcityModifiers();
@@ -197,6 +222,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * This almost always points to a star that is owned by this empire
      *
      * @return The X coordinate of the capital
+     * @since 2.0.0
      */
     public float getCapitalX(); // FIXME This method is probably named incorrectly and should be named "getHQX()" if it is indeed misleadingly named
 
@@ -205,8 +231,22 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * This almost always points to a star that is owned by this empire
      *
      * @return The Y coordinate of the capital
+     * @since 2.0.0
      */
     public float getCapitalY(); // FIXME This method is probably named incorrectly and should be named "getHQY()" if it is indeed misleadingly named
+
+    /**
+     * The year the empire collapsed, or -1 if the empire did not collapse.
+     *
+     * <p>Internally, galimulator terms collapsed empires as being dead or not alive.
+     * The term 'collapsed' as used by SLAPI is used for historical reasons and was coined
+     * before in-depth knowledge of the game was present. However, both terms refer
+     * to the same thing.
+     *
+     * @return the year of collapse
+     * @since 2.0.0
+     */
+    public int getCollapseYear();
 
     /**
      * Obtains the name of the empire with color. The format of the colored string
@@ -215,6 +255,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @return A formatted string the is the colored name of the empire.
      * @see #getGDXColor()
+     * @since 2.0.0
      */
     @NotNull
     public default String getColoredName() {
@@ -224,9 +265,19 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     }
 
     /**
+     * The name of the empire without any colors.
+     *
+     * @return A String that contains the empire's name
+     * @since 2.0.0
+     */
+    @NotNull
+    public String getEmpireName();
+
+    /**
      * Obtains the components that make up the flag of the empire.
      *
      * @return The flag.
+     * @since 2.0.0
      */
     @NotNull
     public Collection<? extends FlagComponent> getFlag();
@@ -254,17 +305,29 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
     public Collection<ActorFleet> getFleets();
 
     /**
+     * The empire color is used for multiple interfaces as well as to paint the
+     * territory of an empire to a constant color, the color as such should not
+     * change without reason to not confuse the user.
+     *
+     * @return The GDX {@link Color} assigned to the empire
+     * @since 2.0.0
+     */
+    @NotNull
+    public Color getGDXColor();
+
+    /**
      * Obtains the motto of the empire. This is purely something for the User and
      * has no significant effect on the simulation
      *
      * @return The motto of the empire
+     * @since 2.0.0
      */
     @NotNull
     public String getMotto();
 
     /**
      * Obtains the UID (as per {@link Identifiable#getUID()}) of the parent empire.
-     * The parent empire is the ancestral empire that "spawned" (as per {@link #spawnOffspring(Star)}) this empire.
+     * The parent empire is the ancestral empire that "spawned" (as per {@link #createChild(Star)}) this empire.
      *
      * <p>Returns -1 if this is the neutral empire or if for some other reason there is no such parent empire.
      *
@@ -280,6 +343,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * This method returns a clone.
      *
      * @return The stars that were recently lost.
+     * @since 2.0.0
      */
     @NotNull
     public Collection<Star> getRecentlyLostStars();
@@ -301,25 +365,18 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * The modded modifiers are accounted for in this calculation.
      *
      * @return The amount of ships the empire is allowed to build, <strong>with</strong> modded modifiers
+     * @since 2.0.0
      */
     public double getShipCapacity();
 
     /**
-     * Obtains the {@link Vector} of the {@link Actor Actors} that are
-     * currently assigned to the empire. The list is backing the internal actor
-     * list, which is why it should NOT be modified directly. Use
-     * {@link #addActor(StateActor)} or {@link #removeActor(StateActor)} instead.
+     * Obtains the total star count of the empire. Should never be negative. For
+     * collapsed empires this should return 0.
      *
-     * @return A {@link Vector} of the {@link Actor Actors} that are
-     *         assigned to the empire.
-     * @deprecated This method violates several design choices that
-     * are now commonly used. Use {@link #getActors()} instead.
+     * @return The current total star count
+     * @since 2.0.0
      */
-    @ScheduledForRemoval(inVersion = "3.0.0")
-    @DeprecatedSince("2.0.0")
-    @Deprecated
-    @NotNull
-    public Vector<Actor> getSLActors();
+    public int getStarCount();
 
     /**
      * Obtains the registry key of the current state of the empire. To obtain the
@@ -327,6 +384,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * first.
      *
      * @return A {@link NamespacedKey} representing the current state of the empire.
+     * @since 2.0.0
      */
     public @NotNull NamespacedKey getState();
 
@@ -335,6 +393,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * have some issues there and this event does not occur naturally.
      *
      * @return The current technology level
+     * @since 2.0.0
      */
     public int getTechnologyLevel();
 
@@ -342,8 +401,23 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * Obtains the average wealth of all stars within the empire.
      *
      * @return The wealth of the empire
+     * @since 2.0.0
      */
     public float getWealth();
+
+    /**
+     * Empires are usually not in the collapse state, however sometimes this is
+     * true, albeit rare.
+     *
+     * <p>Internally, galimulator terms collapsed empires as being dead or not alive.
+     * The term 'collapsed' as used by SLAPI is used for historical reasons and was coined
+     * before in-depth knowledge of the game was present. However, both terms refer
+     * to the same thing.
+     *
+     * @return true if the empire ceased to exist
+     * @since 2.0.0
+     */
+    public boolean hasCollapsed();
 
     /**
      * Obtains whether the given empire special is assigned to this empire. The
@@ -352,6 +426,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *
      * @param empireSpecial The registry key of the special.
      * @return True if the special is assigned to the empire, false otherwise
+     * @since 2.0.0
      */
     public boolean hasSpecial(@NotNull NamespacedKey empireSpecial);
 
@@ -366,6 +441,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      *               in a more natural manner
      * @param force  Whether to suppress the events that are fired otherwise
      * @return False if the event got cancelled
+     * @since 2.0.0
      */
     public boolean increaseTechnologyLevel(boolean notify, boolean force);
 
@@ -383,6 +459,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * operation should fail silently.
      *
      * @param modifier The modifier to remove
+     * @since 2.0.0
      */
     public void removeCapacityModifier(@NotNull ShipCapacityModifier modifier);
 
@@ -390,12 +467,13 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * Removes a special to the empire. The implementation of the method may throw a
      * {@link IllegalArgumentException} if the key is not registered under it's
      * respective registry. This method should return false if
-     * {@link ActiveEmpire#hasSpecial(NamespacedKey)} returns false. Additionally it
+     * {@link Empire#hasSpecial(NamespacedKey)} returns false. Additionally it
      * should return false if the event that added the special was cancelled.
      *
      * @param empireSpecial The registry key of the special.
      * @param force         Whether to suppress the events that are fired otherwise
      * @return Whether the special was really removed.
+     * @since 2.0.0
      */
     public boolean removeSpecial(@NotNull NamespacedKey empireSpecial, boolean force);
 
@@ -403,8 +481,9 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * Sets the alliance that the empire is an owner in.
      *
      * @param alliance The Alliance the empire should join, or null if not applicable
-     * @implNote {@link Alliance#addMember(ActiveEmpire)} should also be called in most cases
+     * @implNote {@link Alliance#addMember(Empire)} should also be called in most cases
      * as the change will otherwise not be propagated to the fullest.
+     * @since 2.0.0
      */
     public void setAlliance(@Nullable Alliance alliance);
 
@@ -413,6 +492,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * and has no real effect on the simulation.
      *
      * @param motto The new motto for the empire
+     * @since 2.0.0
      */
     public void setMotto(@NotNull String motto);
 
@@ -423,6 +503,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * The method does not clone anything.
      *
      * @param stars The stars to set as the most recently lost stars.
+     * @since 2.0.0
      */
     public void setRecentlyLostStars(@NotNull Deque<Star> stars);
 
@@ -448,18 +529,7 @@ public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
      * @param force If true no events will be called and the action is more likely
      *              to happen
      * @return Whether the state was changed
+     * @since 2.0.0
      */
     public boolean setState(@NotNull NamespacedKey state, boolean force);
-
-    /**
-     * Spawns an offspring empire at the given star.
-     * The specified star will not be used for any operations, however is required
-     * and marked as not null for futureproofing. This means that the returned
-     * empire will <b>not</b> own any stars at the beginning.
-     * The offspring empire will consider this {@link ActiveEmpire} instance as it's parent empire.
-     *
-     * @param location The location of the empire.
-     * @return the newly created offspring empire
-     */
-    public @NotNull ActiveEmpire spawnOffspring(@NotNull Star location);
 }

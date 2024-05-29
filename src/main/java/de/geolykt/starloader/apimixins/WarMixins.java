@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.War;
 
 import snoddasmannen.galimulator.Lazy;
@@ -19,6 +19,12 @@ public class WarMixins implements War {
     int conqueredStarBalance;
 
     @Shadow
+    Lazy.EmpireLazy e1;
+
+    @Shadow
+    Lazy.EmpireLazy e2;
+
+    @Shadow
     int lastAction;
 
     @Shadow
@@ -27,58 +33,74 @@ public class WarMixins implements War {
     @Shadow
     int startYear;
 
-    @Shadow
-    Lazy.EmpireLazy e1;
-
-    @Shadow
-    Lazy.EmpireLazy e2;
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    @Deprecated
+    public Collection<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getAggressorParty() {
+        return Collections.singleton((de.geolykt.starloader.api.empire.@NotNull ActiveEmpire) this.e1.get());
+    }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
-    public Collection<@NotNull ActiveEmpire> getAggressorParty() {
-        return Collections.singleton((ActiveEmpire) this.e1.get());
+    public Collection<@NotNull Empire> getAggressors() {
+        return Collections.singleton((Empire) this.e1.get());
     }
 
     @Override
     public int getDateOfLastAction() {
-        return lastAction;
+        return this.lastAction;
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
-    public Collection<@NotNull ActiveEmpire> getDefenderParty() {
-        return Collections.singleton((ActiveEmpire) this.e2.get());
+    @Deprecated
+    public Collection<de.geolykt.starloader.api.empire.@NotNull ActiveEmpire> getDefenderParty() {
+        return Collections.singleton((de.geolykt.starloader.api.empire.@NotNull ActiveEmpire) this.e2.get());
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Collection<@NotNull Empire> getDefenders() {
+        return Collections.singleton((Empire) this.e2.get());
     }
 
     @Override
     public int getDestroyedShips() {
-        return shipsDestroyed;
+        return this.shipsDestroyed;
     }
 
     @Override
     public int getStarDelta() {
-        return conqueredStarBalance;
+        return this.conqueredStarBalance;
     }
 
     @Override
     public int getStartDate() {
-        return startYear;
+        return this.startYear;
     }
 
     @Override
     public void noteShipDestruction() {
-        shipsDestroyed++;
+        this.shipsDestroyed++;
     }
 
     @Override
-    public void noteStarChange(@NotNull ActiveEmpire empire) throws IllegalArgumentException {
+    @Deprecated
+    public void noteStarChange(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire empire) throws IllegalArgumentException {
+        this.noteStarChange((Empire) empire);
+    }
+
+    @Override
+    public void noteStarChange(@NotNull Empire empire) throws IllegalArgumentException {
         int uid = empire.getUID();
         if (((snoddasmannen.galimulator.War) (Object) this).e1.get_id() == uid) {
-            conqueredStarBalance++;
+            this.conqueredStarBalance++;
         } else if (((snoddasmannen.galimulator.War) (Object) this).e2.get_id() == uid) {
-            conqueredStarBalance--;
+            this.conqueredStarBalance--;
         } else {
             throw new IllegalArgumentException("The given empire matches no participant.");
         }
@@ -86,11 +108,11 @@ public class WarMixins implements War {
 
     @Override
     public void setDestroyedShips(int count) {
-        shipsDestroyed = count;
+        this.shipsDestroyed = count;
     }
 
     @Override
     public void setStarDelta(int count) {
-        conqueredStarBalance = count;
+        this.conqueredStarBalance = count;
     }
 }

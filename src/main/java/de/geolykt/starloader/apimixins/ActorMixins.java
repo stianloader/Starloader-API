@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.Weapon;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
 
 import snoddasmannen.galimulator.Empire;
 import snoddasmannen.galimulator.actors.StateActor;
@@ -74,12 +74,21 @@ public abstract class ActorMixins implements Actor {
     @Shadow
     @NotNull
     public Empire getOwner() {
-        return (Empire) Galimulator.getNeutralEmpire();
+        return (Empire) Galimulator.getUniverse().getNeutralEmpire();
     }
 
     @Override
-    public @NotNull ActiveEmpire getOwningEmpire() {
-        return (ActiveEmpire) getOwner(); // Only state actors can be owned by non-neutral empires.
+    @NotNull
+    @Deprecated
+    public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getOwningEmpire() {
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) this.getOwner(); // Only state actors can be owned by non-neutral empires.
+    }
+
+    @NotNull
+    @Unique
+    @Override
+    public de.geolykt.starloader.api.dimension.@NotNull Empire getEmpire() {
+        return (de.geolykt.starloader.api.dimension.Empire) this.getOwner();
     }
 
     @SuppressWarnings("null")

@@ -2,8 +2,10 @@ package de.geolykt.starloader.api.event.empire;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.player.DiplomacyRequest;
 
 /**
@@ -14,10 +16,33 @@ import de.geolykt.starloader.api.player.DiplomacyRequest;
  */
 public class DiplomacyRequestEvent extends EmpireEvent {
 
+    @NotNull
     private final DiplomacyRequest request;
     private String response = null;
 
-    public DiplomacyRequestEvent(@NotNull ActiveEmpire target, @NotNull DiplomacyRequest request) {
+    /**
+     * Constructor.
+     *
+     * @param target The empire affected by this event.
+     * @param request The request that needs to be handled.
+     * @deprecated Use {@link #DiplomacyRequestEvent(Empire, DiplomacyRequest)} instead
+     */
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @Deprecated
+    @DeprecatedSince("2.0.0")
+    public DiplomacyRequestEvent(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire target, @NotNull DiplomacyRequest request) {
+        super(target);
+        this.request = request;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param target The empire affected by this event.
+     * @param request The request that needs to be handled.
+     * @since 2.0.0
+     */
+    public DiplomacyRequestEvent(@NotNull Empire target, @NotNull DiplomacyRequest request) {
         super(target);
         this.request = request;
     }
@@ -28,8 +53,9 @@ public class DiplomacyRequestEvent extends EmpireEvent {
      *
      * @return The instance of {@link DiplomacyRequest} that triggered the event.
      */
+    @NotNull
     public final DiplomacyRequest getRequest() {
-        return request;
+        return this.request;
     }
 
     /**
@@ -38,8 +64,9 @@ public class DiplomacyRequestEvent extends EmpireEvent {
      *
      * @return The response from the action.
      */
-    public @Nullable String getResponse() {
-        return response;
+    @Nullable
+    public String getResponse() {
+        return this.response;
     }
 
     /**

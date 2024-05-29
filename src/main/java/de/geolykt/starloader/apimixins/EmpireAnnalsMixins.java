@@ -5,13 +5,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Empire;
 
 import snoddasmannen.galimulator.EmpireAnnals;
 import snoddasmannen.galimulator.GalColor;
 
 @Mixin(snoddasmannen.galimulator.EmpireAnnals.class)
+@Deprecated
 public class EmpireAnnalsMixins implements Empire {
 
     @Shadow
@@ -34,18 +34,18 @@ public class EmpireAnnalsMixins implements Empire {
 
     @Override
     public int getCollapseYear() {
-        return deathYear;
+        return this.deathYear;
     }
 
     @SuppressWarnings("null")
     @Override
     public @NotNull String getEmpireName() {
-        return name;
+        return this.name;
     }
 
     @Override
     public int getFoundationYear() {
-        return birthYear;
+        return this.birthYear;
     }
 
     @SuppressWarnings("null")
@@ -56,19 +56,15 @@ public class EmpireAnnalsMixins implements Empire {
 
     @Override
     public int getStarCount() {
-        if (deathYear != -1) {
+        if (this.deathYear != -1) {
             return 0;
         }
-        ActiveEmpire slempire = Galimulator.getEmpireByUID(getUID());
-        if (slempire == null) {
-            throw new IllegalStateException("The empire no longer exists even though it should be existing");
-        }
-        return slempire.getStarCount();
+        return Galimulator.lookupEmpire(this.getUID()).getStarCount();
     }
 
     @Override
     public int getUID() {
-        return empireId;
+        return this.empireId;
     }
 
     @Override

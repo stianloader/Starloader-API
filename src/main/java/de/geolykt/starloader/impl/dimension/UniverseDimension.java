@@ -12,7 +12,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import com.badlogic.gdx.math.Rectangle;
 
 import de.geolykt.starloader.api.dimension.Dimension;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Star;
 
 import snoddasmannen.galimulator.Space;
@@ -34,8 +34,8 @@ public class UniverseDimension implements Dimension {
     @Override
     @NotNull
     @UnmodifiableView
-    public Collection<@NotNull ActiveEmpire> getEmpiresView() {
-        return Collections.unmodifiableCollection((Collection<ActiveEmpire>) (Collection<?>) Space.empires);
+    public Collection<@NotNull Empire> getEmpiresView() {
+        return Collections.unmodifiableCollection((Collection<Empire>) (Collection<?>) Space.empires);
     }
 
     @Override
@@ -47,20 +47,20 @@ public class UniverseDimension implements Dimension {
     @Override
     @NotNull
     @SuppressWarnings("null")
-    public ActiveEmpire getNeutralEmpire() {
-        return (ActiveEmpire) Space.neutralEmpire;
+    public Empire getNeutralEmpire() {
+        return (Empire) Space.neutralEmpire;
     }
 
     @Override
     @Nullable
-    public ActiveEmpire getPlayerEmpire() {
+    public Empire getPlayerEmpire() {
         snoddasmannen.galimulator.Player player = Space.getPlayer();
         if (player == null) {
             // It likely can never be null, however before the map is generated,
             // this might return null, so we are going to make sure just in case.
             return null;
         }
-        return (ActiveEmpire) player.getEmpire();
+        return (Empire) player.getEmpire();
     }
 
     @Override

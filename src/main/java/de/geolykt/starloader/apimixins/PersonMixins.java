@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 
 import snoddasmannen.galimulator.Job;
@@ -52,18 +52,20 @@ public class PersonMixins implements DynastyMember {
      * @return Basically the current instance type-casted to Person.
      */
     @Unique
-    private final @NotNull Person asGalimulatorPerson() {
+    @NotNull
+    private final Person asGalimulatorPerson() {
         return (Person) (Object) this;
     }
 
     @Override
     public int getChildrenCount() {
-        return childCount;
+        return this.childCount;
     }
 
     @Override
-    public @Nullable String getDeathReason() {
-        return causeOfDeath;
+    @Nullable
+    public String getDeathReason() {
+        return this.causeOfDeath;
     }
 
     @Override
@@ -72,20 +74,15 @@ public class PersonMixins implements DynastyMember {
     }
 
     @Override
-    public @Nullable ActiveEmpire getEmpire() {
-        if (alive) {
-            if (job.getEmployer() == null) {
-                return null; // this does not make much sense ... why would a job have no employer? But I am sure I coded that check for a reason.
-            }
-            return (@Nullable ActiveEmpire) job.getEmployer().getJobEmpire();
-        } else {
-            return null;
-        }
+    @Nullable
+    @Deprecated
+    public de.geolykt.starloader.api.empire.@Nullable ActiveEmpire getEmpire() {
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) this.getResidenceEmpire();
     }
 
     @Override
     public int getFoundationYear() {
-        return birthMilliYear;
+        return this.birthMilliYear;
     }
 
     @Override
@@ -100,22 +97,35 @@ public class PersonMixins implements DynastyMember {
     }
 
     @Override
+    @Nullable
+    public Empire getResidenceEmpire() {
+        if (this.alive) {
+            if (this.job.getEmployer() == null) {
+                return null; // this does not make much sense ... why would a job have no employer? But I am sure I coded that check for a reason.
+            }
+            return (Empire) this.job.getEmployer().getJobEmpire();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public int getUID() {
-        return asGalimulatorPerson().id;
+        return this.asGalimulatorPerson().id;
     }
 
     @Override
     public boolean hasDied() {
-        return !alive;
+        return !this.alive;
     }
 
     @Override
     public boolean isFollowed() {
-        return isFollowed;
+        return this.isFollowed;
     }
 
     @Override
     public void setFollowed(boolean followed) {
-        isFollowed = followed;
+        this.isFollowed = followed;
     }
 }

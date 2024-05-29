@@ -76,8 +76,23 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @param newOwner The {@link ActiveEmpire} that should be the new owner of the
      *                 star
      * @return False if nothing happened (for example due to cancellation)
+     * @deprecated The {@link ActiveEmpire} interface is scheduled for removal.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
     public boolean doTakeover(@NotNull ActiveEmpire newOwner);
+
+    /**
+     * Performs a takeover of the star by an empire. The takeover may
+     * be deadly and as such cause many deaths, however it might also get cancelled
+     * by an event listener.
+     *
+     * @param newOwner The empire that should be the new owner of the star
+     * @return False if nothing happened (for example due to cancellation)
+     * @since 2.0.0
+     */
+    public boolean doTakeover(@NotNull de.geolykt.starloader.api.dimension.@NotNull Empire newOwner);
 
     /**
      * Gets the empire that is said to have control over the star. This may also be
@@ -85,7 +100,11 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * that inform the empire about this change.
      *
      * @return The {@link ActiveEmpire} that controls the star
+     * @deprecated The {@link ActiveEmpire} interface is scheduled for removal.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
     public @NotNull ActiveEmpire getAssignedEmpire();
 
     /**
@@ -108,6 +127,17 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      */
     @NotNull
     public Vector2 getCoordinates();
+
+    /**
+     * Gets the empire that is said to have control over the star. This may also be
+     * the neutral (unaffiliated) empire. Also automatically invokes the methods
+     * that inform the empire about this change.
+     *
+     * @return The empire that controls the star
+     * @since 2.0.0
+     */
+    @NotNull
+    public de.geolykt.starloader.api.dimension.@NotNull Empire getEmpire();
 
     /**
      * returns the faction that is currently controlling the star or null if not applicable (i. e. the star is not
@@ -317,8 +347,34 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * the ownership forcefully and will not trigger any events (yet).
      *
      * @param empire The {@link ActiveEmpire} controlling the star
+     * @deprecated The {@link ActiveEmpire} interface is scheduled for removal.
      */
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
     public void setAssignedEmpire(@NotNull ActiveEmpire empire);
+
+    /**
+     * Sets the empire that is said to have control over the star This method sets
+     * the ownership forcefully and will not trigger any events (yet).
+     *
+     * <p>This method is an alias for {@link #setEmpire(de.geolykt.starloader.api.dimension.Empire)}.
+     *
+     * @param empire The empire controlling the star
+     * @since 2.0.0
+     */
+    public default void setAssignedEmpire(@NotNull de.geolykt.starloader.api.dimension.@NotNull Empire empire) {
+        this.setEmpire(empire);
+    }
+
+    /**
+     * Sets the empire that is said to have control over the star This method sets
+     * the ownership forcefully and will not trigger any events (yet).
+     *
+     * @param empire The empire controlling the star
+     * @since 2.0.0
+     */
+    public void setEmpire(@NotNull de.geolykt.starloader.api.dimension.@NotNull Empire empire);
 
     /**
      * Sets the faction that would be controlling this star. Can be set to null in order to remove faction

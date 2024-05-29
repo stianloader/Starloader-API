@@ -29,7 +29,7 @@ import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.ActorFleet;
 import de.geolykt.starloader.api.actor.Flagship;
 import de.geolykt.starloader.api.actor.StateActor;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.EmpireAchievement;
 import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
@@ -38,12 +38,10 @@ import de.geolykt.starloader.api.empire.ShipCapacityModifier.Type;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.TickCallback;
-import de.geolykt.starloader.api.event.empire.EmpireRiotingEvent;
 import de.geolykt.starloader.api.event.empire.EmpireSpecialAddEvent;
 import de.geolykt.starloader.api.event.empire.EmpireSpecialRemoveEvent;
 import de.geolykt.starloader.api.event.empire.EmpireStabiliseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireStateChangeEvent;
-import de.geolykt.starloader.api.event.empire.EmpireTranscendEvent;
 import de.geolykt.starloader.api.event.empire.TechnologyLevelDecreaseEvent;
 import de.geolykt.starloader.api.event.empire.TechnologyLevelIncreaseEvent;
 import de.geolykt.starloader.api.event.empire.TechnologyLevelSetEvent;
@@ -66,7 +64,7 @@ import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.class_43;
 
 @Mixin(snoddasmannen.galimulator.Empire.class)
-public class EmpireMixins implements ActiveEmpire {
+public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpire, de.geolykt.starloader.api.dimension.Empire {
 
     @Shadow
     private Vector<EmpireAchievement> achievements;
@@ -149,7 +147,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Shadow
     private int techLevel; // technologyLevel
 
-    private transient List<TickCallback<ActiveEmpire>> tickCallbacks;
+    private transient List<TickCallback<de.geolykt.starloader.api.dimension.Empire>> tickCallbacks;
 
     @Overwrite
     public void a(final EmpireState state) { // setState
@@ -166,6 +164,11 @@ public class EmpireMixins implements ActiveEmpire {
      */
     @Shadow
     public void a(snoddasmannen.galimulator.actors.StateActor var0) { // addActor
+    }
+
+    @Overwrite
+    public void aa() { // advance
+        increaseTechnologyLevel(true, false);
     }
 
     @Overwrite
@@ -197,7 +200,7 @@ public class EmpireMixins implements ActiveEmpire {
             return false;
         }
         if (!force) {
-            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this, empireSpecial);
+            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent((Empire) this, empireSpecial);
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
                 return false;
@@ -206,12 +209,14 @@ public class EmpireMixins implements ActiveEmpire {
         return specials.add(special);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void addTickCallback(TickCallback<ActiveEmpire> callback) {
-        if (tickCallbacks == null) {
-            tickCallbacks = new ArrayList<>();
+    @Deprecated
+    public void addTickCallback(TickCallback<de.geolykt.starloader.api.empire.ActiveEmpire> callback) {
+        if (this.tickCallbacks == null) {
+            this.tickCallbacks = new ArrayList<>();
         }
-        tickCallbacks.add(callback);
+        this.tickCallbacks.add((TickCallback<de.geolykt.starloader.api.dimension.Empire>) (TickCallback<?>) callback);
     }
 
     @Inject(method = "getCurrentShipCapacity()D", at = @At("TAIL"))
@@ -280,21 +285,12 @@ public class EmpireMixins implements ActiveEmpire {
         return;
     }
 
-    @Shadow
-    private void bc() { // Reset bonuses
-        /*
-         * this.specialsAttackBonus = null; this.specialsDefenseBonus = null;
-         * this.specialsTechBonus = null; this.specialsIndustryBonus = null;
-         * this.specialsStabilityBonus = null; this.specialsPeacefulBonus = null;
-         */
-    }
-
     @Overwrite
     public void b(final EmpireSpecial empireSpecial) { // removeSpecial
         if (!this.specials.contains(empireSpecial)) {
             return;
         }
-        EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent(this,
+        EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent((Empire) this,
                 ((RegistryKeyed) empireSpecial).getRegistryKey());
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
@@ -310,6 +306,15 @@ public class EmpireMixins implements ActiveEmpire {
      */
     @Shadow
     public void b(snoddasmannen.galimulator.actors.StateActor var0) { // removeActor
+    }
+
+    @Shadow
+    private void bc() { // Reset bonuses
+        /*
+         * this.specialsAttackBonus = null; this.specialsDefenseBonus = null;
+         * this.specialsTechBonus = null; this.specialsIndustryBonus = null;
+         * this.specialsStabilityBonus = null; this.specialsPeacefulBonus = null;
+         */
     }
 
     /**
@@ -329,7 +334,7 @@ public class EmpireMixins implements ActiveEmpire {
     @SuppressWarnings("unchecked")
     public void c(final EmpireSpecial empireSpecial) { // addSpecial
         if (!this.specials.contains(empireSpecial)) {
-            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent(this,
+            EmpireSpecialAddEvent event = new EmpireSpecialAddEvent((Empire) this,
                     ((RegistryKeyed) empireSpecial).getRegistryKey());
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
@@ -342,25 +347,32 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
+    @NotNull
+    public de.geolykt.starloader.api.dimension.@NotNull Empire createChild(@NotNull Star location) {
+        snoddasmannen.galimulator.Star star = (snoddasmannen.galimulator.Star) location;
+        return (Empire) NullUtils.requireNotNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
+    }
+
+    @Override
     public boolean decreaseTechnologyLevel(boolean notify, boolean force) {
         if (getTechnologyLevel() <= 1) {
             return false;
         }
 
         if (!force) {
-            TechnologyLevelDecreaseEvent event = new TechnologyLevelDecreaseEvent(this);
+            TechnologyLevelDecreaseEvent event = new TechnologyLevelDecreaseEvent((Empire) this);
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
                 return false;
             }
         }
 
-        techLevel--;
-        lastResearchedYear = Galimulator.getGameYear();
+        this.techLevel--;
+        this.lastResearchedYear = Galimulator.getGameYear();
         GameConfiguration config = Galimulator.getConfiguration();
-        if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
+        if (config.allowTranscendence() && this.techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
-                if (notify && Galimulator.getPlayerEmpire() == this) {
+                if (notify && Galimulator.getUniverse().getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_43.b().a("transcending"))).show();
                 }
             }
@@ -370,7 +382,7 @@ public class EmpireMixins implements ActiveEmpire {
         }
 
         broadcastNews("Has degenerated, now tech level: " + getTechnologyLevel());
-        if (this == Galimulator.getPlayerEmpire()) {
+        if (this == Galimulator.getUniverse().getPlayerEmpire()) {
             new BasicDialogBuilder("Technologicy lost", "You have degenerated to tech level: " + this.techLevel
                     + ". You kindly ask your scientists to make back-ups next time.").show();
         }
@@ -394,6 +406,11 @@ public class EmpireMixins implements ActiveEmpire {
     @NotNull
     public Collection<StateActor> getActors() {
         return Collections.unmodifiableCollection(agents);
+    }
+
+    @Override
+    public int getAge() {
+        return de.geolykt.starloader.api.dimension.Empire.super.getAge();
     }
 
     @Override
@@ -441,6 +458,12 @@ public class EmpireMixins implements ActiveEmpire {
         return deathYear;
     }
 
+    @Override
+    @NotNull
+    public String getColoredName() {
+        return de.geolykt.starloader.api.dimension.Empire.super.getColoredName();
+    }
+
     @SuppressWarnings("null")
     @Override
     public @NotNull String getEmpireName() {
@@ -456,7 +479,7 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public Flagship getFlagship() {
-        return (Flagship) flagship;
+        return (Flagship) this.flagship;
     }
 
     @SuppressWarnings({ "unchecked", "null" })
@@ -582,24 +605,24 @@ public class EmpireMixins implements ActiveEmpire {
 
     @Override
     public boolean increaseTechnologyLevel(boolean notify, boolean force) {
-        if (techLevel >= 999) { // implementation is capped there
+        if (this.techLevel >= 999) { // implementation is capped there
             return false;
         }
 
         if (!force) {
-            TechnologyLevelIncreaseEvent event = new TechnologyLevelIncreaseEvent(this);
+            TechnologyLevelIncreaseEvent event = new TechnologyLevelIncreaseEvent((Empire) this);
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
                 return false;
             }
         }
 
-        techLevel++;
-        lastResearchedYear = Galimulator.getGameYear();
+        this.techLevel++;
+        this.lastResearchedYear = Galimulator.getGameYear();
         GameConfiguration config = Galimulator.getConfiguration();
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
-                if (notify && Galimulator.getPlayerEmpire() == this) {
+                if (notify && Galimulator.getUniverse().getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_43.b().a("transcending"))).show();
                 }
             }
@@ -608,13 +631,18 @@ public class EmpireMixins implements ActiveEmpire {
             return true;
         }
 
-        broadcastNews("Has advanced, now tech level: " + getTechnologyLevel());
-        awardAchievement(RegistryKeys.GALIMULATOR_ACHIEVEMENT_RESEARCHED);
-        if (Galimulator.getPlayerEmpire() == this) {
+        this.broadcastNews("Has advanced, now tech level: " + getTechnologyLevel());
+        this.awardAchievement(RegistryKeys.GALIMULATOR_ACHIEVEMENT_RESEARCHED);
+        if (Galimulator.getUniverse().getPlayerEmpire() == this) {
             new BasicDialogBuilder("Technological advance", "You have advanced to tech level: " + this.techLevel
                     + "! This will give your armies and fleets a significant boost.").show();
         }
         return true;
+    }
+
+    @Shadow
+    public boolean isNotable() {
+        return false;
     }
 
     @Override
@@ -637,7 +665,7 @@ public class EmpireMixins implements ActiveEmpire {
             throw new IllegalArgumentException("No special is registered under the given key!");
         }
         if (!force) {
-            EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent(this, empireSpecial);
+            EmpireSpecialRemoveEvent event = new EmpireSpecialRemoveEvent((Empire) this, empireSpecial);
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
                 return false;
@@ -682,7 +710,7 @@ public class EmpireMixins implements ActiveEmpire {
     @Override
     public void setReligion(@Nullable NamespacedKey religion) {
         if (religion == null) {
-            if (this == Galimulator.getNeutralEmpire()) {
+            if (this == Galimulator.getUniverse().getNeutralEmpire()) {
                 a((Religion) null);
                 return;
             } else {
@@ -717,16 +745,20 @@ public class EmpireMixins implements ActiveEmpire {
                     throw new NullPointerException("Internal error occoured while obtaining the metadata entry of an empire state.");
                 }
                 if (!statemeta.isStable()) {
-                    event = new EmpireStabiliseEvent(this, stateKey);
+                    event = new EmpireStabiliseEvent((Empire) this, stateKey);
                 } else {
-                    event = new EmpireStateChangeEvent(this, stateKey);
+                    event = new EmpireStateChangeEvent((Empire) this, stateKey);
                 }
             } else if (stateKey == RegistryKeys.GALIMULATOR_TRANSCENDING) {
-                event = new EmpireTranscendEvent(this);
+                @SuppressWarnings("deprecation")
+                EmpireStateChangeEvent evt2 = new de.geolykt.starloader.api.event.empire.EmpireTranscendEvent(this);
+                event = evt2;
             } else if (stateKey == RegistryKeys.GALIMULATOR_RIOTING) {
-                event = new EmpireRiotingEvent(this);
+                @SuppressWarnings("deprecation")
+                EmpireStateChangeEvent evt2 = new de.geolykt.starloader.api.event.empire.EmpireRiotingEvent(this);
+                event = evt2;
             } else {
-                event = new EmpireStateChangeEvent(this, stateKey);
+                event = new EmpireStateChangeEvent((Empire) this, stateKey);
             }
             EventManager.handleEvent(event);
             if (event.isCancelled()) {
@@ -742,7 +774,7 @@ public class EmpireMixins implements ActiveEmpire {
                 // AWBA does not believe in development, and as such development is reset within
                 // it
                 for (Star star : Galimulator.getUniverse().getStarsView()) {
-                    if (star.getAssignedEmpire() == this) {
+                    if (star.getEmpire() == this) {
                         ((snoddasmannen.galimulator.Star) star).setDevelopment(0);
                     }
                 }
@@ -761,7 +793,7 @@ public class EmpireMixins implements ActiveEmpire {
         if (techLevel == getTechnologyLevel()) {
             return;
         }
-        TechnologyLevelSetEvent event = new TechnologyLevelSetEvent(this, techLevel);
+        TechnologyLevelSetEvent event = new TechnologyLevelSetEvent((Empire) this, techLevel);
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
             ci.cancel();
@@ -776,9 +808,11 @@ public class EmpireMixins implements ActiveEmpire {
     }
 
     @Override
-    public @NotNull ActiveEmpire spawnOffspring(@NotNull Star location) {
+    @NotNull
+    @Deprecated
+    public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire spawnOffspring(@NotNull Star location) {
         snoddasmannen.galimulator.Star star = (snoddasmannen.galimulator.Star) location;
-        return (ActiveEmpire) NullUtils.requireNotNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) NullUtils.requireNotNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
     }
 
     /**
@@ -791,18 +825,16 @@ public class EmpireMixins implements ActiveEmpire {
         if (tickCallbacks == null) {
             tickCallbacks = new ArrayList<>();
         }
-        for (TickCallback<ActiveEmpire> callback : tickCallbacks) {
+        for (TickCallback<de.geolykt.starloader.api.dimension.Empire> callback : tickCallbacks) {
             callback.tick(this);
         }
     }
 
-    @Shadow
-    public boolean isNotable() {
-        return false;
-    }
-
-    @Overwrite
-    public void aa() { // advance
-        increaseTechnologyLevel(true, false);
+    @Override
+    public void withTickCallback(TickCallback<Empire> callback) {
+        if (this.tickCallbacks == null) {
+            this.tickCallbacks = new ArrayList<>();
+        }
+        this.tickCallbacks.add(callback);
     }
 }

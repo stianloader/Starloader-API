@@ -97,12 +97,12 @@ public class ActorSpawningPredicateMixins implements StateActorSpawnPredicate<St
         // TODO deobf
         if (Settings.a.a(this.actorFactory)) {
             return false;
-        } else if (this.religionRequirement != null && ((snoddasmannen.galimulator.Empire) star.getAssignedEmpire()).getReligion() != this.religionRequirement) {
+        } else if (this.religionRequirement != null && ((snoddasmannen.galimulator.Empire) star.getEmpire()).getReligion() != this.religionRequirement) {
             return false;
         }
         if (this.specialRequirements != null) {
             for (NamespacedKey special : getRequiredSpecials()) {
-                if (!star.getAssignedEmpire().hasSpecial(special)) {
+                if (!star.getEmpire().hasSpecial(special)) {
                     return false;
                 }
             }

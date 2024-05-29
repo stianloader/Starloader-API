@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.NullUtils;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
@@ -55,14 +55,14 @@ public class VanillaSavegameFormat implements SavegameFormat {
         Space.setBackgroundTaskDescription("Loading galaxy: Regenerating regions");
 
         HashMap<Integer, Star> uidToStar = new HashMap<>();
-        HashMap<Integer, ActiveEmpire> uidToEmpire = new HashMap<>();
+        HashMap<Integer, Empire> uidToEmpire = new HashMap<>();
 
         for (Star star : unsafe.getStarsUnsafe()) {
             star.setInternalRandom(new Random());
             uidToStar.put(star.getUID(), star);
         }
 
-        for (ActiveEmpire empire : unsafe.getEmpiresUnsafe()) {
+        for (Empire empire : unsafe.getEmpiresUnsafe()) {
             empire.setRecentlyLostStars(new ArrayDeque<>());
             empire.setInternalRandom(new Random());
             uidToEmpire.put(empire.getUID(), empire);
@@ -89,9 +89,9 @@ public class VanillaSavegameFormat implements SavegameFormat {
                 neighbours.add(uidToStar.get(starB));
             }
             star.setNeighbours(neighbours);
-            ActiveEmpire owner = uidToEmpire.get(star.getAssignedEmpireUID());
+            Empire owner = uidToEmpire.get(star.getAssignedEmpireUID());
             if (owner == null) {
-                owner = galiImpl.getNeutralEmpire();
+                owner = Galimulator.getUniverse().getNeutralEmpire();
             }
             star.setAssignedEmpire(owner);
         }
@@ -102,7 +102,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
             unsafe.setAlliancesUnsafe(new Vector<>());
         } else {
             for (Alliance alliance : unsafe.getAlliancesUnsafe()) {
-                for (ActiveEmpire member : alliance.getMembers()) {
+                for (Empire member : alliance.getMemberView()) {
                     member.setAlliance(alliance);
                 }
             }
@@ -148,7 +148,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
         Space.setBackgroundTaskDescription("Loading galaxy: Importing data");
         galiImpl.setMap((de.geolykt.starloader.api.Map) NullUtils.requireNotNull(spaceState.mapData));
         galiImpl.setGameYear(spaceState.milliYear);
-        galiImpl.setNeutralEmpire(NullUtils.requireNotNull((ActiveEmpire) spaceState.neutralEmpire));
+        galiImpl.setNeutralEmpire(NullUtils.requireNotNull((Empire) spaceState.neutralEmpire));
         galiImpl.setPlayer(spaceState.player);
         galiImpl.setUsedSandbox(spaceState.sandboxUsed);
         galiImpl.setTranscendedEmpires(spaceState.transcended);
@@ -159,7 +159,7 @@ public class VanillaSavegameFormat implements SavegameFormat {
         galiImpl.setArtifactsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.artifacts));
         galiImpl.setCorporationsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.corporations));
         galiImpl.setDisruptedStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.disruptedStars));
-        galiImpl.setEmpiresUnsafe(NullUtils.requireNotNull((Vector) spaceState.empires));
+        galiImpl.setEmpiresUnsafe(NullUtils.requireNotNull((Vector<Empire>) (Vector<?>) spaceState.empires));
         galiImpl.setPeopleUnsafe(NullUtils.requireNotNull((Vector) spaceState.persons));
         galiImpl.setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
         galiImpl.setStarsUnsafe(NullUtils.requireNotNull((Vector) spaceState.stars));

@@ -43,5 +43,6 @@ public interface Metadatable {
      * @param key The {@link NamespacedKey} to look up
      * @return The {@link Object} value of the entry or null if it doesn't exist
      */
-    public @Nullable Object getMetadata(@NotNull NamespacedKey key);
+    @Nullable
+    public Object getMetadata(@NotNull NamespacedKey key);
 }

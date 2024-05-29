@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import de.geolykt.starloader.api.CoordinateGrid;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
@@ -68,19 +67,19 @@ public interface Dimension {
 
     /**
      * Return a read-only <b>view</b> (that is changes in the underlying collection get mirrored),
-     * of all correctly registered {@link ActiveEmpire alive empires}.
+     * of all correctly registered {@link Empire alive empires}.
      *
      * @return A read-only view of all alive empires.
-     * @since 2.0.0-a20240519
+     * @since 2.0.0-a20240528
      * @implNote While the current implementation returns a List, future implementations cannot guarantee
      * such behaviour as determining the order of the collection in this way is rather performance-damaging,
      * hence this method returns a {@link Collection}, casting to {@link List} is discouraged.
      */
     @NotNull
     @UnmodifiableView
-    @AvailableSince("2.0.0-a20240519")
+    @AvailableSince("2.0.0-a20240528")
     @Contract(pure = true)
-    public Collection<@NotNull ActiveEmpire> getEmpiresView();
+    public Collection<@NotNull Empire> getEmpiresView();
 
     // TODO getDimensionMeta() as a replacement for getMap()
 
@@ -105,26 +104,26 @@ public interface Dimension {
      * within the ticking mechanism. Additionally merging or destroying the empire might
      * have serious side effects, which is why that should be avoided.
      *
-     * @return The {@link ActiveEmpire} that is the neutral non-playable empire.
-     * @since 2.0.0-a20240519
+     * @return The {@link Empire} that is the neutral non-playable empire.
+     * @since 2.0.0-a20240528
      */
     @NotNull
     @Contract(pure = true)
-    @AvailableSince("2.0.0-a20240519")
-    public ActiveEmpire getNeutralEmpire();
+    @AvailableSince("2.0.0-a20240528")
+    public Empire getNeutralEmpire();
 
     /**
      * Obtains the empire the player is controlling within this dimension.
      * If there is no player or the player is not control of any empire
      * within this dimension, then it returns null.
      *
-     * @return The {@link ActiveEmpire} owned by the player, or null
-     * @since 2.0.0-a20240519
+     * @return The {@link Empire} owned by the player, or null
+     * @since 2.0.0-a20240528
      */
     @Nullable
     @Contract(pure = true)
-    @AvailableSince("2.0.0-a20240519")
-    public ActiveEmpire getPlayerEmpire();
+    @AvailableSince("2.0.0-a20240528")
+    public Empire getPlayerEmpire();
 
     /**
      * Obtains the star that is at or next to the given coordinates.
