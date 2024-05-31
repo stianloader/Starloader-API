@@ -13,24 +13,24 @@ public class TextInputWrapper implements TextInputListener {
     protected final List<Consumer<@Nullable String>> hooks;
 
     public TextInputWrapper(List<Consumer<@Nullable String>> hooks2) {
-        hooks = hooks2;
+        this.hooks = hooks2;
     }
 
     public TextInputWrapper() {
-        hooks = new ArrayList<>();
+        this.hooks = new ArrayList<>();
     }
 
     public void addHook(Consumer<@Nullable String> hook) {
-        hooks.add(hook);
+        this.hooks.add(hook);
     }
 
     @Override
     public void canceled() {
-        hooks.forEach(hook -> hook.accept(null));
+        this.hooks.forEach(hook -> hook.accept(null));
     }
 
     @Override
     public void input(String arg0) {
-        hooks.forEach(hook -> hook.accept(arg0));
+        this.hooks.forEach(hook -> hook.accept(arg0));
     }
 }

@@ -39,15 +39,15 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
     @Override
     public void a(final String o) {
         if ("Custom".equals(o.toString()) && !(option instanceof StringChooseOption)) {
-            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", option.get(), option.getName());
-            if (option instanceof StrictStringOption) {
+            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", this.option.get(), this.option.getName());
+            if (this.option instanceof StrictStringOption) {
                 builder.addHook(text -> {
                     if (text == null) {
                         return; // cancelled
                     }
-                    if (((StrictStringOption) option).isValid(text)) {
-                        option.set(text);
-                        getParentScreen().markDirty();
+                    if (((StrictStringOption) this.option).isValid(text)) {
+                        this.option.set(text);
+                        this.getParentScreen().markDirty();
                     } else {
                         Drawing.toast("The input value is not valid!");
                     }
@@ -57,8 +57,8 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
                     if (text == null) {
                         return; // cancelled
                     }
-                    option.set(text);
-                    getParentScreen().markDirty();
+                    this.option.set(text);
+                    this.getParentScreen().markDirty();
                 });
             }
             builder.build();
@@ -68,6 +68,6 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
     }
 
     public @NotNull ModConfScreen getParentScreen() {
-        return parent;
+        return this.parent;
     }
 }

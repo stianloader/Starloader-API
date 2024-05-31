@@ -24,9 +24,12 @@ public class NamedIntegerChooserComponent extends LabeledStringChooserComponent 
         }
         return options;
     }
-    protected final @NotNull NumberOption<? extends Number> option;
 
-    protected final @NotNull ModConfScreen parent;
+    @NotNull
+    protected final NumberOption<? extends Number> option;
+
+    @NotNull
+    protected final ModConfScreen parent;
 
     public NamedIntegerChooserComponent(@NotNull ModConfScreen parent, @NotNull NumberOption<? extends Number> option) {
         // name / currentValue / options / category
@@ -38,8 +41,11 @@ public class NamedIntegerChooserComponent extends LabeledStringChooserComponent 
     @Override
     public void a(final String o) {
         if ("Custom".equals(o)) {
-            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(option.get().toString()), option.getName());
+            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(this.option.get().toString()), this.option.getName());
             builder.addHook(text -> {
+                if (text == null) {
+                    return; // User cancelled input
+                }
                 Double d;
                 try {
                     d = Double.valueOf(text);
@@ -47,39 +53,39 @@ public class NamedIntegerChooserComponent extends LabeledStringChooserComponent 
                     Drawing.toast(NullUtils.format("%s is not a valid number.", text));
                     return;
                 }
-                if (d < option.getMinimum().doubleValue()) {
-                    Drawing.toast(NullUtils.format("%s is below the minimum value of %s", text, option.getMinimum().toString()));
+                if (d < this.option.getMinimum().doubleValue()) {
+                    Drawing.toast(NullUtils.format("%s is below the minimum value of %s", text, this.option.getMinimum().toString()));
                     return;
                 }
-                if (d > option.getMaximum().doubleValue()) {
-                    Drawing.toast(NullUtils.format("%s is above the maximum value of %s", text, option.getMaximum().toString()));
+                if (d > this.option.getMaximum().doubleValue()) {
+                    Drawing.toast(NullUtils.format("%s is above the maximum value of %s", text, this.option.getMaximum().toString()));
                     return;
                 }
-                NumberOption<?> rawOpt = option; // We have to trick the compiler in order to get this to compile.
+                NumberOption<?> rawOpt = this.option; // We have to trick the compiler in order to get this to compile.
                 if (rawOpt instanceof FloatOption) {
                     ((FloatOption) rawOpt).setValue(d.floatValue());
-                    getParentScreen().markDirty();
+                    this.getParentScreen().markDirty();
                 } else if (rawOpt instanceof IntegerOption) {
                     ((IntegerOption) rawOpt).setValue(d.intValue());
-                    getParentScreen().markDirty();
+                    this.getParentScreen().markDirty();
                 } else {
                     @SuppressWarnings("unchecked")
-                    NumberOption<Number> rawr = (NumberOption<Number>) option;
+                    NumberOption<Number> rawr = (NumberOption<Number>) this.option;
                     rawr.set(d);
-                    getParentScreen().markDirty();
+                    this.getParentScreen().markDirty();
                 }
             });
             builder.build();
             return;
         }
         try {
-            if (option instanceof FloatOption) {
-                ((FloatOption) option).setValue(Float.valueOf(o));
+            if (this.option instanceof FloatOption) {
+                ((FloatOption) this.option).setValue(Float.valueOf(o));
             } else if (option instanceof IntegerOption) {
-                ((IntegerOption) option).setValue(Integer.valueOf(o));
+                ((IntegerOption) this.option).setValue(Integer.valueOf(o));
             } else {
                 @SuppressWarnings("unchecked")
-                NumberOption<Number> rawr = (NumberOption<Number>) option;
+                NumberOption<Number> rawr = (NumberOption<Number>) this.option;
                 Integer i = Integer.decode(o);
                 if (i == null) {
                     throw new NullPointerException();
@@ -93,7 +99,8 @@ public class NamedIntegerChooserComponent extends LabeledStringChooserComponent 
         }
     }
 
-    public @NotNull ModConfScreen getParentScreen() {
-        return parent;
+    @NotNull
+    public ModConfScreen getParentScreen() {
+        return this.parent;
     }
 }
