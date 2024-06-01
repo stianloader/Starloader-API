@@ -16,35 +16,35 @@ public class DialogCloseListenerWrapper implements OptionSelectionListener {
     private boolean playSFX = true;
 
     public DialogCloseListenerWrapper() {
-        listeners = new ArrayList<>();
+        this.listeners = new ArrayList<>();
     }
 
     public DialogCloseListenerWrapper(@NotNull ArrayList<@NotNull BasicDialogCloseListener> listeners, boolean playCloseSound) {
         this.listeners = listeners;
-        playSFX = playCloseSound;
+        this.playSFX = playCloseSound;
     }
 
     @Override
     public void a(Object var1) {
         if (var1 == null) {
-            for (BasicDialogCloseListener closeListener : listeners) {
+            for (BasicDialogCloseListener closeListener : this.listeners) {
                 closeListener.onClose(DialogCloseCause.AUTOMATIC_CLOSE, null);
             }
         } else {
-            for (BasicDialogCloseListener closeListener : listeners) {
+            for (BasicDialogCloseListener closeListener : this.listeners) {
                 closeListener.onClose(DialogCloseCause.BUTTON_CLICK, var1.toString());
             }
         }
-        if (playSFX) {
+        if (this.playSFX) {
             AudioSampleWrapper.UI_SMALL_SELECT.play();
         }
     }
 
     public void addListener(@NotNull BasicDialogCloseListener listener) {
-        listeners.add(listener);
+        this.listeners.add(listener);
     }
 
     public void doPlayCloseSound(boolean doPlayCloseSound) {
-        playSFX = doPlayCloseSound;
+        this.playSFX = doPlayCloseSound;
     }
 }

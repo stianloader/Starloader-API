@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'gsl-starplane' version '0.2.0-a20240508'
+    id 'gsl-starplane' version '0.2.0-a20240601.1'
     id 'me.champeau.mrjar' version '0.1.1'
     id 'eclipse'
 }
@@ -101,6 +101,15 @@ remapJar {
     archiveClassifier = 'remapped'
     fromJar jar
     inputs.file jar.archiveFile
+}
+
+task jarVerification(type: de.geolykt.starloader.gslstarplane.GslVerifyRemapperJarTask, dependsOn: remapJar) {
+    includingGalimulatorJar = true
+    validationJar = remapJar.archiveFile
+}
+
+check {
+    dependsOn jarVerification
 }
 
 build {

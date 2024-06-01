@@ -39,11 +39,11 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
         this.dialog = Space.openOptionChooser(title, description, choices, duration, null, true);
         this.dialog.a((Widget.WIDGET_MESSAGE msg) -> {
             if (msg == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
-                closed = true;
+                this.closed = true;
             }
         });
         this.dialog.registerSelectionListener((Object obj) -> {
-            closed = true;
+            this.closed = true;
         });
         this.dialog.registerSelectionListener(new DialogCloseListenerWrapper(closeListeners, playSFX));
         this.dialog.a(new WidgetActionListenerWrapper(this, closeListeners, actionListeners));
@@ -56,16 +56,16 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
      */
     @Override
     public long getAutocloseTime() {
-        return dialog.d;
+        return this.dialog.d;
     }
 
     @Override
     public void close(@Nullable Object buttonPressed) {
-        dialog.a(buttonPressed);
+        this.dialog.a(buttonPressed);
     }
 
     @Override
     public boolean isClosed() {
-        return closed;
+        return this.closed;
     }
 }
