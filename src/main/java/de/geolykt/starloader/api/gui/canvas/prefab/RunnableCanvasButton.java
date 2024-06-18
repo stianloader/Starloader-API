@@ -1,8 +1,12 @@
 package de.geolykt.starloader.api.gui.canvas.prefab;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 
 import de.geolykt.starloader.api.NullUtils;
 
@@ -31,5 +35,68 @@ public class RunnableCanvasButton extends AbstractCanvasButton {
     @Override
     public void onClick() {
         this.action.run();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link RunnableCanvasButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public RunnableCanvasButton setBackground(@NotNull NinePatch ninepatch) {
+        return (RunnableCanvasButton) super.setBackground(ninepatch);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link RunnableCanvasButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    public RunnableCanvasButton setButtonColor(@NotNull Color color) {
+        return (RunnableCanvasButton) super.setButtonColor(color);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link RunnableCanvasButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public RunnableCanvasButton setFont(@NotNull BitmapFont font) {
+        return (RunnableCanvasButton) super.setFont(font);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link RunnableCanvasButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public RunnableCanvasButton setText(@NotNull CharSequence text) {
+        return (RunnableCanvasButton) super.setText(text);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link RunnableCanvasButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    public RunnableCanvasButton setTextColor(@NotNull Color color) {
+        return (RunnableCanvasButton) super.setTextColor(color);
     }
 }

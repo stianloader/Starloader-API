@@ -3,9 +3,12 @@ package de.geolykt.starloader.api.gui.canvas.prefab;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
@@ -33,17 +36,17 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
 
     public CanvasCloseButton(@NotNull BitmapFont font, @NotNull CharSequence message, int width, int height) {
         super(font, message, width, height);
-        setTextColor(Color.RED);
+        this.setTextColor(Color.RED);
     }
 
     public CanvasCloseButton(@NotNull BitmapFont font, int width, int height) {
         this(font, "Cancel", width, height);
-        setTextColor(Color.RED);
+        this.setTextColor(Color.RED);
     }
 
     public CanvasCloseButton(int width, int height) {
         super("Cancel", width, height);
-        setTextColor(Color.RED);
+        this.setTextColor(Color.RED);
     }
 
     /**
@@ -62,9 +65,24 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
 
     @Override
     public void onClick() {
-        if (closedCanvas != null) {
-            canvasManager.closeCanvas(closedCanvas);
+        if (this.closedCanvas != null) {
+            this.canvasManager.closeCanvas(this.closedCanvas);
+        } else {
+            LoggerFactory.getLogger(CanvasCloseButton.class).warn("A CanvasCloseButton was clicked, but it does not belong to any canvas. Use CanvasCloseButton#closesCanvas to define which canvas the button closes.");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link CanvasCloseButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public CanvasCloseButton setBackground(@NotNull NinePatch ninepatch) {
+        return (CanvasCloseButton) super.setBackground(ninepatch);
     }
 
     /**
@@ -79,6 +97,32 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
     @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
     public CanvasCloseButton setButtonColor(@NotNull Color color) {
         return (CanvasCloseButton) super.setButtonColor(color);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link CanvasCloseButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public CanvasCloseButton setFont(@NotNull BitmapFont font) {
+        return (CanvasCloseButton) super.setFont(font);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The current {@link CanvasCloseButton} instance, for chaining.
+     */
+    @Override
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public CanvasCloseButton setText(@NotNull CharSequence text) {
+        return (CanvasCloseButton) super.setText(text);
     }
 
     /**

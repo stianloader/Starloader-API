@@ -2,6 +2,8 @@ package de.geolykt.starloader.api.gui.canvas;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.stianloader.micromixin.transform.internal.util.Objects;
 
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.Screen;
@@ -24,6 +26,23 @@ public interface CanvasManager {
     @NotNull
     public static CanvasManager getInstance() {
         return Drawing.getCanvasManager();
+    }
+
+    /**
+     * Convenience method that delegates to {@link #newCanvas(CanvasContext, CanvasSettings)} that creates a {@link Canvas}
+     * object from a {@link CanvasContext} using no background or framing (as defined by {@link CanvasSettings#CHILD_TRANSPARENT}).
+     *
+     * <p>The core logic of the canvas object is delegated to the {@link CanvasContext} object.
+     *
+     * @param context The {@link CanvasContext} that is used to get the width and height of the canvas or used to make the canvas responsive.
+     * @return The newly created {@link Canvas} using the specified {@link CanvasContext}.
+     * @since 2.0.0-a20240618.1
+     */
+    @NotNull
+    @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
+    @AvailableSince("2.0.0-a20240618.1")
+    public default Canvas childCanvas(@NotNull CanvasContext context) {
+        return this.newCanvas(Objects.requireNonNull(context, "'context' may not be null."), CanvasSettings.CHILD_TRANSPARENT);
     }
 
     /**
@@ -123,9 +142,9 @@ public interface CanvasManager {
         int childLen = children.length;
         @NotNull Canvas[] canvases = new @NotNull Canvas[childLen];
         for (int i = 0; i < childLen; i++) {
-            canvases[i] = newCanvas(children[i], CanvasSettings.CHILD_TRANSPARENT);
+            canvases[i] = this.childCanvas(children[i]);
         }
-        return multiCanvas(context, settings, orientation, canvases);
+        return this.multiCanvas(context, settings, orientation, canvases);
     }
 
     /**
@@ -153,7 +172,7 @@ public interface CanvasManager {
     @NotNull
     @Contract(pure = false, value = "null -> fail; !null -> param1")
     public default Canvas openCanvas(@NotNull Canvas canvas) {
-        return openCanvas(canvas, CanvasPosition.BOTTOM_RIGHT);
+        return this.openCanvas(canvas, CanvasPosition.BOTTOM_RIGHT);
     }
 
     /**
@@ -167,6 +186,29 @@ public interface CanvasManager {
     @NotNull
     @Contract(pure = false, value = "null, _ -> fail; _, null -> fail; !null, !null -> param1")
     public Canvas openCanvas(@NotNull Canvas canvas, @NotNull CanvasPosition position);
+
+    /**
+     * Returns a canvas that contains a canvas which has defined margins to the side of the returned
+     * canvas.
+     *
+     * <p>This method is a convenience method which delegates to {@link #withMargins(int, int, int, int, Canvas, CanvasSettings)},
+     * using {@link CanvasSettings#CHILD_TRANSPARENT} as the {@link CanvasSettings} instance, meaning that the margins
+     * don't result in any background being drawn additionally.
+     *
+     * @param top The top margin.
+     * @param right The margin to the right side.
+     * @param down The lower margin.
+     * @param left The margin to the left side.
+     * @param input The canvas to wrap.
+     * @return The returned canvas.
+     * @since 2.0.0-a20240618.1
+     */
+    @NotNull
+    @AvailableSince("2.0.0-a20240618.1")
+    @Contract(pure = false, value = "_, _, _, _, null -> fail; _, _, _, _, !null -> new")
+    public default Canvas withMargins(int top, int right, int down, int left, @NotNull Canvas input) {
+        return this.withMargins(top, right, down, left, input, CanvasSettings.CHILD_TRANSPARENT);
+    }
 
     /**
      * Returns a canvas that contains a canvas which has defined margins to the side of the returned
