@@ -42,6 +42,7 @@
     "SLScreenWidgetMixins",
     "StarMixins",
     "StateActorMixins",
+    "TextureTextButtonWidgetMixins",
     "TrackMixins",
     "WarMixins",
     "WeaponMixins",

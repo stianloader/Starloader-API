@@ -291,7 +291,7 @@ public class StarMixins implements Star {
     @Override
     @NotNull
     public Iterable<TickCallback<Star>> getTickCallbacks() {
-        return Collections.unmodifiableList(tickCallbacks);
+        return Collections.unmodifiableList(this.tickCallbacks);
     }
 
     @Override
