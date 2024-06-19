@@ -76,3 +76,7 @@ RAS v1 std
  build      ACC_PROTECTED   ACC_PUBLIC      snoddasmannen/galimulator/ui/Widget                     internalCamera          Lcom/badlogic/gdx/graphics/Camera;
 # Hack used to make a mixin (BufferedWidgetWrapperMixin) compile properly, but isn't actually required at runtime
  build      0               ACC_PUBLIC      snoddasmannen/galimulator/ui/Widget                     t                       F
+
+# Runtime fix for a crash caused due to a concurrency issue in profiling logic
+ runtime    0               ACC_SYNCHRONIZED snoddasmannen/galimulator/Debug                        b                       (Ljava/lang/String;Z)I
+ runtime    0               ACC_SYNCHRONIZED snoddasmannen/galimulator/Debug                        c                       ()V
