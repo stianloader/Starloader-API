@@ -3,13 +3,18 @@ package de.geolykt.starloader.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.gui.BasicDialogCloseListener;
 import de.geolykt.starloader.api.gui.WidgetActionListener;
+import de.geolykt.starloader.api.gui.canvas.Canvas;
+import de.geolykt.starloader.impl.gui.SLOptionChooserWidget;
 
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.OptionChooserWidget;
 import snoddasmannen.galimulator.ui.Widget;
 
@@ -18,7 +23,19 @@ import snoddasmannen.galimulator.ui.Widget;
  */
 public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
 
+    /**
+     * The underlying dialog widget wrapped by this {@link BasicDialog} instance.
+     *
+     * @deprecated This field will likely be replaced with a {@link Canvas} in the future,
+     * and the access will be reduced to 'private' at some point in time. This may even occur
+     * before all other breaking changes are performed in the 3.0.0 release cycle as this
+     * is internal API.
+     */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240620")
+    @ScheduledForRemoval
     protected final OptionChooserWidget dialog;
+
     private boolean closed = false;
 
     /**
@@ -36,7 +53,8 @@ public class BasicDialog implements de.geolykt.starloader.api.gui.BasicDialog {
     public BasicDialog(@NotNull String title, @NotNull String description, @Nullable List<@NotNull String> choices,
             @NotNull ArrayList<@NotNull BasicDialogCloseListener> closeListeners,
             @NotNull ArrayList<@NotNull WidgetActionListener> actionListeners, int duration, boolean playSFX) {
-        this.dialog = Space.openOptionChooser(title, description, choices, duration, null, true);
+        this.dialog = new SLOptionChooserWidget(title, description, choices, duration, null);
+        Space.openedWidgets.add(new BufferedWidgetWrapper(this.dialog, 0.0, 0.0, true, Widget.WIDGET_ALIGNMENT.MIDDLE));
         this.dialog.a((Widget.WIDGET_MESSAGE msg) -> {
             if (msg == Widget.WIDGET_MESSAGE.WIDGET_CLOSED) {
                 this.closed = true;

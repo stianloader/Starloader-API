@@ -14,7 +14,6 @@ import de.geolykt.starloader.api.Locateable;
  * @since 2.0.0
  */
 public abstract class EffectFactory {
-
     /**
      * The instance of this class.
      *

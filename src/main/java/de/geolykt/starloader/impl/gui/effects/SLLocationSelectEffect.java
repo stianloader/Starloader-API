@@ -45,21 +45,21 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
 
     @Override
     public void dispose() {
-        disposed = true;
+        this.disposed = true;
     }
 
     @Override
     public void draw() {
         // FIXME use the rendercache system!
         SpriteBatch batch = Drawing.getDrawingBatch();
-        batch.setColor(ringColor);
-        batch.draw(TEXTURE, getX() - radius, getY() - radius, radius * 2, radius * 2);
+        batch.setColor(this.ringColor);
+        batch.draw(SLLocationSelectEffect.TEXTURE, getX() - this.radius, getY() - this.radius, this.radius * 2, this.radius * 2);
     }
 
     @Override
     @NotNull
     public Color getRingColor() {
-        return ringColor;
+        return this.ringColor;
     }
 
     @Override
@@ -70,22 +70,22 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
 
     @Override
     public float getX() {
-        return location.getX();
+        return this.location.getX();
     }
 
     @Override
     public float getY() {
-        return location.getY();
+        return this.location.getY();
     }
 
     @Override
     public boolean isAlive() {
-        return !disposed;
+        return !this.disposed;
     }
 
     @Override
     public boolean isDisposed() {
-        return disposed;
+        return this.disposed;
     }
 
     @Override
@@ -107,10 +107,10 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
 
     @Override
     public void show() {
-        if (!disposed) {
+        if (!this.disposed) {
             throw new IllegalStateException("Effect already disposed!");
         }
-        disposed = false;
+        this.disposed = false;
         Space.showItem(this);
     }
 }

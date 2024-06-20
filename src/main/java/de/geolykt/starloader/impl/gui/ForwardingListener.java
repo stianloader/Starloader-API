@@ -25,7 +25,7 @@ public class ForwardingListener implements AuxiliaryListener {
     @Override
     public boolean globalKeyDown(float screenX, float screenY) {
         // (what a strange name considering that the mouse is pressed, not a key)
-        if (listeners.isEmpty()) {
+        if (this.listeners.isEmpty()) {
             return false;
         }
 
@@ -60,7 +60,7 @@ public class ForwardingListener implements AuxiliaryListener {
 
     @Override
     public boolean globalTap(float screenX, float screenY) {
-        if (listeners.isEmpty()) {
+        if (this.listeners.isEmpty()) {
             return false;
         }
 

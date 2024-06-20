@@ -66,7 +66,7 @@ public class UniverseDimension implements Dimension {
     @Override
     @Nullable
     public Star getStarAt(float boardX, float boardY) {
-        return getNearestStar(boardX, boardY, snoddasmannen.galimulator.Star.globalSizeFactor * 2);
+        return this.getNearestStar(boardX, boardY, snoddasmannen.galimulator.Star.globalSizeFactor * 2);
     }
 
     @SuppressWarnings({ "null", "unchecked" })

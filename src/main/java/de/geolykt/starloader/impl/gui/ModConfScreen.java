@@ -60,11 +60,11 @@ public class ModConfScreen implements Dialog {
                 } else if (option instanceof StringOption) {
                     alist.add(new NamedStringChooserComponent(this, (StringOption) option));
                 } else {
-                    LOGGER.info("Unsupported option of class: " + option.getClass().getName());
+                    ModConfScreen.LOGGER.error("Unsupported option of class: " + option.getClass().getName());
                 }
             }
         }
-        dirty = false;
+        this.dirty = false;
         return alist;
     }
 
@@ -85,10 +85,10 @@ public class ModConfScreen implements Dialog {
 
     @Override
     public boolean isValid() {
-        return !dirty;
+        return !this.dirty;
     }
 
     public void markDirty() {
-        dirty = true;
+        this.dirty = true;
     }
 }

@@ -21,17 +21,18 @@ public final class GLScissorState {
 
     @NotNull
     public static GLScissorState captureScissor() {
-        if (!scissorInit) {
-            scissorInit = true;
-            currentX = 0;
-            currentY = 0;
-            currentW = Gdx.graphics.getBackBufferWidth();
-            currentH = Gdx.graphics.getBackBufferHeight();
+        if (!GLScissorState.scissorInit) {
+            GLScissorState.scissorInit = true;
+            GLScissorState.currentX = 0;
+            GLScissorState.currentY = 0;
+            GLScissorState.currentW = Gdx.graphics.getBackBufferWidth();
+            GLScissorState.currentH = Gdx.graphics.getBackBufferHeight();
         }
 
         boolean scissorEnabled = Gdx.gl.glIsEnabled(GL20.GL_SCISSOR_TEST);
-        return new GLScissorState(currentX, currentY, currentW, currentH, scissorEnabled);
+        return new GLScissorState(GLScissorState.currentX, GLScissorState.currentY, GLScissorState.currentW, GLScissorState.currentH, scissorEnabled);
     }
+
     /**
      * Makes the {@link GLScissorState} class "forget" the scissor - which means that the scissor will be at the (0, 0)
      * coordinates with a width and height defined by the BackBuffer.
@@ -41,6 +42,7 @@ public final class GLScissorState {
     public static void forgetScissor() {
         GLScissorState.scissorInit = false;
     }
+
     /**
      * Sets the OpenGL scissor. Calls {@link GL11#glScissor(int, int, int, int)}, but also remembers
      * the arguments it was called with. All {@link GL11#glScissor(int, int, int, int)} calls are delegated
@@ -78,11 +80,11 @@ public final class GLScissorState {
     }
 
     public void reapplyState() {
-        Gdx.gl.glScissor(x, y, width, height);
+        Gdx.gl.glScissor(this.x, this.y, this.width, this.height);
         if (Gdx.gl.glGetError() == GL20.GL_INVALID_VALUE) {
             throw new IllegalStateException("Gdx.gl.glScissor raised an GL20.GL_INVALID_VALUE! Scissor state: " + this.toString());
         }
-        if (enabled) {
+        if (this.enabled) {
             if (!Gdx.gl.glIsEnabled(GL20.GL_SCISSOR_TEST)) {
                 Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
             }
@@ -93,6 +95,6 @@ public final class GLScissorState {
 
     @Override
     public String toString() {
-        return String.format("GLScissorState[x = %d (0x%X), y = %d (0x%X), w = %d (0x%X), h = %d (0x%X)]", x, x, y, y, width, width, height, height);
+        return String.format("GLScissorState[x = %d (0x%X), y = %d (0x%X), w = %d (0x%X), h = %d (0x%X)]", this.x, this.x, this.y, this.y, this.width, this.width, this.height, this.height);
     }
 }

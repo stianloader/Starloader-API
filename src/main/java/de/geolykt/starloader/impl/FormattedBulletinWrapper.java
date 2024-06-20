@@ -21,6 +21,6 @@ public class FormattedBulletinWrapper extends TextBulletin {
 
     @Override
     public void drawAt(float x, float y) {
-        text.renderText(x, y);
+        this.text.renderText(x, y);
     }
 }

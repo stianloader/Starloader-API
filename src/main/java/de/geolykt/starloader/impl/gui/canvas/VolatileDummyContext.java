@@ -38,12 +38,12 @@ final class VolatileDummyContext implements CanvasContext {
 
     @Override
     public int getHeight() {
-        return heightProvider.getAsInt();
+        return this.heightProvider.getAsInt();
     }
 
     @Override
     public int getWidth() {
-        return widthProvider.getAsInt();
+        return this.widthProvider.getAsInt();
     }
 
     @Override

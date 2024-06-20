@@ -1,9 +1,10 @@
 package de.geolykt.starloader;
 
 import java.io.File;
+import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.files.FileHandle;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.lifecycle.SignalExtensionTerminationEvent;
 import de.geolykt.starloader.api.gui.AsyncRenderer;
@@ -68,7 +68,7 @@ public class StarloaderAPIExtension extends Extension {
 
     @Override
     public void preInitialize() {
-        getLogger().info("Using Java {} JavaInterop for SLAPI.", JavaInterop.getInteropRelease());
+        this.getLogger().debug("Using Java {} JavaInterop for SLAPI.", JavaInterop.getInteropRelease());
         // We had to move this to preinit as some AWs are bork in SLL 2.0.0 and below, however
         // some of these versions are still supported by the current SLAPI version
         ModConf.setImplementation(new de.geolykt.starloader.impl.ModConf());
@@ -77,7 +77,7 @@ public class StarloaderAPIExtension extends Extension {
     @Override
     public void unload() {
         EventManager.handleEvent(new SignalExtensionTerminationEvent(this));
-        getLogger().info("SLAPI is going to bed. Let's conquer the stars tomorrow!");
+        this.getLogger().info("SLAPI is going to bed. Let's conquer the stars tomorrow!");
     }
 
     /**
@@ -102,7 +102,7 @@ public class StarloaderAPIExtension extends Extension {
         LoggerFactory.getLogger(StarloaderAPIExtension.class).info("Setting up SLAPI. Classloaded via {}", StarloaderAPIExtension.class.getClassLoader());
         MinestomRootClassLoader.getInstance().addTransformer(new GLTransformer());
         File dataFolder = new File("data");
-        DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), NullUtils.requireNotNull(dataFolder.toPath())));
+        DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), Objects.requireNonNull(dataFolder.toPath())));
         MinestomRootClassLoader.getInstance().addTransformer(new UIASMTransformer());
         MinestomRootClassLoader.getInstance().addTransformer(new SpaceASMTransformer());
         MinestomRootClassLoader.getInstance().addTransformer(new StateActorCreatorTransformer());
@@ -118,7 +118,7 @@ public class StarloaderAPIExtension extends Extension {
         SidebarInjector.setImplementation(new SLSidebarInjector());
         ScreenBuilder.setFactory(SLScreenBuilder::new);
         RegistryExpander.setImplementation(new SLRegistryExpander());
-        registerBuiltinCodecs();
-        initDeprecatedSubcomponents();
+        StarloaderAPIExtension.registerBuiltinCodecs();
+        StarloaderAPIExtension.initDeprecatedSubcomponents();
     }
 }
