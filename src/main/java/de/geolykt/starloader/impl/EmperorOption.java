@@ -22,13 +22,13 @@ public class EmperorOption extends class_42 {
     public EmperorOption(EmploymentAgency parentClass, DynastyMember person, Job b, boolean c) {
         super((Person) Objects.requireNonNull(person, "The person may not be null!"), b, c);
         this.person = person;
-        job = b;
-        agency = parentClass;
+        this.job = b;
+        this.agency = parentClass;
     }
 
     @Override
     public void b() {
-        agency.a(job, (Person) person);
+        this.agency.a(this.job, (Person) this.person);
         Galimulator.setPaused(false);
     }
 }

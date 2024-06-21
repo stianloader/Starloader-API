@@ -7,7 +7,6 @@ import java.util.Objects;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -233,11 +232,10 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
         return this;
     }
 
-    @SuppressWarnings("null")
     @Override
     @NotNull
     public NinePatch getRoundedButtonNinePatch() {
-        return GalFX.NINEPATCH.BUTTON3.getNine();
+        return Objects.requireNonNull(GalFX.NINEPATCH.BUTTON3.getNine());
     }
 
     @Override
@@ -267,14 +265,15 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
         return this;
     }
 
-    @SuppressWarnings("null")
     @Override
-    public @NotNull NinePatch getWindowNinepatch() {
-        return GalFX.NINEPATCH.WINDOW.getNine();
+    @NotNull
+    public NinePatch getWindowNinepatch() {
+        return Objects.requireNonNull(GalFX.NINEPATCH.WINDOW.getNine());
     }
 
     @Override
-    public @NotNull Texture loadTexture(@NotNull String path) {
+    @NotNull
+    public Texture loadTexture(@NotNull String path) {
         return NullUtils.requireNotNull(GalFX.a(Objects.requireNonNull(path, "Path cannot be null")));
     }
 
@@ -304,11 +303,9 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     public void showScreen(@NotNull Screen screen) {
         if (Objects.requireNonNull(screen, "Screen cannot be null") instanceof Dialog) {
-            LoggerFactory.getLogger(DrawingManager.class).warn("Tried to show a screen which uses galimulator's native dialog system. This operation will fail in the future.");
-            // Standard screen using the dialog api
-            // We want to mimic this call:
-            // arguments probably mean: screen, ???, type, closeOthers
-            // Space.a((ck) screen, true, null, false);
+            // The Screen API should now only be based on the Canvas API introduced in SLAPI 2.0.0,
+            // however in the past the Screen API was implemented using Galimulator's Dialog API.
+            // In contrast, the Canvas API is based on Galimulator's Widget API.
             throw new UnsupportedOperationException("Galimulator's native dialog API is no longer supported");
         } else if (screen instanceof Widget) {
             Space.showWidget((Widget) screen);
@@ -318,8 +315,8 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    public @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,
-            @NotNull String hint) {
+    @NotNull
+    public TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text, @NotNull String hint) {
         return new StarloaderTextInputBuilder(title, text, hint);
     }
 

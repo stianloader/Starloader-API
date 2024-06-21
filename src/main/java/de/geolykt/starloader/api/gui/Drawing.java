@@ -331,7 +331,7 @@ public final class Drawing {
     @Deprecated
     @NotNull
     public static de.geolykt.starloader.api.gui.text.TextFactory getTextFactory() {
-        return implementation.getTextFactory();
+        return Drawing.implementation.getTextFactory();
     }
 
     /**
@@ -400,7 +400,7 @@ public final class Drawing {
     @DeprecatedSince("2.0.0")
     @Deprecated
     public static void sendBulletin(de.geolykt.starloader.api.gui.text.@NotNull FormattedText text) {
-        implementation.sendBulletin(text);
+        Drawing.implementation.sendBulletin(text);
     }
 
     /**
@@ -410,7 +410,7 @@ public final class Drawing {
      * @param message The message to send
      */
     public static void sendBulletin(@NotNull String message) {
-        implementation.sendBulletin(message);
+        Drawing.implementation.sendBulletin(message);
     }
 
     /**
@@ -421,7 +421,7 @@ public final class Drawing {
      * @param message The message to send
      */
     public static void sendOddityBulletin(@NotNull String message) {
-        implementation.sendOddityBulletin(message);
+        Drawing.implementation.sendOddityBulletin(message);
     }
 
     public static void setImplementation(@NotNull DrawingImpl implementation) {
@@ -473,9 +473,9 @@ public final class Drawing {
      * @param hint The hint of the dialog, is - misleadingly - the text of the widget, not the prefilled text. They only differ in the colour of the text.
      * @return A new {@link TextInputBuilder} instance
      */
-    public static @NotNull TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text,
-            @NotNull String hint) {
-        return implementation.textInputBuilder(title, text, hint);
+    @NotNull
+    public static TextInputBuilder textInputBuilder(@NotNull String title, @NotNull String text, @NotNull String hint) {
+        return Drawing.implementation.textInputBuilder(title, text, hint);
     }
 
     /**

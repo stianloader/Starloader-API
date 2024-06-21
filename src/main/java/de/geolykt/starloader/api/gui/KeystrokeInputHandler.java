@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -268,7 +269,7 @@ public class KeystrokeInputHandler {
      * @since 2.0.0
      * @see Keys
      */
-    public void registerKeybind(@NotNull Keybind keybind, int @NotNull... requiredKeystrokes) {
+    public synchronized void registerKeybind(@NotNull Keybind keybind, int @NotNull... requiredKeystrokes) {
         this.unregisterKeybind(keybind.getID());
         this.entries.add(new KeybindEntry(keybind, requiredKeystrokes));
     }
@@ -280,11 +281,13 @@ public class KeystrokeInputHandler {
      * @return True if succeeded, false otherwise
      * @since 2.0.0
      */
-    public boolean unregisterKeybind(@NotNull NamespacedKey key) {
-        Iterator<KeybindEntry> it = this.entries.iterator();
+    public synchronized boolean unregisterKeybind(@NotNull NamespacedKey key) {
+        ListIterator<KeybindEntry> it = this.entries.listIterator();
         while (it.hasNext()) {
             if (it.next().keybind.getID().equals(key)) {
-                it.remove();
+                // Note: The iterator of CopyOnWriteArrayList doesn't support removal
+                // as the iterator might work with a copy of the collection due to the semantics of COW
+                this.entries.remove(it.previousIndex());
                 return true;
             }
         }

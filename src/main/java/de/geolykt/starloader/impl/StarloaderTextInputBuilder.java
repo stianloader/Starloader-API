@@ -22,11 +22,16 @@ import snoddasmannen.galimulator.ui.Widget;
 
 public class StarloaderTextInputBuilder implements TextInputBuilder {
 
-    private @NotNull String hint;
-    private final @NotNull List<Consumer<@Nullable String>> hooks = new ArrayList<>();
-    private @NotNull String text;
-    private @Nullable String initialText;
-    private @NotNull String title;
+    @NotNull
+    private String hint;
+    @NotNull
+    private final List<@NotNull Consumer<@Nullable String>> hooks = new ArrayList<>();
+    @Nullable
+    private String initialText;
+    @NotNull
+    private String text;
+    @NotNull
+    private String title;
 
     public StarloaderTextInputBuilder(@NotNull String title, @NotNull String text, @NotNull String hint) {
         this.title = title;
@@ -35,13 +40,15 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     }
 
     @Override
-    public @NotNull TextInputBuilder addHook(@NotNull Consumer<@Nullable String> hook) {
-        hooks.add(hook);
+    @NotNull
+    public TextInputBuilder addHook(@NotNull Consumer<@Nullable String> hook) {
+        this.hooks.add(hook);
         return this;
     }
 
     @Override
-    public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<@Nullable String>> hooks) {
+    @NotNull
+    public TextInputBuilder addHooks(@NotNull Collection<@NotNull Consumer<@Nullable String>> hooks) {
         this.hooks.addAll(hooks);
         return this;
     }
@@ -54,7 +61,7 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
                 try {
                     Space.getMainTickLoopLock().acquire(2);
                     try {
-                        hooks.forEach(c -> c.accept(s));
+                        this.hooks.forEach(c -> c.accept(s));
                     } finally {
                         Space.getMainTickLoopLock().release(2);
                     }
@@ -62,11 +69,11 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
                     e.printStackTrace();
                 }
             });
-            Gdx.input.getTextInput(new TextInputWrapper(surrogate), title, text, hint);
+            Gdx.input.getTextInput(new TextInputWrapper(surrogate), this.title, this.text, this.hint);
             return null;
         }
         // Based on the galactic preview and a few others, might require something better
-        StarloaderInputDialog dialog = new StarloaderInputDialog(title, new TextInputWrapper(hooks), text, hint);
+        StarloaderInputDialog dialog = new StarloaderInputDialog(this.title, new TextInputWrapper(this.hooks), this.text, this.hint);
         String initialText = this.initialText;
         if (initialText != null) {
             dialog.setText(initialText);
@@ -77,26 +84,30 @@ public class StarloaderTextInputBuilder implements TextInputBuilder {
     }
 
     @Override
-    public @NotNull TextInputBuilder setHint(@NotNull String hint) {
+    @NotNull
+    public TextInputBuilder setHint(@NotNull String hint) {
         this.hint = hint;
         return this;
     }
 
     @Override
-    public @NotNull TextInputBuilder setText(@NotNull String text) {
+    @NotNull
+    public TextInputBuilder setInitialText(@NotNull String text) {
+        this.initialText = text;
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public TextInputBuilder setText(@NotNull String text) {
         this.text = text;
         return this;
     }
 
     @Override
-    public @NotNull TextInputBuilder setTitle(@NotNull String title) {
+    @NotNull
+    public TextInputBuilder setTitle(@NotNull String title) {
         this.title = title;
-        return this;
-    }
-
-    @Override
-    public @NotNull TextInputBuilder setInitialText(@NotNull String text) {
-        this.initialText = text;
         return this;
     }
 }

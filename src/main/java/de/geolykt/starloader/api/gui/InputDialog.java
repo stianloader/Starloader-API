@@ -5,6 +5,17 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Dialog displayed to the user which allows the user to input arbitrary text.
+ *
+ * <p>Note that due to limitations with the underlying game engine, the user is likely to be incapable
+ * of inputting quite a few special characters, especially with characters not present on US keyboards.
+ * For examples, this includes the umlauts like '&auml;' or '&uuml;'.
+ *
+ * <p>Instances of this interface can be created using {@link TextInputBuilder}, which in turn can be
+ * created via {@link Drawing#textInputBuilder(String, String, String)}. This interface should not be
+ * implemented by mods.
+ */
 public interface InputDialog extends Closable {
 
     /**

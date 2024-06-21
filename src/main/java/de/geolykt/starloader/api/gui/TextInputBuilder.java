@@ -6,8 +6,14 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.Input;
+
 /**
- * Interface for building Text Input Dialogs who easily provide User input.
+ * Interface for building {@link InputDialog text input dialogs} which serve as a quick way of
+ * obtaining user input.
+ *
+ * <p>Instances of this interface can be obtained using {@link Drawing#textInputBuilder(String, String, String)}.
+ * This interface should not be implemented by mods.
  */
 public interface TextInputBuilder {
 
@@ -20,7 +26,8 @@ public interface TextInputBuilder {
      * @see TextInputBuilder#addHooks(Collection)
      * @see InputDialog#addHook(Consumer)
      */
-    public @NotNull TextInputBuilder addHook(@NotNull Consumer<@Nullable String> hook);
+    @NotNull
+    public TextInputBuilder addHook(@NotNull Consumer<@Nullable String> hook);
 
     /**
      * Adds a multiple hook to the Dialog. These hooks will be called after the
@@ -31,17 +38,26 @@ public interface TextInputBuilder {
      * @see #addHook(Consumer)
      * @see InputDialog#addHook(Consumer)
      */
-    public @NotNull TextInputBuilder addHooks(@NotNull Collection<Consumer<@Nullable String>> hooks);
+    @NotNull
+    public TextInputBuilder addHooks(@NotNull Collection<@NotNull Consumer<@Nullable String>> hooks);
 
     /**
-     * Builds the dialog. Note that due to how the Game is built, the return value
+     * Builds the dialog. Note that due to how the game is built, the return value
      * will always be null if native keyboard input is enabled. This may get changed
      * in the future, but that is the current implementation. However this does not
      * mean that the hooks will not be called; they will be called either way.
      *
+     * <p>Note: As native text input using
+     * {@link Input#getTextInput(com.badlogic.gdx.Input.TextInputListener, String, String, String)}
+     * is not supported in the LWJGL3 backend of libGDX, future versions of SLAPI
+     * which are designed to only run under LWJGL3 (this is planned to happen one day
+     * or another) may explicitly disable the ability to make use of native text
+     * input.
+     *
      * @return The {@link InputDialog} that was just built, if applicable
      */
-    public @Nullable InputDialog build();
+    @Nullable
+    public InputDialog build();
 
     /**
      * Updates the hint of the Dialog.
@@ -51,7 +67,8 @@ public interface TextInputBuilder {
      * @param hint The hint of the dialog.
      * @return The builder instance, for chaining
      */
-    public @NotNull TextInputBuilder setHint(@NotNull String hint);
+    @NotNull
+    public TextInputBuilder setHint(@NotNull String hint);
 
     /**
      * Sets the initial text of the dialog. Unlike {@link #setText(String)}, this is the prefilled text - for real.
@@ -59,7 +76,8 @@ public interface TextInputBuilder {
      * @param text The text to use
      * @return The builder instance, for chaining
      */
-    public @NotNull TextInputBuilder setInitialText(@NotNull String text);
+    @NotNull
+    public TextInputBuilder setInitialText(@NotNull String text);
 
     /**
      * Updates the text of the Dialog.
@@ -69,7 +87,8 @@ public interface TextInputBuilder {
      * @param text The text of the dialog.
      * @return The builder instance, for chaining
      */
-    public @NotNull TextInputBuilder setText(@NotNull String text);
+    @NotNull
+    public TextInputBuilder setText(@NotNull String text);
 
     /**
      * Updates the title of the Dialog.
@@ -77,5 +96,6 @@ public interface TextInputBuilder {
      * @param title The title of the dialog.
      * @return The builder instance, for chaining
      */
-    public @NotNull TextInputBuilder setTitle(@NotNull String title);
+    @NotNull
+    public TextInputBuilder setTitle(@NotNull String title);
 }
