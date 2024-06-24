@@ -74,6 +74,24 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     private static boolean assumeVanillaRegionRenderingLogic = true;
 
+    @NotNull
+    @RemapMemberReference(ownerType = snoddasmannen.galimulator.factions.Faction.class, name = "d", desc = "()V", format = ReferenceFormat.NAME)
+    private static final String FACTION_REBEL_METHOD_NAME = ReferenceSource.getStringValue();
+
+    /**
+     * The remapped name of the "generateGalaxy" method.
+     *
+     * @since 2.0.0
+     * @see RemapMemberReference
+     */
+    @RemapMemberReference(ownerType = Space.class, name = "generateGalaxy", methodDesc = @MethodDesc(args = {int.class, MapData.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
+    @NotNull
+    public static String generateGalaxyMethod = ReferenceSource.getStringValue();
+
+    @RemapClassReference(type = GalimulatorGestureListener.class)
+    @NotNull
+    public static String gestureListenerClass = ReferenceSource.getStringValue();
+
     /**
      * The logger object that should be used used throughout this class.
      */
@@ -82,6 +100,10 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     @RemapMemberReference(ownerType = MapModes.class, name = "getShowsActors" /* Interesting name */, methodDesc = @MethodDesc(args = {}, ret = boolean.class), format = ReferenceFormat.COMBINED_LEGACY)
     public static String mapModeShowsActorsMethod = ReferenceSource.getStringValue();
+
+    @NotNull
+    @RemapMemberReference(ownerType = Space.class, name = "f", methodDesc = @MethodDesc(args = {snoddasmannen.galimulator.Empire.class}, ret = void.class), format = ReferenceFormat.NAME)
+    private static final String ON_EMPIRE_COLLAPSE_METHOD_NAME = ReferenceSource.getStringValue();
 
     /**
      * The remapped name of the "saveSync" method.
@@ -103,24 +125,10 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String simLoopLockField = ReferenceSource.getStringValue();
 
-    @RemapClassReference(type = GalimulatorGestureListener.class)
-    @NotNull
-    public static String gestureListenerClass = ReferenceSource.getStringValue();
-
     /**
      * The internal name of the class that this transformer seeks to modify.
      */
     private static final String SPACE_CLASS = "snoddasmannen/galimulator/Space";
-
-    /**
-     * The remapped name of the "generateGalaxy" method.
-     *
-     * @since 2.0.0
-     * @see RemapMemberReference
-     */
-    @RemapMemberReference(ownerType = Space.class, name = "generateGalaxy", methodDesc = @MethodDesc(args = {int.class, MapData.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
-    @NotNull
-    public static String generateGalaxyMethod = ReferenceSource.getStringValue();
 
     @RemapMemberReference(ownerType = Star.class, name = "renderRegion", desc = "()V", format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
@@ -181,6 +189,14 @@ public class SpaceASMTransformer extends ASMTransformer {
         return e.isCancelled();
     }
 
+    public static final void generateGalaxy(boolean finished) {
+        if (finished) {
+            EventManager.handleEvent(new GalaxyGeneratedEvent());
+        } else {
+            DebugNagException.nag();
+        }
+    }
+
     /**
      * Called at the very beginning of the global tick method.
      */
@@ -201,14 +217,6 @@ public class SpaceASMTransformer extends ASMTransformer {
      */
     public static final void logicalTickPre() {
         EventManager.handleEvent(new LogicalTickEvent(LogicalTickEvent.Phase.PRE_LOGICAL));
-    }
-
-    public static final void generateGalaxy(boolean finished) {
-        if (finished) {
-            EventManager.handleEvent(new GalaxyGeneratedEvent());
-        } else {
-            DebugNagException.nag();
-        }
     }
 
     public static final void save(String cause, String location) {
@@ -246,75 +254,6 @@ public class SpaceASMTransformer extends ASMTransformer {
         }
     }
 
-    /**
-     * Adds the callbacks that are responsible of emitting the {@link EmpireCollapseEvent}.
-     * Please beware that this method does not do any sanity checks, it will blindly transform the given method node.
-     *
-     * @param source The method node to transform
-     */
-    private void addEmpireCollapseListener(MethodNode source) {
-        AbstractInsnNode loadvar = new VarInsnNode(Opcodes.ALOAD, 0); // We inject into a static method, variable 0 corresponds to the first parameter
-        AbstractInsnNode checkcast = new TypeInsnNode(Opcodes.CHECKCAST, ACTIVE_EMPIRE_CLASS); // The parameter is the snoddasmannen/galimulator/Empire, which can be safely casted to ActiveEmpire
-        AbstractInsnNode callMethod = new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "emitCollapseEvent", "(L" + ACTIVE_EMPIRE_CLASS + ";)Z");
-        LabelNode skipReturnLabel = new LabelNode();
-        AbstractInsnNode returnInsn = new InsnNode(Opcodes.RETURN);
-        AbstractInsnNode condSkipReturn = new JumpInsnNode(Opcodes.IFEQ, skipReturnLabel);
-        // Keep in mind of reversed order
-        source.instructions.insert(skipReturnLabel);
-        source.instructions.insert(returnInsn);
-        source.instructions.insert(condSkipReturn);
-        source.instructions.insert(callMethod);
-        source.instructions.insert(checkcast);
-        source.instructions.insert(loadvar);
-    }
-
-    /**
-     * Adds the required bytecode so a {@link LogicalTickEvent} is thrown whenever needed.
-     * Please beware that this method does not do any sanity checks, it will mostly blindly transform the given method node.
-     *
-     * @param method The method to transform
-     */
-    private void addLogicalListener(MethodNode method) {
-        AbstractInsnNode currentInsn = method.instructions.getFirst();
-        String tickCountFieldName = tickCountField.split("[\\. ]")[1];
-        while (currentInsn != null) {
-            if (currentInsn instanceof FieldInsnNode) {
-                FieldInsnNode yField = (FieldInsnNode) currentInsn;
-                currentInsn = currentInsn.getNext();
-                if (!yField.owner.equals(SPACE_CLASS) || !yField.name.equals(tickCountFieldName) || currentInsn.getOpcode() != Opcodes.ICONST_2) {
-                    continue;
-                }
-                currentInsn = currentInsn.getNext();
-                if (currentInsn.getOpcode() != Opcodes.IREM) {
-                    continue;
-                }
-                currentInsn = currentInsn.getNext();
-                if (!(currentInsn instanceof JumpInsnNode)) {
-                    continue;
-                }
-                JumpInsnNode jumpToPOI = (JumpInsnNode) currentInsn;
-                while (currentInsn != jumpToPOI.label) {
-                    currentInsn = currentInsn.getNext();
-                }
-                // WARNING: this is some seriously dangerous assumptions.
-                AbstractInsnNode lastNode = method.instructions.getLast();
-                Objects.requireNonNull(lastNode);
-                while (lastNode.getOpcode() != Opcodes.IRETURN && lastNode.getOpcode() != Opcodes.RETURN) {
-                    lastNode = lastNode.getPrevious();
-                }
-                method.instructions.insert(currentInsn, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPre", "()V"));
-                method.instructions.insertBefore(lastNode, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPost", "()V"));
-                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickEarly", "()V"));
-            }
-            currentInsn = currentInsn.getNext();
-        }
-    }
-
-    @Override
-    public int getPriority() {
-        return -9_900;
-    }
-
     @Override
     public boolean accept(@NotNull ClassNode source) {
         if (source.name.equals(SPACE_CLASS)) {
@@ -331,11 +270,12 @@ public class SpaceASMTransformer extends ASMTransformer {
             boolean foundLoopLockFieldInit = false;
 
             for (MethodNode method : source.methods) {
-                if (method.name.equals("f") && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
-                    addEmpireCollapseListener(method);
+                if (method.name.equals(SpaceASMTransformer.ON_EMPIRE_COLLAPSE_METHOD_NAME)
+                        && method.desc.equals("(Lsnoddasmannen/galimulator/Empire;)V")) {
+                    this.addEmpireCollapseListener(method);
                     foundEmpireCollapseMethod = true;
                 } else if (method.name.equals(tickMethodName) && method.desc.equals(tickMethodDesc)) {
-                    addLogicalListener(method);
+                    this.addLogicalListener(method);
                     foundTickMethod = true;
                 } else if (method.name.equals(saveSyncMethodName) && method.desc.equals("(Ljava/lang/String;Ljava/lang/String;)V")) {
                     method.instructions.clear();
@@ -399,7 +339,8 @@ public class SpaceASMTransformer extends ASMTransformer {
             return true;
         } else if (source.name.equals("snoddasmannen/galimulator/factions/Faction")) {
             for (MethodNode method : source.methods) {
-                if (method.name.equals("d") && method.desc.equals("()V")) {
+                if (method.name.equals(SpaceASMTransformer.FACTION_REBEL_METHOD_NAME)
+                        && method.desc.equals("()V")) {
                     final String factionRebelEvent = "de/geolykt/starloader/api/event/empire/factions/FactionRebelEvent";
                     LabelNode skipLabel = new LabelNode();
                     InsnList injectedInstructions = new InsnList();
@@ -531,13 +472,82 @@ public class SpaceASMTransformer extends ASMTransformer {
         return false;
     }
 
+    /**
+     * Adds the callbacks that are responsible of emitting the {@link EmpireCollapseEvent}.
+     * Please beware that this method does not do any sanity checks, it will blindly transform the given method node.
+     *
+     * @param source The method node to transform
+     */
+    private void addEmpireCollapseListener(MethodNode source) {
+        AbstractInsnNode loadvar = new VarInsnNode(Opcodes.ALOAD, 0); // We inject into a static method, variable 0 corresponds to the first parameter
+        AbstractInsnNode checkcast = new TypeInsnNode(Opcodes.CHECKCAST, ACTIVE_EMPIRE_CLASS); // The parameter is the snoddasmannen/galimulator/Empire, which can be safely casted to ActiveEmpire
+        AbstractInsnNode callMethod = new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "emitCollapseEvent", "(L" + ACTIVE_EMPIRE_CLASS + ";)Z");
+        LabelNode skipReturnLabel = new LabelNode();
+        AbstractInsnNode returnInsn = new InsnNode(Opcodes.RETURN);
+        AbstractInsnNode condSkipReturn = new JumpInsnNode(Opcodes.IFEQ, skipReturnLabel);
+        // Keep in mind of reversed order
+        source.instructions.insert(skipReturnLabel);
+        source.instructions.insert(returnInsn);
+        source.instructions.insert(condSkipReturn);
+        source.instructions.insert(callMethod);
+        source.instructions.insert(checkcast);
+        source.instructions.insert(loadvar);
+    }
+
+    /**
+     * Adds the required bytecode so a {@link LogicalTickEvent} is thrown whenever needed.
+     * Please beware that this method does not do any sanity checks, it will mostly blindly transform the given method node.
+     *
+     * @param method The method to transform
+     */
+    private void addLogicalListener(MethodNode method) {
+        AbstractInsnNode currentInsn = method.instructions.getFirst();
+        String tickCountFieldName = tickCountField.split("[\\. ]")[1];
+        while (currentInsn != null) {
+            if (currentInsn instanceof FieldInsnNode) {
+                FieldInsnNode yField = (FieldInsnNode) currentInsn;
+                currentInsn = currentInsn.getNext();
+                if (!yField.owner.equals(SPACE_CLASS) || !yField.name.equals(tickCountFieldName) || currentInsn.getOpcode() != Opcodes.ICONST_2) {
+                    continue;
+                }
+                currentInsn = currentInsn.getNext();
+                if (currentInsn.getOpcode() != Opcodes.IREM) {
+                    continue;
+                }
+                currentInsn = currentInsn.getNext();
+                if (!(currentInsn instanceof JumpInsnNode)) {
+                    continue;
+                }
+                JumpInsnNode jumpToPOI = (JumpInsnNode) currentInsn;
+                while (currentInsn != jumpToPOI.label) {
+                    currentInsn = currentInsn.getNext();
+                }
+                // WARNING: this is some seriously dangerous assumptions.
+                AbstractInsnNode lastNode = method.instructions.getLast();
+                Objects.requireNonNull(lastNode);
+                while (lastNode.getOpcode() != Opcodes.IRETURN && lastNode.getOpcode() != Opcodes.RETURN) {
+                    lastNode = lastNode.getPrevious();
+                }
+                method.instructions.insert(currentInsn, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPre", "()V"));
+                method.instructions.insertBefore(lastNode, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPost", "()V"));
+                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickEarly", "()V"));
+            }
+            currentInsn = currentInsn.getNext();
+        }
+    }
+
+    @Override
+    public int getPriority() {
+        return -9_900;
+    }
+
     @Override
     public boolean isValidTarget(@NotNull String internalName) {
         if (!internalName.startsWith("sno")) {
             return false;
         }
         String fqn = internalName.replace('.', '/');
-        return fqn.equals(SPACE_CLASS)
+        return fqn.equals(SpaceASMTransformer.SPACE_CLASS)
                 || fqn.equals("snoddasmannen/galimulator/factions/Faction")
                 || fqn.equals("snoddasmannen/galimulator/Star")
                 || fqn.equals(SpaceASMTransformer.gestureListenerClass);
