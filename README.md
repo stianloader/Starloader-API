@@ -36,14 +36,18 @@ you can run in order to debug the starloader api.
 
 ### Maven
 
+You can use the maven package `de.geolykt:starloader-api:CURRENT_VERSION_HERE`
+at `https://stianloader.org/maven/`. Releases on the stianloader.org repository
+are performed at a nightly basis, that is every commit should see a new
+alpha release. "Full" releases may occur from time to time - however
+a few years have passed since the last full release, so one shouldn't depend
+on the presence of such releases.
+
 Warning: **Publishing SLAPI requires Java 17 or above** (Javadocs needs it)
 
-You can use the maven package `de.geolykt:starloader-api:CURRENT_VERSION_HERE`
-at `https://geolykt.de/maven`
+To bind against your own version of SLAPI run
 
-To bind against the latest version of SLAPI run
-
-    java -jar brachyura-bootstrap-0.jar publishToMavenLocal
+    ./gradlew publish
 
 which publishes the project to your local maven repository. You can then use it
 without having to declare a repository explicitly. Just note that doing
@@ -56,25 +60,30 @@ this requires any contributors of your project to do the same.
 - a2a1d9a597bf2463247bc0468e4b8594c9d96ef2 (v1.5) -> Galimulator 4.9
 - 7a341bfc108e863629cd64763c5de92e6baf894b (v2.0) -> Galimulator 4.10
 
-## Existing Extensions making use of this API (that I know of)
+## Existing mods making use of this API (that I know of)
+
+- [FastStar](https://github.com/Geolykt/FastStar)
+- [galimulator-profiler](https://github.com/Geolykt/galimulator-profiler)
+- [StarCellShading](https://github.com/Geolykt/StarCellShading)
+- [fast-asynchronous-starlane-triangulator](https://github.com/Geolykt/fast-async-starlane-triangulator)
+- [GalimulatorIRC](https://github.com/Geolykt/GalimulatorIRC)
+
+### Legacy mods (i.e. mods that haven't been developed and tested for a while)
 
 - [Datadriven-specials](https://github.com/Geolykt/Datadriven-specials)
 - [Timelapser](https://github.com/Geolykt/Timelapser)
 - [Variable Data Folder](https://github.com/Geolykt/VariableDataFolder)
 - [FeedbackVectors](https://github.com/Geolykt/Feedbackvectors)
-- [GalimulatorIRC](https://github.com/Geolykt/GalimulatorIRC)
 - [IvyH](https://github.com/Geolykt/IvyH)
 
-## Licensing and decompiled code
+## Licensing and legal concerns
 
-Most of the code is licensed under the Apache 2.0 license, however especially in
-the mixin zone you may encounter decompiled and slightly altered code from
-Galimulator. It should be addressed that the decompiled galimulator code IS NOT
-licensed under the Apache 2.0 license and in fact this repo is doing legally grey
-area stuff. Additionally the code is linking against code that doesn't have a
-known license, which means that it is more legal grey area actions! Although for
-latter I did get a not really legally valid permisson, so it's not much to
-worry about.
+The code of this repository is licensed under the Apache 2.0 license.
+However, due to the inherent state of modding, the existence of this
+project mostly relies on the (silent) approval of the game's developer.
+Henceforth, we ask anyone using this project to use it in a way which
+would not harm the perception of this project. That being said, from
+a legal perspective our appeal isn't binding at all.
 
 ## Event API example
 

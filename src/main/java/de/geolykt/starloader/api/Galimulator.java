@@ -56,8 +56,8 @@ import de.geolykt.starloader.api.utils.TickLoopLock;
  * methods/variables. This should be used to reduce the amount of calls to
  * obfuscated methods, which will improve the sanity of anyone that is working
  * on updating an extension.
- * <br/>
- * It also contains miscellaneous methods that do not really fall under a category.
+ *
+ * <p>It also contains miscellaneous methods that do not really fall under a category.
  *
  * @since 1.0.0
  */
@@ -67,8 +67,8 @@ public final class Galimulator {
      * Interface that contains the methods used by Starloader's {@link Galimulator} class.
      * This is needed in order to abstract out certain concepts and give the possibility
      * of implementing the Starloader API on non-galimulator games or with nonstandard mappings.
-     * <br/>
-     * This class should not be implemented by anything but the API Implementation.
+     *
+     * <p>This class should not be implemented by anything but the API Implementation.
      *
      * @since 1.2.0
      */
