@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
@@ -24,7 +23,8 @@ public class SLScreenBuilder extends ScreenBuilder {
     /**
      * The list of component providers for the screen instance.
      */
-    protected final @NotNull List<@NotNull ComponentSupplier> componentProviders = new ArrayList<>();
+    @NotNull
+    protected final List<@NotNull ComponentSupplier> componentProviders = new ArrayList<>();
 
     /**
      * Whether the header should be enabled, see {@link #setHeaderEnabled(boolean)}.
@@ -36,13 +36,15 @@ public class SLScreenBuilder extends ScreenBuilder {
      * but can be set to another colour via {@link #setHeaderColor(Color)}.
      * This value should be ignored is {@link #enableHeader} is false.
      */
-    protected @NotNull GalColor headerColor = NullUtils.requireNotNull(GalColor.ORANGE);
+    @NotNull
+    protected GalColor headerColor = Objects.requireNonNull(GalColor.ORANGE);
 
     /**
      * The title of the screen. While it is annotated as {@link Nullable}, it can only be null if
      * {@link #enableHeader} is set to false. It is set via {@link #setTitle(String)} and should not be set to null.
      */
-    protected @Nullable String title;
+    @Nullable
+    protected String title;
 
     /**
      * The width of the screen, see {@link #setWidth(int)}.
@@ -53,24 +55,35 @@ public class SLScreenBuilder extends ScreenBuilder {
     /**
      * A dynamic provider for the width of the screen. It is set via {@link #setWidthProvider(IntSupplier)}.
      */
-    protected @Nullable IntSupplier widthProvider;
+    @Nullable
+    protected IntSupplier widthProvider;
 
     @Override
-    public @NotNull Screen build() {
-        List<@NotNull ComponentSupplier> components = new LinkedList<>(componentProviders);
+    @NotNull
+    @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
+    public ScreenBuilder addComponentSupplier(@NotNull ComponentSupplier supplier) {
+        this.componentProviders.add(Objects.requireNonNull(supplier, "supplier must not be null."));
+        return this;
+    }
+
+    @Override
+    @NotNull
+    public Screen build() {
+        List<@NotNull ComponentSupplier> components = new LinkedList<>(this.componentProviders);
         String title = null;
-        if (enableHeader) {
-            title = NullUtils.requireNotNull(this.title, "The title was never provided!");
+        if (this.enableHeader) {
+            title = Objects.requireNonNull(this.title, "The title was never provided!");
         } else {
             title = this.title;
             if (title == null) {
-                title = NullUtils.requireNotNull(this.toString(), "Internal logic error. (did the universe collapse?)");
+                title = Objects.requireNonNull(this.toString(), "Internal logic error. (did the universe collapse?)");
             }
         }
+        IntSupplier widthProvider = this.widthProvider;
         if (widthProvider == null) {
-            return new SLScreenWidget(title, width, headerColor, components, !enableHeader);
+            return new SLScreenWidget(title, this.width, this.headerColor, components, !this.enableHeader);
         } else {
-            return new SLScreenWidget(title, NullUtils.requireNotNull(widthProvider), headerColor, components, !enableHeader);
+            return new SLScreenWidget(title, widthProvider, this.headerColor, components, !this.enableHeader);
         }
     }
 
@@ -79,7 +92,7 @@ public class SLScreenBuilder extends ScreenBuilder {
     @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
     public ScreenBuilder withHeaderColor(@NotNull Color gdxColor) {
         Objects.requireNonNull(gdxColor, "gdxColor may not be null.");
-        headerColor = new GalColor(gdxColor);
+        this.headerColor = new GalColor(gdxColor);
         return this;
     }
 
@@ -112,12 +125,6 @@ public class SLScreenBuilder extends ScreenBuilder {
     @Contract(pure = false, mutates = "this", value = "null -> fail, !null -> this")
     public ScreenBuilder withWidthProvider(@Nullable IntSupplier width) {
         this.widthProvider = width;
-        return this;
-    }
-
-    @Override
-    public @NotNull ScreenBuilder addComponentSupplier(@NotNull ComponentSupplier supplier) {
-        componentProviders.add(NullUtils.requireNotNull(supplier, "supplier must not be null."));
         return this;
     }
 }
