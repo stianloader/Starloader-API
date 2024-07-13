@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'gsl-starplane' version '0.2.0-a20240702'
+    id 'gsl-starplane' version '0.2.0-a20240713.1'
     id 'me.champeau.mrjar' version '0.1.1'
     id 'eclipse'
 }
