@@ -433,7 +433,7 @@ public final class Drawing {
      * This method does not pause the game nor does it unpause it. This may need to be done manually.
      * This method is also not blocking and may not be called asynchronously!
      *
-     * <p>The currently active stage will be disposed and if the vanilla galimulator logic is active,
+     * <p><b>The currently active stage will be disposed</b> and if the vanilla galimulator logic is active,
      * all input processors will be temporarily stored when displaying a custom stage and will be put back on
      * if the vanilla drawing logic is being used again.
      *

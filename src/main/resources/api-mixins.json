@@ -26,6 +26,7 @@
     "FactionMixins",
     "FlagItemMixins",
     "FleetMixins",
+    "FractalStarGeneratorMixins",
     "GalFXMixins",
     "GalimulatorGestureListenerMixins",
     "InstanceMixins",

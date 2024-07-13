@@ -49,10 +49,10 @@ dependencies {
     // The launcher - the heart of this project; Note that we now adopt a "bring your own launcher" model
     // so we don't actually force the usage of micromixin on others; Other projects can make use of more modern
     // launcher versions or even other variants such as those making use of the spongeian mixin implementation
-    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240703"
-    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240703"
+    compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240713"
+    devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240713"
 
-    compileOnly "org.stianloader:micromixin-annotations:0.6.1-a20240703"
+    compileOnly "org.stianloader:micromixin-annotations:0.6.1-a20240713"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
 
     compileOnlyApi "org.jetbrains:annotations:24.1.0"
