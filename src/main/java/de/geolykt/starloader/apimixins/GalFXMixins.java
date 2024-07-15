@@ -4,15 +4,21 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Desc;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 
 import de.geolykt.starloader.StarloaderAPIExtension;
 import de.geolykt.starloader.api.Galimulator;
@@ -24,15 +30,28 @@ import snoddasmannen.galimulator.GalFX;
 @Mixin(GalFX.class)
 public class GalFXMixins {
 
-    @Shadow
-    private static HashMap<String, Texture> w;
+    @Unique
+    private static Set<String> missingTextures = ConcurrentHashMap.newKeySet();
 
     @Unique
     private static boolean slapi$texturecrash;
 
-    @Unique
-    private static Set<String> missingTextures = ConcurrentHashMap.newKeySet();
+    @Shadow
+    private static HashMap<String, Texture> w;
 
+    @Overwrite
+    public static Texture a(String string) {
+        return GalFXMixins.slapi$slFetchTexture(string);
+    }
+
+    @Inject(at = @At("HEAD"), target = @Desc(value = "drawPolygon", args = PolygonSprite.class))
+    private static void slapi$onDrawPolygon(@NotNull PolygonSprite polygon, CallbackInfo ci) {
+        if (polygon.getVertices().length == 0) {
+            throw new IllegalArgumentException("Cannot draw a vertex-less polygon!");
+        }
+    }
+
+    @Unique
     private static Texture slapi$slFetchTexture(String path) {
         if (GalFXMixins.slapi$texturecrash) {
             throw new IllegalStateException("GalFXMixins.slapi$texturecrash is set.");
@@ -71,10 +90,5 @@ public class GalFXMixins {
             GalFX.a(path);
         });
         return Drawing.getTextureProvider().getSinglePixelSquare().getTexture();
-    }
-
-    @Overwrite
-    public static Texture a(String string) {
-        return GalFXMixins.slapi$slFetchTexture(string);
     }
 }

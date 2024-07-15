@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
 
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -87,6 +89,10 @@ public class StarMixins implements Star {
     @Shadow
     private float sprawlLevel;
 
+    @Shadow
+    private transient float[] starRegionVertices;
+
+    @Unique
     private transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
 
     @Shadow
@@ -104,7 +110,7 @@ public class StarMixins implements Star {
 
     @Overwrite
     public void a(snoddasmannen.galimulator.factions.Faction faction) { // setFaction
-        setFaction((Faction) faction);
+        this.setFaction((Faction) faction);
     }
 
     @Shadow
@@ -118,7 +124,7 @@ public class StarMixins implements Star {
 
     @Override
     public void addNeighbour(@NotNull Star star) {
-        connect((snoddasmannen.galimulator.Star) star);
+        this.connect((snoddasmannen.galimulator.Star) star);
     }
 
     @Override
@@ -171,7 +177,7 @@ public class StarMixins implements Star {
     @NotNull
     @Deprecated
     public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire getAssignedEmpire() {
-        return NullUtils.requireNotNull((de.geolykt.starloader.api.empire.ActiveEmpire) getOwningEmpire());
+        return Objects.requireNonNull((de.geolykt.starloader.api.empire.ActiveEmpire) this.getOwningEmpire());
     }
 
     @Override
@@ -183,7 +189,7 @@ public class StarMixins implements Star {
     @Shadow
     @NotNull
     public Vector2 getCoordinates() { // thankfully this is already implemented by the base class
-        throw new UnsupportedOperationException("This should be created by the shadowed field!");
+        throw new UnsupportedOperationException("This should be created by the shadowed member!");
     }
 
     @Override
@@ -307,20 +313,17 @@ public class StarMixins implements Star {
 
     @Override
     public float getX() {
-        return (float) x;
+        return (float) this.x;
     }
 
     @Override
     public float getY() {
-        return (float) y;
+        return (float) this.y;
     }
 
     @Override
     public boolean hasKey(@NotNull NamespacedKey key) {
-        if (metadata == null) {
-            metadata = new HashMap<>();
-        }
-        return metadata.containsKey(key);
+        return this.metadata != null && this.metadata.containsKey(key);
     }
 
     @Override
@@ -356,7 +359,7 @@ public class StarMixins implements Star {
         snoddasmannen.galimulator.Empire oldEmp = (snoddasmannen.galimulator.Empire) getAssignedEmpire();
         oldEmp.a((snoddasmannen.galimulator.Star) (Object) this, newEmp);
         newEmp.b((snoddasmannen.galimulator.Star) (Object) this, oldEmp);
-        setOwnerEmpire(newEmp);
+        this.setOwnerEmpire(newEmp);
     }
 
     @Override
@@ -402,7 +405,7 @@ public class StarMixins implements Star {
 
     @Override
     public void setInternalRandom(@NotNull Random random) {
-        d = NullUtils.requireNotNull(random);
+        this.d = Objects.requireNonNull(random);
     }
 
     @Override
@@ -411,38 +414,38 @@ public class StarMixins implements Star {
         if (rel == null) {
             throw new IllegalStateException("Cannot resolve registered religion for key: " + religion);
         }
-        faith = rel;
-        if (faith == minorityFaith) {
-            minorityFaith = null;
+        this.faith = rel;
+        if (this.faith == this.minorityFaith) {
+            this.minorityFaith = null;
         }
     }
 
     @Override
     public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
-        if (metadata == null) {
-            metadata = new HashMap<>();
+        if (this.metadata == null) {
+            this.metadata = new HashMap<>();
         }
         if (value == null) {
-            metadata.remove(key);
+            this.metadata.remove(key);
         } else {
-            metadata.put(key, value);
+            this.metadata.put(key, value);
         }
     }
 
     @Override
     public void setMinorityFaith(@Nullable NamespacedKey religion) {
         if (religion == null) {
-            minorityFaith = null;
+            this.minorityFaith = null;
             return;
         }
         Religion rel = (Religion) Registry.RELIGIONS.get(religion);
         if (rel == null) {
             throw new IllegalStateException("Cannot resolve registered religion for key: " + religion);
         }
-        if (rel == faith) {
-            minorityFaith = null;
+        if (rel == this.faith) {
+            this.minorityFaith = null;
         } else {
-            minorityFaith = rel;
+            this.minorityFaith = rel;
         }
     }
 
@@ -506,15 +509,26 @@ public class StarMixins implements Star {
         return visitedStars;
     }
 
+    @Inject(
+        at = @At("HEAD"),
+        target = @Desc(value = "setStarRegionTexture", args = snoddasmannen.galimulator.Star.PolygonType.class),
+        cancellable = true
+    )
+    private void slapi$onSetStarRegionTexture(CallbackInfo ci) {
+        if (this.starRegionVertices.length < 6) {
+            ci.cancel();
+        }
+    }
+
     @Override
     public void syncCoordinates() {
-        Vector2 vect = r;
+        Vector2 vect = this.r;
         if (vect == null) {
-            r = new Vector2((float) x, (float) y);
+            this.r = new Vector2((float) this.x, (float) this.y);
             return;
         }
-        x = vect.x;
-        y = vect.y;
+        this.x = vect.x;
+        this.y = vect.y;
     }
 
     @Inject(method = "onHostileTakeover(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
