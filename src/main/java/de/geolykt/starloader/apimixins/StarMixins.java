@@ -90,7 +90,7 @@ public class StarMixins implements Star {
     private float sprawlLevel;
 
     @Shadow
-    private transient float[] starRegionVertices;
+    private transient float[] t; // starRegionVertices
 
     @Unique
     private transient List<TickCallback<Star>> tickCallbacks = new ArrayList<>();
@@ -511,11 +511,13 @@ public class StarMixins implements Star {
 
     @Inject(
         at = @At("HEAD"),
-        target = @Desc(value = "setStarRegionTexture", args = snoddasmannen.galimulator.Star.PolygonType.class),
-        cancellable = true
+        target = @Desc(value = "a" /* = setStarRegionTexture */, args = snoddasmannen.galimulator.Star.PolygonType.class),
+        cancellable = true,
+        require = 1,
+        allow = 1
     )
     private void slapi$onSetStarRegionTexture(CallbackInfo ci) {
-        if (this.starRegionVertices.length < 6) {
+        if (this.t.length < 6) {
             ci.cancel();
         }
     }
@@ -534,7 +536,7 @@ public class StarMixins implements Star {
     @Inject(method = "onHostileTakeover(Lsnoddasmannen/galimulator/Empire;)V", at = @At("HEAD"), cancellable = true)
     public void takeover(snoddasmannen.galimulator.Empire empire, CallbackInfo info) {
         StarOwnershipTakeoverEvent event = new StarOwnershipTakeoverEvent(this, this.getEmpire(),
-                NullUtils.requireNotNull((de.geolykt.starloader.api.dimension.Empire) empire));
+                Objects.requireNonNull((de.geolykt.starloader.api.dimension.Empire) empire));
         EventManager.handleEvent(event);
         if (event.isCancelled()) {
             info.cancel();
