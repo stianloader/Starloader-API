@@ -7,9 +7,8 @@ package de.geolykt.starloader.api.gui.modconf;
  * {@link StringOption}, which in theory allows any value or {@link StrictStringOption}
  * which only accept "valid" options.
  *
- * <p>In order to make use of this interface, it needs to be manually implemented by the API consumer.
- * The graphical components are relayed to other components implemented by SLAPI, it is safe to use through
- * {@link ConfigurationSection#addOption(ConfigurationOption)}.
+ * <p>Instances of this interface can be obtained through
+ * {@link ConfigurationSection#addStringChooseOption(String, String, String, String...)}
  *
  * @since 1.3.0
  */

@@ -105,7 +105,7 @@ public interface ConfigurationSection {
      * independent of section and type, however this is not encouraged as this may confuse a few people.
      *
      * <p>If the user desires, it can choose to enter an arbitrary value as an option.
-     * If this behaviour is not desired {@link #addStringListOption(String, String, String, String...)}
+     * If this behaviour is not desired {@link #addStringChooseOption(String, String, String, String...)}
      * should be used. The special "Custom" value is inserted into the list of options presented
      * to the user.
      *
