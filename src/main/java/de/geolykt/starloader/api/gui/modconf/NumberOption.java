@@ -22,7 +22,8 @@ public interface NumberOption<T extends Number> extends ConfigurationOption<T> {
      *
      * @return The maximum value
      */
-    public @NotNull T getMaximum();
+    @NotNull
+    public T getMaximum();
 
     /**
      * Obtains the minimum value the option can be.
@@ -30,12 +31,14 @@ public interface NumberOption<T extends Number> extends ConfigurationOption<T> {
      *
      * @return The minimum value
      */
-    public @NotNull T getMinimum();
+    @NotNull
+    public T getMinimum();
 
     /**
      * Obtains the recommended values that the user can set.
      *
      * @return The recommended values.
      */
-    public @NotNull Collection<@NotNull T> getRecommendedValues();
+    @NotNull
+    public Collection<@NotNull T> getRecommendedValues();
 }

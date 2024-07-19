@@ -21,5 +21,6 @@ public interface StringOption extends ConfigurationOption<String> {
      *
      * @return The recommended values.
      */
-    public @NotNull Collection<@NotNull String> getRecommendedValues();
+    @NotNull
+    public Collection<@NotNull String> getRecommendedValues();
 }

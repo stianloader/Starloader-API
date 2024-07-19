@@ -82,8 +82,9 @@ public interface IntegerOption extends NumberOption<Integer> {
     @Override
     @Deprecated
     @DeprecatedSince("2.0.0")
-    public default @NotNull Integer get() {
-        return getValue();
+    @NotNull
+    public default Integer get() {
+        return this.getValue();
     }
 
     /**
@@ -104,11 +105,11 @@ public interface IntegerOption extends NumberOption<Integer> {
     @Deprecated
     @DeprecatedSince("2.0.0")
     public default void set(@NotNull Integer value) {
-        if (value > getMaximum() || value < getMinimum()) {
+        if (value > this.getMaximum() || value < this.getMinimum()) {
             throw new IllegalArgumentException(String.format(Locale.ROOT, "Value out of bounds: %d (min %d, max %d)",
-                    value, getMinimum(), getMaximum()));
+                    value, this.getMinimum(), this.getMaximum()));
         }
-        setValue(value);
+        this.setValue(value);
     }
 
     /**

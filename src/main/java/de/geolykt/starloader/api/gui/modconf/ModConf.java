@@ -5,8 +5,6 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.NullUtils;
-
 /**
  * Main class for ModConf functionality.
  * The base implementation makes so that this integrates nicely with the vanilla system and does not cause any
@@ -29,7 +27,8 @@ public final class ModConf {
          * @param name The name of the section
          * @return A newly created {@link ConfigurationSection} that has the given name
          */
-        public @NotNull ConfigurationSection createSection(@NotNull String name);
+        @NotNull
+        public ConfigurationSection createSection(@NotNull String name);
 
         /**
          * Obtains the sections that are currently registered.
@@ -38,7 +37,8 @@ public final class ModConf {
          *
          * @return A {@link Collection} of sections that are registered
          */
-        public @NotNull Collection<@NotNull ConfigurationSection> getSections();
+        @NotNull
+        public Collection<@NotNull ConfigurationSection> getSections();
     }
 
     private static ModConfSpec impl;
@@ -58,7 +58,8 @@ public final class ModConf {
      *
      * @return The implementation that is currently in use
      */
-    public static @NotNull ModConfSpec getImplementation() {
+    @NotNull
+    public static ModConfSpec getImplementation() {
         ModConfSpec implementation = ModConf.impl;
         if (implementation == null) {
             throw new IllegalStateException("The implementation was not yet defined!");
@@ -73,8 +74,9 @@ public final class ModConf {
      *
      * @return A {@link Collection} of sections that are registered
      */
-    public static @NotNull Collection<@NotNull ConfigurationSection> getSections() {
-        return impl.getSections();
+    @NotNull
+    public static Collection<@NotNull ConfigurationSection> getSections() {
+        return ModConf.impl.getSections();
     }
 
     /**
@@ -83,7 +85,7 @@ public final class ModConf {
      * @param impl The implementation to use.
      */
     public static void setImplementation(@NotNull ModConfSpec impl) {
-        ModConf.impl = NullUtils.requireNotNull(impl, "Cannot set the modconf implementation to a null value");
+        ModConf.impl = Objects.requireNonNull(impl, "Cannot set the modconf implementation to a null value");
     }
 
     /**

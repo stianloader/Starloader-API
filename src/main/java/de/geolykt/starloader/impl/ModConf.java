@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.stianloader.micromixin.transform.internal.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
@@ -19,9 +22,10 @@ import de.geolykt.starloader.api.gui.modconf.ConfigurationSection;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.gui.modconf.ModConf.ModConfSpec;
-import de.geolykt.starloader.api.utils.FloatConsumer;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;
+import de.geolykt.starloader.api.gui.modconf.StringChooseOption;
 import de.geolykt.starloader.api.gui.modconf.StringOption;
+import de.geolykt.starloader.api.utils.FloatConsumer;
 import de.geolykt.starloader.impl.gui.ModConfScreen;
 import de.geolykt.starloader.impl.util.PseudoImmutableArrayList;
 
@@ -47,14 +51,16 @@ public class ModConf implements ModConfSpec {
          *
          * @since 1.3.0
          */
-        protected final @NotNull ConfigurationSection cfgSect;
+        @NotNull
+        protected final ConfigurationSection cfgSect;
 
         /**
          * The name of the option. Should be user-friendly but not all too long.
          *
          * @since 1.3.0
          */
-        protected final @NotNull String name;
+        @NotNull
+        protected final String name;
 
         /**
          * Constructor.
@@ -73,16 +79,18 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull String getName() {
-            return name;
+        @NotNull
+        public String getName() {
+            return this.name;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public @NotNull ConfigurationSection getParent() {
-            return cfgSect;
+        @NotNull
+        public ConfigurationSection getParent() {
+            return this.cfgSect;
         }
     }
 
@@ -97,19 +105,20 @@ public class ModConf implements ModConfSpec {
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
          *
-         * @since 1.3.0
+         * @since 2.0.0-a20240719
          */
-        protected @NotNull Boolean currentVal;
+        private boolean currentVal;
 
         /**
          * The currently valid value.
          *
-         * @since 1.3.0
+         * @since 2.0.0-a20240719
          */
-        protected final @NotNull Boolean defaultVal;
+        private final boolean defaultVal;
 
+        @AvailableSince("2.0.0-a20240719")
         protected SLBooleanOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
-                @NotNull Boolean currentVal, @NotNull Boolean defaultVal) {
+                boolean currentVal, boolean defaultVal) {
             super(name, cfgSect);
             this.currentVal = currentVal;
             this.defaultVal = defaultVal;
@@ -119,16 +128,18 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Boolean get() {
-            return currentVal;
+        @NotNull
+        public Boolean get() {
+            return this.currentVal;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public @NotNull Boolean getDefault() {
-            return defaultVal;
+        @NotNull
+        public Boolean getDefault() {
+            return this.defaultVal;
         }
 
         /**
@@ -137,7 +148,7 @@ public class ModConf implements ModConfSpec {
         @Override
         public void set(@NotNull Boolean value) {
             this.onSet(value);
-            currentVal = value;
+            this.currentVal = value;
         }
     }
 
@@ -154,14 +165,16 @@ public class ModConf implements ModConfSpec {
          *
          * @since 1.3.0
          */
-        protected final @NotNull PseudoImmutableArrayList<@NotNull ConfigurationOption<?>> children = new PseudoImmutableArrayList<>(16);
+        @NotNull
+        protected final PseudoImmutableArrayList<@NotNull ConfigurationOption<?>> children = new PseudoImmutableArrayList<>(16);
 
         /**
          * The user-friendly name of the section.
          *
          * @since 1.3.0
          */
-        protected final @NotNull String name;
+        @NotNull
+        protected final String name;
 
         /**
          * Constructor.
@@ -177,10 +190,11 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull BooleanOption addBooleanOption(@NotNull String name, boolean currentValue, boolean defaultValue) {
-            checkState();
+        @NotNull
+        public BooleanOption addBooleanOption(@NotNull String name, boolean currentValue, boolean defaultValue) {
+            ModConf.checkState();
             BooleanOption opt = new SLBooleanOption(name, this, currentValue, defaultValue);
-            children.unsafeAdd(opt);
+            this.children.unsafeAdd(opt);
             return opt;
         }
 
@@ -188,11 +202,12 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull FloatOption addFloatOption(@NotNull String name, float currentValue, float defaultValue,
+        @NotNull
+        public FloatOption addFloatOption(@NotNull String name, float currentValue, float defaultValue,
                 float min, float max, @NotNull Collection<@NotNull Float> recommended) {
-            checkState();
+            ModConf.checkState();
             FloatOption opt = new SLFLoatOption(name, this, currentValue, defaultValue, min, max, recommended);
-            children.unsafeAdd(opt);
+            this.children.unsafeAdd(opt);
             return opt;
         }
 
@@ -200,11 +215,12 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull IntegerOption addIntegerOption(@NotNull String name, int currentValue, int defaultValue,
+        @NotNull
+        public IntegerOption addIntegerOption(@NotNull String name, int currentValue, int defaultValue,
                 int min, int max, @NotNull Collection<@NotNull Integer> recommended) {
-            checkState();
+            ModConf.checkState();
             IntegerOption opt = new SLIntOption(name, this, currentValue, defaultValue, min, max, recommended);
-            children.unsafeAdd(opt);
+            this.children.unsafeAdd(opt);
             return opt;
         }
 
@@ -213,18 +229,18 @@ public class ModConf implements ModConfSpec {
          */
         @Override
         public void addOption(@NotNull ConfigurationOption<?> option) {
-            children.add(option);
+            ModConf.checkState();
+            this.children.unsafeAdd(option);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
-        public @NotNull StringOption addStringOption(@NotNull String name, @NotNull String currentValue,
-                @NotNull String defaultValue, @NotNull Collection<@NotNull String> recommended) {
-            checkState();
-            StringOption opt = new SLStringOption(name, this, currentValue, defaultValue, recommended);
-            children.unsafeAdd(opt);
+        @NotNull
+        public StringChooseOption addStringChooseOption(@NotNull String name,
+                @NotNull String currentValue, @NotNull String defaultValue,
+                @NotNull String @NotNull... options) {
+            ModConf.checkState();
+            StringChooseOption opt = new SLStringChooseOption(name, this, currentValue, defaultValue, Objects.requireNonNull(Arrays.asList(options)));
+            this.children.unsafeAdd(opt);
             return opt;
         }
 
@@ -232,12 +248,26 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
+        @NotNull
+        public StringOption addStringOption(@NotNull String name, @NotNull String currentValue,
+                @NotNull String defaultValue, @NotNull Collection<@NotNull String> recommended) {
+            ModConf.checkState();
+            StringOption opt = new SLStringOption(name, this, currentValue, defaultValue, recommended);
+            this.children.unsafeAdd(opt);
+            return opt;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @NotNull
+        public StrictStringOption addStringOption(@NotNull String name, @NotNull String currentValue,
                 @NotNull String defaultValue, @NotNull Predicate<@NotNull String> test,
                 @NotNull Collection<@NotNull String> recommended) {
-            checkState();
+            ModConf.checkState();
             StrictStringOption opt = new SLStrictStringOption(name, this, currentValue, defaultValue, test, recommended);
-            children.unsafeAdd(opt);
+            this.children.unsafeAdd(opt);
             return opt;
         }
 
@@ -245,16 +275,18 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull List<@NotNull ConfigurationOption<?>> getChildren() {
-            return children;
+        @NotNull
+        public List<@NotNull ConfigurationOption<?>> getChildren() {
+            return this.children;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public @NotNull String getName() {
-            return name;
+        @NotNull
+        public String getName() {
+            return this.name;
         }
     }
 
@@ -562,6 +594,22 @@ public class ModConf implements ModConfSpec {
     }
 
     /**
+     * Simplistic implementation of the {@link StringChooseOption} interface.
+     * Instances can be created using {@link ConfigurationSection#addStringChooseOption(String, String, String, String...)}.
+     *
+     * @since 2.0.0-a20240719
+     */
+    @AvailableSince("2.0.0-a20240719")
+    private static class SLStringChooseOption extends SLStrictStringOption implements StringChooseOption {
+        @AvailableSince("2.0.0-a20240719")
+        private SLStringChooseOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
+                @NotNull String currentVal, @NotNull String defaultVal,
+                @NotNull Collection<@NotNull String> supportedValues) {
+            super(name, cfgSect, currentVal, defaultVal, supportedValues::contains, supportedValues);
+        }
+    }
+
+    /**
      * Simplistic implementation of the {@link StringOption} interface. As the
      * interface states, this implementation does not verify strings for validity,
      * however sub-classes may do that.
@@ -574,23 +622,26 @@ public class ModConf implements ModConfSpec {
          * The default value. What is considered default is more or less arbitrary, but
          * having one is required.
          *
-         * @since 1.3.0
+         * @since 2.0.0-a20240719
          */
-        protected @NotNull String currentVal;
+        @NotNull
+        private String currentVal;
 
         /**
          * The currently valid value.
          *
-         * @since 1.3.0
+         * @since 2.0.0-a20240719
          */
-        protected final @NotNull String defaultVal;
+        @NotNull
+        private final String defaultVal;
 
         /**
          * The recommended values shown to the user when the user decides to change the value.
          *
-         * @since 1.3.0
+         * @since 2.0.0-a20240719
          */
-        protected @NotNull Collection<@NotNull String> recommended;
+        @NotNull
+        private Collection<@NotNull String> recommended;
 
         protected SLStringOption(@NotNull String name, @NotNull ConfigurationSection cfgSect,
                 @NotNull String currentVal, @NotNull String defaultVal, @NotNull Collection<@NotNull String> recommended) {
@@ -604,21 +655,24 @@ public class ModConf implements ModConfSpec {
          * {@inheritDoc}
          */
         @Override
-        public @NotNull String get() {
-            return currentVal;
+        @NotNull
+        public String get() {
+            return this.currentVal;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public @NotNull String getDefault() {
-            return defaultVal;
+        @NotNull
+        public String getDefault() {
+            return this.defaultVal;
         }
 
         @Override
-        public @NotNull Collection<@NotNull String> getRecommendedValues() {
-            return recommended;
+        @NotNull
+        public Collection<@NotNull String> getRecommendedValues() {
+            return this.recommended;
         }
 
         /**
@@ -627,7 +681,7 @@ public class ModConf implements ModConfSpec {
         @Override
         public void set(@NotNull String value) {
             this.onSet(value);
-            currentVal = value;
+            this.currentVal = value;
         }
     }
 
@@ -643,7 +697,8 @@ public class ModConf implements ModConfSpec {
         }
     }
 
-    protected final @NotNull ModConfScreen screen = new ModConfScreen(this);
+    @NotNull
+    protected final ModConfScreen screen = new ModConfScreen(this);
 
     /**
      * The name of the currently registered sections. Used for easy state

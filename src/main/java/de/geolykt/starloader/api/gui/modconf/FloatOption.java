@@ -82,8 +82,9 @@ public interface FloatOption extends NumberOption<Float> {
     @Override
     @Deprecated
     @DeprecatedSince("2.0.0")
-    public default @NotNull Float get() {
-        return getValue();
+    @NotNull
+    public default Float get() {
+        return this.getValue();
     }
 
     /**
@@ -104,11 +105,11 @@ public interface FloatOption extends NumberOption<Float> {
     @Deprecated
     @DeprecatedSince("2.0.0")
     public default void set(@NotNull Float value) {
-        if (value > getMaximum() || value < getMinimum()) {
+        if (value > this.getMaximum() || value < this.getMinimum()) {
             throw new IllegalArgumentException(String.format(Locale.ROOT, "Value out of bounds: %f (min %f, max %f)",
-                    value, getMinimum(), getMaximum()));
+                    value, this.getMinimum(), this.getMaximum()));
         }
-        setValue(value);
+        this.setValue(value);
     }
 
     /**
