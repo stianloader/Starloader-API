@@ -39,12 +39,19 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
         // TODO properly register natives and deobf this
         Set<String> nativesName = new HashSet<>();
         Native.get_a().forEach(starNative -> {
+            StateActorCreator creator = starNative.e();
+            if (creator == null) {
+                LoggerFactory.getLogger(StateActorFactoryRegistry.class).error("Star native '{}' does not have a StateActorCreator instance attached. This ship is likely absent from the native ship definition directory. Regardless, skipping it from the registry but a crash during gameplay is likely.", starNative.getName());
+                return;
+            }
             nativesName.add(starNative.getName());
-            register(((RegistryKeyed) starNative.e()).getRegistryKey(), starNative.e());
+            this.register(((RegistryKeyed) creator).getRegistryKey(), creator);
         });
+
         for (ShipType type : ShipType.values()) {
-            register(((RegistryKeyed) (Object) type).getRegistryKey(), type);
+            this.register(((RegistryKeyed) (Object) type).getRegistryKey(), type);
         }
+
         Set<Object> alreadyIncluded = new HashSet<>(super.keyedValues.values());
         for (Object o : Space.getStateActorCreators()) {
             if (alreadyIncluded.contains(o)) {
@@ -59,7 +66,7 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
                     LoggerFactory.getLogger(StateActorFactoryRegistry.class).warn("Unregistered native actor creator (not registering it anyways): " + jsonFactory.getShipName());
                     continue;
                 }
-                register(((RegistryKeyed) o).getRegistryKey(), jsonFactory);
+                this.register(((RegistryKeyed) o).getRegistryKey(), jsonFactory);
             } else {
                 LoggerFactory.getLogger(StateActorFactoryRegistry.class).warn("Unknown factory class: " + o.getClass().getName());
             }
