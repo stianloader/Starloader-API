@@ -75,7 +75,7 @@ public class StateActorFactoryRegistry extends Registry<StateActorFactory<?>> {
 
     @SuppressWarnings("null")
     public void register(@NotNull NamespacedKey key, StateActorCreator value) {
-        register(key, (StateActorFactory<?>) value);
+        this.register(key, (StateActorFactory<?>) value);
     }
 
     @Override
