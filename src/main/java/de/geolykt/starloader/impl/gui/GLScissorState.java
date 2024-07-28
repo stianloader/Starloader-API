@@ -55,9 +55,18 @@ public final class GLScissorState {
      * @since 2.0.0
      */
     public static final void glScissor(int x, int y, int w, int h) {
-        if (x < 0 || y < 0 || w < 0 || h < 0) {
-            throw new IllegalStateException("One of the arguments has a negative value - which is not permitted! Values: x=" + x + ", y=" + y + ", w=" + w + ", h=" + h);
+        if (w < 0 || h < 0) {
+            throw new IllegalArgumentException("Width or height has a negative value - which is not permitted! Values: x=" + x + ", y=" + y + ", w=" + w + ", h=" + h);
         }
+
+        if (x < 0) {
+            w -= (x = -x);
+        }
+
+        if (y < 0) {
+            h -= (y = -y);
+        }
+
         GLScissorState.currentX = x;
         GLScissorState.currentY = y;
         GLScissorState.currentW = w;

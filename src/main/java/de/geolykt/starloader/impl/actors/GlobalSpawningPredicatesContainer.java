@@ -32,33 +32,33 @@ public class GlobalSpawningPredicatesContainer implements SpawnPredicatesContain
 
     @SuppressWarnings("null")
     private void init() {
-        if (initialised) {
+        if (this.initialised) {
             return;
         }
-        initialised = true;
+        this.initialised = true;
 
         // JAVAC does not like this
         for (Native starNative : Native.get_a()) {
-            natives.put(starNative, SLIntrinsics.createPredicate(starNative.e(), 0.5F));
+            this.natives.put(starNative, SLIntrinsics.createPredicate(starNative.e(), 0.5F));
         }
 
         Vector<ShipType> buildableTypes = ShipFactory.getBuildableTypes();
-        fallbackPredicates = new ArrayList<>(buildableTypes.size());
+        this.fallbackPredicates = new ArrayList<>(buildableTypes.size());
 
         for (int i = 0; i < buildableTypes.size(); i++) {
-            fallbackPredicates.add(SLIntrinsics.createPredicate(buildableTypes.get(i), 1.0F));
+            this.fallbackPredicates.add(SLIntrinsics.createPredicate(buildableTypes.get(i), 1.0F));
         }
 
-        fallbackShuffled = new ArrayList<>(fallbackPredicates);
+        this.fallbackShuffled = new ArrayList<>(this.fallbackPredicates);
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
     public Iterable<@NotNull StateActorSpawnPredicate<?>> getFallbackShuffled() {
-        init();
-        Collections.shuffle((List<?>) fallbackShuffled);
-        return Collections.unmodifiableCollection(fallbackShuffled);
+        this.init();
+        Collections.shuffle((List<?>) this.fallbackShuffled);
+        return Collections.unmodifiableCollection(this.fallbackShuffled);
     }
 
     @SuppressWarnings("all")
@@ -75,7 +75,7 @@ public class GlobalSpawningPredicatesContainer implements SpawnPredicatesContain
     @Override
     @NotNull
     public Map<? extends @NotNull Object, StateActorSpawnPredicate<?>> getNatives() {
-        init();
-        return natives;
+        this.init();
+        return this.natives;
     }
 }
