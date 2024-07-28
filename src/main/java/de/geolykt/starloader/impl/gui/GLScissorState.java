@@ -59,13 +59,10 @@ public final class GLScissorState {
             throw new IllegalArgumentException("Width or height has a negative value - which is not permitted! Values: x=" + x + ", y=" + y + ", w=" + w + ", h=" + h);
         }
 
-        if (x < 0) {
-            w -= (x = -x);
-        }
-
-        if (y < 0) {
-            h -= (y = -y);
-        }
+        w = Math.min(w, w + x);
+        x = Math.max(x, 0);
+        h = Math.min(h, h + y);
+        y = Math.max(y, 0);
 
         GLScissorState.currentX = x;
         GLScissorState.currentY = y;
