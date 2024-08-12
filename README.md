@@ -1,4 +1,4 @@
-# Starloader-API
+# SLAPI
 
 ## Communication
 
@@ -12,11 +12,13 @@ There is also a discord if you are into this: https://discord.gg/CjnPMxsAX6
 
 ## Description
 
-The starloader API is the more usefull part of the Starloader project for anyone
-interested in the project. While Starloader proper is still required in order to
-run, the Starloader-API will provide a common and hopefully version-independent
-API that can be used by extensions. Another big goal is to prevent any conflicts
-that may arise (for example overwriting static methods) via our Event API.
+SLAPI is the more usefull part of the stianloader project for anyone
+interested in the project. While SLL is still required in order to
+run all mods in the Galimulator modding ecosystem, the Starloader-API provides
+a common and ideally version-independent API that can be used by extensions.
+Another big goal is to prevent any conflicts that may arise (for example
+overwriting methods via Mixins or doing other potentially conflicting transforms)
+via our Event API.
 
 ## Building
 
@@ -25,7 +27,12 @@ Warning: **Building SLAPI requires Java 11 or above**
 The project can be built via gradle as you are used to. Simply running
 `./gradlew build` on UNIX (on Windows you'd want to use `gradlew.bat`) will
 build the project and everything else that you need. The output will be in the
-`build/libs` folder.
+`build/libs` folder. The `-remapped.jar` artifact is the jar used in a
+production environment, the other jar will only work in development
+environments with the appropriate mappings applied (that is the minimal
+mappings. Supplying additional mappings to gslStarplane means that this
+artifact cannot be used in that development environment. See the documentation
+of gslStarplane for workarounds in this scenario.)
 
 ### IDE Support
 
@@ -67,13 +74,12 @@ this requires any contributors of your project to do the same.
 - [StarCellShading](https://github.com/Geolykt/StarCellShading)
 - [fast-asynchronous-starlane-triangulator](https://github.com/Geolykt/fast-async-starlane-triangulator)
 - [GalimulatorIRC](https://github.com/Geolykt/GalimulatorIRC)
+- [s2dmenues](https://github.com/Geolykt/s2dmenues)
 
 ### Legacy mods (i.e. mods that haven't been developed and tested for a while)
 
 - [Datadriven-specials](https://github.com/Geolykt/Datadriven-specials)
 - [Timelapser](https://github.com/Geolykt/Timelapser)
-- [Variable Data Folder](https://github.com/Geolykt/VariableDataFolder)
-- [FeedbackVectors](https://github.com/Geolykt/Feedbackvectors)
 - [IvyH](https://github.com/Geolykt/IvyH)
 
 ## Licensing and legal concerns
@@ -110,30 +116,30 @@ public class StarloaderDemoListener implements Listener {
     @EventHandler(EventPriority.MEDIUM)
     public void onEmpireCollapse(EmpireCollapseEvent event) {
         if (!event.isCancelled()) {
-            logger.info("{} ceased to exist. They persisted for {} years.",
-                    event.getCollapsedEmpire().getEmpireName(),
-                    event.getCollapsedEmpire().getAge());
+            this.logger.info("{} ceased to exist. They persisted for {} years.",
+                    event.getEmpire().getEmpireName(),
+                    event.getEmpire().getAge());
         }
     }
 
     @EventHandler
     public void onAllianceJoin(AllianceJoinEvent event) {
-        logger.info("{} has joined the alliance \"{}\".", 
-                event.getEmpire().getEmpireName(), 
+        this.logger.info("{} has joined the alliance \"{}\".", 
+                event.getJoiningEmpire().getEmpireName(), 
                 event.getAlliance().getFullName());
     }
 
     @EventHandler
     public void onAllianceQuit(AllianceLeaveEvent event) {
-        logger.info("{} has left the alliance \"{}\".", 
-                event.getEmpire().getEmpireName(), 
+        this.logger.info("{} has left the alliance \"{}\".", 
+                event.getLeavingEmpire().getEmpireName(), 
                 event.getAlliance().getAbbreviation());
     }
 }
 ```
 
 The concept behind the event API was borrowed from Bukkit, so if you have worked
-with Bukkit before, the api will be pretty similar to you.
+with Bukkit before, the api will look pretty similar to you.
 The listener can then be registered via
 
     EventManager.registerListener(new StarloaderDemoListener(logger));
@@ -141,6 +147,6 @@ The listener can then be registered via
 however it should be noted that you cannot register the same listener instance multiple
 times, although this should rarely be an issue for you. It should also be noted
 that the event API is very fragile at the moment and you should avoid
-registering or unregistering listeners an incredible amount of times as that
-can be very resource intensive.
+registering or unregistering listeners frequently as that can be very resource
+intensive.
 

@@ -42,21 +42,24 @@ public interface Alliance extends Dateable {
      *
      * @return The abbreviation the alliance currently has
      */
-    public @NotNull String getAbbreviation();
+    @NotNull
+    public String getAbbreviation();
 
     /**
      * Obtains the Color of the Alliance used for UI.
      *
      * @return The {@link Color} of the alliance
      */
-    public @NotNull Color getGDXColor();
+    @NotNull
+    public Color getGDXColor();
 
     /**
      * Obtains the full name of the Alliance.
      *
      * @return The name that the alliance currently has
      */
-    public @NotNull String getFullName();
+    @NotNull
+    public String getFullName();
 
     /**
      * The {@link ActiveEmpire ActiveEmpires} that the alliance currently has as
