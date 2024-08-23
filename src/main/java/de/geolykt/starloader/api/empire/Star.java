@@ -234,7 +234,7 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @return A {@link Vector} of {@link Star Stars} that the current Star has a
      *         starlane to
      * @deprecated This method violates several core design principles that were developed
-     * later on in the developer lifecycle, use {@link #getNeighbourList()} instead.
+     * later on in the development lifecycle, use {@link #getNeighbourList()} instead.
      */
     @ScheduledForRemoval(inVersion = "3.0.0")
     @DeprecatedSince("2.0.0")
@@ -249,8 +249,14 @@ public interface Star extends Identifiable, Metadatable, Locateable, InternalRan
      * @param recurseDepth The depth of recursion
      * @return A {@link Vector} of {@link Star Stars} that are within the given
      *         distance
+     * @deprecated This method violates several core design principles that were developed
+     * later on in the development lifecycle.
      */
-    public @NotNull Vector<Star> getNeighboursRecursive(int recurseDepth);
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0")
+    @NotNull
+    public Vector<Star> getNeighboursRecursive(int recurseDepth);
 
     /**
      * Obtains the tick callbacks registered to this {@link Star} instance.
