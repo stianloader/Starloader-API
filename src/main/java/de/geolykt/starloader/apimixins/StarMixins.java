@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.stianloader.micromixin.annotations.CanonicalOverwrite;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntSet;
@@ -275,9 +276,9 @@ public class StarMixins implements Star {
         return this.neighbours;
     }
 
-    @Overwrite(aliases = "c")
     @NotNull
     @Override
+    @CanonicalOverwrite(target = @Desc(value = "c", args = int.class, ret = Vector.class))
     public Vector<Star> getNeighboursRecursive(int depth) {
         return this.slapi$getNeighboursRecursive(depth);
     }
