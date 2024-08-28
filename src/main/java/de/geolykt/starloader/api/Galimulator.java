@@ -36,6 +36,7 @@ import de.geolykt.starloader.api.dimension.Dimension;
 import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.empire.StarlaneGenerator;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
@@ -725,6 +726,38 @@ public final class Galimulator {
          * @see #getActiveMapmode()
          */
         public void setActiveMapmode(@NotNull MapMode mode);
+
+        /**
+         * Sets the progress of the currently performed background task.
+         * A background task is a task that is being performed if the main thread is unable to
+         * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
+         * caused by another thread having acquired "hard" control of the tick loop lock
+         * (as per {@link TickLoopLock#acquireHardControl()}. This scenario causes the
+         * loading screen to show up.
+         *
+         * <p>This progress string is displayed on the aforementioned loading screen
+         * after the "main" background task description. This method is supposed to be
+         * used for features such as galaxy generation (e.g. within  {@link StarlaneGenerator})
+         * or galaxy loading, or any other feature that may induce a loading screen due
+         * to the semantics mentioned in the previous paragraph.
+         *
+         * <p>This method is safe to invoke on any thread, but should generally
+         * be invoked by the thread holding the "hard" tick loop lock control,
+         * or a child thread of said thread.
+         *
+         * <p>In vanilla galimulator this method is solely used by the landmark generation,
+         * and even then only in a flawed capacity that means that it isn't being incremented
+         * correctly. The string used here follows the following format:
+         * <code>completedLandmarkCount / allLandmarkCount</code>.
+         *
+         * @param progressDescription The description of the progress currently ongoing
+         * in the currently performed task running in the background (which is blocking
+         * the main rendering thread). Or null, to clear/unset the progress.
+         * @since 2.0.0-a20240828
+         */
+        @NonBlocking
+        @ApiStatus.AvailableSince("2.0.0-a20240828")
+        public void setBackgroundTaskProgress(@Nullable String progressDescription);
 
         /**
          * Set the year in-game. The year is rarely a negative number and should not get
@@ -1867,14 +1900,47 @@ public final class Galimulator {
     }
 
     /**
+     * Sets the progress of the currently performed background task.
+     * A background task is a task that is being performed if the main thread is unable to
+     * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
+     * caused by another thread having acquired "hard" control of the tick loop lock
+     * (as per {@link TickLoopLock#acquireHardControl()}. This scenario causes the
+     * loading screen to show up.
+     *
+     * <p>This progress string is displayed on the aforementioned loading screen
+     * after the "main" background task description. This method is supposed to be
+     * used for features such as galaxy generation (e.g. within  {@link StarlaneGenerator})
+     * or galaxy loading, or any other feature that may induce a loading screen due
+     * to the semantics mentioned in the previous paragraph.
+     *
+     * <p>This method is safe to invoke on any thread, but should generally
+     * be invoked by the thread holding the "hard" tick loop lock control,
+     * or a child thread of said thread.
+     *
+     * <p>In vanilla galimulator this method is solely used by the landmark generation,
+     * and even then only in a flawed capacity that means that it isn't being incremented
+     * correctly. The string used here follows the following format:
+     * <code>completedLandmarkCount / allLandmarkCount</code>.
+     *
+     * @param progressDescription The description of the progress currently ongoing
+     * in the currently performed task running in the background (which is blocking
+     * the main rendering thread). Or null, to clear/unset the progress.
+     * @since 2.0.0-a20240828
+     */
+    @NonBlocking
+    @ApiStatus.AvailableSince("2.0.0-a20240828")
+    public static void setBackgroundTaskProgress(@Nullable String progressDescription) {
+        Galimulator.impl.setBackgroundTaskProgress(progressDescription);
+    }
+
+    /**
      * Sets the {@link GameConfiguration} directly.
      * It is unlikely that anyone would need to use this method except the API implementation itself.
      *
      * @param config The implementation that should be used in the future
      */
     public static void setConfiguration(@NotNull GameConfiguration config) {
-        NullUtils.requireNotNull(config);
-        Galimulator.config = config;
+        Galimulator.config = Objects.requireNonNull(config, "config may not be null");
     }
 
     /**
@@ -1897,8 +1963,7 @@ public final class Galimulator {
      * @param implementation The implementation that should be used in the future
      */
     public static void setImplementation(@NotNull GameImplementation implementation) {
-        NullUtils.requireNotNull(implementation);
-        impl = implementation;
+        Galimulator.impl = Objects.requireNonNull(implementation, "implementation may not be null.");
     }
 
     /**
@@ -1922,8 +1987,7 @@ public final class Galimulator {
      * @since 2.0.0
      */
     public static void setNoiseProvider(@NotNull NoiseProvider provider) {
-        NullUtils.requireNotNull(provider);
-        Galimulator.noiseImpl = provider;
+        Galimulator.noiseImpl = Objects.requireNonNull(provider, "provider may not be null");
     }
 
     /**

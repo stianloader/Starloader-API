@@ -745,6 +745,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         Space.artifacts = NullUtils.requireNotNull((Vector) artifacts);
     }
 
+    @Override
+    public void setBackgroundTaskProgress(@Nullable String progressDescription) {
+        Space.h(progressDescription);
+    }
+
     @SuppressWarnings("rawtypes")
     @Override
     public void setCorporationsUnsafe(Vector<?> corporations) {
