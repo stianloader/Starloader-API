@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
@@ -75,7 +74,7 @@ public class ShapesTest extends Usertest {
 
             @Override
             public void render(@NotNull SpriteBatch surface, @NotNull Camera camera) {
-                AsyncRenderer.drawTexture(Drawing.getTextureProvider().getSinglePixelSquare(), 0, 0, getWidth(), getHeight(), 0F, NullUtils.requireNotNull(Color.YELLOW), camera);
+                AsyncRenderer.drawTexture(Drawing.getTextureProvider().getSinglePixelSquare(), 0, 0, getWidth(), getHeight(), 0F, Color.YELLOW, camera);
             }
 
             @Override

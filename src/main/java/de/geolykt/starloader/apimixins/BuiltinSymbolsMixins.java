@@ -75,12 +75,13 @@ public class BuiltinSymbolsMixins implements FlagSymbol {
 
     @Override
     public @NotNull OptionalInt getHeight() {
-        return fixedH != 0 ? NullUtils.getOptionalInt(fixedH) : NullUtils.getEmptyOptionalInt();
+        return this.fixedH != 0 ? NullUtils.getOptionalInt(this.fixedH) : NullUtils.getEmptyOptionalInt();
     }
 
     @Override
-    public @NotNull NamespacedKey getRegistryKey() {
-        NamespacedKey key = registryKey;
+    @NotNull
+    public NamespacedKey getRegistryKey() {
+        NamespacedKey key = this.registryKey;
         if (key == null) {
             throw new IllegalStateException("Registry key not yet defined");
         }
@@ -90,25 +91,27 @@ public class BuiltinSymbolsMixins implements FlagSymbol {
     @SuppressWarnings("null")
     @Override
     @Unique(silent = true) // @Unique behaves like @Intrinsic here
-    public @NotNull TextureRegion getTexture() {
-        return texture;
+    @NotNull
+    public TextureRegion getTexture() {
+        return this.texture;
     }
 
     @Override
-    public @NotNull OptionalInt getWidth() {
-        return fixedW != 0 ? NullUtils.getOptionalInt(fixedW) : NullUtils.getEmptyOptionalInt();
+    @NotNull
+    public OptionalInt getWidth() {
+        return this.fixedW != 0 ? NullUtils.getOptionalInt(this.fixedW) : NullUtils.getEmptyOptionalInt();
     }
 
     @Override
     public boolean isSquare() {
-        return mustBeSquare;
+        return this.mustBeSquare;
     }
 
     @Override
     public void setRegistryKey(@NotNull NamespacedKey key) {
-        if (registryKey != null) {
+        if (this.registryKey != null) {
             throw new IllegalStateException("The registry key is already set!");
         }
-        registryKey = key;
+        this.registryKey = key;
     }
 }

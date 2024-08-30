@@ -80,7 +80,7 @@ public final class CanvasSettings {
      * @since 2.0.0
      */
     public CanvasSettings(@NotNull Color backgroundColor, @NotNull String headerText) {
-        this(backgroundColor, headerText, NullUtils.requireNotNull(Color.ORANGE));
+        this(backgroundColor, headerText, Color.ORANGE);
     }
 
     /**
@@ -108,7 +108,7 @@ public final class CanvasSettings {
      */
     @SuppressWarnings("null")
     public CanvasSettings(@NotNull String headerText) {
-        this(GalColor.NEAR_SOLID.getGDXColor(), headerText, NullUtils.requireNotNull(Color.ORANGE));
+        this(GalColor.NEAR_SOLID.getGDXColor(), headerText, Color.ORANGE);
     }
 
     /**

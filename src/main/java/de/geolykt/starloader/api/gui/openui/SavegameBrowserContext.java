@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
@@ -137,7 +136,7 @@ public class SavegameBrowserContext implements CanvasContext {
     @NotNull
     @Contract(mutates = "this", pure = false, value = "null -> fail; !null -> this")
     public SavegameBrowserContext addSavegame(@NotNull Savegame savegame) {
-        this.savegames.add(NullUtils.requireNotNull(savegame, "savegame may not be null"));
+        this.savegames.add(Objects.requireNonNull(savegame, "savegame may not be null"));
         return this;
     }
 }

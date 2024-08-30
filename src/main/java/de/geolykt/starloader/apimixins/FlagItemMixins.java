@@ -1,10 +1,11 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.FlagComponent;
 import de.geolykt.starloader.api.gui.FlagSymbol;
 
@@ -44,23 +45,24 @@ public class FlagItemMixins implements FlagComponent {
 
     @Override
     public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
-        return NullUtils.requireNotNull(color.getGDXColor());
+        return Objects.requireNonNull(this.color.getGDXColor());
     }
 
     @Override
     public float getHeight() {
-        return height;
+        return this.height;
     }
 
     @Override
     public float getRotation() {
-        return rotation;
+        return this.rotation;
     }
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull FlagSymbol getSymbol() {
-        return (FlagSymbol) (Object) symbol;
+    @NotNull
+    public FlagSymbol getSymbol() {
+        return (FlagSymbol) (Object) this.symbol;
     }
 
     @Override

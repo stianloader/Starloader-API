@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
@@ -154,7 +153,7 @@ public final class Drawing {
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size) {
-        return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"));
+        return implementation.drawText(message, x, y, color, Objects.requireNonNull(size, "Size cannot be null"));
     }
 
     /**
@@ -172,7 +171,7 @@ public final class Drawing {
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size, @NotNull Camera camera) {
-        return implementation.drawText(message, x, y, color, NullUtils.requireNotNull(size, "Size cannot be null"), Objects.requireNonNull(camera, "Camera cannot be null."));
+        return implementation.drawText(message, x, y, color, Objects.requireNonNull(size, "Size cannot be null"), Objects.requireNonNull(camera, "Camera cannot be null."));
     }
 
     /**

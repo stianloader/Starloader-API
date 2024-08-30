@@ -1,6 +1,7 @@
 package de.geolykt.starloader.impl.text;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.ComponentBuilder;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
@@ -62,6 +62,6 @@ public class StarloaderTextFactory implements TextFactory {
     public FormattedText asDefaultFormattedText(@NotNull String text) {
         return new SingletonFormattedText(new SingletonTextComponent(
                 new ColoredFontspecificTextComponent(text, Color.WHITE,
-                        NullUtils.requireNotNull(GalFX.FONT_TYPE.MONOTYPE_DEFAULT))));
+                        Objects.requireNonNull(GalFX.FONT_TYPE.MONOTYPE_DEFAULT))));
     }
 }

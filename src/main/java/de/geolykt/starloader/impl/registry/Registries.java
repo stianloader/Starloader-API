@@ -1,11 +1,12 @@
 package de.geolykt.starloader.impl.registry;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.empire.StarlaneGenerator;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.event.EventManager;
@@ -406,26 +407,26 @@ public final class Registries {
  * Default implementation of the {@link AudioSampleWrapper}.
  */
 class StarloaderAudioSample extends AudioSampleWrapper {
-
-    private final @NotNull AudioSample sample;
+    @NotNull
+    private final AudioSample sample;
 
     protected StarloaderAudioSample(@NotNull String loc, @NotNull AudioSample sample) {
-        super(loc, NullUtils.requireNotNull(sample.sound));
+        super(loc, Objects.requireNonNull(sample.sound));
         this.sample = sample;
     }
 
     @Override
     public void play() {
-        sample.play();
+        this.sample.play();
     }
 
     @Override
     public void play(float volume) {
-        sample.a(volume);
+        this.sample.a(volume);
     }
 
     @Override
     public void play(float x, float y) {
-        sample.a(x, y);
+        this.sample.a(x, y);
     }
 }

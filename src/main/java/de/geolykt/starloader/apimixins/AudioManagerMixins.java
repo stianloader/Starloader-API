@@ -1,12 +1,10 @@
 package de.geolykt.starloader.apimixins;
 
-import java.util.ArrayList;
+import java.util.Objects;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.sound.TrackSwitchEvent;
 import de.geolykt.starloader.api.sound.Track;
@@ -20,45 +18,26 @@ import snoddasmannen.galimulator.class_4;
  */
 @Mixin(AudioManager.class)
 public class AudioManagerMixins {
-
-    /**
-     * currentTrack.
-     */
-    @Shadow
-    public static class_4 a;
-
-    /**
-     * currentTrackId.
-     */
-    @Shadow
-    public static int b;
-
-    /**
-     * tracks.
-     */
-    @Shadow
-    public static ArrayList<Track> c;
-
     /**
      * nextTrack.
      */
     @Overwrite
     public static void f() {
-        if (!c.isEmpty()) {
-            Track original = (Track) a;
-            int originalId = b;
-            ++b;
-            if (b >= c.size()) {
-                b = 0;
+        if (!AudioManager.c.isEmpty()) {
+            Track original = (Track) AudioManager.a;
+            int originalId = AudioManager.b;
+            ++AudioManager.b;
+            if (AudioManager.b >= AudioManager.c.size()) {
+                AudioManager.b = 0;
             }
-            a = (class_4) c.get(b);
+            AudioManager.a = (class_4) AudioManager.c.get(AudioManager.b);
             if (SLSoundHandler.supressEvents) {
                 SLSoundHandler.supressEvents = false;
             } else {
-                EventManager.handleEvent(new TrackSwitchEvent(originalId, b, original, NullUtils.requireNotNull((Track) a)));
+                EventManager.handleEvent(new TrackSwitchEvent(originalId, AudioManager.b, original, Objects.requireNonNull((Track) AudioManager.a)));
             }
-            a.c();
-            a.a();
+            AudioManager.a.c();
+            AudioManager.a.a();
         }
     }
 }

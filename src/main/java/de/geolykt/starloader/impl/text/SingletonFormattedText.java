@@ -2,6 +2,7 @@ package de.geolykt.starloader.impl.text;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedText;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 
@@ -34,8 +34,9 @@ public class SingletonFormattedText implements FormattedText {
     }
 
     @Override
-    public @NotNull List<@NotNull FormattedTextComponent> getComponents() {
-        return NullUtils.requireNotNull(Arrays.asList(component));
+    @NotNull
+    public List<@NotNull FormattedTextComponent> getComponents() {
+        return Objects.requireNonNull(Arrays.asList(component));
     }
 
     @Override

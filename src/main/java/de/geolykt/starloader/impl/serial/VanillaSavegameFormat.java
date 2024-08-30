@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
 
@@ -146,23 +147,23 @@ public class VanillaSavegameFormat implements SavegameFormat {
 
         GalimulatorImplementation galiImpl = (GalimulatorImplementation) Galimulator.getImplementation();
         Space.setBackgroundTaskDescription("Loading galaxy: Importing data");
-        galiImpl.setMap((de.geolykt.starloader.api.Map) NullUtils.requireNotNull(spaceState.mapData));
+        galiImpl.setMap((de.geolykt.starloader.api.Map) Objects.requireNonNull(spaceState.mapData));
         galiImpl.setGameYear(spaceState.milliYear);
-        galiImpl.setNeutralEmpire(NullUtils.requireNotNull((Empire) spaceState.neutralEmpire));
+        galiImpl.setNeutralEmpire(Objects.requireNonNull((Empire) spaceState.neutralEmpire));
         galiImpl.setPlayer(spaceState.player);
         galiImpl.setUsedSandbox(spaceState.sandboxUsed);
         galiImpl.setTranscendedEmpires(spaceState.transcended);
         galiImpl.setWarsUnsafe((Vector) spaceState.wars);
         galiImpl.setVanityHolder(spaceState.vanity);
-        galiImpl.setActorsUnsafe(NullUtils.requireNotNull((Vector) spaceState.actors));
-        galiImpl.setAlliancesUnsafe(NullUtils.requireNotNull((Vector) spaceState.alliances));
-        galiImpl.setArtifactsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.artifacts));
-        galiImpl.setCorporationsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.corporations));
-        galiImpl.setDisruptedStarsUnsafe(NullUtils.requireNotNull((Vector<Star>) spaceState.disruptedStars));
-        galiImpl.setEmpiresUnsafe(NullUtils.requireNotNull((Vector<Empire>) (Vector<?>) spaceState.empires));
-        galiImpl.setPeopleUnsafe(NullUtils.requireNotNull((Vector) spaceState.persons));
-        galiImpl.setQuestsUnsafe(NullUtils.requireNotNull((Vector<?>) spaceState.quests));
-        galiImpl.setStarsUnsafe(NullUtils.requireNotNull((Vector) spaceState.stars));
+        galiImpl.setActorsUnsafe(Objects.requireNonNull((Vector) spaceState.actors));
+        galiImpl.setAlliancesUnsafe(Objects.requireNonNull((Vector) spaceState.alliances));
+        galiImpl.setArtifactsUnsafe(Objects.requireNonNull((Vector<?>) spaceState.artifacts));
+        galiImpl.setCorporationsUnsafe(Objects.requireNonNull((Vector<?>) spaceState.corporations));
+        galiImpl.setDisruptedStarsUnsafe(Objects.requireNonNull((Vector<Star>) spaceState.disruptedStars));
+        galiImpl.setEmpiresUnsafe(Objects.requireNonNull((Vector<Empire>) (Vector<?>) spaceState.empires));
+        galiImpl.setPeopleUnsafe(Objects.requireNonNull((Vector) spaceState.persons));
+        galiImpl.setQuestsUnsafe(Objects.requireNonNull((Vector<?>) spaceState.quests));
+        galiImpl.setStarsUnsafe(Objects.requireNonNull((Vector) spaceState.stars));
         EmploymentAgency.setInstance(spaceState.employmentAgency);
         Space.p = null;
         Space.E = true;
@@ -201,8 +202,8 @@ public class VanillaSavegameFormat implements SavegameFormat {
     @Override
     public synchronized void loadGameState(@NotNull InputStream input) throws IOException {
         EventManager.handleEvent(new GalaxyLoadingEvent());
-        loadVanillaState(input);
-        inferSavegameData();
+        VanillaSavegameFormat.loadVanillaState(input);
+        VanillaSavegameFormat.inferSavegameData();
         EventManager.handleEvent(new GalaxyLoadingEndEvent(this, new WriteableMetadataState())); // TODO perhaps make a NOP metadata collection?
     }
 

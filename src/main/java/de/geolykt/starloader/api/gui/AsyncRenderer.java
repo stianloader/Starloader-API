@@ -1,8 +1,10 @@
 package de.geolykt.starloader.api.gui;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.ApiStatus.AvailableSince;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Camera;
@@ -11,8 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
-
-import de.geolykt.starloader.api.NullUtils;
 
 /**
  * Starting from Galimulator 5.0 it has become very dangerous to draw things on
@@ -234,7 +234,7 @@ public interface AsyncRenderer {
      */
     @NotNull
     public static AsyncRenderer requireInstance() {
-        return NullUtils.requireNotNull(Drawing.asyncImplementation, "Implementation not initialized!");
+        return Objects.requireNonNull(Drawing.asyncImplementation, "Implementation not initialized!");
     }
 
     /**
@@ -245,7 +245,7 @@ public interface AsyncRenderer {
      * @since 2.0.0
      */
     public static void setInstance(@NotNull AsyncRenderer instance) {
-        Drawing.asyncImplementation = NullUtils.requireNotNull(instance);
+        Drawing.asyncImplementation = Objects.requireNonNull(instance);
     }
 
     /**

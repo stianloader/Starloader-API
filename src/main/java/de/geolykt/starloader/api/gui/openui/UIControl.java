@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.BasicDialogBuilder;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
@@ -76,7 +76,7 @@ public class UIControl {
                         Galimulator.getSimulationLoopLock().acquireHardControl();
                     }
                     Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE)
-                        .saveGameState(NullUtils.requireNotNull(Files.newOutputStream(location)), "User-issued save", location.getFileName().toString(), false);
+                        .saveGameState(Objects.requireNonNull(Files.newOutputStream(location)), "User-issued save", location.getFileName().toString(), false);
                     if (acquistitions == 1) {
                         Galimulator.getSimulationLoopLock().releaseSoft();
                     } else if (acquistitions == 0) {
@@ -137,7 +137,7 @@ public class UIControl {
         Canvas mainWindow = cmgr.newCanvas(browserCtx, CanvasSettings.CHILD_TRANSPARENT);
         Canvas topElements = cmgr.newCanvas(cmgr.dummyContext(width, 0), CanvasSettings.CHILD_TRANSPARENT);
 
-        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings(CanvasSettings.NEAR_SOLID_COLOR, "Load Galaxy", NullUtils.requireNotNull(Color.BLUE)), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElement, mainWindow, topElements);
+        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings(CanvasSettings.NEAR_SOLID_COLOR, "Load Galaxy", Color.BLUE), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElement, mainWindow, topElements);
         cmgr.openCanvas(c, CanvasPosition.CENTER);
         closeButton.closesCanvas(c);
         canvasRef.set(c);
@@ -205,7 +205,7 @@ public class UIControl {
         Canvas mainWindow = cmgr.newCanvas(browserCtx, CanvasSettings.CHILD_TRANSPARENT);
         Canvas topElements = cmgr.newCanvas(cmgr.dummyContext(width, 0), CanvasSettings.CHILD_TRANSPARENT);
 
-        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings(CanvasSettings.NEAR_SOLID_COLOR, "Save Galaxy", NullUtils.requireNotNull(Color.BLUE)), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElements, mainWindow, topElements);
+        Canvas c = cmgr.multiCanvas(cmgr.dummyContext(width, fullHeight), new CanvasSettings(CanvasSettings.NEAR_SOLID_COLOR, "Save Galaxy", Color.BLUE), ChildObjectOrientation.BOTTOM_TO_TOP, bottomElements, mainWindow, topElements);
         cmgr.openCanvas(c, CanvasPosition.CENTER);
         closeButton.closesCanvas(c);
         canvasRef.set(c);

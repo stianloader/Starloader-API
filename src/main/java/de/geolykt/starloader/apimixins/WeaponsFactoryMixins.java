@@ -1,5 +1,7 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.Weapon;
 import de.geolykt.starloader.api.actor.WeaponType;
@@ -43,7 +44,7 @@ public class WeaponsFactoryMixins implements WeaponType {
     @Overwrite
     @SuppressWarnings("deprecation")
     public static WeaponsFactory valueOf(final String name) {
-        return (WeaponsFactory) Registry.WEAPON_TYPES.getIntern(NullUtils.requireNotNull(name));
+        return (WeaponsFactory) Registry.WEAPON_TYPES.getIntern(Objects.requireNonNull(name));
     }
 
     @Overwrite
@@ -58,8 +59,9 @@ public class WeaponsFactoryMixins implements WeaponType {
     private NamespacedKey registryKey = null;
 
     @Override
-    public @NotNull Weapon build(@NotNull Actor actor, @Nullable Object arg) {
-        return NullUtils.requireNotNull((Weapon) ((WeaponsFactory) (Object) this).a(ExpectedObfuscatedValueException.requireNullableStateActor(actor), arg));
+    @NotNull
+    public Weapon build(@NotNull Actor actor, @Nullable Object arg) {
+        return Objects.requireNonNull((Weapon) ((WeaponsFactory) (Object) this).a(ExpectedObfuscatedValueException.requireNullableStateActor(actor), arg));
     }
 
     @SuppressWarnings("null")
@@ -71,7 +73,8 @@ public class WeaponsFactoryMixins implements WeaponType {
     }
 
     @Override
-    public @NotNull NamespacedKey getRegistryKey() {
+    @NotNull
+    public NamespacedKey getRegistryKey() {
         NamespacedKey key = this.registryKey;
         if (key == null) {
             throw new IllegalStateException("The registry key is not already set!");

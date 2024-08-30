@@ -1,5 +1,7 @@
 package de.geolykt.starloader.impl.gui.effects;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Color;
@@ -8,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.Locateable;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.effects.LocationSelectEffect;
 
@@ -91,7 +92,7 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
     @Override
     @NotNull
     public LocationSelectEffect setRingColor(@NotNull Color color) {
-        this.ringColor = NullUtils.requireNotNull(color, "color may not be null");
+        this.ringColor = Objects.requireNonNull(color, "color may not be null");
         return this;
     }
 
@@ -101,7 +102,7 @@ public class SLLocationSelectEffect extends Item implements LocationSelectEffect
         if (location.getGrid() != CoordinateGrid.BOARD) {
             throw new IllegalArgumentException("location.getGrid must be equal to CoordinateGrid.BOARD");
         }
-        this.location = NullUtils.requireNotNull(location, "location may not be null");
+        this.location = Objects.requireNonNull(location, "location may not be null");
         return this;
     }
 

@@ -1,5 +1,7 @@
 package de.geolykt.starloader.impl.usertest;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
@@ -29,15 +31,15 @@ public class CanvasScrollTest extends Usertest {
         private final BitmapFont font;
 
         public CanvasScrollChildContext(Color color) {
-            this.color = NullUtils.requireNotNull(color);
-            this.font = NullUtils.requireNotNull(Drawing.getFontBitmap("FRIENDLY"), "Unable to find expected font");
+            this.color = Objects.requireNonNull(color);
+            this.font = Objects.requireNonNull(Drawing.getFontBitmap("FRIENDLY"), "Unable to find expected font");
         }
 
         @Override
         public void render(@NotNull SpriteBatch batch, @NotNull Camera camera) {
-            font.setColor(color);
-            font.draw(batch, Integer.toString(value), this.x, this.y);
-            Drawing.drawLine(0, 0, getWidth(), getHeight(), 3, color, camera);
+            this.font.setColor(this.color);
+            this.font.draw(batch, Integer.toString(this.value), this.x, this.y);
+            Drawing.drawLine(0, 0, this.getWidth(), this.getHeight(), 3, this.color, camera);
         }
 
         @Override
@@ -68,7 +70,7 @@ public class CanvasScrollTest extends Usertest {
         Canvas c3 = manager.newCanvas(new CanvasScrollChildContext(Color.CORAL), CanvasSettings.CHILD_TRANSPARENT);
         Canvas c4 = manager.newCanvas(new CanvasScrollChildContext(Color.RED), CanvasSettings.CHILD_TRANSPARENT);
 
-        Canvas row1 = manager.multiCanvas(manager.dummyContext(400, 200), new CanvasSettings(NullUtils.requireNotNull(Color.BLUE)), ChildObjectOrientation.LEFT_TO_RIGHT, c1, c2);
+        Canvas row1 = manager.multiCanvas(manager.dummyContext(400, 200), new CanvasSettings(Objects.requireNonNull(Color.BLUE)), ChildObjectOrientation.LEFT_TO_RIGHT, c1, c2);
         Canvas row2 = manager.multiCanvas(manager.dummyContext(400, 200), CanvasSettings.CHILD_TRANSPARENT, ChildObjectOrientation.LEFT_TO_RIGHT, c3, c4);
 
         CanvasSettings settings = new CanvasSettings("CanvasScrollTest");

@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 
 /**
@@ -44,8 +43,9 @@ public abstract class ScreenBuilder {
      *
      * @return The newly created builder instance.
      */
-    public static @NotNull ScreenBuilder getBuilder() {
-        return NullUtils.requireNotNull(factory.get());
+    @NotNull
+    public static ScreenBuilder getBuilder() {
+        return Objects.requireNonNull(ScreenBuilder.factory.get());
     }
 
     /**
@@ -59,8 +59,9 @@ public abstract class ScreenBuilder {
     @ScheduledForRemoval(inVersion = "3.0.0")
     @DeprecatedSince("2.0.0")
     @Deprecated
-    public static @NotNull ComponentCreator getComponentCreator() {
-        return NullUtils.requireNotNull(componentCreator);
+    @NotNull
+    public static ComponentCreator getComponentCreator() {
+        return Objects.requireNonNull(componentCreator);
     }
 
     /**
@@ -82,7 +83,7 @@ public abstract class ScreenBuilder {
      * @param factory The factory implementation
      */
     public static void setFactory(@NotNull Supplier<ScreenBuilder> factory) {
-        ScreenBuilder.factory = NullUtils.requireNotNull(factory);
+        ScreenBuilder.factory = Objects.requireNonNull(factory);
     }
 
     /**

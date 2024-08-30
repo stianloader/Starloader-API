@@ -7,10 +7,9 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
-
-import de.geolykt.starloader.api.NullUtils;
 
 /**
  * An implementation of {@link ChartData} that allows to incrementally add nodes to the
@@ -76,24 +75,24 @@ public class RollingChartData<T> implements ChartData<T> {
      * @throws IllegalStateException if a node was inserted twice into the chart without calling {@link #incrementPosition()} in between.
      */
     public void addNode(@NotNull T node, int value) {
-        maxValue = Math.max(maxValue, value);
-        if (currentPosition < 1) {
-            if (currentPosition == 0) {
+        this.maxValue = Math.max(this.maxValue, value);
+        if (this.currentPosition < 1) {
+            if (this.currentPosition == 0) {
                 ValueEdge<T> edge = new ValueEdge<>(node, value, 0, node, value, 0);
-                currentNodes.put(node, edge);
-                edges.addLast(edge);
+                this.currentNodes.put(node, edge);
+                this.edges.addLast(edge);
             } else {
-                throw new IllegalStateException("Illegal position: " + currentPosition + ". Did you call .incrementPosition?");
+                throw new IllegalStateException("Illegal position: " + this.currentPosition + ". Did you call .incrementPosition?");
             }
         } else {
-            ValueEdge<T> lastEdge = previousNodes.get(node);
-            if (lastEdge != null && lastEdge.vertex2Position == currentPosition - 1) {
-                lastEdge = new ValueEdge<>(node, lastEdge.vertex2Value, currentPosition - 1, node, value, currentPosition);
+            ValueEdge<T> lastEdge = this.previousNodes.get(node);
+            if (lastEdge != null && lastEdge.vertex2Position == this.currentPosition - 1) {
+                lastEdge = new ValueEdge<>(node, lastEdge.vertex2Value, this.currentPosition - 1, node, value, this.currentPosition);
             } else {
-                lastEdge = new ValueEdge<>(node, 0, currentPosition - 1, node, value, currentPosition);
+                lastEdge = new ValueEdge<>(node, 0, this.currentPosition - 1, node, value, this.currentPosition);
             }
-            edges.addLast(lastEdge);
-            if (currentNodes.put(node, lastEdge) != null) {
+            this.edges.addLast(lastEdge);
+            if (this.currentNodes.put(node, lastEdge) != null) {
                 throw new IllegalStateException("Partially overwrote an edge (did you forget to call .incrementPosition?).");
             }
         }
@@ -103,22 +102,23 @@ public class RollingChartData<T> implements ChartData<T> {
      * Increments the position of the rollover chart and removes edges that are outside the defined validity period.
      */
     public void incrementPosition() {
-        for (T node : previousNodes.keySet()) {
-            if (!currentNodes.containsKey(node)) {
-                node = NullUtils.requireNotNull(node);
-                edges.add(new ValueEdge<>(node, previousNodes.get(node).vertex1Value, currentPosition - 1, node, 0, currentPosition));
+        for (T node : this.previousNodes.keySet()) {
+            if (!this.currentNodes.containsKey(node)) {
+                node = Objects.requireNonNull(node);
+                this.edges.add(new ValueEdge<>(node, this.previousNodes.get(node).vertex1Value, this.currentPosition - 1, node, 0, this.currentPosition));
             }
         }
-        Map<T, ValueEdge<T>> ret = previousNodes;
-        previousNodes = currentNodes;
-        currentNodes = ret;
-        currentNodes.clear();
-        currentPosition++;
-        ValueEdge<T> edge = edges.peekFirst();
-        int minPosition = currentPosition - validityPeriod;
+
+        Map<T, ValueEdge<T>> ret = this.previousNodes;
+        this.previousNodes = this.currentNodes;
+        this.currentNodes = ret;
+        this.currentNodes.clear();
+        this.currentPosition++;
+        ValueEdge<T> edge = this.edges.peekFirst();
+        int minPosition = this.currentPosition - this.validityPeriod;
         if (edge != null && edge.vertex1Position < minPosition) {
-            edges.removeFirst();
-            for (Iterator<ValueEdge<T>> edgeIterator = edges.iterator(); edgeIterator.hasNext();) {
+            this.edges.removeFirst();
+            for (Iterator<ValueEdge<T>> edgeIterator = this.edges.iterator(); edgeIterator.hasNext();) {
                 edge = edgeIterator.next();
                 if (edge.vertex1Position < minPosition) {
                     edgeIterator.remove();

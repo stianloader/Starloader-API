@@ -27,7 +27,6 @@ import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.api.CoordinateGrid;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Faction;
 import de.geolykt.starloader.api.empire.Star;
@@ -452,7 +451,7 @@ public class StarMixins implements Star {
 
     @Override
     public void setNeighbours(@NotNull Vector<Star> neighbours) {
-        this.neighbours = NullUtils.requireNotNull(neighbours);
+        this.neighbours = Objects.requireNonNull(neighbours);
     }
 
     @Shadow

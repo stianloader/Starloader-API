@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
@@ -138,8 +137,9 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         return true;
     }
 
-    public @NotNull GalColor getBackgroundColor() {
-        return NullUtils.requireNotNull(GalColor.NEAR_SOLID);
+    @NotNull
+    public GalColor getBackgroundColor() {
+        return Objects.requireNonNull(GalColor.NEAR_SOLID);
     }
 
     @Override
@@ -259,7 +259,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
         }
         @SuppressWarnings("null")
         @NotNull Iterator<ScreenComponent> hackvar = this.components.iterator();
-        Camera c = NullUtils.requireNotNull(this.getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
+        Camera c = Objects.requireNonNull(this.getCamera(), "The internal camera may not be null in order for draw operations to succeed.");
         int height = this.getHeight();
         Iterator<Map.Entry<Vector2, ScreenComponent>> populator = new SLScreenWidgetPopulator(height, this.isHeadless(), getInnerWidth(), hackvar, false);
 
@@ -282,7 +282,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     protected boolean scroll(int x, int y, int amount) {
-        Camera c = NullUtils.requireNotNull(this.getCamera());
+        Camera c = Objects.requireNonNull(this.getCamera());
         double actualY = this.lastRenderHeight - y;
         if (!this.headless) {
             actualY += 25D;
@@ -310,7 +310,7 @@ public class SLScreenWidget extends SLAbstractWidget implements Screen {
 
     @Override
     protected void tap(double x, double y, boolean isLongTap) {
-        Camera c = NullUtils.requireNotNull(this.getCamera());
+        Camera c = Objects.requireNonNull(this.getCamera());
         double actualY = this.lastRenderHeight - y;
         if (!this.headless) {
             actualY -= 25D;

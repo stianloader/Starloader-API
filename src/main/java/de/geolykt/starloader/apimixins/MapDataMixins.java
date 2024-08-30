@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -15,15 +16,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.geolykt.starloader.DeprecatedSince;
-import de.geolykt.starloader.api.Map;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
 
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.StarGenerator;
 
 @Mixin(MapData.class)
-public class MapDataMixins implements Map {
+public class MapDataMixins implements de.geolykt.starloader.api.Map {
 
     private BufferedImage awtImage = null;
 
@@ -41,13 +40,13 @@ public class MapDataMixins implements Map {
     public BufferedImage getAWTBackground() {
         String backgroundImage = this.backgroundImage;
         if (backgroundImage != null) {
-            if (awtImage != null) {
-                return awtImage;
+            if (this.awtImage != null) {
+                return this.awtImage;
             }
             File f = new File(DataFolderProvider.getProvider().provideAsFile(), backgroundImage);
             if (f.exists()) {
                 try {
-                    awtImage = ImageIO.read(f);
+                    this.awtImage = ImageIO.read(f);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -57,27 +56,30 @@ public class MapDataMixins implements Map {
     }
 
     @Override
-    public @Nullable String getBackgroundFilename() {
-        return backgroundImage;
+    @Nullable
+    public String getBackgroundFilename() {
+        return this.backgroundImage;
     }
 
     @Override
-    public @Nullable Texture getGDXBackground() {
+    @Nullable
+    public Texture getGDXBackground() {
         return ((MapData) (Object) this).getTexture();
     }
 
     @Override
-    public @NotNull String getGeneratorName() {
-        return NullUtils.requireNotNull(generator.name());
+    @NotNull
+    public String getGeneratorName() {
+        return Objects.requireNonNull(this.generator.name());
     }
 
     @Override
     public float getHeight() {
-        return generator.getMaxY() * 2;
+        return this.generator.getMaxY() * 2;
     }
 
     @Override
     public float getWidth() {
-        return generator.getMaxX() * 2;
+        return this.generator.getMaxX() * 2;
     }
 }

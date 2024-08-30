@@ -1,12 +1,13 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import com.badlogic.gdx.audio.Music;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.sound.Track;
 
 import snoddasmannen.galimulator.class_4;
@@ -23,7 +24,7 @@ public class TrackMixins implements Track {
 
     @Override
     public void adjustVolume() {
-        c();
+        this.c();
     }
 
     @Shadow
@@ -37,16 +38,16 @@ public class TrackMixins implements Track {
     @Override
     @NotNull
     public Music getGDXMusic() {
-        return NullUtils.requireNotNull(b);
+        return Objects.requireNonNull(this.b);
     }
 
     @Override
     public void start() {
-        a();
+        this.a();
     }
 
     @Override
     public void stop() {
-        b();
+        this.b();
     }
 }

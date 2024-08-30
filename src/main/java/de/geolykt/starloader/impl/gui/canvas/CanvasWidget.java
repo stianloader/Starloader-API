@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
@@ -186,7 +186,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
 
     @Override
     public void onRender() {
-        open = true;
+        this.open = true;
 
         GLScissorState oldScissor = GLScissorState.captureScissor();
 
@@ -208,8 +208,8 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
 
         try {
             renderChildren();
-            surface.setProjectionMatrix(internalCamera.combined);
-            ctx.render(surface, NullUtils.requireNotNull(getCamera(), "the internal camera is null, how strange"));
+            surface.setProjectionMatrix(this.internalCamera.combined);
+            this.ctx.render(surface, Objects.requireNonNull(this.getCamera(), "the internal camera is null, how strange"));
         } finally {
             surface.flush();
             oldScissor.reapplyState();
@@ -223,7 +223,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
     @Override
     protected boolean scroll(int x, int y, int amount) {
         boolean ret = super.scroll(x, y, amount);
-        this.ctx.onScroll(x, y, internalCamera, amount, this);
+        this.ctx.onScroll(x, y, this.internalCamera, amount, this);
         return ret;
     }
 

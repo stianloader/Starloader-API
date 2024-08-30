@@ -24,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.GameConfiguration;
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.ActorFleet;
 import de.geolykt.starloader.api.actor.Flagship;
@@ -350,12 +349,12 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @NotNull
     public de.geolykt.starloader.api.dimension.@NotNull Empire createChild(@NotNull Star location) {
         snoddasmannen.galimulator.Star star = (snoddasmannen.galimulator.Star) location;
-        return (Empire) NullUtils.requireNotNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
+        return (Empire) Objects.requireNonNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
     }
 
     @Override
     public boolean decreaseTechnologyLevel(boolean notify, boolean force) {
-        if (getTechnologyLevel() <= 1) {
+        if (this.getTechnologyLevel() <= 1) {
             return false;
         }
 
@@ -373,7 +372,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         if (config.allowTranscendence() && this.techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getUniverse().getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_43.b().a("transcending"))).show();
+                    new BasicDialogBuilder("Transcending!", Objects.requireNonNull(class_43.b().a("transcending"))).show();
                 }
             }
         }
@@ -381,7 +380,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
             return true;
         }
 
-        broadcastNews("Has degenerated, now tech level: " + getTechnologyLevel());
+        this.broadcastNews("Has degenerated, now tech level: " + this.getTechnologyLevel());
         if (this == Galimulator.getUniverse().getPlayerEmpire()) {
             new BasicDialogBuilder("Technologicy lost", "You have degenerated to tech level: " + this.techLevel
                     + ". You kindly ask your scientists to make back-ups next time.").show();
@@ -398,14 +397,14 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Override
     @NotNull
     public Collection<@NotNull EmpireAchievement> getAchievements() {
-        return Collections.unmodifiableList(achievements);
+        return Collections.unmodifiableList(this.achievements);
     }
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
     @NotNull
     public Collection<StateActor> getActors() {
-        return Collections.unmodifiableCollection(agents);
+        return Collections.unmodifiableCollection(this.agents);
     }
 
     @Override
@@ -415,32 +414,32 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public Alliance getAlliance() {
-        return (Alliance) alliance;
+        return (Alliance) this.alliance;
     }
 
     @Override
     public double getBaseShipCapacity() {
-        flagNoModdedShipCapacity = true;
+        this.flagNoModdedShipCapacity = true;
         return slapiAsGalimulatorEmpire().getCurrentShipCapacity();
     }
 
     @Override
     @NotNull
     public List<ShipCapacityModifier> getCapcityModifiers() {
-        if (capModifiers == null) {
+        if (this.capModifiers == null) {
             return new ArrayList<>();
         }
-        return new ArrayList<>(capModifiers);
+        return new ArrayList<>(this.capModifiers);
     }
 
     @Override
     public Star getCapital() {
-        return Galimulator.lookupStar(getCapitalID());
+        return Galimulator.lookupStar(this.getCapitalID());
     }
 
     @Override
     public int getCapitalID() {
-        return capitalId;
+        return this.capitalId;
     }
 
     @Override
@@ -455,7 +454,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public int getCollapseYear() {
-        return deathYear;
+        return this.deathYear;
     }
 
     @Override
@@ -486,32 +485,34 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Override
     @NotNull
     public Collection<ActorFleet> getFleets() {
-        return Collections.unmodifiableCollection(fleets);
+        return Collections.unmodifiableCollection(this.fleets);
     }
 
     @Override
     public int getFoundationYear() {
-        return birthMilliYear;
+        return this.birthMilliYear;
     }
 
     @SuppressWarnings("null")
     @Override
     public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
-        return color.getGDXColor();
+        return this.color.getGDXColor();
     }
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull Random getInternalRandom() {
-        return internalSessionRandom;
+    @NotNull
+    public Random getInternalRandom() {
+        return this.internalSessionRandom;
     }
 
     @Override
-    public @Nullable Object getMetadata(@NotNull NamespacedKey key) {
-        if (metadata == null) {
-            metadata = new HashMap<>();
+    @Nullable
+    public Object getMetadata(@NotNull NamespacedKey key) {
+        if (this.metadata == null) {
+            this.metadata = new HashMap<>();
         }
-        return metadata.get(key);
+        return this.metadata.get(key);
     }
 
     @SuppressWarnings("null")
@@ -532,26 +533,27 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public @NotNull Collection<Star> getRecentlyLostStars() {
-        return new ArrayList<>(recentlyLostStars);
+        return new ArrayList<>(this.recentlyLostStars);
     }
 
     @SuppressWarnings("null")
     @Override
     public NamespacedKey getReligion() {
-        if (religion == null) {
+        if (this.religion == null) {
             return null;
         }
-        return ((RegistryKeyed) religion).getRegistryKey();
+        return ((RegistryKeyed) this.religion).getRegistryKey();
     }
 
     @Override
     public double getShipCapacity() {
-        return slapiAsGalimulatorEmpire().getCurrentShipCapacity();
+        return ((snoddasmannen.galimulator.Empire) (Object) this).getCurrentShipCapacity();
     }
 
     @SuppressWarnings({ "unchecked", "null" })
     @Override
-    public @NotNull Vector<Actor> getSLActors() {
+    @NotNull
+    public Vector<Actor> getSLActors() {
         return this.agents;
     }
 
@@ -562,23 +564,24 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     }
 
     @Override
-    public @NotNull NamespacedKey getState() {
+    @NotNull
+    public NamespacedKey getState() {
         return ((RegistryKeyed) (Object) state).getRegistryKey();
     }
 
     @Override
     public int getTechnologyLevel() {
-        return techLevel;
+        return this.techLevel;
     }
 
     @Override
     public int getUID() {
-        return id;
+        return this.id;
     }
 
     @Override
     public float getWealth() {
-        return j;
+        return this.j;
     }
 
     @Override
@@ -588,10 +591,10 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public boolean hasKey(@NotNull NamespacedKey key) {
-        if (metadata == null) {
-            metadata = new HashMap<>();
+        if (this.metadata == null) {
+            this.metadata = new HashMap<>();
         }
-        return metadata.containsKey(key);
+        return this.metadata.containsKey(key);
     }
 
     @Override
@@ -600,7 +603,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         if (special == null) {
             return false; // For extension cooperation
         }
-        return specials.contains(special);
+        return this.specials.contains(special);
     }
 
     @Override
@@ -623,7 +626,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getUniverse().getPlayerEmpire() == this) {
-                    new BasicDialogBuilder("Transcending!", NullUtils.requireNotNull(class_43.b().a("transcending"))).show();
+                    new BasicDialogBuilder("Transcending!", Objects.requireNonNull(class_43.b().a("transcending"))).show();
                 }
             }
         }
@@ -647,15 +650,15 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public void removeActor(@NotNull StateActor actor) {
-        b((snoddasmannen.galimulator.actors.StateActor) actor);
+        this.b((snoddasmannen.galimulator.actors.StateActor) actor);
     }
 
     @Override
     public void removeCapacityModifier(@NotNull ShipCapacityModifier modifier) {
-        if (capModifiers == null) {
+        if (this.capModifiers == null) {
             return; // nothing to remove
         }
-        capModifiers.remove(Objects.requireNonNull(modifier, "Tried to remove null modifier!"));
+        this.capModifiers.remove(Objects.requireNonNull(modifier, "Tried to remove null modifier!"));
     }
 
     @Override
@@ -686,13 +689,13 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public void setMetadata(@NotNull NamespacedKey key, @Nullable Object value) {
-        if (metadata == null) {
-            metadata = new HashMap<>();
+        if (this.metadata == null) {
+            this.metadata = new HashMap<>();
         }
         if (value == null) {
-            metadata.remove(key);
+            this.metadata.remove(key);
         } else {
-            metadata.put(key, value);
+            this.metadata.put(key, value);
         }
     }
 
@@ -704,14 +707,14 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public void setRecentlyLostStars(@NotNull Deque<Star> stars) {
-        recentlyLostStars = NullUtils.requireNotNull(stars);
+        this.recentlyLostStars = Objects.requireNonNull(stars);
     }
 
     @Override
     public void setReligion(@Nullable NamespacedKey religion) {
         if (religion == null) {
             if (this == Galimulator.getUniverse().getNeutralEmpire()) {
-                a((Religion) null);
+                this.a((Religion) null);
                 return;
             } else {
                 throw new NullPointerException("religion cannot be null for non-neutral empires.");
@@ -721,7 +724,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         if (rel == null) {
             throw new IllegalStateException("Cannot resolve registered religion for key: " + religion);
         }
-        a(rel);
+        this.a(rel);
     }
 
     @Override
@@ -812,7 +815,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Deprecated
     public de.geolykt.starloader.api.empire.@NotNull ActiveEmpire spawnOffspring(@NotNull Star location) {
         snoddasmannen.galimulator.Star star = (snoddasmannen.galimulator.Star) location;
-        return (de.geolykt.starloader.api.empire.ActiveEmpire) NullUtils.requireNotNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
+        return (de.geolykt.starloader.api.empire.ActiveEmpire) Objects.requireNonNull(Space.a((snoddasmannen.galimulator.Empire) (Object) this, star));
     }
 
     /**

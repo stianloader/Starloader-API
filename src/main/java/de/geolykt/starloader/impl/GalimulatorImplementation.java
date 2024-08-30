@@ -33,7 +33,6 @@ import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.ExpectedObfuscatedValueException;
 import de.geolykt.starloader.Starloader;
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.Actor;
 import de.geolykt.starloader.api.actor.SpawnPredicatesContainer;
 import de.geolykt.starloader.api.actor.WeaponsManager;
@@ -308,30 +307,30 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<Actor> getActorsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.actors);
+        return Objects.requireNonNull((Vector) Space.actors);
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<Alliance> getAlliancesUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.alliances);
+        return Objects.requireNonNull((Vector) Space.alliances);
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getArtifactsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.artifacts);
+        return Objects.requireNonNull((Vector) Space.artifacts);
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getCooperationsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.corporations);
+        return Objects.requireNonNull((Vector) Space.corporations);
     }
 
     @Override
     public Vector<Star> getDisruptedStarsUnsafe() {
-        return NullUtils.requireNotNull(Space.disruptedStars);
+        return Objects.requireNonNull(Space.disruptedStars);
     }
 
     @Override
@@ -353,7 +352,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<Empire> getEmpiresUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.empires);
+        return Objects.requireNonNull((Vector) Space.empires);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes", "null" })
@@ -392,7 +391,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<DynastyMember> getPeopleUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.getPersons());
+        return Objects.requireNonNull((Vector) Space.getPersons());
     }
 
     @Override
@@ -405,7 +404,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<?> getQuestsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.quests);
+        return Objects.requireNonNull((Vector) Space.quests);
     }
 
     @Override
@@ -496,7 +495,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public Vector<Star> getStarsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.stars);
+        return Objects.requireNonNull((Vector) Space.stars);
     }
 
     @Override
@@ -534,11 +533,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @SuppressWarnings("rawtypes")
     public Vector<War> getWarsUnsafe() {
-        return NullUtils.requireNotNull((Vector) Space.wars);
+        return Objects.requireNonNull((Vector) Space.wars);
     }
 
     @Override
-    public @NotNull WeaponsManager getWeaponsManager() {
+    @NotNull
+    public WeaponsManager getWeaponsManager() {
         return SLWeaponsManager.getInstance();
     }
 
@@ -671,7 +671,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void saveFile(@NotNull String name, byte[] data) {
-        File out = new File(DataFolderProvider.getProvider().provideAsFile(), NullUtils.requireNotNull(name));
+        File out = new File(DataFolderProvider.getProvider().provideAsFile(), Objects.requireNonNull(name));
         if (!out.exists()) {
             try (FileOutputStream fos = new FileOutputStream(out)) {
                 fos.write(data);
@@ -684,7 +684,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @Override
     public void saveFile(@NotNull String name, @NotNull InputStream data) {
-        File out = new File(DataFolderProvider.getProvider().provideAsFile(), NullUtils.requireNotNull(name));
+        File out = new File(DataFolderProvider.getProvider().provideAsFile(), Objects.requireNonNull(name));
         if (!out.exists()) {
             try (FileOutputStream fos = new FileOutputStream(out)) {
                 JavaInterop.transferTo(data, fos);
@@ -730,19 +730,19 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setActorsUnsafe(Vector<Actor> actors) {
-        Space.actors = NullUtils.requireNotNull((Vector) actors);
+        Space.actors = Objects.requireNonNull((Vector) actors);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setAlliancesUnsafe(Vector<Alliance> alliances) {
-        Space.alliances = NullUtils.requireNotNull((Vector) alliances);
+        Space.alliances = Objects.requireNonNull((Vector) alliances);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setArtifactsUnsafe(Vector<?> artifacts) {
-        Space.artifacts = NullUtils.requireNotNull((Vector) artifacts);
+        Space.artifacts = Objects.requireNonNull((Vector) artifacts);
     }
 
     @Override
@@ -753,24 +753,24 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setCorporationsUnsafe(Vector<?> corporations) {
-        Space.corporations = NullUtils.requireNotNull((Vector) corporations);
+        Space.corporations = Objects.requireNonNull((Vector) corporations);
     }
 
     @Override
     public void setDisruptedStarsUnsafe(Vector<Star> disruptedStars) {
-        Space.disruptedStars = NullUtils.requireNotNull(disruptedStars);
+        Space.disruptedStars = Objects.requireNonNull(disruptedStars);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setEmpiresUnsafe(Vector<Empire> empires) {
-        Space.empires = NullUtils.requireNotNull((Vector) empires);
+        Space.empires = Objects.requireNonNull((Vector) empires);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setFollowedPeopleUnsafe(@NotNull Vector<DynastyMember> people) {
-        Space.v = NullUtils.requireNotNull((Vector) people);
+        Space.v = Objects.requireNonNull((Vector) people);
     }
 
     @Override
@@ -790,7 +790,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @Deprecated
     public void setNeutralEmpire(@NotNull de.geolykt.starloader.api.empire.@NotNull ActiveEmpire empire) {
-        Space.neutralEmpire = ExpectedObfuscatedValueException.requireEmpire((Empire) NullUtils.requireNotNull(empire));
+        Space.neutralEmpire = ExpectedObfuscatedValueException.requireEmpire((Empire) Objects.requireNonNull(empire));
     }
 
     @Override
@@ -805,7 +805,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setPeopleUnsafe(Vector<DynastyMember> members) {
-        Space.persons = NullUtils.requireNotNull((Vector) members);
+        Space.persons = Objects.requireNonNull((Vector) members);
     }
 
     public void setPlayer(Player player) {
@@ -815,13 +815,13 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setQuestsUnsafe(Vector<?> quests) {
-        Space.quests = NullUtils.requireNotNull((Vector) quests);
+        Space.quests = Objects.requireNonNull((Vector) quests);
     }
 
     @SuppressWarnings("rawtypes")
     @Override
     public void setStarsUnsafe(Vector<Star> stars) {
-        Space.stars = NullUtils.requireNotNull((Vector) stars);
+        Space.stars = Objects.requireNonNull((Vector) stars);
         Space.starCount = stars.size();
     }
 
@@ -847,7 +847,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     @Override
     public void setWarsUnsafe(Vector<War> wars) {
-        Space.wars = NullUtils.requireNotNull((Vector) wars);
+        Space.wars = Objects.requireNonNull((Vector) wars);
     }
 
     @Override

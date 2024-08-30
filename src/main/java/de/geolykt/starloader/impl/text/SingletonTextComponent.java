@@ -2,6 +2,7 @@ package de.geolykt.starloader.impl.text;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.text.FormattedTextComponent;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
@@ -41,22 +41,24 @@ public class SingletonTextComponent implements FormattedTextComponent {
     }
 
     @Override
-    public @NotNull List<@NotNull TextComponent> getComponents() {
-        return NullUtils.requireNotNull(Arrays.asList(component));
+    @NotNull
+    public List<@NotNull TextComponent> getComponents() {
+        return Objects.requireNonNull(Arrays.asList(this.component));
     }
 
     @Override
-    public @NotNull String getText() {
-        return component.getText();
+    @NotNull
+    public String getText() {
+        return this.component.getText();
     }
 
     @Override
     public float renderText(float x, float y) {
-        return component.renderText(x, y);
+        return this.component.renderText(x, y);
     }
 
     @Override
     public float renderTextAt(float x, float y, @NotNull Camera camera) {
-        return component.renderTextAt(x, y, camera);
+        return this.component.renderTextAt(x, y, camera);
     }
 }

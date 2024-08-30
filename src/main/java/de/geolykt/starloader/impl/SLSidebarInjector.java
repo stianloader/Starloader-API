@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.impl.gui.SLSidebarButton;
 
@@ -24,12 +23,12 @@ public class SLSidebarInjector extends SidebarInjector {
 
     @Override
     public void addButton0(@NotNull Orientation orientation, @NotNull String textureName, @NotNull Runnable action) {
-        switch (NullUtils.requireNotNull(orientation)) {
+        switch (Objects.requireNonNull(orientation)) {
         case TOP:
-            this.topPrototypes.add(new AbstractMap.SimpleImmutableEntry<>(NullUtils.requireNotNull(textureName), NullUtils.requireNotNull(action)));
+            this.topPrototypes.add(new AbstractMap.SimpleImmutableEntry<>(Objects.requireNonNull(textureName), Objects.requireNonNull(action)));
             break;
         case BOTTOM:
-            this.bottomPrototypes.add(new AbstractMap.SimpleImmutableEntry<>(NullUtils.requireNotNull(textureName), NullUtils.requireNotNull(action)));
+            this.bottomPrototypes.add(new AbstractMap.SimpleImmutableEntry<>(Objects.requireNonNull(textureName), Objects.requireNonNull(action)));
             break;
         default:
             throw new UnsupportedOperationException("Unsupported injection point");
@@ -38,7 +37,7 @@ public class SLSidebarInjector extends SidebarInjector {
 
     public void addAll(@NotNull Orientation o, @NotNull Widget widget) {
         Objects.requireNonNull(widget, "Widget is null.");
-        switch (NullUtils.requireNotNull(o)) {
+        switch (Objects.requireNonNull(o)) {
         case TOP:
             for (Map.Entry<@NotNull String, @NotNull Runnable> entry : this.topPrototypes) {
                 widget.a(new SLSidebarButton(entry.getKey(), 106, 70, entry.getValue()));

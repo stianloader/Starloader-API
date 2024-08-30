@@ -26,10 +26,19 @@ public final class NullUtils {
      * @param arr The array to back
      * @return A list backed by the specific array.
      * @since 2.0.0
+     * @deprecated Use {@link Arrays#asList(Object...)} directly instead.
+     * Newer GeolEEA releases have mapped out the relevant method, rendering this method
+     * superfluous. The method is no longer used by SLAPI itself, and will thus be removed
+     * later on. In hindsight it was a mistake to declare this class as public API.
+     * Further, the return type of this method is highly unfortunate.
      */
     @SafeVarargs
     @SuppressWarnings("null")
-    public static <T> @NotNull Collection<T> asList(T @NotNull... arr) {
+    @NotNull
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240830")
+    public static <T> Collection<T> asList(T @NotNull... arr) {
         return Arrays.asList(arr);
     }
 
@@ -46,7 +55,8 @@ public final class NullUtils {
     @Deprecated
     @ScheduledForRemoval(inVersion = "3.0.0")
     @DeprecatedSince("2.0.0-a20240105")
-    public static @NotNull <T> Optional<T> asOptional(@Nullable T object) {
+    @NotNull
+    public static <T> Optional<T> asOptional(@Nullable T object) {
         return Optional.ofNullable(object);
     }
 
@@ -63,7 +73,8 @@ public final class NullUtils {
     @Deprecated
     @ScheduledForRemoval(inVersion = "3.0.0")
     @DeprecatedSince("2.0.0-a20240105")
-    public static @NotNull <T> Optional<T> emptyOptional() {
+    @NotNull
+    public static <T> Optional<T> emptyOptional() {
         return Optional.empty();
     }
 
@@ -76,7 +87,8 @@ public final class NullUtils {
      * @param args The arguments that are used to format the string
      * @return The formatted string
      */
-    public static @NotNull String format(@NotNull String format, @Nullable Object... args) {
+    @NotNull
+    public static String format(@NotNull String format, @Nullable Object... args) {
         String ret = String.format(Locale.ROOT, format, args);
         if (ret == null) {
             throw new InternalError(); // Not possible, but let's have it there either way
@@ -93,7 +105,8 @@ public final class NullUtils {
      *
      * @return The OptionalInt that was created. Or cached, depending on the implementation of the method.
      */
-    public static @NotNull OptionalInt getEmptyOptionalInt() {
+    @NotNull
+    public static OptionalInt getEmptyOptionalInt() {
         OptionalInt opt = OptionalInt.empty();
         if (opt == null) {
             throw new InternalError();
@@ -109,7 +122,8 @@ public final class NullUtils {
      * @param value The value to wrap
      * @return The OptionalInt that was created.
      */
-    public static @NotNull OptionalInt getOptionalInt(int value) {
+    @NotNull
+    public static OptionalInt getOptionalInt(int value) {
         OptionalInt opt = OptionalInt.of(value);
         if (opt == null) {
             throw new InternalError();
@@ -135,8 +149,15 @@ public final class NullUtils {
      * @param object The object to check for null
      * @return The non-null object
      * @throws NullPointerException If the input object is null
+     * @deprecated Use {@link Objects#requireNonNull(Object)} instead.
+     * Newer GeolEEA releases have mapped out the relevant method, rendering this method
+     * superfluous. The method is no longer used by SLAPI itself, and will thus be removed
+     * later on. In hindsight it was a mistake to declare this class as public API.
      */
     @NotNull
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240830")
     public static <T> T requireNotNull(@Nullable T object) {
         if (object != null) {
             return object;
@@ -153,8 +174,15 @@ public final class NullUtils {
      * @param message The message of the NPE
      * @return The non-null object
      * @throws NullPointerException If the input object is null
+     * @deprecated Use {@link Objects#requireNonNull(Object, String)} instead.
+     * Newer GeolEEA releases have mapped out the relevant method, rendering this method
+     * superfluous. The method is no longer used by SLAPI itself, and will thus be removed
+     * later on. In hindsight it was a mistake to declare this class as public API.
      */
     @NotNull
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240830")
     public static <T> T requireNotNull(@Nullable T object, @NotNull String message) {
         if (object != null) {
             return object;
@@ -171,8 +199,15 @@ public final class NullUtils {
      * @param message The message of the NPE
      * @return The non-null object
      * @throws NullPointerException If the input object is null
+     * @deprecated Use {@link Objects#requireNonNull(Object, Supplier)} instead.
+     * Newer GeolEEA releases have mapped out the relevant method, rendering this method
+     * superfluous. The method is no longer used by SLAPI itself, and will thus be removed
+     * later on. In hindsight it was a mistake to declare this class as public API.
      */
     @NotNull
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240830")
     public static <T> T requireNotNull(@Nullable T object, @NotNull Supplier<String> message) {
         if (object != null) {
             return object;

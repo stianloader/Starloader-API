@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.event.EventManager;
@@ -61,7 +61,7 @@ public class AllianceMixins implements Alliance {
 
     @Inject(method = "a", at = @At("HEAD"))
     public void addMember(snoddasmannen.galimulator.Empire member, CallbackInfo info) {
-        EventManager.handleEvent(new AllianceJoinEvent((Alliance) this, (Empire) NullUtils.requireNotNull(member)));
+        EventManager.handleEvent(new AllianceJoinEvent((Alliance) this, (Empire) Objects.requireNonNull(member)));
     }
 
     @Shadow
@@ -140,6 +140,6 @@ public class AllianceMixins implements Alliance {
 
     @Inject(method = "b", at = @At("HEAD"))
     public void removeMember(snoddasmannen.galimulator.Empire member, CallbackInfo info) {
-        EventManager.handleEvent(new AllianceLeaveEvent((Alliance) this, (Empire) NullUtils.requireNotNull(member)));
+        EventManager.handleEvent(new AllianceLeaveEvent((Alliance) this, (Empire) Objects.requireNonNull(member)));
     }
 }

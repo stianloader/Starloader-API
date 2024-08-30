@@ -1,10 +1,11 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.stianloader.micromixin.transform.internal.util.Objects;
 
 import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.dimension.Empire;
@@ -57,7 +58,7 @@ public class FactionMixins implements Faction {
 
     @Override
     public int getFoundationYear() {
-        return birthMilliYear;
+        return this.birthMilliYear;
     }
 
     @Override
@@ -74,8 +75,9 @@ public class FactionMixins implements Faction {
     }
 
     @Override
-    public @NotNull String getName() {
-        return NullUtils.requireNotNull(name);
+    @NotNull
+    public String getName() {
+        return Objects.requireNonNull(this.name);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class FactionMixins implements Faction {
 
     @Override
     public boolean isAlive() {
-        return alive;
+        return this.alive;
     }
 
     @Override
@@ -101,6 +103,6 @@ public class FactionMixins implements Faction {
 
     @Override
     public void setName(@NotNull String name) {
-        this.name = NullUtils.requireNotNull(name, "name must not be null");
+        this.name = Objects.requireNonNull(name, "name must not be null");
     }
 }

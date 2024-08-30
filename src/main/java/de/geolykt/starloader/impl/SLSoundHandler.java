@@ -7,7 +7,6 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.sound.TrackSwitchEvent;
 import de.geolykt.starloader.api.sound.SoundHandler;
@@ -52,7 +51,7 @@ public final class SLSoundHandler implements SoundHandler {
         if (trackNr < 0 || trackNr >= AudioManager.c.size()) {
             throw new IndexOutOfBoundsException("Track at index " + trackNr + " does not exist because the amount of tracks is " + AudioManager.c.size());
         }
-        return NullUtils.requireNotNull((Track) AudioManager.c.get(trackNr));
+        return Objects.requireNonNull((Track) AudioManager.c.get(trackNr));
     }
 
     @Override

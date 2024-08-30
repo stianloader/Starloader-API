@@ -1,11 +1,11 @@
 package de.geolykt.starloader.api.gui;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
-
-import de.geolykt.starloader.api.NullUtils;
 
 /**
  * The sidebar is a series of buttons that are always shown in the right side of the GUI interface.
@@ -47,7 +47,7 @@ public abstract class SidebarInjector {
      * @param action The action to run when the button is clicked
      */
     public static void addButton(@NotNull Orientation orientation, @NotNull String textureName, @NotNull Runnable action) {
-        getImplementation().addButton0(NullUtils.requireNotNull(orientation), textureName, action);
+        SidebarInjector.getImplementation().addButton0(Objects.requireNonNull(orientation), textureName, action);
     }
 
     /**
@@ -55,8 +55,9 @@ public abstract class SidebarInjector {
      *
      * @return The handle
      */
-    public static @NotNull SidebarInjector getImplementation() {
-        SidebarInjector impl = implementation;
+    @NotNull
+    public static SidebarInjector getImplementation() {
+        SidebarInjector impl = SidebarInjector.implementation;
         if (impl == null) {
             throw new IllegalStateException("Implementation not yet set.");
         }

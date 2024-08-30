@@ -1,11 +1,11 @@
 package de.geolykt.starloader.api.gui.graph;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.screen.ComponentSupplier;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
@@ -46,13 +46,13 @@ public class LineChartComponentSupplier implements ComponentSupplier {
     @Override
     public void supplyComponent(@NotNull Screen screen, @NotNull List<@NotNull ScreenComponent> existingComponents) {
         if (this.screen == screen) {
-            existingComponents.add(NullUtils.requireNotNull(chart));
+            existingComponents.add(Objects.requireNonNull(this.chart));
             return;
         } else if (this.screen != null) {
             throw new IllegalStateException("A LineChartComponentSupplier can only supply the components for a single Screen.");
         }
         this.screen = screen;
-        LineChart chart = new LineChart(screen, lwinfo, graph, width, height);
+        LineChart chart = new LineChart(screen, this.lwinfo, this.graph, this.width, this.height);
         this.chart = chart;
         existingComponents.add(chart);
     }

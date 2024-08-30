@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,19 +38,22 @@ public final class SLWeaponsManager implements WeaponsManager {
     }
 
     @Override
-    public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull NamespacedKey key) {
-        return Optional.ofNullable((WeaponType) Registry.WEAPON_TYPES.get(NullUtils.requireNotNull(key)));
+    @NotNull
+    public Optional<@NotNull WeaponType> getWeaponType(@NotNull NamespacedKey key) {
+        return Optional.ofNullable((WeaponType) Registry.WEAPON_TYPES.get(Objects.requireNonNull(key, "input argument 'key' may not be null")));
     }
 
     @Override
-    public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull String key) {
-        return Optional.ofNullable((WeaponType) WeaponsFactory.a(NullUtils.requireNotNull(key)));
+    @NotNull
+    public Optional<@NotNull WeaponType> getWeaponType(@NotNull String key) {
+        return Optional.ofNullable((WeaponType) WeaponsFactory.a(Objects.requireNonNull(key, "input argument 'key' may not be null")));
     }
 
     @Override
-    public @NotNull WeaponType getWeaponTypeByEnumName(@NotNull String key) throws IllegalArgumentException {
+    @NotNull
+    public WeaponType getWeaponTypeByEnumName(@NotNull String key) throws IllegalArgumentException {
         @SuppressWarnings("deprecation")
-        WeaponType type = Registry.WEAPON_TYPES.getIntern(NullUtils.requireNotNull(key));
+        WeaponType type = Registry.WEAPON_TYPES.getIntern(Objects.requireNonNull(key, "input argument 'key' may not be null"));
         if (type == null) {
             throw new IllegalArgumentException("Name not bound to an instance.");
         }
@@ -57,7 +61,8 @@ public final class SLWeaponsManager implements WeaponsManager {
     }
 
     @Override
-    public @NotNull WeaponType[] getWeaponTypes() {
+    @NotNull
+    public WeaponType[] getWeaponTypes() {
         return Registry.WEAPON_TYPES.getValues();
     }
 }

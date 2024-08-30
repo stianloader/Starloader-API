@@ -1,16 +1,17 @@
 package de.geolykt.starloader.api.gui.canvas.prefab;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
@@ -150,7 +151,7 @@ public final class CanvasCloseButton extends AbstractCanvasButton {
     @NotNull
     @Contract(pure = false, mutates = "this", value = "!null -> this; null -> fail")
     public CanvasCloseButton useCanvasManager(@NotNull CanvasManager manager) {
-        this.canvasManager = NullUtils.requireNotNull(manager, "\"manager\" may not be null!");
+        this.canvasManager = Objects.requireNonNull(manager, "\"manager\" may not be null!");
         return this;
     }
 }

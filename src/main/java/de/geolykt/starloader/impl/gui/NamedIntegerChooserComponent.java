@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui;
 
+import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +35,14 @@ public class NamedIntegerChooserComponent extends LabeledStringChooserComponent 
     public NamedIntegerChooserComponent(@NotNull ModConfScreen parent, @NotNull NumberOption<? extends Number> option) {
         // name / currentValue / options / category
         super(option.getName(), option.get().toString(), getOptions(option), option.getParent().getName());
-        this.parent = NullUtils.requireNotNull(parent);
+        this.parent = Objects.requireNonNull(parent);
         this.option = option;
     }
 
     @Override
     public void a(final String o) {
         if ("Custom".equals(o)) {
-            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", NullUtils.requireNotNull(this.option.get().toString()), this.option.getName());
+            TextInputBuilder builder = Drawing.textInputBuilder("Change value of setting", Objects.requireNonNull(this.option.get().toString()), this.option.getName());
             builder.addHook(text -> {
                 if (text == null) {
                     return; // User cancelled input

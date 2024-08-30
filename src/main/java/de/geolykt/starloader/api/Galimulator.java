@@ -1529,7 +1529,7 @@ public final class Galimulator {
     @NotNull
     @AvailableSince("2.0.0-a20240519")
     public static Dimension getUniverse() {
-        return NullUtils.requireNotNull(Galimulator.universe);
+        return Objects.requireNonNull(Galimulator.universe);
     }
 
     /**
@@ -1538,8 +1538,9 @@ public final class Galimulator {
      *
      * @return The weapons manager.
      */
-    public static @NotNull WeaponsManager getWeaponsManager() {
-        return impl.getWeaponsManager();
+    @NotNull
+    public static WeaponsManager getWeaponsManager() {
+        return Galimulator.impl.getWeaponsManager();
     }
 
     /**

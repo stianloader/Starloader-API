@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.registry;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 import de.geolykt.starloader.DebugNagException;
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.StateActorFactory;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.empire.EmpireAchievement.EmpireAchievementType;
@@ -260,6 +260,6 @@ public abstract class Registry<T> {
     @NotNull
     @Contract(pure = true)
     public T require(@NotNull NamespacedKey key) {
-        return NullUtils.requireNotNull(get(key), "Key \"" + key + "\" is not associated with a value!");
+        return Objects.requireNonNull(this.get(key), "Key \"" + key + "\" is not associated with a value!");
     }
 }

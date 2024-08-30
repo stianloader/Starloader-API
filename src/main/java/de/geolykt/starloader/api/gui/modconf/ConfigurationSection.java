@@ -1,13 +1,12 @@
 package de.geolykt.starloader.api.gui.modconf;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
-
-import de.geolykt.starloader.api.NullUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A section within the configuration dialog.
@@ -159,7 +158,7 @@ public interface ConfigurationSection {
     @NotNull
     public default StrictStringOption addCustomStringOption(@NotNull String name, @NotNull String currentValue,
             @NotNull String defaultValue, @NotNull Predicate<@NotNull String> test) {
-        return this.addStringOption(name, currentValue, defaultValue, test, NullUtils.asList(defaultValue, "Custom"));
+        return this.addStringOption(name, currentValue, defaultValue, test, Arrays.asList(defaultValue, "Custom"));
     }
 
     /**

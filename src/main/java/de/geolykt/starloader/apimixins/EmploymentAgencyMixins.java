@@ -3,6 +3,7 @@ package de.geolykt.starloader.apimixins;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -18,7 +19,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.event.EventManager;
@@ -135,7 +135,7 @@ public class EmploymentAgencyMixins {
                     }
                     candidates.add((DynastyMember) o);
                 }
-                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, NullUtils.requireNotNull((Empire) job.getEmployer()));
+                EmperorDeathEvent evt = new EmperorDeathEvent(candidates, Objects.requireNonNull((Empire) job.getEmployer()));
                 EventManager.handleEvent(evt);
                 List<@NotNull DynastyMember> finalSuggestions = evt.getSuccessors();
                 if (finalSuggestions.size() == 1) {

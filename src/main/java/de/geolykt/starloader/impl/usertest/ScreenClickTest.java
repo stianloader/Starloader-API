@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.ReactiveComponent;
@@ -85,7 +84,7 @@ public class ScreenClickTest extends Usertest{
     @Override
     public void runTest() {
         Screen s = ScreenBuilder.getBuilder()
-                .withHeaderColor(NullUtils.requireNotNull(Color.GOLDENROD))
+                .withHeaderColor(Color.GOLDENROD)
                 .withTitle("Screen Click Test")
                 .build();
         s.addChild(new ReactiveClickTestComponent(s));

@@ -1,5 +1,6 @@
 package de.geolykt.starloader.apimixins;
 
+import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 
@@ -87,7 +87,7 @@ public class PersonMixins implements DynastyMember {
 
     @Override
     public @NotNull String getFullName() {
-        return NullUtils.requireNotNull(this.asGalimulatorPerson().q());
+        return Objects.requireNonNull(this.asGalimulatorPerson().q());
     }
 
     @Override

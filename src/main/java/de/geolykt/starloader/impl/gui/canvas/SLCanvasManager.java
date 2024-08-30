@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui.canvas;
 
+import java.util.Objects;
 import java.util.WeakHashMap;
 
 import org.jetbrains.annotations.Contract;
@@ -9,7 +10,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
@@ -90,7 +90,7 @@ public class SLCanvasManager implements CanvasManager {
     @Contract(pure = false, value = "null, _ -> fail; _, null -> fail; !null, !null -> param1")
     public Canvas openCanvas(@NotNull Canvas canvas, @NotNull CanvasPosition position) {
         WIDGET_ALIGNMENT alignment;
-        switch (NullUtils.requireNotNull(position, "\"position\" may not be null!")) {
+        switch (Objects.requireNonNull(position, "\"position\" may not be null!")) {
         case BOTTOM_LEFT:
             alignment = WIDGET_ALIGNMENT.BOTTOM_LEFT;
             break;

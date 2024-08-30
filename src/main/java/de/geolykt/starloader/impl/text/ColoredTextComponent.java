@@ -1,5 +1,7 @@
 package de.geolykt.starloader.impl.text;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,7 +9,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.DeprecatedSince;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.text.TextComponent;
 
@@ -16,12 +17,14 @@ import de.geolykt.starloader.api.gui.text.TextComponent;
 @Deprecated
 public class ColoredTextComponent implements TextComponent {
 
-    protected final @NotNull Color color;
+    @NotNull
+    protected final Color color;
     protected final Drawing.@NotNull TextSize size;
-    protected final @NotNull String text;
+    @NotNull
+    protected final String text;
 
     public ColoredTextComponent(@NotNull String s) {
-        this(s, NullUtils.requireNotNull(Color.WHITE), Drawing.TextSize.SMALL);
+        this(s, Objects.requireNonNull(Color.WHITE), Drawing.TextSize.SMALL);
     }
 
     public ColoredTextComponent(@NotNull String s, @NotNull Color color) {
@@ -31,21 +34,22 @@ public class ColoredTextComponent implements TextComponent {
     public ColoredTextComponent(@NotNull String s, @NotNull Color color, Drawing.@NotNull TextSize size) {
         this.text = s;
         this.color = color;
-        this.size = NullUtils.requireNotNull(size);
+        this.size = Objects.requireNonNull(size);
     }
 
     @Override
-    public @NotNull String getText() {
-        return text;
+    @NotNull
+    public String getText() {
+        return this.text;
     }
 
     @Override
     public float renderText(float x, float y) {
-        return Drawing.drawText(text, x, y, color, size);
+        return Drawing.drawText(this.text, x, y, this.color, this.size);
     }
 
     @Override
     public float renderTextAt(float x, float y, @NotNull Camera camera) {
-        return Drawing.drawText(text, x, y, color, size, camera);
+        return Drawing.drawText(this.text, x, y, this.color, this.size, camera);
     }
 }

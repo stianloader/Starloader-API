@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.gui;
 
+import java.util.Objects;
 import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +32,8 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
 
     public NamedStringChooserComponent(@NotNull ModConfScreen parent, @NotNull StringOption option) {
         // name / currentValue / options / category
-        super(option.getName(), option.get(), getOptions(option), option.getParent().getName());
-        this.parent = NullUtils.requireNotNull(parent);
+        super(option.getName(), option.get(), NamedStringChooserComponent.getOptions(option), option.getParent().getName());
+        this.parent = Objects.requireNonNull(parent);
         this.option = option;
     }
 
@@ -64,10 +65,11 @@ public class NamedStringChooserComponent extends LabeledStringChooserComponent {
             builder.build();
             return;
         }
-        this.option.set(NullUtils.requireNotNull(o.toString()));
+        this.option.set(Objects.requireNonNull(o.toString()));
     }
 
-    public @NotNull ModConfScreen getParentScreen() {
+    @NotNull
+    public ModConfScreen getParentScreen() {
         return this.parent;
     }
 }

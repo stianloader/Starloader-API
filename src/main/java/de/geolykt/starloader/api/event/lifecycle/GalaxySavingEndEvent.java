@@ -1,8 +1,9 @@
 package de.geolykt.starloader.api.event.lifecycle;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.serial.SavegameFormat;
 
@@ -26,7 +27,7 @@ public class GalaxySavingEndEvent extends Event {
      */
     public GalaxySavingEndEvent(@NotNull String location) {
         // TODO OOM boolean
-        this.location = NullUtils.requireNotNull(location, "location must not be null");
+        this.location = Objects.requireNonNull(location, "location must not be null");
     }
 
     /**

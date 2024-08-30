@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.canvas.Canvas;
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
@@ -60,8 +59,8 @@ public class CanvasClippingTest extends Usertest {
     public void runTest() {
         CanvasManager cmgr = CanvasManager.getInstance();
 
-        Canvas upperRow = cmgr.multiCanvas(cmgr.dummyContext(400, 100), new CanvasSettings(NullUtils.requireNotNull(Color.YELLOW)), ChildObjectOrientation.LEFT_TO_RIGHT, cmgr.dummyContext(200, 100), new UpperRightContext());
-        Canvas lowerRow = cmgr.multiCanvas(cmgr.dummyContext(400, 300), new CanvasSettings(NullUtils.requireNotNull(Color.GREEN)), ChildObjectOrientation.LEFT_TO_RIGHT, new LowerLeftContext(), cmgr.dummyContext(200, 300));
+        Canvas upperRow = cmgr.multiCanvas(cmgr.dummyContext(400, 100), new CanvasSettings(Color.YELLOW), ChildObjectOrientation.LEFT_TO_RIGHT, cmgr.dummyContext(200, 100), new UpperRightContext());
+        Canvas lowerRow = cmgr.multiCanvas(cmgr.dummyContext(400, 300), new CanvasSettings(Color.GREEN), ChildObjectOrientation.LEFT_TO_RIGHT, new LowerLeftContext(), cmgr.dummyContext(200, 300));
 
         Canvas combined = cmgr.multiCanvas(cmgr.dummyContext(400, 400), new CanvasSettings("ClippingTest"), ChildObjectOrientation.BOTTOM_TO_TOP, lowerRow, upperRow);
         combined.openCanvas();

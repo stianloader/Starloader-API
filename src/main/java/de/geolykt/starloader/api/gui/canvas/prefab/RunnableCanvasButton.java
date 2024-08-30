@@ -1,14 +1,14 @@
 package de.geolykt.starloader.api.gui.canvas.prefab;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.ApiStatus.AvailableSince;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-
-import de.geolykt.starloader.api.NullUtils;
 
 /**
  * An {@link AbstractCanvasButton} that calls a {@link Runnable}
@@ -24,12 +24,12 @@ public class RunnableCanvasButton extends AbstractCanvasButton {
 
     public RunnableCanvasButton(@NotNull Runnable action, @NotNull BitmapFont font, @NotNull CharSequence text, int width, int height) {
         super(font, text, width, height);
-        this.action = NullUtils.requireNotNull(action, "\"action\" may not be null!");
+        this.action = Objects.requireNonNull(action, "\"action\" may not be null!");
     }
 
     public RunnableCanvasButton(@NotNull Runnable action, @NotNull CharSequence text, int width, int height) {
         super(text, width, height);
-        this.action = NullUtils.requireNotNull(action, "\"action\" may not be null!");
+        this.action = Objects.requireNonNull(action, "\"action\" may not be null!");
     }
 
     @Override

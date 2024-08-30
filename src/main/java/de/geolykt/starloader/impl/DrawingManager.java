@@ -32,6 +32,7 @@ import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.impl.gui.canvas.SLCanvasManager;
 import de.geolykt.starloader.impl.gui.s2d.MenuHandler;
 
+import snoddasmannen.galimulator.AudioManager;
 import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
@@ -157,7 +158,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     @NotNull
     public TextureRegion findTextureRegion(@NotNull String name) {
-        return NullUtils.requireNotNull(GalFX.getTextureRegion(name));
+        return Objects.requireNonNull(GalFX.getTextureRegion(name));
     }
 
     @SuppressWarnings("null")
@@ -169,7 +170,8 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull NinePatch getAlternateWindowNinepatch() {
+    @NotNull
+    public NinePatch getAlternateWindowNinepatch() {
         return GalFX.NINEPATCH.WINDOW3.getNine();
     }
 
@@ -274,7 +276,7 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     @NotNull
     public Texture loadTexture(@NotNull String path) {
-        return NullUtils.requireNotNull(GalFX.a(Objects.requireNonNull(path, "Path cannot be null")));
+        return Objects.requireNonNull(GalFX.a(Objects.requireNonNull(path, "Path cannot be null")));
     }
 
     @Override
