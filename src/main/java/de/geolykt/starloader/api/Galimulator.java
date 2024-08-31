@@ -43,6 +43,7 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent.Phase;
+import de.geolykt.starloader.api.gui.BackgroundTask;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.serial.SavegameFormat;
@@ -119,7 +120,40 @@ public final class Galimulator {
          * @return The currently active map mode.
          * @see #setActiveMapmode(MapMode)
          */
-        public @NotNull MapMode getActiveMapmode();
+        @NotNull
+        public MapMode getActiveMapmode();
+
+        /**
+         * Gets the currently active background task.
+         * A background task is a task that is being performed if the main thread is unable to
+         * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
+         * caused by another thread having acquired "hard" control of the tick loop lock
+         * (as per {@link TickLoopLock#acquireHardControl()}. This scenario causes the
+         * loading screen to show up.
+         *
+         * <p>This method is safe to invoke on any thread.
+         *
+         * <p>The {@link BackgroundTask} API supersedes the short-lived
+         * {@link #setBackgroundTaskProgress(String)} API. While {@link #setBackgroundTaskProgress(String)}
+         * reused galimulator APIs, the {@link BackgroundTask} API inserts itself into the
+         * loading menu rendering pipeline. This change was performed as it was discovered
+         * that {@link #setBackgroundTaskProgress(String)} would be called very frequently,
+         * meaning that it would be better for performance to offload string concatenation
+         * used to call the method to the main rendering thread. This is achieved by making
+         * {@link BackgroundTask#getProgressDescription()} a method that lazily obtains the
+         * necessary string.
+         *
+         * @return The current {@link BackgroundTask} instance used.
+         * Please note that this method will return a potentially nonsensical instance if
+         * no background task is being executed while calling this method.
+         * @since 2.0.0-a20240831
+         * @see #setBackgroundTask(BackgroundTask)
+         */
+        @NonBlocking
+        @ApiStatus.AvailableSince("2.0.0-a20240831")
+        @NotNull
+        @Contract(pure = true, value = "-> !null")
+        public BackgroundTask getBackgroundTask();
 
         /**
          * Returns the ActiveEmpire mapped to the given unique ID. If however
@@ -728,6 +762,37 @@ public final class Galimulator {
         public void setActiveMapmode(@NotNull MapMode mode);
 
         /**
+         * Sets the currently active background task.
+         * A background task is a task that is being performed if the main thread is unable to
+         * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
+         * caused by another thread having acquired "hard" control of the tick loop lock
+         * (as per {@link TickLoopLock#acquireHardControl()}. This scenario causes the
+         * loading screen to show up.
+         *
+         * <p>This method is safe to invoke on any thread, but should generally
+         * be invoked by the thread holding the "hard" tick loop lock control,
+         * or a child thread of said thread.
+         *
+         * <p>The {@link BackgroundTask} API supersedes the short-lived
+         * {@link #setBackgroundTaskProgress(String)} API. While {@link #setBackgroundTaskProgress(String)}
+         * reused galimulator APIs, the {@link BackgroundTask} API inserts itself into the
+         * loading menu rendering pipeline. This change was performed as it was discovered
+         * that {@link #setBackgroundTaskProgress(String)} would be called very frequently,
+         * meaning that it would be better for performance to offload string concatenation
+         * used to call the method to the main rendering thread. This is achieved by making
+         * {@link BackgroundTask#getProgressDescription()} a method that lazily obtains the
+         * necessary string.
+         *
+         * @param task The new {@link BackgroundTask} instance which should be used from now on.
+         * @since 2.0.0-a20240831
+         * @see #getBackgroundTask()
+         */
+        @NonBlocking
+        @ApiStatus.AvailableSince("2.0.0-a20240831")
+        @Contract(pure = false)
+        public void setBackgroundTask(@NotNull BackgroundTask task);
+
+        /**
          * Sets the progress of the currently performed background task.
          * A background task is a task that is being performed if the main thread is unable to
          * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
@@ -754,9 +819,14 @@ public final class Galimulator {
          * in the currently performed task running in the background (which is blocking
          * the main rendering thread). Or null, to clear/unset the progress.
          * @since 2.0.0-a20240828
+         * @see #setBackgroundTask(BackgroundTask)
+         * @deprecated Replaced by {@link BackgroundTask} and it's associated APIs.
          */
         @NonBlocking
         @ApiStatus.AvailableSince("2.0.0-a20240828")
+        @Deprecated
+        @DeprecatedSince("2.0.0-a20240831")
+        @ScheduledForRemoval(inVersion = "3.0.0")
         public void setBackgroundTaskProgress(@Nullable String progressDescription);
 
         /**
@@ -1101,7 +1171,7 @@ public final class Galimulator {
     @DeprecatedSince("2.0.0-a20240519")
     @ScheduledForRemoval(inVersion = "3.0.0")
     public static void connectStars(@NotNull Star starA, @NotNull Star starB) {
-        impl.connectStars(starA, starB);
+        Galimulator.impl.connectStars(starA, starB);
     }
 
     /**
@@ -1116,7 +1186,7 @@ public final class Galimulator {
     @DeprecatedSince("2.0.0-a20240519")
     @ScheduledForRemoval(inVersion = "3.0.0")
     public static void disconnectStars(@NotNull Star starA, @NotNull Star starB) {
-        impl.disconnectStars(starA, starB);
+        Galimulator.impl.disconnectStars(starA, starB);
     }
 
     /**
@@ -1131,7 +1201,7 @@ public final class Galimulator {
     @NotNull
     @Contract(pure = true, value = "null -> fail, !null -> new")
     public static String generateRandomName(@NotNull RandomNameType type) {
-        return impl.generateRandomName(type);
+        return Galimulator.impl.generateRandomName(type);
     }
 
     /**
@@ -1140,8 +1210,41 @@ public final class Galimulator {
      * @return The currently active map mode.
      * @see #setActiveMapmode(MapMode)
      */
-    public static @NotNull MapMode getActiveMapmode() {
-        return impl.getActiveMapmode();
+    @NotNull
+    public static MapMode getActiveMapmode() {
+        return Galimulator.impl.getActiveMapmode();
+    }
+
+    /**
+     * Gets the currently active background task.
+     * A background task is a task that is being performed if the main thread is unable to
+     * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
+     * caused by another thread having acquired "hard" control of the tick loop lock
+     * (as per {@link TickLoopLock#acquireHardControl()}. This scenario causes the
+     * loading screen to show up.
+     *
+     * <p>This method is safe to invoke on any thread.
+     *
+     * <p>The {@link BackgroundTask} API supersedes the short-lived
+     * {@link #setBackgroundTaskProgress(String)} API. While {@link #setBackgroundTaskProgress(String)}
+     * reused galimulator APIs, the {@link BackgroundTask} API inserts itself into the
+     * loading menu rendering pipeline. This change was performed as it was discovered
+     * that {@link #setBackgroundTaskProgress(String)} would be called very frequently,
+     * meaning that it would be better for performance to offload string concatenation
+     * used to call the method to the main rendering thread. This is achieved by making
+     * {@link BackgroundTask#getProgressDescription()} a method that lazily obtains the
+     * necessary string.
+     *
+     * @return The current {@link BackgroundTask} instance used.
+     * Please note that this method will return a potentially nonsensical instance if
+     * no background task is being executed while calling this method.
+     */
+    @NonBlocking
+    @ApiStatus.AvailableSince("2.0.0-a20240831")
+    @NotNull
+    @Contract(pure = true, value = "-> !null")
+    public static BackgroundTask getBackgroundTask() {
+        return Galimulator.impl.getBackgroundTask();
     }
 
     /**
@@ -1149,8 +1252,9 @@ public final class Galimulator {
      *
      * @return The implementation of the configuration that is used right now
      */
-    public static @NotNull GameConfiguration getConfiguration() {
-        GameConfiguration conf = config;
+    @NotNull
+    public static GameConfiguration getConfiguration() {
+        GameConfiguration conf = Galimulator.config;
         if (conf == null) {
             throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
         }
@@ -1875,7 +1979,7 @@ public final class Galimulator {
      * @param data The data of the file.
      */
     public static void saveFile(@NotNull String name, byte[] data) {
-        impl.saveFile(name, data);
+        Galimulator.impl.saveFile(name, data);
     }
 
     /**
@@ -1887,7 +1991,7 @@ public final class Galimulator {
      * @param data The data of the file.
      */
     public static void saveFile(@NotNull String name, @NotNull InputStream data) {
-        impl.saveFile(name, data);
+        Galimulator.impl.saveFile(name, data);
     }
 
     /**
@@ -1897,7 +2001,39 @@ public final class Galimulator {
      * @see #getActiveMapmode()
      */
     public static void setActiveMapmode(@NotNull MapMode mode) {
-        impl.setActiveMapmode(Objects.requireNonNull(mode, "The map mode cannot be set to a null value"));
+        Galimulator.impl.setActiveMapmode(Objects.requireNonNull(mode, "The map mode cannot be set to a null value"));
+    }
+
+    /**
+     * Sets the currently active background task.
+     * A background task is a task that is being performed if the main thread is unable to
+     * acquire any ticking lock (as per {@link TickLoopLock#acquireSoftControl()}), usually
+     * caused by another thread having acquired "hard" control of the tick loop lock
+     * (as per {@link TickLoopLock#acquireHardControl()}. This scenario causes the
+     * loading screen to show up.
+     *
+     * <p>This method is safe to invoke on any thread, but should generally
+     * be invoked by the thread holding the "hard" tick loop lock control,
+     * or a child thread of said thread.
+     *
+     * <p>The {@link BackgroundTask} API supersedes the short-lived
+     * {@link #setBackgroundTaskProgress(String)} API. While {@link #setBackgroundTaskProgress(String)}
+     * reused galimulator APIs, the {@link BackgroundTask} API inserts itself into the
+     * loading menu rendering pipeline. This change was performed as it was discovered
+     * that {@link #setBackgroundTaskProgress(String)} would be called very frequently,
+     * meaning that it would be better for performance to offload string concatenation
+     * used to call the method to the main rendering thread. This is achieved by making
+     * {@link BackgroundTask#getProgressDescription()} a method that lazily obtains the
+     * necessary string.
+     *
+     * @param task The new {@link BackgroundTask} instance which should be used from now on.
+     * @since 2.0.0-a20240831
+     */
+    @NonBlocking
+    @ApiStatus.AvailableSince("2.0.0-a20240831")
+    @Contract(pure = false)
+    public static void setBackgroundTask(@NotNull BackgroundTask task) {
+        Galimulator.impl.setBackgroundTask(task);
     }
 
     /**
@@ -1927,9 +2063,13 @@ public final class Galimulator {
      * in the currently performed task running in the background (which is blocking
      * the main rendering thread). Or null, to clear/unset the progress.
      * @since 2.0.0-a20240828
+     * @deprecated Replaced by {@link BackgroundTask} and it's associated APIs.
      */
     @NonBlocking
     @ApiStatus.AvailableSince("2.0.0-a20240828")
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20240831")
+    @ScheduledForRemoval(inVersion = "3.0.0")
     public static void setBackgroundTaskProgress(@Nullable String progressDescription) {
         Galimulator.impl.setBackgroundTaskProgress(progressDescription);
     }
@@ -1978,7 +2118,7 @@ public final class Galimulator {
     @DeprecatedSince("2.0.0-a20240519")
     @ScheduledForRemoval(inVersion = "3.0.0")
     public static void setMap(@NotNull Map map) {
-        impl.setMap(map);
+        Galimulator.impl.setMap(map);
     }
 
     /**
@@ -2015,7 +2155,7 @@ public final class Galimulator {
      * @param count The amount of transcended empires
      */
     public static void setTranscendedEmpires(int count) {
-        impl.setTranscendedEmpires(count);
+        Galimulator.impl.setTranscendedEmpires(count);
     }
 
     /**
@@ -2043,7 +2183,7 @@ public final class Galimulator {
      * @param state The sandbox used modifier
      */
     public static void setUsedSandbox(boolean state) {
-        impl.setUsedSandbox(state);
+        Galimulator.impl.setUsedSandbox(state);
     }
 
     /**
@@ -2052,7 +2192,7 @@ public final class Galimulator {
      * @since 2.0.0
      */
     public static void showGalaxyCreationScreen() {
-        impl.showGalaxyCreationScreen();
+        Galimulator.impl.showGalaxyCreationScreen();
     }
 
     /**
@@ -2061,7 +2201,7 @@ public final class Galimulator {
      * @since 2.0.0
      */
     public static void showOnlineScenarioBrowser() {
-        impl.showOnlineScenarioBrowser();
+        Galimulator.impl.showOnlineScenarioBrowser();
     }
 
     /**
@@ -2071,7 +2211,7 @@ public final class Galimulator {
      * @since 2.0.0
      */
     public static void showModUploadScreen() {
-        impl.showModUploadScreen();
+        Galimulator.impl.showModUploadScreen();
     }
 
     /**
@@ -2087,7 +2227,7 @@ public final class Galimulator {
     @DeprecatedSince("2.0.0-a20240519")
     @ScheduledForRemoval(inVersion = "3.0.0")
     public static void showScenarioMetadataEditor(de.geolykt.starloader.api.@NotNull Map map) {
-        impl.showScenarioMetadataEditor(map);
+        Galimulator.impl.showScenarioMetadataEditor(map);
     }
 
     /**
@@ -2097,7 +2237,7 @@ public final class Galimulator {
      * @since 2.0.0
      */
     public static void showScenarioSaveScreen() {
-        impl.showScenarioSaveScreen();
+        Galimulator.impl.showScenarioSaveScreen();
     }
 
     /**

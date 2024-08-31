@@ -1,12 +1,18 @@
 package de.geolykt.starloader.apimixins;
 
+import org.jetbrains.annotations.NonBlocking;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.event.EventManager;
@@ -23,6 +29,8 @@ import de.geolykt.starloader.impl.gui.keybinds.KeybindHelper;
 import de.geolykt.starloader.impl.gui.s2d.MenuHandler;
 import de.geolykt.starloader.impl.registry.StateActorFactoryRegistry;
 
+import snoddasmannen.galimulator.GalColor;
+import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Galemulator;
 import snoddasmannen.galimulator.Settings;
 import snoddasmannen.galimulator.Space;
@@ -31,6 +39,20 @@ import snoddasmannen.galimulator.actors.StateActorCreator;
 
 @Mixin(Galemulator.class)
 public class ApplicationMixins {
+
+    @ModifyArg(
+        target = @Desc("render"),
+        at = @At(value = "INVOKE", desc = @Desc(owner = GalFX.class, value = "drawText", args = {float.class, float.class, float.class, Vector3.class, String.class, GalColor.class, GalFX.FONT_TYPE.class, float.class, Camera.class}, ret = float.class)),
+        slice = @Slice(from = @At("HEAD"), to = @At(value = "CONSTANT", args = "stringValue=MB)")),
+        require = 1,
+        allow = 1,
+        expect = 1,
+        index = 4
+    )
+    @NotNull
+    private String getSLBackgroundTaskDescription(@NotNull String originalValue) {
+        return Galimulator.getBackgroundTask().getProgressDescription();
+    }
 
     @Inject(target = @Desc("render"), at = @At("HEAD"), cancellable = true)
     private void onRender(CallbackInfo ci) {

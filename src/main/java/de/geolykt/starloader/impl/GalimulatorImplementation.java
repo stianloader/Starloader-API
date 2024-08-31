@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +43,7 @@ import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
+import de.geolykt.starloader.api.gui.BackgroundTask;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
@@ -53,6 +56,7 @@ import de.geolykt.starloader.impl.actors.GlobalSpawningPredicatesContainer;
 import de.geolykt.starloader.impl.asm.SpaceASMTransformer;
 import de.geolykt.starloader.impl.gui.ForwardingListener;
 import de.geolykt.starloader.impl.gui.GLScissorState;
+import de.geolykt.starloader.impl.gui.VanillaBackgroundTask;
 import de.geolykt.starloader.impl.serial.BoilerplateSavegameFormat;
 import de.geolykt.starloader.impl.serial.VanillaSavegameFormat;
 import de.geolykt.starloader.mod.Extension;
@@ -108,6 +112,11 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
 
     @NotNull
     private static final Deque<@NotNull Runnable> SCHEDULED_TASKS_NEXT_TICK = new ConcurrentLinkedDeque<>();
+
+    @NotNull
+    @AvailableSince("2.0.0-a20240831")
+    @Internal
+    private volatile BackgroundTask currentTask = new VanillaBackgroundTask();
 
     @NotNull
     private final SpawnPredicatesContainer globalSpawningPredicates = new GlobalSpawningPredicatesContainer();
@@ -320,6 +329,12 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @SuppressWarnings("rawtypes")
     public Vector<?> getArtifactsUnsafe() {
         return Objects.requireNonNull((Vector) Space.artifacts);
+    }
+
+    @Override
+    @NotNull
+    public BackgroundTask getBackgroundTask() {
+        return this.currentTask;
     }
 
     @Override
@@ -746,6 +761,14 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     }
 
     @Override
+    public void setBackgroundTask(@NotNull BackgroundTask task) {
+        this.currentTask = Objects.requireNonNull(task, "Input argument 'task' may not be null.");
+    }
+
+    @Override
+    @Deprecated
+    @ScheduledForRemoval(inVersion = "3.0.0")
+    @DeprecatedSince("2.0.0-a20240831")
     public void setBackgroundTaskProgress(@Nullable String progressDescription) {
         Space.h(progressDescription);
     }
