@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -25,8 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.DebugNagException;
+import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.Galimulator;
-import de.geolykt.starloader.api.empire.ActiveEmpire;
 import de.geolykt.starloader.api.event.EventManager;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent;
 import de.geolykt.starloader.api.event.empire.EmpireCollapseEvent.EmpireCollapseCause;
@@ -179,8 +180,12 @@ public class SpaceASMTransformer extends ASMTransformer {
      *
      * @param empire The empire that collapsed.
      * @return True if the collapse should be cancelled
+     * @deprecated The ActiveEmpire API is deprecated, deprecating this method by extension.
      */
-    public static final boolean emitCollapseEvent(ActiveEmpire empire) {
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval // Not official API, will be removed at any time
+    @DeprecatedSince("4.0.0-a20241102")
+    public static final boolean emitCollapseEvent(de.geolykt.starloader.api.empire.ActiveEmpire empire) {
         EmpireCollapseEvent e = new EmpireCollapseEvent(empire, empire.getStarCount() == 0 ? EmpireCollapseCause.NO_STARS : EmpireCollapseCause.UNKNOWN);
         if (e.getCause() == EmpireCollapseCause.UNKNOWN) {
             // I have never seen this nag yet, so it can likely be assumed that the assumption is right.

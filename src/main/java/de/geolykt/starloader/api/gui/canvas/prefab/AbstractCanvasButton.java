@@ -1,10 +1,11 @@
 package de.geolykt.starloader.api.gui.canvas.prefab;
 
+import java.util.Objects;
+
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.stianloader.micromixin.transform.internal.util.Objects;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;

@@ -1,6 +1,5 @@
 package de.geolykt.starloader.apimixins;
 
-import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

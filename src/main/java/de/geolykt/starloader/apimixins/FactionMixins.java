@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Faction;
 

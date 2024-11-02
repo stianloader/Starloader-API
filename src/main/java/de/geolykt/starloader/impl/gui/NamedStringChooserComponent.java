@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
 import de.geolykt.starloader.api.gui.modconf.StrictStringOption;

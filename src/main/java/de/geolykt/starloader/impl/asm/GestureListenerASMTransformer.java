@@ -155,6 +155,6 @@ public class GestureListenerASMTransformer extends ASMTransformer {
 
     @Override
     public boolean isValidTarget(@NotNull String internalName) {
-        return this.target.equals(internalName);
+        return GestureListenerASMTransformer.target.equals(internalName);
     }
 }

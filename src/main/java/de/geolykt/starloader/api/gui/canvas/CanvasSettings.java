@@ -6,8 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.geolykt.starloader.api.NullUtils;
-
 import snoddasmannen.galimulator.GalColor;
 
 /**

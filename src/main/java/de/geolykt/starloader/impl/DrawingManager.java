@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.CoordinateGrid;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.TextInputBuilder;
@@ -32,7 +31,6 @@ import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.impl.gui.canvas.SLCanvasManager;
 import de.geolykt.starloader.impl.gui.s2d.MenuHandler;
 
-import snoddasmannen.galimulator.AudioManager;
 import snoddasmannen.galimulator.Dialog;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;

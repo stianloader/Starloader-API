@@ -75,11 +75,12 @@ public class TestRegistry {
         JarFile galimulatorJar = new JarFile(new File("build/gsl-starplane/galimulator-remapped.jar"));
         for (Enumeration<JarEntry> entries = galimulatorJar.entries(); entries.hasMoreElements();) {
             JarEntry entry = entries.nextElement();
-            if (ENUMS.contains(entry.getName())) {
+            if (TestRegistry.ENUMS.contains(entry.getName())) {
                 InputStream stream = galimulatorJar.getInputStream(entry);
                 requireRegistryCompleteness(classNode, stream);
                 stream.close();
             }
         }
+        galimulatorJar.close();
     }
 }

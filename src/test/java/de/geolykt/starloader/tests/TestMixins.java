@@ -45,6 +45,7 @@ public class TestMixins {
         List<InputStream> childStreams = new ArrayList<>();
         JarFile toClose = null;
         if (url.getFile().indexOf('!') != -1) {
+            @SuppressWarnings("resource")
             JarFile file = new JarFile(URLDecoder.decode(url.getFile().substring(url.getFile().indexOf(":") + 1, url.getFile().indexOf("!")), StandardCharsets.UTF_8.name()));
             Enumeration<JarEntry> entries = file.entries();
             while (entries.hasMoreElements()) {

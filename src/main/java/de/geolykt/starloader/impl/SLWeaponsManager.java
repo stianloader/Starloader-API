@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NamespacedKey;
-import de.geolykt.starloader.api.NullUtils;
 import de.geolykt.starloader.api.actor.WeaponType;
 import de.geolykt.starloader.api.actor.WeaponsManager;
 import de.geolykt.starloader.api.registry.Registry;

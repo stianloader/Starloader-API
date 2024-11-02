@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -12,7 +13,6 @@ import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
-import org.stianloader.micromixin.transform.internal.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;

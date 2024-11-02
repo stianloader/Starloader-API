@@ -52,7 +52,7 @@ dependencies {
     compileOnly "org.stianloader:launcher-micromixin:4.0.0-a20240825"
     devRuntime "org.stianloader:launcher-micromixin:4.0.0-a20240825"
 
-    compileOnly "org.stianloader:micromixin-annotations:0.6.4-a20240825"
+    compileOnly "org.stianloader:micromixin-annotations:0.7.1-a20241021"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
 
     compileOnlyApi "org.jetbrains:annotations:24.1.0"

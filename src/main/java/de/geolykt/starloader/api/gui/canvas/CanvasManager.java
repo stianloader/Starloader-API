@@ -1,9 +1,10 @@
 package de.geolykt.starloader.api.gui.canvas;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.ApiStatus.AvailableSince;
-import org.stianloader.micromixin.transform.internal.util.Objects;
 
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.screen.Screen;
