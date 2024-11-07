@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.audio.Sound;
 
+import de.geolykt.starloader.api.CoordinateGrid;
+
 import snoddasmannen.galimulator.AudioManager.AudioSample;
 
 /**
@@ -38,12 +40,14 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
     /**
      * The location of the resource within the respective data folder.
      */
-    private final @NotNull String location;
+    @NotNull
+    private final String location;
 
     /**
      * The sound resource that should be used.
      */
-    private final @NotNull Sound sound;
+    @NotNull
+    private final Sound sound;
 
     /**
      * Constructor.
@@ -58,13 +62,15 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
     }
 
     @Override
-    public @NotNull String getResourceLocation() {
-        return location;
+    @NotNull
+    public String getResourceLocation() {
+        return this.location;
     }
 
     @Override
-    public @NotNull Sound getWrappingResource() {
-        return sound;
+    @NotNull
+    public Sound getWrappingResource() {
+        return this.sound;
     }
 
     /**
@@ -81,15 +87,16 @@ public abstract class AudioSampleWrapper implements ResourceWrapper<Sound> {
     public abstract void play(float volume);
 
     /**
-     * Plays the sample at a given position. This alters the volume depending on the distance of the posion and here.
+     * Plays the sample at a given position. This alters the volume depending on the distance of the position
+     * and the center of the camera.
      *
-     * @param x The X-position of the sound
-     * @param y The Y-position of the sound
+     * @param x The X-position of the sound. Board position (see {@link CoordinateGrid#BOARD})
+     * @param y The Y-position of the sound. Board position (see {@link CoordinateGrid#BOARD})
      */
     public abstract void play(float x, float y);
 
     static {
-        AudioSample.values(); // Force the loading of the underlying resources if this class (AudioSampleWrapper is loaded too early).
+        AudioSample.values(); // Force the loading of the underlying resources of this class (AudioSampleWrapper is loaded too early).
         // Slightly strange, but this is a rather small issue that will be resolved eventually later on - at least hopefully
     }
 }

@@ -51,6 +51,13 @@ public class GalFXMixins {
         return GalFXMixins.slapi$slFetchTexture(string);
     }
 
+    @Inject(at = @At("HEAD"), target = @Desc(value = "drawPolygon", args = PolygonSprite.class))
+    private static void slapi$onDrawPolygon(@NotNull PolygonSprite polygon, CallbackInfo ci) {
+        if (polygon.getVertices().length == 0) {
+            throw new IllegalArgumentException("Cannot draw a vertex-less polygon!");
+        }
+    }
+
     @Inject(
         at = @At("HEAD"),
         target = @Desc(value = "a", args = {float.class, float.class, String.class, float.class, GalFX.FONT_TYPE.class, float.class, int.class, GalColor.class}),
@@ -58,18 +65,11 @@ public class GalFXMixins {
         allow = 1,
         cancellable = true
     )
-    private static void onDrawText(float centerX, float centerY, @NotNull String text, float rotation, @NotNull GalFX.@NotNull FONT_TYPE font, float displaySize, int align, @Nullable GalColor backgroundColor, @NotNull CallbackInfo ci) {
+    private static void slapi$onDrawText(float centerX, float centerY, @NotNull String text, float rotation, @NotNull GalFX.@NotNull FONT_TYPE font, float displaySize, int align, @Nullable GalColor backgroundColor, @NotNull CallbackInfo ci) {
         RenderCache rendercache = GalFXMixins.RENDERCACHE_LOCAL.get();
         if (rendercache != null) {
             rendercache.pushItem(new BoardTextRenderItem(centerX, centerY, text, rotation, font, displaySize, align, backgroundColor));
             ci.cancel();
-        }
-    }
-
-    @Inject(at = @At("HEAD"), target = @Desc(value = "drawPolygon", args = PolygonSprite.class))
-    private static void slapi$onDrawPolygon(@NotNull PolygonSprite polygon, CallbackInfo ci) {
-        if (polygon.getVertices().length == 0) {
-            throw new IllegalArgumentException("Cannot draw a vertex-less polygon!");
         }
     }
 

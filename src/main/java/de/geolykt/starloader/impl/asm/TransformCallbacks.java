@@ -1,21 +1,36 @@
 package de.geolykt.starloader.impl.asm;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
+import de.geolykt.starloader.api.CoordinateGrid;
+import de.geolykt.starloader.api.Galimulator;
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.KeystrokeInputHandler;
 import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
+import de.geolykt.starloader.api.utils.TickLoopLock;
+import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
+import de.geolykt.starloader.impl.gui.GestureListenerAccess;
 import de.geolykt.starloader.impl.gui.WidgetMouseReleaseListener;
 import de.geolykt.starloader.impl.gui.keybinds.KeybindListMenu;
 
+import snoddasmannen.galimulator.AuxiliaryListener;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.GalimulatorGestureListener;
+import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.AboutWidget;
 import snoddasmannen.galimulator.ui.NinepatchButtonWidget;
@@ -30,9 +45,6 @@ import snoddasmannen.galimulator.ui.Widget;
  */
 public class TransformCallbacks {
 
-    private TransformCallbacks() {
-    }
-
     /**
      * The default implementation of {@link IntegerOption#addValueChangeListener(java.util.function.IntConsumer)},
      * {@link FloatOption#addValueChangeListener(de.geolykt.starloader.api.utils.FloatConsumer)}
@@ -46,7 +58,7 @@ public class TransformCallbacks {
     }
 
     /**
-     * Method that is called inplace of the logic within the constructor of {@link AboutWidget} that adds
+     * Method that is called instead of the logic within the constructor of {@link AboutWidget} that adds
      * the shortcut list button. More specifically, this method adds a replacement for the shortcut list
      * button and adds it to the widget.
      *
@@ -74,6 +86,125 @@ public class TransformCallbacks {
     }
 
     /**
+     * This is the method that replaces {@link GalimulatorGestureListener#touchDown(float, float, int, int)}.
+     *
+     * <p>This method is mainly used to provide improved asynchronous capabilities by offering
+     * finer-tuned access to locks. This method should not be altered by mods - if the need of doing so
+     * should arise, please notify me so I can adjust this method to suit your usecases better.
+     *
+     * <p>Due to being an overwrite of the touchDown method within galimulator code,
+     * this method has the same properties as {@link InputProcessor#touchDown(int, int, int, int)}.
+     *
+     * @param access Access to the caller gesture listener instance via {@link GestureListenerAccess}.
+     * @param x The X-coordinate where the mouse button was pressed.
+     * @param y The Y-coordinate where the mouse button was pressed.
+     * @param pointer The pointer of the event, almost definitely <code>-1</code> since we are on desktop.
+     * @param button The button that was pressed.
+     * @return True if the input was processed, false otherwise.
+     * @see InputProcessor#touchDown(int, int, int, int)
+     * @since 2.0.0-a20241107
+     */
+    @ApiStatus.AvailableSince("2.0.0-a20241107")
+    public static boolean gesturelistener$onTouchDown(GestureListenerAccess access, float x, float y, int pointer, int button) {
+        access.slapi$setLastClickedOnWidget(false);
+        TickLoopLock tickLock = Galimulator.getSimulationLoopLock();
+
+        // Test whether the graphical loop was locked (e.g. while generating a galaxy)
+        if (!tickLock.tryAcquireSoftControl()) {
+            return false;
+        }
+        tickLock.releaseSoft();
+
+        @SuppressWarnings("deprecation") // CoordinateGrid.WIDGET is used as intended
+        Vector3 widgetCoordinates = Drawing.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGrid.WIDGET, x, y);
+        widgetCoordinates.y = GalFX.getScreenHeight() - widgetCoordinates.y;
+        Vector2 widgetCoords2 = new Vector2(widgetCoordinates.x, widgetCoordinates.y);
+
+        TickLoopLock.LockScope acquiredLock = null;
+        try {
+            // Iterate over widgets in backwards order (that is the higher the ordinal of a widget within the list, the higher it's priority)
+            for (int widgetIndex = Space.activeWidgets.size(); widgetIndex > 0;) {
+                Widget widget = Space.activeWidgets.get(--widgetIndex);
+
+                if (!widget.containsPoint(widgetCoords2)) {
+                    continue;
+                }
+
+                float clickedWidgetX = (float) (widgetCoords2.x - widget.getX());
+                float clickedWidgetY = (float) (widgetCoords2.y - widget.getY());
+
+                if (widget instanceof AsyncWidgetInput && ((AsyncWidgetInput) widget).isAsyncClick()) {
+                    if (widget.interceptMouseDown(clickedWidgetX, clickedWidgetY)) {
+                        access.slapi$setLastClickedOnWidget(true);
+                        return true;
+                    } else {
+                        continue;
+                    }
+                }
+
+                if (!widget.l_() && Objects.isNull(acquiredLock)) {
+                    acquiredLock = tickLock.acquireHardControlWithResources();
+                }
+
+                if (!widget.interceptMouseDown(clickedWidgetX, clickedWidgetY)) {
+                    widget.mouseDown(clickedWidgetX, clickedWidgetY);
+                    widget.considerRelayout();
+                }
+
+                // Since we clicked on a widget, we need to stop processing here
+                access.slapi$setLastClickedOnWidget(true);
+                return true;
+            }
+
+            List<AuxiliaryListener> auxiliaryListeners = Space.get_x();
+            for (AuxiliaryListener auxiliaryListener : auxiliaryListeners) {
+                if (acquiredLock == null) {
+                    acquiredLock = tickLock.acquireHardControlWithResources();
+                }
+
+                if (auxiliaryListener.globalTap(x, y)) {
+                    return true;
+                }
+            }
+        } catch (InterruptedException e) {
+            LoggerFactory.getLogger(TransformCallbacks.class).error("A touchDown(FFII)Z call was interrupted!", e);
+        } finally {
+            if (acquiredLock != null) {
+                acquiredLock.close();
+            }
+        }
+
+        Vector3 boardCoordinates = new Vector3(widgetCoordinates);
+        GalFX.b(boardCoordinates);
+
+        MapData map = Space.getMapData();
+        if (map != null && map.debugEnabled()) {
+
+            float u = boardCoordinates.x / Space.getMaxX();
+            // Notice: The below line is knowingly 'incorrect' (even though vanilla galimulator uses getMaxY)
+            // See https://discord.com/channels/406113399659954177/406113400381243403/1287429101094961203
+            // for further info about this issue (the link points to the galimulator discord).
+            float v = boardCoordinates.y / Space.getMaxX();
+
+            String closestLocation = map.getNameCloseTo(boardCoordinates.x, boardCoordinates.y, false);
+            LoggerFactory.getLogger(TransformCallbacks.class).info("You pressed at the following coordinates within the map: {}/{}. Currently closest location: '{}'", u, v, closestLocation);
+
+            if (map.isLocationBuilding()) {
+                Drawing.textInputBuilder("Name location", "Press ctrl + 'd' to return to normal map mode (Geolykt note: That keybind probably does not work on modded galimulator - sucks to be you!).", "")
+                    .addHook((locationName) -> {
+                        map.addLocation(new Vector2(u, v), locationName);
+                        map.debugDrawLocations();
+                    })
+                    .build();
+            }
+        }
+
+        access.slapi$setSelectedActor(Space.findNearestActor(boardCoordinates.x, boardCoordinates.y, null, 0.1F));
+
+        return true;
+    }
+
+    /**
      * The method to replace the {@link Widget#containsPoint(Vector2)} in {@link GalimulatorGestureListener#tap(float, float, int, int)}
      * with.
      *
@@ -90,5 +221,8 @@ public class TransformCallbacks {
             return true;
         }
         return false;
+    }
+
+    private TransformCallbacks() {
     }
 }
