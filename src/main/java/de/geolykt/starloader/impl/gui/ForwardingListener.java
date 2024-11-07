@@ -14,7 +14,7 @@ import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.ui.Widget;
 
-public class ForwardingListener implements AuxiliaryListener {
+public class ForwardingListener implements AuxiliaryListener, AsyncPanListener {
 
     private final List<MouseInputListener> listeners;
 

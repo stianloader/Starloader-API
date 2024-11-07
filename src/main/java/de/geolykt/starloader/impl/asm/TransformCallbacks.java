@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -21,6 +22,7 @@ import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.utils.TickLoopLock;
+import de.geolykt.starloader.impl.gui.AsyncPanListener;
 import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
 import de.geolykt.starloader.impl.gui.GestureListenerAccess;
 import de.geolykt.starloader.impl.gui.WidgetMouseReleaseListener;
@@ -32,7 +34,9 @@ import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.GalimulatorGestureListener;
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.Space;
+import snoddasmannen.galimulator.actors.Actor;
 import snoddasmannen.galimulator.ui.AboutWidget;
+import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.NinepatchButtonWidget;
 import snoddasmannen.galimulator.ui.Widget;
 
@@ -83,6 +87,97 @@ public class TransformCallbacks {
                 cm.openCanvas(cm.newCanvas(new KeybindListMenu(KeystrokeInputHandler.getInstance(), 800, 610), new CanvasSettings("Keyboard shortcuts")));
             }
         });
+    }
+
+    /**
+     * This is the method that replaces {@link GalimulatorGestureListener#pan(float, float, float, float)}.
+     *
+     * <p>This method is mainly used to provide improved asynchronous capabilities by offering
+     * finer-tuned access to locks. This method should not be altered by mods - if the need of doing so
+     * should arise, please notify me so I can adjust this method to suit your usecases better.
+     *
+     * <p>Due to being an overwrite of the pan method within galimulator code,
+     * this method has the same properties as {@link GestureListener#pan(float, float, float, float)}.
+     *
+     * @param access Access to the caller gesture listener instance via {@link GestureListenerAccess}.
+     * @param x The current X-coordinate of the cursor.
+     * @param y The current Y-coordinate of the cursor.
+     * @param deltaX The difference in pixels to the last drag event within the x-axis.
+     * @param deltaY The difference in pixels to the last drag event within the y-axis.
+     * @return True if the input was processed, false otherwise.
+     * @since 2.0.0-a20241108
+     */
+    @ApiStatus.AvailableSince("2.0.0-a20241108")
+    public static boolean gesturelistener$onPan(GestureListenerAccess access, float x, float y, float deltaX, float deltaY) {
+        TickLoopLock tickLock = Galimulator.getSimulationLoopLock();
+
+        // Test whether the graphical loop was locked (e.g. while generating a galaxy)
+        if (!tickLock.tryAcquireSoftControl()) {
+            return false;
+        }
+        tickLock.releaseSoft();
+
+        Actor selectedActor = access.slapi$getSelectedActor();
+        if (!access.slapi$isDraggingSelectedActor() && selectedActor != null && Space.a(selectedActor.getOwner())) {
+            access.slapi$setDraggingSelectedActor(true);
+            Space.addAuxiliaryListener(selectedActor.new ActorDragManager());
+        }
+
+        @SuppressWarnings("deprecation") // CoordinateGrid.WIDGET is used as intended
+        Vector3 widgetCoordinates = Drawing.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGrid.WIDGET, x, y);
+        widgetCoordinates.y = GalFX.getScreenHeight() - widgetCoordinates.y;
+        Vector2 widgetCoords2 = new Vector2(widgetCoordinates.x, widgetCoordinates.y);
+
+        TickLoopLock.LockScope acquiredLock = null;
+        try {
+            // Iterate over widgets in backwards order (that is the higher the ordinal of a widget within the list, the higher it's priority)
+            for (int widgetIndex = Space.activeWidgets.size(); widgetIndex > 0;) {
+                Widget widget = Space.activeWidgets.get(--widgetIndex);
+
+                if (!widget.containsPoint(widgetCoords2)) {
+                    continue;
+                }
+
+                float clickedWidgetX = (float) (widgetCoords2.x - widget.getX());
+                float clickedWidgetY = (float) (widgetCoords2.y - widget.getY());
+
+                if (!widget.l_() && Objects.isNull(acquiredLock) && !(widget instanceof AsyncWidgetInput && ((AsyncWidgetInput) widget).isAsyncPan())) {
+                    if (widget instanceof BufferedWidgetWrapper) {
+                        LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for BWW'D widget {}", ((BufferedWidgetWrapper) widget).getChildWidgets().get(0));
+                    } else {
+                        LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for {}", widget);
+                    }
+                    acquiredLock = tickLock.acquireHardControlWithResources();
+                }
+
+                widget.a(deltaX, deltaY, clickedWidgetX, clickedWidgetY);
+                return true;
+            }
+
+            List<AuxiliaryListener> auxiliaryListeners = Space.get_x();
+            for (AuxiliaryListener auxiliaryListener : auxiliaryListeners) {
+                if (acquiredLock == null && !(auxiliaryListener instanceof AsyncPanListener)) {
+                    LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for {}", auxiliaryListener);
+                    acquiredLock = tickLock.acquireHardControlWithResources();
+                }
+
+                if (auxiliaryListener.globalPan(x, y)) {
+                    return true;
+                }
+            }
+        } catch (InterruptedException e) {
+            LoggerFactory.getLogger(TransformCallbacks.class).error("A pan(FFFF)Z call was interrupted!", e);
+        } finally {
+            if (acquiredLock != null) {
+                acquiredLock.close();
+            }
+        }
+
+        Vector2 mapMovement = new Vector2(-deltaX, deltaY);
+        mapMovement.rotateRad((float) GalFX.b());
+        GalFX.a(mapMovement.x, mapMovement.y);
+
+        return true;
     }
 
     /**

@@ -62,7 +62,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
     public Widget addChild(Widget widget) {
         if (widget instanceof CanvasWidget) {
             if (this.layout == null) {
-                if (orientation == ChildObjectOrientation.LEFT_TO_RIGHT) {
+                if (this.orientation == ChildObjectOrientation.LEFT_TO_RIGHT) {
                     this.layout = new FlowLayout(FlowDirection.HORIZONTAL, this.internalCamera);
                 } else {
                     this.layout = new FlowLayout(FlowDirection.VERTICAL, this.internalCamera);
@@ -120,39 +120,39 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
     @Override
     @NotNull
     public Collection<Canvas> getChildren() {
-        return Collections.unmodifiableCollection(childCanvases);
+        return Collections.unmodifiableCollection(this.childCanvases);
     }
 
     @Override
     @NotNull
     public ChildObjectOrientation getChildrenOrientation() {
-        return orientation;
+        return this.orientation;
     }
 
     @Override
     @NotNull
     public CanvasContext getContext() {
-        return ctx;
+        return this.ctx;
     }
 
     @Override
     public int getHeight() {
-        if (canvasSettings.hasHeader()) {
-            return ctx.getHeight() + 32;
+        if (this.canvasSettings.hasHeader()) {
+            return this.ctx.getHeight() + 32;
         } else {
-            return ctx.getHeight();
+            return this.ctx.getHeight();
         }
     }
 
     @Override
     public int getWidth() {
-        return ctx.getWidth();
+        return this.ctx.getWidth();
     }
 
     @SuppressWarnings("null")
     @Override
     public void hover(int x, int y) {
-        ctx.onHover(x, y, internalCamera, this);
+        this.ctx.onHover(x, y, this.internalCamera, this);
     }
 
     @Override
@@ -161,26 +161,31 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
     }
 
     @Override
+    public boolean isAsyncPan() {
+        return true;
+    }
+
+    @Override
     public boolean isOpen() {
-        return open;
+        return this.open;
     }
 
     @Override
     public boolean isPersistent() {
-        return ctx.isPersistent();
+        return this.ctx.isPersistent();
     }
 
     @Override
     @NotNull
     public Canvas markDirty() {
-        dispatchMessage(WIDGET_MESSAGE.WIDGET_FORCE_REDRAW);
+        this.dispatchMessage(WIDGET_MESSAGE.WIDGET_FORCE_REDRAW);
         return this;
     }
 
     @Override
     public void onDispose() {
-        open = false;
-        ctx.onDispose(this);
+        this.open = false;
+        this.ctx.onDispose(this);
         super.onDispose();
     }
 
@@ -193,17 +198,17 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
         SpriteBatch surface = Drawing.getDrawingBatch();
         surface.flush();
         if (oldScissor.enabled) {
-            GLScissorState.glScissor(oldScissor.x + getXPosition(), oldScissor.y + getYPosition(), getWidth(), getHeight());
+            GLScissorState.glScissor(oldScissor.x + this.getXPosition(), oldScissor.y + this.getYPosition(), this.getWidth(), this.getHeight());
         } else {
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
-            GLScissorState.glScissor(0, 0, getWidth(), getHeight());
+            GLScissorState.glScissor(0, 0, this.getWidth(), this.getHeight());
         }
 
         if (this.canvasSettings.getBackgroundColor().a != 0) {
-            drawBackground(new GalColor(this.canvasSettings.getBackgroundColor()));
+            this.drawBackground(new GalColor(this.canvasSettings.getBackgroundColor()));
         }
         if (this.canvasSettings.hasHeader()) {
-            drawHeader();
+            this.drawHeader();
         }
 
         try {

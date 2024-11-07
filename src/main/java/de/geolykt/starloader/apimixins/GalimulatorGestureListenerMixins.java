@@ -30,13 +30,16 @@ import snoddasmannen.galimulator.ui.Widget;
 public class GalimulatorGestureListenerMixins implements GestureListenerAccess {
 
     @Shadow
-    private boolean d;
-
-    @Shadow
     private ActorSelectedEffect c;
 
     @Shadow
+    private boolean d;
+
+    @Shadow
     private Actor e;
+
+    @Shadow
+    private boolean f;
 
     @Inject(target = @Desc(value = "tap", args = {float.class, float.class, int.class, int.class}, ret = boolean.class),
             at = @At("HEAD"))
@@ -59,8 +62,24 @@ public class GalimulatorGestureListenerMixins implements GestureListenerAccess {
     }
 
     @Overwrite
-    public boolean touchDown(float x, float y, int pointer, int button) {
-        return TransformCallbacks.gesturelistener$onTouchDown(this, x, y, pointer, button);
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        return TransformCallbacks.gesturelistener$onPan(this, x, y, deltaX, deltaY);
+    }
+
+    @Override
+    @Nullable
+    public Actor slapi$getSelectedActor() {
+        return this.e;
+    }
+
+    @Override
+    public boolean slapi$isDraggingSelectedActor() {
+        return this.f;
+    }
+
+    @Override
+    public void slapi$setDraggingSelectedActor(boolean setDragging) {
+        this.f = setDragging;
     }
 
     @Override
@@ -87,5 +106,10 @@ public class GalimulatorGestureListenerMixins implements GestureListenerAccess {
             this.c = effect = new ActorSelectedEffect(selectedActor, "", true);
             Space.showItem(effect);
         }
+    }
+
+    @Overwrite
+    public boolean touchDown(float x, float y, int pointer, int button) {
+        return TransformCallbacks.gesturelistener$onTouchDown(this, x, y, pointer, button);
     }
 }

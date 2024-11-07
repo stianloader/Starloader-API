@@ -26,12 +26,14 @@ public class BufferedWidgetWrapperMixins implements AsyncWidgetInput, WidgetMous
     @Shadow
     SpriteBatch e;
 
-    @Inject(target = @Desc("onDispose"), at = @At("HEAD"), require = 1)
-    public void onOnDispose(CallbackInfo ci) {
-        if (GalFX.RENDERCACHE_LOCAL.get() != null) {
-            Galimulator.panic("You cannot dispose a widget outside the main (drawing) thread. This hints at a thread management problem and could cause hard to debug race condition errors.", true);
-        }
-        LoggerFactory.getLogger(BufferedWidgetWrapperMixins.class).debug("Disposing {} as {}", this.a, this);
+    @Override
+    public boolean isAsyncClick() {
+        return this.a instanceof AsyncWidgetInput && ((AsyncWidgetInput) this.a).isAsyncClick();
+    }
+
+    @Override
+    public boolean isAsyncPan() {
+        return this.a instanceof AsyncWidgetInput && ((AsyncWidgetInput) this.a).isAsyncPan();
     }
 
     @Inject(method = "draw()V", at = @At("HEAD"), require = 1, cancellable = true)
@@ -49,8 +51,11 @@ public class BufferedWidgetWrapperMixins implements AsyncWidgetInput, WidgetMous
         }
     }
 
-    @Override
-    public boolean isAsyncClick() {
-        return this.a instanceof AsyncWidgetInput && ((AsyncWidgetInput) this.a).isAsyncClick();
+    @Inject(target = @Desc("onDispose"), at = @At("HEAD"), require = 1)
+    public void onOnDispose(CallbackInfo ci) {
+        if (GalFX.RENDERCACHE_LOCAL.get() != null) {
+            Galimulator.panic("You cannot dispose a widget outside the main (drawing) thread. This hints at a thread management problem and could cause hard to debug race condition errors.", true);
+        }
+        LoggerFactory.getLogger(BufferedWidgetWrapperMixins.class).debug("Disposing {} as {}", this.a, this);
     }
 }
