@@ -49,6 +49,9 @@ import snoddasmannen.galimulator.ui.Widget;
  */
 public class TransformCallbacks {
 
+    @ApiStatus.AvailableSince("2.0.0-a20241109")
+    private static final boolean DEBUG_ASYNC_LOCK_REQUESTS = Boolean.getBoolean("org.stianloader.slapi.DEBUG_ASYNC_LOCK_REQUESTS");
+
     /**
      * The default implementation of {@link IntegerOption#addValueChangeListener(java.util.function.IntConsumer)},
      * {@link FloatOption#addValueChangeListener(de.geolykt.starloader.api.utils.FloatConsumer)}
@@ -142,10 +145,12 @@ public class TransformCallbacks {
                 float clickedWidgetY = (float) (widgetCoords2.y - widget.getY());
 
                 if (!widget.l_() && Objects.isNull(acquiredLock) && !(widget instanceof AsyncWidgetInput && ((AsyncWidgetInput) widget).isAsyncPan())) {
-                    if (widget instanceof BufferedWidgetWrapper) {
-                        LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for BWW'D widget {}", ((BufferedWidgetWrapper) widget).getChildWidgets().get(0));
-                    } else {
-                        LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for {}", widget);
+                    if (TransformCallbacks.DEBUG_ASYNC_LOCK_REQUESTS) {
+                        if (widget instanceof BufferedWidgetWrapper) {
+                            LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for BWW'D widget {}", ((BufferedWidgetWrapper) widget).getChildWidgets().get(0));
+                        } else {
+                            LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for {}", widget);
+                        }
                     }
                     acquiredLock = tickLock.acquireHardControlWithResources();
                 }
@@ -157,7 +162,9 @@ public class TransformCallbacks {
             List<AuxiliaryListener> auxiliaryListeners = Space.get_x();
             for (AuxiliaryListener auxiliaryListener : auxiliaryListeners) {
                 if (acquiredLock == null && !(auxiliaryListener instanceof AsyncPanListener)) {
-                    LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for {}", auxiliaryListener);
+                    if (TransformCallbacks.DEBUG_ASYNC_LOCK_REQUESTS) {
+                        LoggerFactory.getLogger(TransformCallbacks.class).info("Acquired strong control for {}", auxiliaryListener);
+                    }
                     acquiredLock = tickLock.acquireHardControlWithResources();
                 }
 
