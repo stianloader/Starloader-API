@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
-    id 'gsl-starplane' version '0.2.0-a20240825'
+    id 'gsl-starplane' version '0.2.1-a20241109'
     id 'me.champeau.mrjar' version '0.1.1'
     id 'eclipse'
 }
@@ -39,6 +39,8 @@ deployMods {
 runMods {
     from components["java"]
     debug false
+
+    systemProperties.put("classloader.dump", true)
 }
 
 configurations {
@@ -55,7 +57,7 @@ dependencies {
     compileOnly "org.stianloader:micromixin-annotations:0.7.1-a20241021"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
 
-    compileOnlyApi "org.jetbrains:annotations:24.1.0"
+    compileOnlyApi "org.jetbrains:annotations:26.0.1"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.ow2.asm:asm-util:9.7'
