@@ -44,6 +44,7 @@
     "SLScreenWidgetMixins",
     "StarMixins",
     "StateActorMixins",
+    "SteamSharedLibraryLoaderMixins",
     "TextureTextButtonWidgetMixins",
     "TrackMixins",
     "WarMixins",

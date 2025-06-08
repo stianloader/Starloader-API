@@ -1,6 +1,7 @@
 package de.geolykt.starloader;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 
 /**
  * Pure debugging exception to debug the occurrence of unexpected calls of
@@ -24,7 +25,7 @@ public class DebugNagException extends Exception {
         try {
             throw new DebugNagException("Nag! Whyever this got issued, it is not too much of an importance, however you may decide to report the occourence of this nag.");
         } catch (DebugNagException e) {
-            e.printStackTrace();
+            LoggerFactory.getLogger(DebugNagException.class).error("Nag", e);
         }
     }
 
@@ -32,7 +33,7 @@ public class DebugNagException extends Exception {
         try {
             throw new DebugNagException(message);
         } catch (DebugNagException e) {
-            e.printStackTrace();
+            LoggerFactory.getLogger(DebugNagException.class).error(message, e);
         }
     }
 }
