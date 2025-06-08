@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.slf4j.LoggerFactory;
 
 import de.geolykt.starloader.api.utils.TickLoopLock;
 
@@ -48,7 +49,7 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
     private static final PrintWriter DEBUG_OUT;
 
     static {
-        if (DEBUG) {
+        if (SemaphoreLoopLock.DEBUG) {
             PrintWriter pw = null;
             try {
                 pw = new PrintWriter("SemaphoreLoopLockLog.csv", StandardCharsets.UTF_8.name());
@@ -56,7 +57,7 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
                 e.printStackTrace();
             }
             DEBUG_OUT = pw;
-            writeDebug("transaction_id,transaction_type,count,start,end");
+            SemaphoreLoopLock.writeDebug("transaction_id,transaction_type,count,start,end");
         } else {
             DEBUG_OUT = null;
         }
@@ -64,53 +65,60 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     public SemaphoreLoopLock(int permits) {
         super(permits);
-        this.scopes = new LockScope[permits];
-        for (int i = 0; i < permits; i++) {
+        this.scopes = new LockScope[permits + 1];
+        if (permits != 2) {
+            try {
+                throw new IllegalArgumentException("Expected permit count is 2, but this lock was initialized with " + permits + " permits! This may cause issues later on.");
+            } catch (IllegalArgumentException e) {
+                LoggerFactory.getLogger(SemaphoreLoopLock.class).error("Unexpected permit count when initializing a lock.", e);
+            }
+        }
+        for (int i = 0; i <= permits; i++) {
             this.scopes[i] = new SemaphoreLockScope(i);
         }
     }
 
     private static synchronized void writeDebug(String ln) {
-        DEBUG_OUT.write(ln + "\r\n");
-        DEBUG_OUT.flush();
+        SemaphoreLoopLock.DEBUG_OUT.write(ln + "\r\n");
+        SemaphoreLoopLock.DEBUG_OUT.flush();
     }
 
     @Override
     public void acquire() throws InterruptedException {
-        if (DEBUG) {
-            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+        if (SemaphoreLoopLock.DEBUG) {
+            long debugId = SemaphoreLoopLock.DEBUG_ID_COUNTER.getAndIncrement();
             long start = System.currentTimeMillis();
             super.acquire();
-            acquisitions.get().increment();
-            writeDebug(debugId + ",ACQUIRE_ONE,1," + start+ "," + System.currentTimeMillis());
+            this.acquisitions.get().increment();
+            SemaphoreLoopLock.writeDebug(debugId + ",ACQUIRE_ONE,1," + start+ "," + System.currentTimeMillis());
         } else {
             super.acquire();
-            acquisitions.get().increment();
+            this.acquisitions.get().increment();
         }
     }
 
     @Override
     public void acquire(int permits) throws InterruptedException {
-        if (DEBUG) {
-            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+        if (SemaphoreLoopLock.DEBUG) {
+            long debugId = SemaphoreLoopLock.DEBUG_ID_COUNTER.getAndIncrement();
             long start = System.currentTimeMillis();
             super.acquire(permits);
-            acquisitions.get().increment(permits);
-            writeDebug(debugId + ",ACQUIRE," + permits + "," + start+ "," + System.currentTimeMillis());
+            this.acquisitions.get().increment(permits);
+            SemaphoreLoopLock.writeDebug(debugId + ",ACQUIRE," + permits + "," + start+ "," + System.currentTimeMillis());
         } else {
             super.acquire(permits);
-            acquisitions.get().increment(permits);
+            this.acquisitions.get().increment(permits);
         }
     }
 
     @Override
     public void acquireHardControl() throws InterruptedException {
-        if (getLocalAcquisitions() == 2) {
+        if (this.getLocalAcquisitions() == 2) {
             return;
-        } else if (getLocalAcquisitions() == 1) {
-            acquire(1);
+        } else if (this.getLocalAcquisitions() == 1) {
+            this.acquire(1);
         } else {
-            acquire(2);
+            this.acquire(2);
         }
     }
 
@@ -123,10 +131,10 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     @Override
     public void acquireSoftControl() throws InterruptedException {
-        if (getLocalAcquisitions() > 0) {
+        if (this.getLocalAcquisitions() > 0) {
             return;
         } else {
-            acquire(1);
+            this.acquire(1);
         }
     }
 
@@ -139,29 +147,29 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     @Override
     public void acquireUninterruptibly() {
-        if (DEBUG) {
-            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+        if (SemaphoreLoopLock.DEBUG) {
+            long debugId = SemaphoreLoopLock.DEBUG_ID_COUNTER.getAndIncrement();
             long start = System.currentTimeMillis();
             super.acquireUninterruptibly();
-            acquisitions.get().increment();
-            writeDebug(debugId + ",ACQUIRE_HARD_ONE,1," + start+ "," + System.currentTimeMillis());
+            this.acquisitions.get().increment();
+            SemaphoreLoopLock.writeDebug(debugId + ",ACQUIRE_HARD_ONE,1," + start+ "," + System.currentTimeMillis());
         } else {
             super.acquireUninterruptibly();
-            acquisitions.get().increment();
+            this.acquisitions.get().increment();
         }
     }
 
     @Override
     public void acquireUninterruptibly(int permits) {
-        if (DEBUG) {
-            long debugId = DEBUG_ID_COUNTER.getAndIncrement();
+        if (SemaphoreLoopLock.DEBUG) {
+            long debugId = SemaphoreLoopLock.DEBUG_ID_COUNTER.getAndIncrement();
             long start = System.currentTimeMillis();
             super.acquireUninterruptibly(permits);
-            acquisitions.get().increment(permits);
-            writeDebug(debugId + ",ACQUIRE_HARD," + permits + "," + start+ "," + System.currentTimeMillis());
+            this.acquisitions.get().increment(permits);
+            SemaphoreLoopLock.writeDebug(debugId + ",ACQUIRE_HARD," + permits + "," + start+ "," + System.currentTimeMillis());
         } else {
             super.acquireUninterruptibly(permits);
-            acquisitions.get().increment(permits);
+            this.acquisitions.get().increment(permits);
         }
     }
 
@@ -189,41 +197,41 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     @Override
     public int getLocalAcquisitions() {
-        return acquisitions.get().getValue();
+        return this.acquisitions.get().getValue();
     }
 
     @Override
     public void release() {
-        if (acquisitions.get().getValue() < 1) {
+        if (this.acquisitions.get().getValue() < 1) {
             throw new IllegalMonitorStateException("This thread has no control over the semaphore");
         }
         super.release();
-        acquisitions.get().decrement();
+        this.acquisitions.get().decrement();
     }
 
     @Override
     public void release(int permits) {
-        if (acquisitions.get().getValue() < permits) {
+        if (this.acquisitions.get().getValue() < permits) {
             throw new IllegalMonitorStateException("This thread has insufficent control over the semaphore");
         }
         super.release(permits);
-        acquisitions.get().decrement(permits);
+        this.acquisitions.get().decrement(permits);
     }
 
     @Override
     public void releaseHard() {
-        release(2);
+        this.release(2);
     }
 
     @Override
     public void releaseSoft() {
-        release(1);
+        this.release(1);
     }
 
     @Override
     public boolean tryAcquire() {
         if (super.tryAcquire()) {
-            acquisitions.get().increment();
+            this.acquisitions.get().increment();
             return true;
         } else {
             return false;
@@ -233,7 +241,7 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
     @Override
     public boolean tryAcquire(int permits) {
         if (super.tryAcquire(permits)) {
-            acquisitions.get().increment(permits);
+            this.acquisitions.get().increment(permits);
             return true;
         } else {
             return false;
@@ -243,7 +251,7 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
     @Override
     public boolean tryAcquire(int permits, long timeout, TimeUnit unit) throws InterruptedException {
         if (super.tryAcquire(permits, timeout, unit)) {
-            acquisitions.get().increment(permits);
+            this.acquisitions.get().increment(permits);
             return true;
         } else {
             return false;
@@ -253,7 +261,7 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
     @Override
     public boolean tryAcquire(long timeout, TimeUnit unit) throws InterruptedException {
         if (super.tryAcquire(timeout, unit)) {
-            acquisitions.get().increment();
+            this.acquisitions.get().increment();
             return true;
         } else {
             return false;
@@ -262,21 +270,21 @@ public class SemaphoreLoopLock extends Semaphore implements TickLoopLock {
 
     @Override
     public boolean tryAcquireHardControl() {
-        if (getLocalAcquisitions() == 2) {
+        if (this.getLocalAcquisitions() == 2) {
             return true;
-        } else if (getLocalAcquisitions() == 1) {
-            return tryAcquire(1);
+        } else if (this.getLocalAcquisitions() == 1) {
+            return this.tryAcquire(1);
         } else {
-            return tryAcquire(2);
+            return this.tryAcquire(2);
         }
     }
 
     @Override
     public boolean tryAcquireSoftControl() {
-        if (getLocalAcquisitions() > 0) {
+        if (this.getLocalAcquisitions() > 0) {
             return true;
         } else {
-            return tryAcquire(1);
+            return this.tryAcquire(1);
         }
     }
 }
