@@ -116,6 +116,7 @@ check {
 
 build {
     dependsOn remapJar
+    dependsOn javadoc // I am somewhat sick of surprises concerning broken javadoc references and the likes
 }
 
 publish {

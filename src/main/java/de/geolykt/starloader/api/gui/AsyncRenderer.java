@@ -41,7 +41,7 @@ public interface AsyncRenderer {
     /**
      * Creates, but does not post a {@link Runnable} action to execute during draw.
      *
-     * <p>Unlike {@link AsyncRenderer#postRunnableRenderObject(Runnable, Rectangle, Camera)}, this method always creates
+     * <p>Unlike {@link AsyncRenderer#postRunnableRenderObject(Runnable, Rectangle, OrthographicCamera)}, this method always creates
      * a {@link RenderObject} instance. Further, this {@link RenderObject} instance must be added to a
      * {@link RenderCacheState} manually, otherwise the action will never be executed.
      *
@@ -299,7 +299,7 @@ public interface AsyncRenderer {
     /**
      * Creates, but does not post a {@link Runnable} action to execute during draw.
      *
-     * <p>Unlike {@link AsyncRenderer#postRunnableRenderObject(Runnable, Rectangle, Camera)}, this method always creates
+     * <p>Unlike {@link AsyncRenderer#postRunnableRenderObject(Runnable, Rectangle, OrthographicCamera)}, this method always creates
      * a {@link RenderObject} instance. Further, this {@link RenderObject} instance must be added to a
      * {@link RenderCacheState} manually, otherwise the action will never be executed.
      *
