@@ -28,6 +28,7 @@ import de.geolykt.starloader.api.event.lifecycle.GalaxyLoadingEndEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxyLoadingEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEndEvent;
 import de.geolykt.starloader.api.event.lifecycle.GalaxySavingEvent;
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
@@ -124,8 +125,8 @@ public class VanillaSavegameFormat implements SavegameFormat {
         LandmarkManager.regenerateLandmarks();
 
         Space.getMapData().getGenerator().onLoad();
-        GalFX.m.zoom = GalFX.e();
-        GalFX.m.update();
+        Drawing.getBoardCamera().zoom = GalFX.e();
+        Drawing.getBoardCamera().update();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

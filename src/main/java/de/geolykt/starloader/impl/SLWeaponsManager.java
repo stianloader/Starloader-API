@@ -29,7 +29,7 @@ public final class SLWeaponsManager implements WeaponsManager {
      * @return The shared instance
      */
     public static @NotNull SLWeaponsManager getInstance() {
-        return INSTANCE;
+        return SLWeaponsManager.INSTANCE;
     }
 
     private SLWeaponsManager() {
@@ -38,13 +38,13 @@ public final class SLWeaponsManager implements WeaponsManager {
 
     @Override
     @NotNull
-    public Optional<@NotNull WeaponType> getWeaponType(@NotNull NamespacedKey key) {
+    public Optional<WeaponType> getWeaponType(@NotNull NamespacedKey key) {
         return Optional.ofNullable((WeaponType) Registry.WEAPON_TYPES.get(Objects.requireNonNull(key, "input argument 'key' may not be null")));
     }
 
     @Override
     @NotNull
-    public Optional<@NotNull WeaponType> getWeaponType(@NotNull String key) {
+    public Optional<WeaponType> getWeaponType(@NotNull String key) {
         return Optional.ofNullable((WeaponType) WeaponsFactory.a(Objects.requireNonNull(key, "input argument 'key' may not be null")));
     }
 

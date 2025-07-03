@@ -2,6 +2,7 @@ package de.geolykt.starloader.api;
 
 import de.geolykt.starloader.DeprecatedSince;
 import de.geolykt.starloader.api.empire.Star;
+import de.geolykt.starloader.api.gui.Drawing;
 
 /**
  * A coordinate grid is the projection of X/Y coordinates within the game.
@@ -16,6 +17,7 @@ public enum CoordinateGrid {
      * This is used for {@link Star#getCoordinates()} and similar.
      *
      * @since 2.0.0
+     * @see Drawing#getBoardCamera()
      */
     BOARD,
 
@@ -24,6 +26,7 @@ public enum CoordinateGrid {
      * Generally only needed for drawing operations.
      *
      * @since 2.0.0
+     * @see Drawing#getScreenCamera()
      */
     SCREEN,
 

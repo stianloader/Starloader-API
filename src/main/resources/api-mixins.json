@@ -38,6 +38,7 @@
     "PersonMixins",
     "ReligionMixins",
     "RenderCacheMixins",
+    "RenderItemMixins",
     "SettingsscreenMixins",
     "ShipFactoryMixins",
     "ShipTypeMixins",

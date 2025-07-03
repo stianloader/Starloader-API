@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -190,6 +192,13 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @SuppressWarnings("null")
     @Override
     @NotNull
+    public OrthographicCamera getBoardCamera() {
+        return GalFX.get_m();
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
     public NinePatch getBoxButtonNinePatch() {
         return GalFX.NINEPATCH.NICEBUTTON.getNine();
     }
@@ -197,13 +206,20 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Override
     @NotNull
     public CanvasManager getCanvasManager() {
-        return CANVAS_MANAGER;
+        return DrawingManager.CANVAS_MANAGER;
     }
 
-    @SuppressWarnings("null")
     @Override
     @NotNull
+    @Contract(pure = true)
     public RenderCacheState getDrawingState() {
+        return Objects.requireNonNull(this.getDrawingStateNullable(), "getDrawingStateNullable returned null (method called from wrong thread?)");
+    }
+
+    @Override
+    @Nullable
+    @Contract(pure = true)
+    public RenderCacheState getDrawingStateNullable() {
         return (RenderCacheState) GalFX.RENDERCACHE_LOCAL.get();
     }
 
@@ -236,6 +252,13 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @NotNull
     public NinePatch getRoundedButtonNinePatch() {
         return Objects.requireNonNull(GalFX.NINEPATCH.BUTTON3.getNine());
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public OrthographicCamera getScreenCamera() {
+        return GalFX.get_t();
     }
 
     @Override

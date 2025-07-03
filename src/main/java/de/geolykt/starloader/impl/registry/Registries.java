@@ -41,7 +41,7 @@ public final class Registries {
      * Initialises the Audio wrapper layer.
      */
     public static void initAudio() {
-        LOGGER.info("Wrapping audio samples");
+        Registries.LOGGER.info("Wrapping audio samples");
         AudioSampleWrapper.ACTOR_SELECTED = new StarloaderAudioSample("uismallselect.wav", AudioSample.ACTOR_SELECTED);
         AudioSampleWrapper.ACTOR_ORDERED = new StarloaderAudioSample("uismallselect.wav", AudioSample.ACTOR_ORDERED);
         AudioSampleWrapper.GOOD_MINI = new StarloaderAudioSample("goodmini.wav", AudioSample.GOOD_MINI);
@@ -104,7 +104,7 @@ public final class Registries {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void initEmpireAchievements() {
-        LOGGER.info("Registering empire achievements");
+        Registries.LOGGER.info("Registering empire achievements");
         SimpleEnumRegistry<EmpireAchievementType> achievementRegistry = new SimpleEnumRegistry<>(EmpireAchievementType.class);
         @NotNull EmpireAchievementType[] achivements = new @NotNull EmpireAchievementType[] {
             EmpireAchievementType.FIVEMILOLD,
@@ -149,7 +149,7 @@ public final class Registries {
      * It also emits the required events.
      */
     public static void initEmpireSpecials() {
-        LOGGER.info("Registering empire specials");
+        Registries.LOGGER.info("Registering empire specials");
         SimpleEnumRegistry<EmpireSpecial> specials = new SimpleEnumRegistry<>(EmpireSpecial.class);
         @SuppressWarnings("null") // Since we removed the enum access flag for the EmpireSpecial class, eclipse treats it as an ordinary class; thus we have to use hacks to make it comprehend that the members are not null.
         @NotNull EmpireSpecial[] specialsArray = new EmpireSpecial[] {
@@ -197,7 +197,7 @@ public final class Registries {
      * It also emits the required events.
      */
     public static void initEmpireStates() {
-        LOGGER.info("Registering empire states");
+        Registries.LOGGER.info("Registering empire states");
         EmpireStateRegistry empireStateRegistry = new EmpireStateRegistry();
         empireStateRegistry.registerAll(
                 new @NotNull NamespacedKey[] { RegistryKeys.GALIMULATOR_EXPANDING, RegistryKeys.GALIMULATOR_FORTIFYING,
@@ -222,7 +222,7 @@ public final class Registries {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void initFlagSymbols() {
-        LOGGER.info("Registering flag symbols");
+        Registries.LOGGER.info("Registering flag symbols");
         SimpleEnumRegistry<BuiltinSymbols> symbolRegistry = new SimpleEnumRegistry<>(BuiltinSymbols.class);
         @SuppressWarnings("null")
         @NotNull BuiltinSymbols[] symbols = new @NotNull BuiltinSymbols[] {
@@ -271,7 +271,7 @@ public final class Registries {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void initMapModes() {
-        LOGGER.info("Registering map modes");
+        Registries.LOGGER.info("Registering map modes");
         SimpleEnumRegistry<MapModes> mapModeRegistry = new SimpleEnumRegistry<>(MapModes.class);
         @SuppressWarnings("null")
         @NotNull MapModes[] modes = new MapModes[] {
@@ -316,7 +316,7 @@ public final class Registries {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void initReligions() {
-        LOGGER.info("Registering religions");
+        Registries.LOGGER.info("Registering religions");
         SimpleEnumRegistry<Religion> religionRegistry = new SimpleEnumRegistry<>(Religion.class);
         @SuppressWarnings("null")
         @NotNull Religion[] religions = new Religion[] {
@@ -358,7 +358,7 @@ public final class Registries {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void initWeaponsTypes() {
-        LOGGER.info("Registering weapon factories");
+        Registries.LOGGER.info("Registering weapon factories");
         SimpleEnumRegistry<WeaponsFactory> weaponTypes = new SimpleEnumRegistry<>(WeaponsFactory.class);
         weaponTypes.registerBulk(new @NotNull NamespacedKey[] {
                 RegistryKeys.GALIMULATOR_WT_LASER,

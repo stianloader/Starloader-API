@@ -7,6 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.math.Rectangle;
 
+import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.rendercache.RenderObject;
+
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
@@ -36,8 +39,8 @@ public class BoardTextRenderItem extends RenderItem {
         this.align = align;
         this.backgroundColor = backgroundColor;
 
-        super.b = new Rectangle(-Space.getMaxX(), -Space.getMaxY(), Space.getMaxX() * 2.0F, Space.getMaxY() * 2.0F);
-        super.c = GalFX.get_t(); // = getScreenCamera
+        ((RenderObject) this).setCamera(Drawing.getScreenCamera());
+        ((RenderObject) this).setAABB(new Rectangle(-Space.getMaxX(), -Space.getMaxY(), Space.getMaxX() * 2.0F, Space.getMaxY() * 2.0F));
     }
 
     @Override

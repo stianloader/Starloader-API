@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.rendercache.RenderObject;
 
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
@@ -37,8 +38,8 @@ public class AlignedTextRenderItem extends RenderItem {
      * <p>Warning: This action is performed in sync. Use the {@link AsyncRenderer}
      * interface to use the rendercache functionality if needed.
      *
-     * @param x           The X-position of the drawing op
-     * @param y           The Y-position of the drawing op
+     * @param x           The X-position of the drawing operation
+     * @param y           The Y-position of the drawing operation
      * @param targetWidth The drawn width of the string to draw
      * @param text        The string to draw
      * @param color       The color to draw the string in
@@ -50,7 +51,7 @@ public class AlignedTextRenderItem extends RenderItem {
      */
     public static void drawText(float x, float y, float targetWidth, @NotNull CharSequence text, @NotNull Color color,
             @NotNull Camera camera, int halign, @NotNull BitmapFont font) {
-        COMMON_LAYOUT_INSTANCE.setText(font, text, color, targetWidth, halign, true);
+        AlignedTextRenderItem.COMMON_LAYOUT_INSTANCE.setText(font, text, color, targetWidth, halign, true);
         Gdx.gl.glDisable(GL20.GL_CULL_FACE);
 
         SpriteBatch mainDrawingBatch = Drawing.getDrawingBatch();
@@ -61,7 +62,7 @@ public class AlignedTextRenderItem extends RenderItem {
             mainDrawingBatch.begin();
         }
 
-        font.draw(mainDrawingBatch, COMMON_LAYOUT_INSTANCE, x, y);
+        font.draw(mainDrawingBatch, AlignedTextRenderItem.COMMON_LAYOUT_INSTANCE, x, y);
 
         mainDrawingBatch.setProjectionMatrix(oldProjection);
 
@@ -70,8 +71,6 @@ public class AlignedTextRenderItem extends RenderItem {
         }
     }
 
-    @NotNull
-    private final Camera camera;
     @NotNull
     private final Color color;
     @NotNull
@@ -90,17 +89,16 @@ public class AlignedTextRenderItem extends RenderItem {
         this.targetWidth = targetWidth;
         this.text = text;
         this.color = color;
-        this.camera = camera;
         this.halign = halign;
         this.font = font;
 
-        super.c = (OrthographicCamera) camera;
-        super.b = new Rectangle(-Space.getMaxX(), -Space.getMaxY(), Space.getMaxX() * 2.0F, Space.getMaxY() * 2.0F);
+        ((RenderObject) this).setCamera((OrthographicCamera) camera);
+        ((RenderObject) this).setAABB(new Rectangle(-Space.getMaxX(), -Space.getMaxY(), Space.getMaxX() * 2.0F, Space.getMaxY() * 2.0F));
     }
 
     @Override
     public void a() {
-        drawText(x, y, targetWidth, text, color, camera, halign, font);
+        AlignedTextRenderItem.drawText(this.x, this.y, this.targetWidth, this.text, this.color, ((RenderObject) this).getCamera(), this.halign, this.font);
     }
 
     @Override

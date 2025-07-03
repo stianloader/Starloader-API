@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.rendercache.RenderObject;
 
 import snoddasmannen.galimulator.GalFX;
 import snoddasmannen.galimulator.Space;
@@ -54,7 +55,7 @@ public class CenteredTextRenderItem extends RenderItem {
      */
     public static void drawTextCentred(float x, float y, float width, float height, @NotNull CharSequence text,
             @NotNull Color color, @NotNull Camera camera, @NotNull BitmapFont font) {
-        COMMON_LAYOUT_INSTANCE.setText(font, text, color, width, Align.top | Align.center, true);
+        CenteredTextRenderItem.COMMON_LAYOUT_INSTANCE.setText(font, text, color, width, Align.top | Align.center, true);
         Gdx.gl.glDisable(GL20.GL_CULL_FACE);
 
         SpriteBatch mainDrawingBatch = Drawing.getDrawingBatch();
@@ -65,9 +66,9 @@ public class CenteredTextRenderItem extends RenderItem {
             mainDrawingBatch.begin();
         }
 
-        float yDraw = y + (height / 2) + (COMMON_LAYOUT_INSTANCE.height / 2);
+        float yDraw = y + (height / 2) + (CenteredTextRenderItem.COMMON_LAYOUT_INSTANCE.height / 2);
         float xDraw = x;
-        font.draw(mainDrawingBatch, COMMON_LAYOUT_INSTANCE, xDraw, yDraw);
+        font.draw(mainDrawingBatch, CenteredTextRenderItem.COMMON_LAYOUT_INSTANCE, xDraw, yDraw);
 
         mainDrawingBatch.setProjectionMatrix(oldProjection);
 
@@ -76,8 +77,6 @@ public class CenteredTextRenderItem extends RenderItem {
         }
     }
 
-    @NotNull
-    private final Camera camera;
     @NotNull
     private final Color color;
     @NotNull
@@ -97,16 +96,15 @@ public class CenteredTextRenderItem extends RenderItem {
         this.height = height;
         this.text = text;
         this.color = color;
-        this.camera = camera;
         this.font = font;
 
-        super.c = (OrthographicCamera) camera;
-        super.b = new Rectangle(-Space.getMaxX(), -Space.getMaxY(), Space.getMaxX() * 2.0F, Space.getMaxY() * 2.0F);
+        ((RenderObject) this).setCamera((OrthographicCamera) camera);
+        ((RenderObject) this).setAABB(new Rectangle(-Space.getMaxX(), -Space.getMaxY(), Space.getMaxX() * 2.0F, Space.getMaxY() * 2.0F));
     }
 
     @Override
     public void a() {
-        drawTextCentred(x, y, width, height, text, color, camera, font);
+        CenteredTextRenderItem.drawTextCentred(this.x, this.y, this.width, this.height, this.text, this.color, ((RenderObject) this).getCamera(), this.font);
     }
 
     @Override

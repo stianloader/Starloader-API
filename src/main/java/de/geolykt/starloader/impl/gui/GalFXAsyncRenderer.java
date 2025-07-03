@@ -2,17 +2,24 @@ package de.geolykt.starloader.impl.gui;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 import de.geolykt.starloader.api.gui.AsyncRenderer;
+import de.geolykt.starloader.api.gui.Drawing;
+import de.geolykt.starloader.api.gui.rendercache.RenderCacheState;
+import de.geolykt.starloader.api.gui.rendercache.RenderObject;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 import de.geolykt.starloader.impl.gui.rendercache.AlignedTextRenderItem;
 import de.geolykt.starloader.impl.gui.rendercache.CenteredTextRenderItem;
+import de.geolykt.starloader.impl.gui.rendercache.RunnableRenderObject;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
@@ -25,6 +32,14 @@ import snoddasmannen.galimulator.rendersystem.RenderCache;
  * @since 2.0.0
  */
 public class GalFXAsyncRenderer implements AsyncRenderer {
+
+    @Override
+    @NotNull
+    @Contract(pure = true)
+    public RenderObject createRunnableRenderObject0(@NotNull Runnable action,
+            @NotNull Rectangle aabb, @NotNull OrthographicCamera cullCamera) {
+        return (RenderObject) new RunnableRenderObject(action, aabb, cullCamera);
+    }
 
     @Override
     public void drawNinepatch0(@NotNull NinePatch ninepatch, double x, double y, double width, double height, @NotNull Color color,
@@ -76,5 +91,20 @@ public class GalFXAsyncRenderer implements AsyncRenderer {
     @Contract(pure = true)
     public boolean isRenderThread() {
         return GalimulatorImplementation.isRenderThread();
+    }
+
+    @Override
+    @Nullable
+    public RenderObject postRunnableRenderObject0(@NotNull Runnable action,
+            @NotNull Rectangle aabb, @NotNull OrthographicCamera cullCamera) {
+        RenderCacheState cache = Drawing.getRendercacheUtils().getDrawingStateNullable();
+        if (cache != null) {
+            RenderObject pushedObject = this.createRunnableRenderObject0(action, aabb, cullCamera);
+            cache.pushObject(pushedObject);
+            return pushedObject;
+        } else {
+            action.run();
+            return null;
+        }
     }
 }

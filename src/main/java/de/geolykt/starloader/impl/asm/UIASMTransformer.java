@@ -67,16 +67,6 @@ public final class UIASMTransformer extends ASMTransformer {
     @NotNull
     public static final String OPEN_GAME_CONTROL_METHOD = ReferenceSource.getStringValue();
 
-    /**
-     * The fully classified name of the RenderItem class.
-     * Remapped by starplane - contents of this string will vary in built jar.
-     *
-     * @since 2.0.0
-     */
-    @RemapClassReference(type = RenderItem.class)
-    @NotNull
-    public static final String RENDER_ITEM_CLASS = ReferenceSource.getStringValue();
-
     public static final void sideBarBottom(Object widget) {
         if (widget instanceof Widget && SidebarInjector.getImplementation() instanceof SLSidebarInjector) {
             ((SLSidebarInjector) SidebarInjector.getImplementation()).addAll(Orientation.BOTTOM, (Widget) widget);
@@ -94,9 +84,6 @@ public final class UIASMTransformer extends ASMTransformer {
         if (node.name.equals(MAIN_SIDEBAR_CLASS)) {
             transformSidebarClass(node);
             return true;
-        } else if (node.name.equals(RENDER_ITEM_CLASS)) {
-            node.interfaces.add(Type.getInternalName(RenderObject.class));
-            return true;
         } else if (node.name.equals(ABOUT_WIDGET_CLASS)) {
             transformAboutClass(node);
             return true;
@@ -112,7 +99,6 @@ public final class UIASMTransformer extends ASMTransformer {
     @Override
     public boolean isValidTarget(@NotNull String internalName) {
         return internalName.equals(MAIN_SIDEBAR_CLASS)
-                || internalName.equals(RENDER_ITEM_CLASS)
                 || internalName.equals(ABOUT_WIDGET_CLASS);
     }
 

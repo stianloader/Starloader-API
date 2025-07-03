@@ -50,7 +50,7 @@ public class ReligionMixins implements RegistryKeyed {
 
     @Override
     public @NotNull NamespacedKey getRegistryKey() {
-        NamespacedKey key = registryKey;
+        NamespacedKey key = this.registryKey;
         if (key == null) {
             throw new IllegalStateException("Registry key not yet defined");
         }
@@ -59,9 +59,9 @@ public class ReligionMixins implements RegistryKeyed {
 
     @Override
     public void setRegistryKey(@NotNull NamespacedKey key) {
-        if (registryKey != null) {
+        if (this.registryKey != null) {
             throw new IllegalStateException("The registry key is already set!");
         }
-        registryKey = key;
+        this.registryKey = key;
     }
 }

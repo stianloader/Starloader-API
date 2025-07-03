@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.Obsolete;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -66,6 +68,7 @@ public final class Drawing {
      *
      * @since 2.0.0
      */
+    @Internal
     static AsyncRenderer asyncImplementation;
 
     private static DrawingImpl implementation;
@@ -106,7 +109,7 @@ public final class Drawing {
      */
     public static void drawLine(double x1, double y1, double x2, double y2, float width, @NotNull Color color,
             @NotNull Camera camera) {
-        implementation.drawLine(x1, y1, x2, y2, width, color, camera);
+        Drawing.implementation.drawLine(x1, y1, x2, y2, width, color, camera);
     }
 
     /**
@@ -121,7 +124,7 @@ public final class Drawing {
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y) {
-        return implementation.drawText(message, x, y);
+        return Drawing.implementation.drawText(message, x, y);
     }
 
     /**
@@ -136,7 +139,7 @@ public final class Drawing {
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull Color color) {
-        return implementation.drawText(message, x, y, color);
+        return Drawing.implementation.drawText(message, x, y, color);
     }
 
     /**
@@ -153,7 +156,7 @@ public final class Drawing {
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size) {
-        return implementation.drawText(message, x, y, color, Objects.requireNonNull(size, "Size cannot be null"));
+        return Drawing.implementation.drawText(message, x, y, color, Objects.requireNonNull(size, "Size cannot be null"));
     }
 
     /**
@@ -171,7 +174,7 @@ public final class Drawing {
      * @return The width of the text that was just drawn
      */
     public static float drawText(@NotNull String message, float x, float y, @NotNull Color color, Drawing.@NotNull TextSize size, @NotNull Camera camera) {
-        return implementation.drawText(message, x, y, color, Objects.requireNonNull(size, "Size cannot be null"), Objects.requireNonNull(camera, "Camera cannot be null."));
+        return Drawing.implementation.drawText(message, x, y, color, Objects.requireNonNull(size, "Size cannot be null"), Objects.requireNonNull(camera, "Camera cannot be null."));
     }
 
     /**
@@ -197,7 +200,7 @@ public final class Drawing {
     @DeprecatedSince("2.0.0")
     @Deprecated
     public static void fillRect(float x, float y, float width, float height, @NotNull Color fillColor, @NotNull Camera camera) {
-        implementation.fillRect(x, y, width, height, fillColor, camera);
+        Drawing.implementation.fillRect(x, y, width, height, fillColor, camera);
     }
 
     /**
@@ -231,6 +234,19 @@ public final class Drawing {
     }
 
     /**
+     * Obtains the {@link OrthographicCamera} camera used for projecting the game's map.
+     *
+     * @return The "board" camera. Corresponding to the camera powering {@link CoordinateGrid#BOARD}.
+     * @since 2.0.0-a20250703
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @Contract(pure = true)
+    @NotNull
+    public static OrthographicCamera getBoardCamera() {
+        return Drawing.implementation.getBoardCamera();
+    }
+
+    /**
      * Obtains the currently active {@link CanvasManager} instance, which is used to create and open
      * {@link Canvas canvases} and {@link MultiCanvas multi-canvases}.
      *
@@ -258,7 +274,7 @@ public final class Drawing {
      */
     @NotNull
     public static SpriteBatch getDrawingBatch() {
-        return implementation.getMainDrawingBatch();
+        return Drawing.implementation.getMainDrawingBatch();
     }
 
     /**
@@ -269,7 +285,7 @@ public final class Drawing {
      * @return The {@link BitmapFont} associated under that name
      */
     public static @Nullable BitmapFont getFontBitmap(@NotNull String font) {
-        return implementation.getFontBitmap(font);
+        return Drawing.implementation.getFontBitmap(font);
     }
 
     /**
@@ -278,7 +294,7 @@ public final class Drawing {
      * @return A collection of all Font names available at this current time
      */
     public static @NotNull Collection<String> getFonts() {
-        return implementation.getAvailiableFonts();
+        return Drawing.implementation.getAvailiableFonts();
     }
 
     /**
@@ -289,7 +305,7 @@ public final class Drawing {
      * @see Drawing#requireInstance()
      */
     public static DrawingImpl getInstance() {
-        return implementation;
+        return Drawing.implementation;
     }
 
     /**
@@ -300,7 +316,20 @@ public final class Drawing {
      */
     @NotNull
     public static RendercacheUtils getRendercacheUtils() {
-        return implementation.getRendercacheUtils();
+        return Drawing.implementation.getRendercacheUtils();
+    }
+
+    /**
+     * Obtains the {@link OrthographicCamera} camera used for projecting the game's GUI.
+     *
+     * @return The "screen" camera. Corresponding to the camera powering {@link CoordinateGrid#SCREEN}.
+     * @since 2.0.0-a20250703
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @Contract(pure = true)
+    @NotNull
+    public static OrthographicCamera getScreenCamera() {
+        return Drawing.implementation.getScreenCamera();
     }
 
     /**
@@ -316,7 +345,7 @@ public final class Drawing {
      */
     @NotNull
     public static BitmapFont getSpaceFont() {
-        return implementation.getSpaceFont();
+        return Drawing.implementation.getSpaceFont();
     }
 
     /**
@@ -347,6 +376,8 @@ public final class Drawing {
      * Queries whether this method is the main thread. The implementation bases this
      * off from the current Thread's name. The value is cached in a {@link ThreadLocal}.
      *
+     * <p>This method is a convenience method for invoking {@link AsyncRenderer#isRenderThread()}.
+     *
      * @return True if this thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
      * @since 2.0.0-a20240104
      */
@@ -366,7 +397,8 @@ public final class Drawing {
      * @param path The path to the image file to load.
      * @return The bound texture.
      */
-    public static @NotNull Texture loadTexture(@NotNull String path) {
+    @NotNull
+    public static Texture loadTexture(@NotNull String path) {
         return Drawing.implementation.loadTexture(path);
     }
 
@@ -378,7 +410,9 @@ public final class Drawing {
      * @see Drawing#getInstance()
      * @throws IllegalStateException if the Drawing implementation has not yet been set.
      */
-    public static @NotNull DrawingImpl requireInstance() {
+    @NotNull
+    @Contract(pure = true)
+    public static DrawingImpl requireInstance() {
         DrawingImpl implementation = Drawing.implementation;
         if (implementation == null) {
             throw new IllegalStateException("Drawing implementation not yet set.");

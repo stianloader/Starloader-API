@@ -4,12 +4,14 @@ import java.util.Collection;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -184,6 +186,17 @@ public interface DrawingImpl {
     public @NotNull Collection<String> getAvailiableFonts();
 
     /**
+     * Obtains the {@link OrthographicCamera} camera used for projecting the game's map.
+     *
+     * @return The "board" camera. Corresponding to the camera powering {@link CoordinateGrid#BOARD}.
+     * @since 2.0.0-a20250703
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @Contract(pure = true)
+    @NotNull
+    public OrthographicCamera getBoardCamera();
+
+    /**
      * Obtains the currently active {@link CanvasManager} instance, which is used to create and open
      * {@link Canvas canvases} and {@link MultiCanvas multi-canvases}.
      *
@@ -227,6 +240,17 @@ public interface DrawingImpl {
      */
     @NotNull
     public RendercacheUtils getRendercacheUtils();
+
+    /**
+     * Obtains the {@link OrthographicCamera} camera used for projecting the game's GUI.
+     *
+     * @return The "screen" camera. Corresponding to the camera powering {@link CoordinateGrid#SCREEN}.
+     * @since 2.0.0-a20250703
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @Contract(pure = true)
+    @NotNull
+    public OrthographicCamera getScreenCamera();
 
     /**
      * Obtains the {@link BitmapFont} that corresponds to the "SPACE" font type (returned by

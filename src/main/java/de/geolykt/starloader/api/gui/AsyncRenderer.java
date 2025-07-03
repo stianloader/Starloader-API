@@ -3,16 +3,22 @@ package de.geolykt.starloader.api.gui;
 import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
+
+import de.geolykt.starloader.api.gui.rendercache.RenderCacheState;
+import de.geolykt.starloader.api.gui.rendercache.RenderObject;
 
 /**
  * Starting from Galimulator 5.0 it has become very dangerous to draw things on
@@ -31,6 +37,26 @@ import com.badlogic.gdx.utils.Align;
  * @since 2.0.0
  */
 public interface AsyncRenderer {
+
+    /**
+     * Creates, but does not post a {@link Runnable} action to execute during draw.
+     *
+     * <p>Unlike {@link AsyncRenderer#postRunnableRenderObject(Runnable, Rectangle, Camera)}, this method always creates
+     * a {@link RenderObject} instance. Further, this {@link RenderObject} instance must be added to a
+     * {@link RenderCacheState} manually, otherwise the action will never be executed.
+     *
+     * @param action The action to execute when rendering this object.
+     * @param aabb The bounding box of the object.
+     * @param cullCamera The camera used by this object. Used most crucially to evaluate the bounding box of the render object.
+     * @return The created {@link RenderObject} instance.
+     * @since 2.0.0-a20250703
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @NotNull
+    @Contract(pure = true)
+    public static RenderObject createRunnableRenderObject(@NotNull Runnable action, @NotNull Rectangle aabb, @NotNull OrthographicCamera cullCamera) {
+        return Drawing.asyncImplementation.createRunnableRenderObject0(action, aabb, cullCamera);
+    }
 
     /**
      * <b>Warning: As of the latest alpha release of Galimulator 5.0 as of October 15th 2022,
@@ -62,8 +88,8 @@ public interface AsyncRenderer {
      * Draws a text on the main drawing batch with the given arguments.
      * {@link DrawingImpl#getSpaceFont()} is used as the font of this operation.
      *
-     * @param x           The X-position of the drawing op
-     * @param y           The Y-position of the drawing op
+     * @param x           The X-position of the drawing operation
+     * @param y           The Y-position of the drawing operation
      * @param targetWidth The drawn width of the string to draw
      * @param text        The string to draw
      * @param color       The color to draw the string in
@@ -226,6 +252,28 @@ public interface AsyncRenderer {
     }
 
     /**
+     * Posts a {@link Runnable} action to execute during draw. Unlike {@link Application#postRunnable(Runnable)},
+     * the runnable action will be executed at the same time as other rendering instructions dispatched by this class.
+     * As such, this method is preferable for rendering operations, especially if rendering logic is handled by the
+     * {@link Runnable}.
+     *
+     * <p>This is especially important when trying to render something behind or in front of something else.
+     *
+     * @param action The action to execute when rendering this object.
+     * @param aabb The bounding box of the object.
+     * @param cullCamera The camera used by this object. Used most crucially to evaluate the bounding box of the render object.
+     * @return The posted {@link RenderObject}, or null if {@link AsyncRenderer#isRenderThread()} is true.
+     * @since 2.0.0-a20250703
+     * @implNote Note that if {@link AsyncRenderer#isRenderThread()} is true, then the culling bounding box might not be
+     * evaluated. However, in the future that behaviour is subject to change, so this behaviour must not be relied upon.
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @Nullable
+    public static RenderObject postRunnableRenderObject(@NotNull Runnable action, @NotNull Rectangle aabb, @NotNull OrthographicCamera cullCamera) {
+        return Drawing.asyncImplementation.postRunnableRenderObject0(action, aabb, cullCamera);
+    }
+
+    /**
      * Obtains the currently registered instance of the {@link AsyncRenderer}
      * interface. If none are registered, a {@link NullPointerException} is thrown.
      *
@@ -247,6 +295,24 @@ public interface AsyncRenderer {
     public static void setInstance(@NotNull AsyncRenderer instance) {
         Drawing.asyncImplementation = Objects.requireNonNull(instance);
     }
+
+    /**
+     * Creates, but does not post a {@link Runnable} action to execute during draw.
+     *
+     * <p>Unlike {@link AsyncRenderer#postRunnableRenderObject(Runnable, Rectangle, Camera)}, this method always creates
+     * a {@link RenderObject} instance. Further, this {@link RenderObject} instance must be added to a
+     * {@link RenderCacheState} manually, otherwise the action will never be executed.
+     *
+     * @param action The action to execute when rendering this object.
+     * @param aabb The bounding box of the object.
+     * @param cullCamera The camera used by this object. Used most crucially to evaluate the bounding box of the render object.
+     * @return The created {@link RenderObject} instance.
+     * @since 2.0.0-a20250703
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @NotNull
+    @Contract(pure = true)
+    public RenderObject createRunnableRenderObject0(@NotNull Runnable action, @NotNull Rectangle aabb, @NotNull OrthographicCamera cullCamera);
 
     /**
      * <b>Warning: As of the latest alpha release of Galimulator 5.0 as of October 15th 2022,
@@ -380,9 +446,31 @@ public interface AsyncRenderer {
      * Queries whether this method is the main thread. The implementation bases this
      * off from the current Thread's name. The value is cached in a {@link ThreadLocal}.
      *
+     * <p>A static convince method for invoking this method can be found in {@link Drawing#isRenderThread()}.
+     *
      * @return True if this thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
      * @since 2.0.0-a20240104
      */
     @AvailableSince("2.0.0-a20240104")
     public boolean isRenderThread();
+
+    /**
+     * Posts a {@link Runnable} action to execute during draw. Unlike {@link Application#postRunnable(Runnable)},
+     * the runnable action will be executed at the same time as other rendering instructions dispatched by this class.
+     * As such, this method is preferable for rendering operations, especially if rendering logic is handled by the
+     * {@link Runnable}.
+     *
+     * <p>This is especially important when trying to render something behind or in front of something else.
+     *
+     * @param action The action to execute when rendering this object.
+     * @param aabb The bounding box of the object.
+     * @param cullCamera The camera used by this object. Used most crucially to evaluate the bounding box of the render object.
+     * @return The posted {@link RenderObject}, or null if {@link AsyncRenderer#isRenderThread()} is true.
+     * @since 2.0.0-a20250703
+     * @implNote Note that if {@link AsyncRenderer#isRenderThread()} is true, then the culling bounding box might not be
+     * evaluated. However, in the future that behaviour is subject to change, so this behaviour must not be relied upon.
+     */
+    @AvailableSince("2.0.0-a20250703")
+    @Nullable
+    public RenderObject postRunnableRenderObject0(@NotNull Runnable action, @NotNull Rectangle aabb, @NotNull OrthographicCamera cullCamera);
 }

@@ -19,7 +19,7 @@ public interface WeaponsManager {
      * @param key The key
      * @return The registered weapon type wrapped in an optional
      */
-    public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull NamespacedKey key);
+    public @NotNull Optional<WeaponType> getWeaponType(@NotNull NamespacedKey key);
 
     /**
      * Obtains the weapon type based on it's name that is used by JSON actor definition.
@@ -28,7 +28,7 @@ public interface WeaponsManager {
      * @param key The key to look up for
      * @return The registered weapon type wrapped in an optional
      */
-    public @NotNull Optional<@NotNull WeaponType> getWeaponType(@NotNull String key);
+    public @NotNull Optional<WeaponType> getWeaponType(@NotNull String key);
 
     /**
      * Obtains the weapon type based on it's name that is used by things such as {@link Enum#valueOf(Class, String)}.

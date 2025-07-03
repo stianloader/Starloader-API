@@ -20,6 +20,6 @@ public class RenderCacheMixins implements RenderCacheState {
 
     @Override
     public void pushObject(@NotNull RenderObject object) {
-        pushItem((RenderItem) object);
+        this.pushItem((RenderItem) object);
     }
 }

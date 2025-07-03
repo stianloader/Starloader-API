@@ -144,6 +144,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @since 2.0.0
      */
     public static void crash(@NotNull String cause, boolean save) {
+        @NotNull
         Throwable backtrace = new AssertionError("GalimulatorImplementation.crash() called: " + cause).fillInStackTrace();
         GalimulatorImplementation.crash(backtrace, cause, save);
     }
@@ -238,9 +239,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * @since 2.0.0
      */
     public static void fireScheduledTasks() {
-        SCHEDULED_TASKS_NEXT_TICK.addLast(NEXT_TICK_TASK);
+        GalimulatorImplementation.SCHEDULED_TASKS_NEXT_TICK.addLast(GalimulatorImplementation.NEXT_TICK_TASK);
         Runnable r;
-        while ((r = SCHEDULED_TASKS_NEXT_TICK.removeFirst()) != NEXT_TICK_TASK) {
+        while ((r = GalimulatorImplementation.SCHEDULED_TASKS_NEXT_TICK.removeFirst()) != GalimulatorImplementation.NEXT_TICK_TASK) {
             r.run();
         }
     }
