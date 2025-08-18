@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import de.geolykt.starloader.api.CoordinateGrid;
+import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
 
@@ -35,6 +36,9 @@ import de.geolykt.starloader.impl.GalimulatorImplementation;
  *
  * <p>Further, this package exist in order to reduce excess bloat from
  * {@link de.geolykt.starloader.api.Galimulator} or similar classes.
+ *
+ * <p>Instances of this class can easily be obtained via
+ * {@link Galimulator#getUniverse()}.
  *
  * @since 2.0.0-a20240519
  */

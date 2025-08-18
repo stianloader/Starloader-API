@@ -46,6 +46,7 @@
     "StarMixins",
     "StateActorMixins",
     "SteamSharedLibraryLoaderMixins",
+    "TextInputDialogWidgetMixins",
     "TextureTextButtonWidgetMixins",
     "TrackMixins",
     "WarMixins",
