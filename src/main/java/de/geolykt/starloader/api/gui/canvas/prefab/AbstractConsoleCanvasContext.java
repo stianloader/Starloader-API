@@ -143,7 +143,7 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
 
                 @Override
                 public boolean keyTyped(char character) {
-                    if (character == 0) {
+                    if (character == 0 || character == '\r') {
                         return true;
                     }
                     int caretIndex = AbstractConsoleCanvasContext.this.getCaretIndex();
