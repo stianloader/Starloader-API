@@ -93,6 +93,10 @@ public class SpaceASMTransformer extends ASMTransformer {
     @NotNull
     public static String gestureListenerClass = ReferenceSource.getStringValue();
 
+    @NotNull
+    @RemapMemberReference(ownerType = Space.class, name = "isPaused", desc = "()Z", format = ReferenceFormat.NAME)
+    private static final String IS_PAUSED_METHOD_NAME = ReferenceSource.getStringValue();
+
     /**
      * The logger object that should be used used throughout this class.
      */
@@ -134,10 +138,6 @@ public class SpaceASMTransformer extends ASMTransformer {
     @RemapMemberReference(ownerType = Star.class, name = "renderRegion", desc = "()V", format = ReferenceFormat.COMBINED_LEGACY)
     @NotNull
     public static String starRenderOverlayMethod = ReferenceSource.getStringValue();
-
-    @RemapMemberReference(ownerType = Space.class, name = "tickCount", descType = int.class, format = ReferenceFormat.COMBINED_LEGACY)
-    @NotNull
-    public static String tickCountField = ReferenceSource.getStringValue();
 
     /**
      * The remapped name of the "tick" method.
@@ -261,12 +261,12 @@ public class SpaceASMTransformer extends ASMTransformer {
 
     @Override
     public boolean accept(@NotNull ClassNode source) {
-        if (source.name.equals(SPACE_CLASS)) {
-            String generateGalaxyMethodName = generateGalaxyMethod.split("[\\.\\(]", 3)[1];
-            String tickMethodName = tickMethod.split("[\\.\\(]", 3)[1];
-            String tickMethodDesc = '(' + tickMethod.split("[\\.\\(]", 3)[2];
-            String saveSyncMethodName = saveSyncMethod.split("[\\.\\(]", 3)[1];
-            String simLoopLockFieldName = simLoopLockField.split("[ \\.]", 3)[1];
+        if (source.name.equals(SpaceASMTransformer.SPACE_CLASS)) {
+            String generateGalaxyMethodName = SpaceASMTransformer.generateGalaxyMethod.split("[\\.\\(]", 3)[1];
+            String tickMethodName = SpaceASMTransformer.tickMethod.split("[\\.\\(]", 3)[1];
+            String tickMethodDesc = '(' + SpaceASMTransformer.tickMethod.split("[\\.\\(]", 3)[2];
+            String saveSyncMethodName = SpaceASMTransformer.saveSyncMethod.split("[\\.\\(]", 3)[1];
+            String simLoopLockFieldName = SpaceASMTransformer.simLoopLockField.split("[ \\.]", 3)[1];
 
             boolean foundTickMethod = false;
             boolean foundEmpireCollapseMethod = false;
@@ -303,7 +303,7 @@ public class SpaceASMTransformer extends ASMTransformer {
                     if (returnInsn == null) {
                         throw new IllegalStateException("There is no return opcode in this method. Is this even valid java?");
                     }
-                    MethodInsnNode insn = new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "generateGalaxy", "(Z)V");
+                    MethodInsnNode insn = new MethodInsnNode(Opcodes.INVOKESTATIC, SpaceASMTransformer.TRANSFORMER_CLASS, "generateGalaxy", "(Z)V");
                     method.instructions.insertBefore(returnInsn, new InsnNode(Opcodes.ICONST_1)); // load true into the stack
                     method.instructions.insertBefore(returnInsn, insn);
                     foundSaveGalaxyMethodName = true;
@@ -312,7 +312,7 @@ public class SpaceASMTransformer extends ASMTransformer {
                     while (insn != null) {
                         if (insn.getOpcode() == Opcodes.PUTSTATIC) {
                             FieldInsnNode finsn = (FieldInsnNode) insn;
-                            if (finsn.owner.equals(SPACE_CLASS) && finsn.name.equals(simLoopLockFieldName) && finsn.desc.equals("Ljava/util/concurrent/Semaphore;")) {
+                            if (finsn.owner.equals(SpaceASMTransformer.SPACE_CLASS) && finsn.name.equals(simLoopLockFieldName) && finsn.desc.equals("Ljava/util/concurrent/Semaphore;")) {
                                 InsnList injected = new InsnList();
                                 injected.add(new InsnNode(Opcodes.POP));
                                 injected.add(new TypeInsnNode(Opcodes.NEW, "de/geolykt/starloader/impl/util/SemaphoreLoopLock"));
@@ -506,38 +506,41 @@ public class SpaceASMTransformer extends ASMTransformer {
      * @param method The method to transform
      */
     private void addLogicalListener(MethodNode method) {
+        boolean injected = false;
+
         AbstractInsnNode currentInsn = method.instructions.getFirst();
-        String tickCountFieldName = tickCountField.split("[\\. ]")[1];
-        while (currentInsn != null) {
-            if (currentInsn instanceof FieldInsnNode) {
-                FieldInsnNode yField = (FieldInsnNode) currentInsn;
-                currentInsn = currentInsn.getNext();
-                if (!yField.owner.equals(SPACE_CLASS) || !yField.name.equals(tickCountFieldName) || currentInsn.getOpcode() != Opcodes.ICONST_2) {
+
+        while ((currentInsn = currentInsn.getNext()) != null) {
+
+            if (currentInsn instanceof MethodInsnNode) {
+                MethodInsnNode methodInsn = (MethodInsnNode) currentInsn;
+                if (!methodInsn.owner.equals(SpaceASMTransformer.SPACE_CLASS) || !methodInsn.name.equals(SpaceASMTransformer.IS_PAUSED_METHOD_NAME) || !methodInsn.desc.equals("()Z")) {
                     continue;
                 }
-                currentInsn = currentInsn.getNext();
-                if (currentInsn.getOpcode() != Opcodes.IREM) {
+
+                currentInsn = methodInsn.getNext();
+
+                if (currentInsn.getOpcode() != Opcodes.IFEQ) {
                     continue;
                 }
-                currentInsn = currentInsn.getNext();
-                if (!(currentInsn instanceof JumpInsnNode)) {
-                    continue;
-                }
-                JumpInsnNode jumpToPOI = (JumpInsnNode) currentInsn;
-                while (currentInsn != jumpToPOI.label) {
-                    currentInsn = currentInsn.getNext();
-                }
+
+                JumpInsnNode jumpInsn = (JumpInsnNode) currentInsn;
+
                 // WARNING: this is some seriously dangerous assumptions.
                 AbstractInsnNode lastNode = method.instructions.getLast();
                 Objects.requireNonNull(lastNode);
                 while (lastNode.getOpcode() != Opcodes.IRETURN && lastNode.getOpcode() != Opcodes.RETURN) {
                     lastNode = lastNode.getPrevious();
                 }
-                method.instructions.insert(currentInsn, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPre", "()V"));
-                method.instructions.insertBefore(lastNode, new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickPost", "()V"));
-                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, TRANSFORMER_CLASS, "logicalTickEarly", "()V"));
+                method.instructions.insert(jumpInsn.label, new MethodInsnNode(Opcodes.INVOKESTATIC, SpaceASMTransformer.TRANSFORMER_CLASS, "logicalTickPre", "()V"));
+                method.instructions.insertBefore(lastNode, new MethodInsnNode(Opcodes.INVOKESTATIC, SpaceASMTransformer.TRANSFORMER_CLASS, "logicalTickPost", "()V"));
+                method.instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC, SpaceASMTransformer.TRANSFORMER_CLASS, "logicalTickEarly", "()V"));
+                injected = true;
             }
-            currentInsn = currentInsn.getNext();
+        }
+
+        if (!injected) {
+            throw new IllegalStateException("Failed injection in tick method: No further information");
         }
     }
 
