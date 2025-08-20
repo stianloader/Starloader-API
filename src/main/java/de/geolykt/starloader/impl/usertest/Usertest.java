@@ -28,5 +28,6 @@ public abstract class Usertest {
         USERTESTS.add(new ShapesTest());
         USERTESTS.add(new StarlaneGenerationBenchmarks());
         USERTESTS.add(new ScreenClickTest());
+        USERTESTS.add(new CanvasConsoleTest());
     }
 }

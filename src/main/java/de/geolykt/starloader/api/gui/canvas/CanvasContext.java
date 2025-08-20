@@ -24,7 +24,7 @@ public interface CanvasContext {
 
     /**
      * Obtains whether nonsensical dimensions are allowed in the immediate hierarchy around the canvas context.
-     * More specifically, if the canvas or a child canvas is larger than it's parent canvas is at least one dimension
+     * More specifically, if the canvas or a child canvas is larger than its parent canvas in at least one dimension,
      * and this method returns false, then a crash will occur, otherwise nothing will happen.
      * By default this method returns false to allow the easy debugging of hard to trace bugs.
      *
