@@ -1,5 +1,11 @@
 package de.geolykt.starloader.api.gui.canvas.prefab;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.IntSupplier;
 
@@ -14,12 +20,16 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout.GlyphRun;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
 
 import de.geolykt.starloader.api.gui.Drawing;
@@ -71,6 +81,8 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
     private InputProcessor originalProcessor = null;
     @Nullable
     private InputProcessor replacementProcessor = null;
+    @NotNull
+    private final List<Map.Entry<@NotNull Rectangle, @NotNull URI>> uriAABBs = new ArrayList<>();
     @NotNull
     private IntSupplier width;
 
@@ -168,6 +180,90 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         }
     }
 
+    private void detectURIs(@NotNull BitmapFont font, @NotNull GlyphLayout layout, @NotNull StringBuilder sharedStringBuilder, float originX, float originY) {
+        if (!this.isDetectingURIs()) {
+            return;
+        }
+
+        sharedStringBuilder.setLength(0);
+        this.flattenRuns(layout, sharedStringBuilder);
+        String drawnText = sharedStringBuilder.toString();
+
+        int i = 0;
+        while ((i = drawnText.indexOf(':', i + 1)) > 0 && (i + 3) < drawnText.length()) {
+            if (!drawnText.regionMatches(i + 1, "//", 0, 2) || Character.isWhitespace(drawnText.charAt(i + 3))) {
+                continue;
+            }
+
+            int start;
+            if (i >= 4 && drawnText.regionMatches(i - 4, "http", 0, 4)) {
+                start = i - 4;
+            } else if (i >= 5 && drawnText.regionMatches(i - 5, "https", 0, 5)) {
+                start = i - 5;
+            } else {
+                continue;
+            }
+
+            if (start != 0 && !Character.isWhitespace(drawnText.charAt(start - 1))) {
+                break;
+            }
+
+            int end = i + 3;
+            while (++end < drawnText.length() && !Character.isWhitespace(drawnText.charAt(end)));
+
+            URI detectedURI;
+            try {
+                detectedURI = new URI(drawnText.substring(start, end));
+            } catch (URISyntaxException expected) {
+                continue;
+            }
+
+            float startX = Float.NaN;
+            float endX = Float.NaN;
+
+            int j = 0;
+            float offsetX = 0;
+            glyphRunLoop:
+            for (GlyphRun run : layout.runs) {
+                for (Glyph glyph : run.glyphs) {
+                    if (j == start) {
+                        startX = offsetX * font.getScaleX();
+                        if (end == drawnText.length()) {
+                            endX = layout.width;
+                            break glyphRunLoop;
+                        }
+                    } else if (j == end) {
+                        endX = offsetX * font.getScaleX();
+                        break glyphRunLoop;
+                    }
+                    offsetX += glyph.xadvance; 
+                    j++;
+                }
+            }
+
+            if (Float.isNaN(startX)) {
+                throw new IllegalStateException("Start not found???");
+            } else if (Float.isNaN(endX)) {
+                throw new IllegalStateException("End not found???");
+            }
+
+            Rectangle uriAABB = new Rectangle(originX + startX, originY, endX - startX, layout.height);
+
+            this.uriAABBs.add(new AbstractMap.SimpleImmutableEntry<>(uriAABB, detectedURI));
+        }
+    }
+
+    private void flattenRuns(@NotNull GlyphLayout layout, @NotNull StringBuilder output) {
+        // Note: Some fonts don't contain certain characters (especially emojis), and thus cannot represent
+        // these characters. As a logical result, the GlyphLayout does not contain these characters. Thus we
+        // cannot use the input String and must flatten the runs to obtain the actually rendered text.
+        for (GlyphRun run : layout.runs) {
+            for (Glyph glyph : run.glyphs) {
+                output.appendCodePoint(glyph.id);
+            }
+        }
+    }
+
     /**
      * Obtains the caret position. The caret position is the index within the input string at which
      * new characters should be inserted. Inserting new characters advances the index by one. All
@@ -262,6 +358,74 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         return this.width.getAsInt();
     }
 
+    /**
+     * Check whether this {@link AbstractConsoleCanvasContext} instance is configured to detect URIs
+     * within {@link #getLine(int)} and to make them clickable via
+     * {@link CanvasContext#onClick(int, int, Camera, Canvas)}.
+     *
+     * <p>No special markup is applied on detected links, that would need to be handled separately.
+     * {@link AbstractConsoleCanvasContext} tries to remove markup from the URIs by default,
+     * however in some circumstances it may fail to do so properly.
+     *
+     * <p>By default, only a very very small subset of URIs will be detected, or in other
+     * words, basic http:// and https:// links ought to be detected, the rest not so much.
+     * However, that may be changed at a later date (especially if the need to do so arises).
+     *
+     * <p>While SLAPI makes the best effort to make links clickable, there are instances
+     * where {@link #onClickURI(URI)} will fail, see the documentation for that method for
+     * more details.
+     *
+     * @return  True to detect and make URIs clickable.
+     * @since 2.0.0-a20250821
+     */
+    @Contract(pure = true)
+    @ApiStatus.AvailableSince("2.0.0-a20250821")
+    public boolean isDetectingURIs() {
+        return true;
+    }
+
+    @Override
+    public void onClick(int canvasX, int canvasY, @NotNull Camera camera, @NotNull Canvas canvas) {
+        if (this.isDetectingURIs()) {
+            for (Map.Entry<@NotNull Rectangle, @NotNull URI> entry : this.uriAABBs) {
+                if (entry.getKey().contains(canvasX, canvasY)) {
+                    this.onClickURI(entry.getValue());
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Try to open a given {@link URI} link via the appropriate application (oftentimes that is
+     * defined by the operating system, or more accurately, the user's default browser/mail client/etc. etc.).
+     *
+     * <p>This method is intended to be overridden by children classes to do various intercepting operations,
+     * such as filter which links can be opened, add confirmation dialogs, or use a different method of
+     * opening URIs.
+     *
+     * <p>This method will by default make use of {@link Net#openURI(String)}. However, it is known that on
+     * Linux, under specific circumstances, the URI will only be opened once the application is closed.
+     * This may affect different OSes and configurations, however it is assumed to be an LWJGL issue and
+     * an incompatibility with another, unknown, piece of software. This is because {@link Net#openURI(String)}
+     * will by default delegate the call to LWJGL.
+     *
+     * <p>Further, opening a URI implies that the system knows how to open the resource. For example, a http://
+     * link can only really be opened if a default browser is known. Some implementations might try to gracefully
+     * fall back to hardcoded alternatives that may or not exist (e.g. Firefox on Linux systems).
+     * In other cases, the system might know how to open a resource but won't do so anyways due to the application
+     * (that is, the Galimulator process) missing permissions to do so. This is most likely to arise in environments
+     * that are very stringent on security, so it shouldn't occur in the average case.
+     *
+     * @param uri The {@link URI} link to open.
+     * @since 2.0.0-a20250821
+     */
+    @Contract(pure = false)
+    @ApiStatus.AvailableSince("2.0.0-a20250821")
+    protected void onClickURI(@NotNull URI uri) {
+        Gdx.net.openURI(uri.toString());
+    }
+
     @Override
     public void onDispose(@NotNull Canvas canvas) {
         this.releaseKeyboardFocus();
@@ -352,19 +516,30 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         GLScissorState scissor = GLScissorState.captureScissor();
         GLScissorState.glScissor((int) AbstractConsoleCanvasContext.WINDOW_EDGE_WIDTH, (int) y, (int) width, (int) (height - y + AbstractConsoleCanvasContext.WINDOW_EDGE_WIDTH));
 
+        this.uriAABBs.clear();
+
         String text;
         int lineNumber = 0;
         GlyphLayout layout = new GlyphLayout();
+        StringBuilder buffer = new StringBuilder();
         while (height > y && (text = this.getLine(lineNumber++)) != null) {
-            layout.setText(font, text, Color.WHITE, 0, Align.left, false);
-            font.draw(surface, layout, AbstractConsoleCanvasContext.WINDOW_EDGE_WIDTH + AbstractConsoleCanvasContext.TEXT_MARGIN, y + layout.height);
-            y += AbstractConsoleCanvasContext.TEXT_MARGIN + layout.height;
+            String[] lines = text.split("\n");
+
+            for (int j = lines.length - 1; j >= 0; j--) {
+                text = lines[j];
+                float x = AbstractConsoleCanvasContext.WINDOW_EDGE_WIDTH + AbstractConsoleCanvasContext.TEXT_MARGIN;
+                layout.setText(font, text, Color.WHITE, 0, Align.left, false);
+                font.draw(surface, layout, x, y + layout.height);
+
+                this.detectURIs(font, layout, buffer, x, y);
+
+                y += AbstractConsoleCanvasContext.TEXT_MARGIN + layout.height;
+            }
         }
 
         surface.flush();
         scissor.reapplyState();
     }
-
     /**
      * Sets the caret position. The caret position is the index within the input string at which
      * new characters should be inserted. Inserting new characters advances the index by one. All
@@ -394,7 +569,6 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         this.caretIndex = caretIndex;
         return this;
     }
-
     /**
      * Set the font used for text rendering operations within this instance of the console.
      *
@@ -409,6 +583,7 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         this.font = Objects.requireNonNull(font);
         return this;
     }
+
     /**
      * Set the height of the canvas to a static value.
      *
@@ -425,6 +600,7 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         this.height = () -> height;
         return this;
     }
+
     /**
      * Sets the height of the {@link CanvasContext} to a dynamically computed value.
      *
