@@ -79,3 +79,6 @@ RAS v1 std
 # Runtime fix for a crash caused due to a concurrency issue in profiling logic
  runtime    0               ACC_SYNCHRONIZED snoddasmannen/galimulator/Debug                        b                       (Ljava/lang/String;Z)I
  runtime    0               ACC_SYNCHRONIZED snoddasmannen/galimulator/Debug                        c                       ()V
+
+# Platform-dependent concurrency-fixing hacks
+@runtime    0               ACC_SYNCHRONIZED org/lwjgl/LinuxSysImplementation                       openURL                 (Ljava/lang/String;)Z

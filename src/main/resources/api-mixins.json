@@ -30,6 +30,8 @@
     "GalFXMixins",
     "GalimulatorGestureListenerMixins",
     "InstanceMixins",
+    "LinuxSysImplementationMixins",
+    "Lwjgl3NetMixins",
     "Main1Mixins",
     "MapDataMixins",
     "MapModesMixins",

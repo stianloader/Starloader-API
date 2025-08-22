@@ -155,7 +155,7 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
 
                 @Override
                 public boolean keyTyped(char character) {
-                    if (character == 0 || character == '\r') {
+                    if (character == 0 || character == '\r' || character == '\n') {
                         return true;
                     }
                     int caretIndex = AbstractConsoleCanvasContext.this.getCaretIndex();
@@ -540,6 +540,7 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         surface.flush();
         scissor.reapplyState();
     }
+
     /**
      * Sets the caret position. The caret position is the index within the input string at which
      * new characters should be inserted. Inserting new characters advances the index by one. All
@@ -569,6 +570,7 @@ public abstract class AbstractConsoleCanvasContext implements CanvasContext {
         this.caretIndex = caretIndex;
         return this;
     }
+
     /**
      * Set the font used for text rendering operations within this instance of the console.
      *
