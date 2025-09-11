@@ -1,48 +1,81 @@
 package de.geolykt.starloader.impl;
 
-import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_ALL_WILL_BE_ASHES;
-import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_BLOOD_PURGE;
-import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_DEGENERATION;
-import static snoddasmannen.galimulator.Settings.EnumSettings.ALLOW_TRANSCENDENCE;
-import static snoddasmannen.galimulator.Settings.EnumSettings.SHIP_NUMBER_MOD;
-import static snoddasmannen.galimulator.Settings.EnumSettings.TRANSCEND_LEVEL;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.GameConfiguration;
+
+import snoddasmannen.galimulator.DeviceConfiguration;
+import snoddasmannen.galimulator.Galemulator;
+import snoddasmannen.galimulator.Settings.EnumSettings;
 
 public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     public boolean allowAWBA() {
-        return (boolean) ALLOW_ALL_WILL_BE_ASHES.getValue();
+        return (boolean) EnumSettings.ALLOW_ALL_WILL_BE_ASHES.getValue();
     }
 
     @Override
     public boolean allowBloodPurge() {
-        return (boolean) ALLOW_BLOOD_PURGE.getValue();
+        return (boolean) EnumSettings.ALLOW_BLOOD_PURGE.getValue();
     }
 
     @Override
     public boolean allowDegeneration() {
-        return (boolean) ALLOW_DEGENERATION.getValue();
+        return (boolean) EnumSettings.ALLOW_DEGENERATION.getValue();
     }
 
     @Override
     public boolean allowTranscendence() {
-        return (boolean) ALLOW_TRANSCENDENCE.getValue();
+        return (boolean) EnumSettings.ALLOW_TRANSCENDENCE.getValue();
     }
 
     @Override
     public int getMinimumComponentHeight() {
-        return snoddasmannen.galimulator.DeviceConfiguration.getConfiguration().getMinHeight();
+        return DeviceConfiguration.getConfiguration().getMinHeight();
     }
 
     @Override
     public int getShipMultiplier() {
-        return (int) SHIP_NUMBER_MOD.getValue();
+        return (int) EnumSettings.SHIP_NUMBER_MOD.getValue();
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("2.0.0-a20250911")
+    public double getTargetTPS() {
+        return ((Number) EnumSettings.TARGET_TPS_RATIO.getValue()).doubleValue();
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("2.0.0-a20250911")
+    public double getTimelapseModifier() {
+        return ((Number) EnumSettings.FIXED_TPF_RATIO.getValue()).doubleValue();
     }
 
     @Override
     public int getTranscendceLevel() {
-        return (int) TRANSCEND_LEVEL.getValue();
+        return (int) EnumSettings.TRANSCEND_LEVEL.getValue();
+    }
+
+    @Override
+    @NotNull
+    @ApiStatus.AvailableSince("2.0.0-a20250911")
+    @Contract(pure = false, value = "_ -> this")
+    public GameConfiguration setTargetTPS(int tps) {
+        EnumSettings.TARGET_TPS_RATIO.a(Integer.valueOf(tps));
+        return this;
+    }
+
+    @Override
+    @NotNull
+    @ApiStatus.AvailableSince("2.0.0-a20250911")
+    @Contract(pure = false, value = "_ -> this")
+    public GameConfiguration setTimelapseModifier(int modifier) {
+        Object tps = EnumSettings.TARGET_TPS_RATIO.getValue();
+        Galemulator.setTimelapseModifier(modifier);
+        EnumSettings.TARGET_TPS_RATIO.a(tps);
+        return this;
     }
 }

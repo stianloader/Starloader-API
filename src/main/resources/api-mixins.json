@@ -39,6 +39,7 @@
     "NativeMixins",
     "PersonMixins",
     "ReligionMixins",
+    "RenderCacheCollectorMixins",
     "RenderCacheMixins",
     "RenderItemMixins",
     "SettingsscreenMixins",

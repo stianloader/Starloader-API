@@ -1256,7 +1256,7 @@ public final class Galimulator {
     public static GameConfiguration getConfiguration() {
         GameConfiguration conf = Galimulator.config;
         if (conf == null) {
-            throw new IllegalStateException("The implementation was not specified. This is a programmer error.");
+            throw new IllegalStateException("The implementation was not (yet) specified. This is a programmer error.");
         }
         return conf;
     }

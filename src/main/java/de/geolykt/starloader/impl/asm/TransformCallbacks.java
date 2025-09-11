@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
@@ -22,19 +23,23 @@ import de.geolykt.starloader.api.gui.modconf.ConfigurationOption;
 import de.geolykt.starloader.api.gui.modconf.FloatOption;
 import de.geolykt.starloader.api.gui.modconf.IntegerOption;
 import de.geolykt.starloader.api.utils.TickLoopLock;
+import de.geolykt.starloader.api.utils.TickLoopLock.LockScope;
 import de.geolykt.starloader.impl.gui.AsyncPanListener;
 import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
 import de.geolykt.starloader.impl.gui.GestureListenerAccess;
 import de.geolykt.starloader.impl.gui.WidgetMouseReleaseListener;
 import de.geolykt.starloader.impl.gui.keybinds.KeybindListMenu;
+import de.geolykt.starloader.impl.util.LongRingBuffer;
 
 import snoddasmannen.galimulator.AuxiliaryListener;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
+import snoddasmannen.galimulator.Galemulator.RenderCacheCollector;
 import snoddasmannen.galimulator.GalimulatorGestureListener;
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.actors.Actor;
+import snoddasmannen.galimulator.rendersystem.class_4;
 import snoddasmannen.galimulator.ui.AboutWidget;
 import snoddasmannen.galimulator.ui.BufferedWidgetWrapper;
 import snoddasmannen.galimulator.ui.NinepatchButtonWidget;
@@ -323,6 +328,96 @@ public class TransformCallbacks {
             return true;
         }
         return false;
+    }
+
+    /**
+     * This method is the replacement logic for the vanilla galimulator tick loop coordination logic,
+     * also known as the render cache collector.
+     *
+     * <p>The replacement logic mainly intends to replace slightly bugged code that would otherwise
+     * be hard to solve with simple mixins or ASM transformations. As such, this is among the more
+     * invasive mixins introduced by SLAPI.
+     *
+     * <p>This method should not exit during normal operation. It might terminate during an application
+     * crash, though.
+     *
+     * <p>This method is called via the respective Mixin overwrite. This method is, like all other
+     * methods in this class, not public API. Call, transform, or otherwise depend on this method
+     * at your own risk.
+     *
+     * @since 2.0.0-a20250911
+     */
+    @Blocking
+    @ApiStatus.AvailableSince("2.0.0-a20250911")
+    public static void tickloop$run() {
+        double frameaccummulator = 0;
+        boolean halfStep = false;
+        LongRingBuffer tpsBuffer = new LongRingBuffer(1024);
+        while (true) {
+            try {
+                double targetTPS = Galimulator.getConfiguration().getTargetTPS();
+                if (targetTPS <= 0F) {
+                    targetTPS = Double.POSITIVE_INFINITY;
+                }
+                long targetNSPT = (long) (1e+9 / targetTPS);
+
+                double tpf = Galimulator.getConfiguration().getTimelapseModifier();
+                if (tpf <= 0D) {
+                    tpf = 1D;
+                }
+                double fpt = 1D / tpf;
+
+                int tickNumber = 0;
+                long startNanos = System.nanoTime();
+
+                TickLoopLock simLoopLock = Galimulator.getSimulationLoopLock();
+
+                frameaccummulator++;
+                while (frameaccummulator > fpt) {
+                    frameaccummulator -= fpt;
+                    tickNumber++;
+                    try (LockScope lock = simLoopLock.acquireSoftControlWithResources()) {
+                        if (!Space.get_ag() || (halfStep ^= true)) {
+                            Space.tick();
+                        }
+                    }
+                }
+
+                try (LockScope lock = simLoopLock.acquireSoftControlWithResources()) {
+                    class_4.a(Space.drawToCache());
+                }
+
+                Space.F.lock();
+                for (Widget var17 : Space.activeWidgets) {
+                    var17.refreshLayout();
+                }
+                Space.F.unlock();
+
+                if (tickNumber > 0) {
+                    long sleepTime = (startNanos - System.nanoTime()) + targetNSPT * tickNumber;
+                    if (sleepTime > 0) {
+                        Thread.sleep(sleepTime / 1_000_000L, (int) (sleepTime % 1_000_000));
+                    }
+
+                    // Update TPS counter
+                    if (tickNumber < 1024) { // The tick timer makes no sense for large numbers anyways
+                        tpsBuffer.appendValue(System.nanoTime(), tickNumber);
+                        long nspt = (tpsBuffer.getHeadValue() - tpsBuffer.getTailValue() + 1) / tpsBuffer.getLength();
+                        RenderCacheCollector.b = (int) (1_000_000_000 / nspt);
+                    }
+                }
+            } catch (Throwable t) {
+                if (t instanceof ThreadDeath) {
+                    Galimulator.panic("Simulation thread killed", false, t);
+                    throw (ThreadDeath) t;
+                } else if (t instanceof InterruptedException) {
+                    LoggerFactory.getLogger(TransformCallbacks.class).error("Simulation loop interrupted. Continuing anyways.", t);
+                    continue;
+                }
+                Galimulator.panic("An error occured while running the ticking loop.", true, t);
+                break;
+            }
+        }
     }
 
     private TransformCallbacks() {
