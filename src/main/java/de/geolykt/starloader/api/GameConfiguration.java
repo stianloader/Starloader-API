@@ -142,7 +142,7 @@ public interface GameConfiguration {
      * Though in that case, it's functionally equivalent to a value of {@code 1}.
      * That is, in vanilla Galimulator, either {@link #getTimelapseModifier()} or
      * {@link #getTargetTPS()} is used. In other words, when {@link #setTimelapseModifier(int)} is used,
-     * {@link #setTargetTPS(double)} should be used also.
+     * {@link #setTargetTPS(int)} should be used also.
      *
      * @param modifier The timelapse modifier, or how many logical ticks per rendercache pass should be used.
      * @return The current {@link GameConfiguration} instance, for chaining.

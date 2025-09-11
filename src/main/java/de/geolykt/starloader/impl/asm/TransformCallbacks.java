@@ -2,6 +2,7 @@ package de.geolykt.starloader.impl.asm;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.IntConsumer;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Blocking;
@@ -34,7 +35,6 @@ import de.geolykt.starloader.impl.util.LongRingBuffer;
 import snoddasmannen.galimulator.AuxiliaryListener;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.GalFX;
-import snoddasmannen.galimulator.Galemulator.RenderCacheCollector;
 import snoddasmannen.galimulator.GalimulatorGestureListener;
 import snoddasmannen.galimulator.MapData;
 import snoddasmannen.galimulator.Space;
@@ -345,11 +345,13 @@ public class TransformCallbacks {
      * methods in this class, not public API. Call, transform, or otherwise depend on this method
      * at your own risk.
      *
+     * @param tpsSetter Feedback supplier that is responsible for setting the current TPS (ticks
+     * per second) field.
      * @since 2.0.0-a20250911
      */
     @Blocking
     @ApiStatus.AvailableSince("2.0.0-a20250911")
-    public static void tickloop$run() {
+    public static void tickloop$run(@NotNull IntConsumer tpsSetter) {
         double frameaccummulator = 0;
         boolean halfStep = false;
         LongRingBuffer tpsBuffer = new LongRingBuffer(1024);
@@ -403,7 +405,7 @@ public class TransformCallbacks {
                     if (tickNumber < 1024) { // The tick timer makes no sense for large numbers anyways
                         tpsBuffer.appendValue(System.nanoTime(), tickNumber);
                         long nspt = (tpsBuffer.getHeadValue() - tpsBuffer.getTailValue() + 1) / tpsBuffer.getLength();
-                        RenderCacheCollector.b = (int) (1_000_000_000 / nspt);
+                        tpsSetter.accept((int) (1_000_000_000 / nspt));
                     }
                 }
             } catch (Throwable t) {
