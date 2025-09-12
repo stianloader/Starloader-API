@@ -4,12 +4,14 @@ import java.util.Collection;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 
 /**
  * A multi-canvas is a canvas that consists of multiple canvases.
  *
  * @since 2.0.0
  */
+@NonExtendable
 public interface MultiCanvas extends Canvas {
 
     /**

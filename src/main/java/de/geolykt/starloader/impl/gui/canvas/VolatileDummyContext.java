@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.geolykt.starloader.api.gui.canvas.CanvasContext;
 
-final class VolatileDummyContext implements CanvasContext {
+public final class VolatileDummyContext implements CanvasContext {
 
     @NotNull
     private final IntSupplier heightProvider;

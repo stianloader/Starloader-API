@@ -2,6 +2,7 @@ package de.geolykt.starloader.api.gui.canvas;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.resource.AudioSampleWrapper;
@@ -19,6 +20,7 @@ import de.geolykt.starloader.api.resource.AudioSampleWrapper;
  * @since 2.0.0
  * @see CanvasManager
  */
+@NonExtendable
 public interface Canvas {
 
     /**

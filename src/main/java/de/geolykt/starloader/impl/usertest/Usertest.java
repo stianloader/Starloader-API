@@ -7,7 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Usertest {
 
-    public static final List<Usertest> USERTESTS = new ArrayList<>();
+    @NotNull
+    public static final List<@NotNull Usertest> USERTESTS = new ArrayList<>();
 
     public abstract void runTest();
 
@@ -29,5 +30,6 @@ public abstract class Usertest {
         USERTESTS.add(new StarlaneGenerationBenchmarks());
         USERTESTS.add(new ScreenClickTest());
         USERTESTS.add(new CanvasConsoleTest());
+        USERTESTS.add(new TPSOverrideTest());
     }
 }

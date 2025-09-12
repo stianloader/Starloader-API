@@ -31,7 +31,7 @@ import de.geolykt.starloader.api.gui.FlagComponent;
 
 /**
  * Represents an empire which is resident under an unspecified dimension
- * (most like {@link Galimulator#getUniverse()} for now).
+ * (most likely {@link Galimulator#getUniverse()} for now).
  *
  * @since 2.0.0
  */

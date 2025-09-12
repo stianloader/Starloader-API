@@ -354,7 +354,7 @@ public class TransformCallbacks {
     public static void tickloop$run(@NotNull IntConsumer tpsSetter) {
         double frameaccummulator = 0;
         boolean halfStep = false;
-        LongRingBuffer tpsBuffer = new LongRingBuffer(1024);
+        LongRingBuffer tpsBuffer = new LongRingBuffer(512);
         while (true) {
             try {
                 double targetTPS = Galimulator.getConfiguration().getTargetTPS();
@@ -402,10 +402,10 @@ public class TransformCallbacks {
                     }
 
                     // Update TPS counter
-                    if (tickNumber < 1024) { // The tick timer makes no sense for large numbers anyways
+                    if (tickNumber <= 255) { // The tick timer makes no sense for large numbers anyways
                         tpsBuffer.appendValue(System.nanoTime(), tickNumber);
-                        long nspt = (tpsBuffer.getHeadValue() - tpsBuffer.getTailValue() + 1) / tpsBuffer.getLength();
-                        tpsSetter.accept((int) (1_000_000_000 / nspt));
+                        long nspt = (tpsBuffer.getHeadValue() - tpsBuffer.getTailValue()) / tpsBuffer.getLength();
+                        tpsSetter.accept(nspt == 0 ? 0 : (int) (1_000_000_000 / nspt));
                     }
                 }
             } catch (Throwable t) {

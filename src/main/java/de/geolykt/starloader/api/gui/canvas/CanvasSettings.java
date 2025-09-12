@@ -12,8 +12,6 @@ import snoddasmannen.galimulator.GalColor;
  * An immutable object that stores settings for a {@link Canvas} object such which color the background is
  * or if there should be a header.
  *
- * <p>This interface can be freely implemented by other mods.
- *
  * @since 2.0.0
  */
 public final class CanvasSettings {

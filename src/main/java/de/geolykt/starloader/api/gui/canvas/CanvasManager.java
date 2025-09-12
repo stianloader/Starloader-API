@@ -3,6 +3,7 @@ package de.geolykt.starloader.api.gui.canvas;
 import java.util.Objects;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,7 @@ import de.geolykt.starloader.api.gui.screen.Screen;
  * @since 2.0.0
  * @see Drawing#getCanvasManager()
  */
+@NonExtendable
 public interface CanvasManager {
 
     /**

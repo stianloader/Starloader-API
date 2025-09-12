@@ -14,6 +14,8 @@ import de.geolykt.starloader.api.utils.TickLoopLock;
  * An object that is used by a {@link Canvas} to define the width and height of a canvas as well as providing rendering
  * and responsive capabilities to the canvas.
  *
+ * <p>This interface may be freely implemented by mods.
+ *
  * @since 2.0.0
  * @apiNote This class does not extend {@link Renderable} as it was deemed to be confusing as most of the time the inserted X
  * and Y coordinates were unnecessary. To compensate {@link CanvasContext#render(SpriteBatch, Camera)} is used. Wherever required,

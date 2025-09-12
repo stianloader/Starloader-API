@@ -23,9 +23,9 @@ public class RectClickTestCanvasContext implements CanvasContext {
     @SuppressWarnings("null")
     @Override
     public void render(@NotNull SpriteBatch drawBatch, @NotNull Camera camera) {
-        drawBatch.setColor(color);
-        drawBatch.draw(Drawing.getTextureProvider().getSinglePixelSquare(), clickX - 5, clickY - 5, 10, 10);
-        Drawing.drawLine(0, 0, getWidth(), getHeight(), 3, color, camera);
+        drawBatch.setColor(this.color);
+        drawBatch.draw(Drawing.getTextureProvider().getSinglePixelSquare(), this.clickX - 5, this.clickY - 5, 10, 10);
+        Drawing.drawLine(0, 0, this.getWidth(), this.getHeight(), 3, this.color, camera);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class RectClickTestCanvasContext implements CanvasContext {
 
     @Override
     public void onClick(int canvasX, int canvasY, @NotNull Camera camera, @NotNull Canvas canvas) {
-        clickX = canvasX;
-        clickY = canvasY;
+        this.clickX = canvasX;
+        this.clickY = canvasY;
         canvas.markDirty();
     }
 }

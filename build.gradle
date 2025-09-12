@@ -57,7 +57,7 @@ dependencies {
     compileOnly "org.stianloader:micromixin-annotations:0.7.1-a20241021"
     compileOnly "de.geolykt.starloader:starplane-annotations:1.0.0"
 
-    compileOnlyApi "org.jetbrains:annotations:26.0.1"
+    compileOnlyApi "org.jetbrains:annotations:26.0.2-1"
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.ow2.asm:asm-util:9.7'
