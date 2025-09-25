@@ -46,6 +46,7 @@
     "ShipFactoryMixins",
     "ShipTypeMixins",
     "SLScreenWidgetMixins",
+    "StarDragListenerMixins",
     "StarMixins",
     "StateActorMixins",
     "SteamSharedLibraryLoaderMixins",

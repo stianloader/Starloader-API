@@ -269,7 +269,7 @@ public class TransformCallbacks {
                     acquiredLock = tickLock.acquireHardControlWithResources();
                 }
 
-                if (auxiliaryListener.globalKeyDown(x, y)) { // The method name is a misnomer. Blame spStarmap.
+                if (auxiliaryListener.globalKeyDown(x, y)) { // The method name is a misnomer. Blame snoddasmannen.
                     return true;
                 }
             }
