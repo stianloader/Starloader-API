@@ -440,7 +440,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Override
     public double getBaseShipCapacity() {
         this.flagNoModdedShipCapacity = true;
-        return slapiAsGalimulatorEmpire().getCurrentShipCapacity();
+        return this.slapiAsGalimulatorEmpire().getCurrentShipCapacity();
     }
 
     @Override
@@ -478,8 +478,18 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     }
 
     @Shadow
+    public GalColor getDarkerColor() {
+        throw new UnsupportedOperationException("Mixin application failure.");
+    }
+
+    @Overwrite
     public GalColor getColor() {
-        throw new UnsupportedOperationException("Not shadowed properly. (Mixin application failure)");
+        Empire liege = this.getLiege();
+        if (liege != null) {
+            return ((EmpireMixins) liege).getDarkerColor();
+        } else {
+            return this.color;
+        }
     }
 
     @Override
@@ -490,8 +500,9 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @SuppressWarnings("null")
     @Override
-    public @NotNull String getEmpireName() {
-        return name;
+    @NotNull
+    public String getEmpireName() {
+        return this.name;
     }
 
     @SuppressWarnings({ "all" })
@@ -535,7 +546,8 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Override
     @Nullable
     public Empire getLiege() {
-        return (Empire) this.master.get();
+        EmpireLazy lazy = this.master;
+        return lazy == null ? null : (Empire) lazy.get();
     }
 
     @SuppressWarnings("null")
@@ -740,7 +752,12 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Override
     public void setLiege(@Nullable Empire liege) {
-        EmpireMixins oldLiege = (EmpireMixins) this.master.get();
+        EmpireLazy master = this.master;
+        if (master == null && liege == null) {
+            return;
+        }
+
+        EmpireMixins oldLiege = master == null ? null : (EmpireMixins) master.get();
 
         if (oldLiege == liege) {
             return;
@@ -749,14 +766,16 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         EmpireMixins newLiege = (EmpireMixins) liege;
         snoddasmannen.galimulator.Empire newLiegeSnod = (snoddasmannen.galimulator.Empire) liege;
         snoddasmannen.galimulator.Empire thisSnod = (snoddasmannen.galimulator.Empire) (Object) this;
-        this.master.a((snoddasmannen.galimulator.Identifiable) liege);
-
-        if (oldLiege != null) {
-            oldLiege.vassals.removeIf(e -> e.get_id() == this.getUID());
-        }
 
         if (newLiege != null) {
             assert liege != null;
+
+            if (master == null) {
+                this.master = new EmpireLazy(newLiegeSnod);
+            } else {
+                master.a((snoddasmannen.galimulator.Identifiable) liege);
+            }
+
             newLiege.vassals.add(new EmpireLazy((snoddasmannen.galimulator.Empire) (Object) this));
             if (!thisSnod.isAtPeace(newLiegeSnod)) {
                 Space.signPeace(newLiegeSnod, thisSnod);
@@ -769,6 +788,12 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
             }
 
             newLiege.broadcastNews("Has been vassalized by " + this.getColoredName());
+        } else {
+            this.master = null;
+        }
+
+        if (oldLiege != null) {
+            oldLiege.vassals.removeIf(e -> e.get_id() == this.getUID());
         }
 
         // Invalidate cached colors
