@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import com.badlogic.gdx.graphics.Color;
 
@@ -69,15 +71,6 @@ public interface Empire extends Dateable, Identifiable, Metadatable, InternalRan
      * @since 2.0.0
      */
     public boolean addSpecial(@NotNull NamespacedKey empireSpecial, boolean force);
-
-    /**
-     * Adds a callback that only applies to this empire. The callback will be called
-     * whenever the empire is ticked.
-     *
-     * @param callback The callback to add
-     * @since 2.0.0
-     */
-    public void withTickCallback(TickCallback<Empire> callback);
 
     /**
      * Adds an achievement to the internal list of achievements, provided the achievement
@@ -316,6 +309,36 @@ public interface Empire extends Dateable, Identifiable, Metadatable, InternalRan
     public Color getGDXColor();
 
     /**
+     * Obtains the liege empire, provided this empire is a vassal of another empire.
+     * A null return value represents that the empire is independent.
+     *
+     * <p>Internal galimulator terminology for this is that the empire's liege is the
+     * empire's master. This method is called getLiege to prevent issues with name
+     * collisions.
+     *
+     * @return The empire's liege/master, or null if there is none.
+     * @since 2.0.0-a20251218
+     */
+    @Nullable
+    @Contract(pure = true)
+    @AvailableSince("2.0.0-a20251218")
+    public Empire getLiege();
+
+    /**
+     * Returns the color used to render this empire in the <b>default</b> map view.
+     *
+     * <p>This method returns the same value as {@link #getGDXColor()} when this empire
+     * has no liege (as per {@link #getLiege()}), whilst it returns a darker version of
+     * the liege's {@link #getGDXColor()} if present.
+     *
+     * @return The color used to fill regions in the <b>default</b> map mode.
+     * @since 2.0.0-a20251218
+     */
+    @NotNull
+    @AvailableSince("2.0.0-a20251218")
+    public Color getMapColor();
+
+    /**
      * Obtains the motto of the empire. This is purely something for the User and
      * has no significant effect on the simulation
      *
@@ -386,7 +409,8 @@ public interface Empire extends Dateable, Identifiable, Metadatable, InternalRan
      * @return A {@link NamespacedKey} representing the current state of the empire.
      * @since 2.0.0
      */
-    public @NotNull NamespacedKey getState();
+    @NotNull
+    public NamespacedKey getState();
 
     /**
      * Obtains the technology level of the empire. It shouldn't be below 1 as math
@@ -396,6 +420,35 @@ public interface Empire extends Dateable, Identifiable, Metadatable, InternalRan
      * @since 2.0.0
      */
     public int getTechnologyLevel();
+
+    /**
+     * Gets the vassals controlled by this empire.
+     *
+     * <p>This method returns an unmodifiable view.
+     * Beware that the returned view may or may not be thread safe.
+     * Whether the underlying collection is synchronised to
+     * the returned collection is left unspecified.
+     *
+     * <p>For adding a vassal to this list or removing one from it,
+     * use {@link #setLiege(Empire)} instead.
+     *
+     * <p>Empires within the returned collection can be mutated however
+     * the collection itself can only be mutated via {@link #setLiege(Empire)}
+     * or other similar calls, potentially from different threads.
+     *
+     * @return The empires vassalized by this empire.
+     * @see #getLiege()
+     * @since 2.0.0-a20251218
+     * @implNote Currently the underlying collection and the returned
+     * collection are synchronised, but this may be changed later on.
+     * Cause for this is that Galimulator internally stores the vassals
+     * as lazy empire instances.
+     */
+    @NotNull
+    @Contract(pure = true)
+    @AvailableSince("2.0.0-a20251218")
+    @UnmodifiableView
+    public Collection<@NotNull Empire> getVassalEmpires();
 
     /**
      * Obtains the average wealth of all stars within the empire.
@@ -488,6 +541,24 @@ public interface Empire extends Dateable, Identifiable, Metadatable, InternalRan
     public void setAlliance(@Nullable Alliance alliance);
 
     /**
+     * Sets the liege empire. When the liege empire is {@code null}, this
+     * empire is freed from it's current liege. If the empire already has a liege,
+     * this empire is removed from the list of vassals of it's current liege.
+     *
+     * <p>This method also modifies the list of vassals of the liege empire.
+     *
+     * <p>This method also ensures that all hostilities between the new liege
+     * and this empire are resolved, and ensures that the two empires are in the
+     * same alliance, regardless of prior hostilities.
+     *
+     * @param liege The new liege empire.
+     * @since 2.0.0-a20251218
+     */
+    @Contract(pure = false, mutates = "this")
+    @AvailableSince("2.0.0-a20251218")
+    public void setLiege(@Nullable Empire liege);
+
+    /**
      * Sets the motto of the empire. The motto of an empire is purely for the user
      * and has no real effect on the simulation.
      *
@@ -532,4 +603,14 @@ public interface Empire extends Dateable, Identifiable, Metadatable, InternalRan
      * @since 2.0.0
      */
     public boolean setState(@NotNull NamespacedKey state, boolean force);
+
+    /**
+     * Adds a callback that only applies to this empire. The callback will be called
+     * whenever the empire is ticked.
+     *
+     * @param callback The callback to add. May not be null.
+     * @since 2.0.0-a20240529
+     */
+    @AvailableSince("2.0.0-a20240529")
+    public void withTickCallback(@NotNull TickCallback<Empire> callback);
 }

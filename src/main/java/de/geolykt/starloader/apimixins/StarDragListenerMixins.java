@@ -19,7 +19,9 @@ public class StarDragListenerMixins implements AsyncPanListener {
             value = "INVOKE",
             desc = @Desc(owner = Space.class, value = "showItem", args = Item.class)
         ),
-        target = @Desc(value = "globalPan", args = {float.class, float.class}, ret = boolean.class)
+        target = @Desc(value = "globalPan", args = {float.class, float.class}, ret = boolean.class),
+        require = 2,
+        allow = 2
     )
     private static void slapi$asyncShowItem(@NotNull Item item) {
         Galimulator.runTaskOnNextTick(() -> Space.showItem(item));

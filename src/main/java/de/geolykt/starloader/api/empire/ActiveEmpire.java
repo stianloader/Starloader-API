@@ -42,6 +42,9 @@ import de.geolykt.starloader.api.gui.FlagComponent;
  * 4.8 many classes were obfuscated, this unfortunate naming blunder was created
  * due to erroneous application of OOP principles where it shouldn't have been applied.
  */
+@Deprecated
+@DeprecatedSince("2.0.0-a20240529")
+@ScheduledForRemoval(inVersion = "3.0.0")
 public interface ActiveEmpire extends Empire, Metadatable, InternalRandom {
 
     /**

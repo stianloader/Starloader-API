@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.badlogic.gdx.graphics.Color;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.GameConfiguration;
@@ -52,12 +55,15 @@ import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 import de.geolykt.starloader.api.registry.RegistryKeys;
 import de.geolykt.starloader.impl.registry.Registries;
+import de.geolykt.starloader.impl.util.LazyCollectionView;
 
 import snoddasmannen.galimulator.EmpireAnnals;
 import snoddasmannen.galimulator.EmpireSpecial;
 import snoddasmannen.galimulator.EmpireState;
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Government;
+import snoddasmannen.galimulator.Lazy;
+import snoddasmannen.galimulator.Lazy.EmpireLazy;
 import snoddasmannen.galimulator.Religion;
 import snoddasmannen.galimulator.Space;
 import snoddasmannen.galimulator.class_43;
@@ -84,6 +90,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Shadow
     int capitalId;
 
+    @Unique
     private transient ArrayList<ShipCapacityModifier> capModifiers;
 
     @Shadow
@@ -119,6 +126,10 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Shadow
     public int lastStateChange;
 
+    @Shadow
+    Lazy.EmpireLazy master;
+
+    @Unique
     private transient HashMap<NamespacedKey, Object> metadata;
 
     @Shadow
@@ -146,11 +157,20 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @Shadow
     private int techLevel; // technologyLevel
 
+    @Unique
     private transient List<TickCallback<de.geolykt.starloader.api.dimension.Empire>> tickCallbacks;
+
+    @Shadow
+    ArrayList<Lazy.EmpireLazy> vassals;
 
     @Overwrite
     public void a(final EmpireState state) { // setState
-        setState(((RegistryKeyed) (Object) state).getRegistryKey(), false);
+        this.setState(((RegistryKeyed) (Object) state).getRegistryKey(), false);
+    }
+
+    @Shadow
+    public void a(GalColor galColor) { // setColor
+        throw new UnsupportedOperationException();
     }
 
     @Shadow
@@ -167,12 +187,12 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @Overwrite
     public void aa() { // advance
-        increaseTechnologyLevel(true, false);
+        this.increaseTechnologyLevel(true, false);
     }
 
     @Overwrite
     public void ab() { // Degenerate
-        decreaseTechnologyLevel(true, false);
+        this.decreaseTechnologyLevel(true, false);
     }
 
     @Override
@@ -457,6 +477,11 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         return this.deathYear;
     }
 
+    @Shadow
+    public GalColor getColor() {
+        throw new UnsupportedOperationException("Not shadowed properly. (Mixin application failure)");
+    }
+
     @Override
     @NotNull
     public String getColoredName() {
@@ -495,7 +520,8 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
 
     @SuppressWarnings("null")
     @Override
-    public com.badlogic.gdx.graphics.@NotNull Color getGDXColor() {
+    @NotNull
+    public Color getGDXColor() {
         return this.color.getGDXColor();
     }
 
@@ -504,6 +530,19 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     @NotNull
     public Random getInternalRandom() {
         return this.internalSessionRandom;
+    }
+
+    @Override
+    @Nullable
+    public Empire getLiege() {
+        return (Empire) this.master.get();
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @NotNull
+    public Color getMapColor() {
+        return this.getColor().getGDXColor();
     }
 
     @Override
@@ -580,6 +619,13 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
     }
 
     @Override
+    @NotNull
+    @UnmodifiableView
+    public Collection<@NotNull Empire> getVassalEmpires() {
+        return new LazyCollectionView<>(Objects.requireNonNull(this.vassals));
+    }
+
+    @Override
     public float getWealth() {
         return this.j;
     }
@@ -623,7 +669,7 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
         this.techLevel++;
         this.lastResearchedYear = Galimulator.getGameYear();
         GameConfiguration config = Galimulator.getConfiguration();
-        if (config.allowTranscendence() && techLevel == config.getTranscendceLevel()) {
+        if (config.allowTranscendence() && this.techLevel == config.getTranscendceLevel()) {
             if (setState(RegistryKeys.GALIMULATOR_TRANSCENDING, false)) {
                 if (notify && Galimulator.getUniverse().getPlayerEmpire() == this) {
                     new BasicDialogBuilder("Transcending!", Objects.requireNonNull(class_43.b().a("transcending"))).show();
@@ -674,17 +720,59 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
                 return false;
             }
         }
-        return specials.remove(special);
+        return this.specials.remove(special);
+    }
+
+    @Shadow
+    public void setAlliance(@Nullable snoddasmannen.galimulator.Alliance alliance) {
+        throw new UnsupportedOperationException("Mixin application failure");
     }
 
     @Override
     public void setAlliance(@Nullable Alliance alliance) {
-        this.alliance = (snoddasmannen.galimulator.Alliance) alliance;
+        this.setAlliance((snoddasmannen.galimulator.Alliance) alliance);
     }
 
     @Override
     public void setInternalRandom(@NotNull Random random) {
-        internalSessionRandom = random;
+        this.internalSessionRandom = random;
+    }
+
+    @Override
+    public void setLiege(@Nullable Empire liege) {
+        EmpireMixins oldLiege = (EmpireMixins) this.master.get();
+
+        if (oldLiege == liege) {
+            return;
+        }
+
+        EmpireMixins newLiege = (EmpireMixins) liege;
+        snoddasmannen.galimulator.Empire newLiegeSnod = (snoddasmannen.galimulator.Empire) liege;
+        snoddasmannen.galimulator.Empire thisSnod = (snoddasmannen.galimulator.Empire) (Object) this;
+        this.master.a((snoddasmannen.galimulator.Identifiable) liege);
+
+        if (oldLiege != null) {
+            oldLiege.vassals.removeIf(e -> e.get_id() == this.getUID());
+        }
+
+        if (newLiege != null) {
+            assert liege != null;
+            newLiege.vassals.add(new EmpireLazy((snoddasmannen.galimulator.Empire) (Object) this));
+            if (!thisSnod.isAtPeace(newLiegeSnod)) {
+                Space.signPeace(newLiegeSnod, thisSnod);
+            }
+            Alliance liegeAlliance = liege.getAlliance();
+            Alliance thisAlliance = this.getAlliance();
+            if (liegeAlliance != null && liegeAlliance != thisAlliance) {
+                liegeAlliance.addMember((Empire) this);
+                this.setAlliance(liegeAlliance);
+            }
+
+            newLiege.broadcastNews("Has been vassalized by " + this.getColoredName());
+        }
+
+        // Invalidate cached colors
+        this.a(this.color);
     }
 
     @Override
@@ -825,19 +913,19 @@ public class EmpireMixins implements de.geolykt.starloader.api.empire.ActiveEmpi
      */
     @Inject(method = "tickEmpire()V", at = @At(value = "HEAD"), cancellable = false)
     public void tick(CallbackInfo info) {
-        if (tickCallbacks == null) {
-            tickCallbacks = new ArrayList<>();
+        if (this.tickCallbacks == null) {
+            this.tickCallbacks = new ArrayList<>();
         }
-        for (TickCallback<de.geolykt.starloader.api.dimension.Empire> callback : tickCallbacks) {
+        for (TickCallback<de.geolykt.starloader.api.dimension.Empire> callback : this.tickCallbacks) {
             callback.tick(this);
         }
     }
 
     @Override
-    public void withTickCallback(TickCallback<Empire> callback) {
+    public void withTickCallback(@NotNull TickCallback<Empire> callback) {
         if (this.tickCallbacks == null) {
             this.tickCallbacks = new ArrayList<>();
         }
-        this.tickCallbacks.add(callback);
+        this.tickCallbacks.add(Objects.requireNonNull(callback, "'callback' must not be null"));
     }
 }
