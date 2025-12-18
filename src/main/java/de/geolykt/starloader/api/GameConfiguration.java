@@ -39,6 +39,27 @@ public interface GameConfiguration {
     public boolean allowTranscendence();
 
     /**
+     * Check whether neutral stars should be drawn.
+     *
+     * <p>This does not completely disable the rendering of neutral stars,
+     * but disables a lot of visual fluff surrounding them. For example,
+     * star auras and star regions are not drawn when
+     * {@link #getDrawNeutralStars()} is false. Further, stars are drawn
+     * in a very crude way, with only a single color instead of the usual
+     * two.
+     *
+     * <p>Neutral stars are always drawn without outlines, regardless
+     * of the setting of this property. Further, starlanes of stars
+     * are always drawn, regardless of this setting.
+     *
+     * @return True to draw neutral stars, false otherwise.
+     * @since 2.0.0-a20251218.2
+     */
+    @ApiStatus.AvailableSince("2.0.0-a20251218.2")
+    @Contract(pure = true)
+    public boolean getDrawNeutralStars();
+
+    /**
      * Obtains the minimum height of Galimulator Widgets / Starloader screen components.
      *
      * @return The minimum height. By default 40 (cannot be changed on the user side)
@@ -101,6 +122,29 @@ public interface GameConfiguration {
      * @return The transcendence level.
      */
     public int getTranscendceLevel();
+
+    /**
+     * Set whether neutral stars should be drawn.
+     *
+     * <p>This does not completely disable the rendering of neutral stars,
+     * but disables a lot of visual fluff surrounding them. For example,
+     * star auras and star regions are not drawn when
+     * {@link #getDrawNeutralStars()} is false. Further, stars are drawn
+     * in a very crude way, with only a single color instead of the usual
+     * two.
+     *
+     * <p>Neutral stars are always drawn without outlines, regardless
+     * of the setting of this property. Further, starlanes of stars
+     * are always drawn, regardless of this setting.
+     *
+     * @param value True to draw neutral stars, false otherwise.
+     * @return The current {@link GameConfiguration} instance, for chaining.
+     * @since 2.0.0-a20251218.2
+     */
+    @ApiStatus.AvailableSince("2.0.0-a20251218.2")
+    @Contract(pure = false, value = "_ -> this")
+    @NotNull
+    public GameConfiguration setDrawNeutralStars(boolean value);
 
     /**
      * Sets the target ticks per second.

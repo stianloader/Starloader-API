@@ -33,6 +33,13 @@ public class GalimulatorConfiguration implements GameConfiguration {
     }
 
     @Override
+    @ApiStatus.AvailableSince("2.0.0-a20251218.2")
+    @Contract(pure = true)
+    public boolean getDrawNeutralStars() {
+        return (Boolean) EnumSettings.DRAW_NEUTRAL_STARS.getValue();
+    }
+
+    @Override
     public int getMinimumComponentHeight() {
         return DeviceConfiguration.getConfiguration().getMinHeight();
     }
@@ -61,6 +68,15 @@ public class GalimulatorConfiguration implements GameConfiguration {
 
     @Override
     @NotNull
+    @ApiStatus.AvailableSince("2.0.0-a20251218.2")
+    @Contract(pure = false, value = "_ -> this")
+    public GameConfiguration setDrawNeutralStars(boolean value) {
+        EnumSettings.DRAW_NEUTRAL_STARS.a(value);
+        return this;
+    }
+
+    @Override
+    @NotNull
     @ApiStatus.AvailableSince("2.0.0-a20250911")
     @Contract(pure = false, value = "_ -> this")
     public GameConfiguration setTargetTPS(int tps) {
@@ -74,6 +90,7 @@ public class GalimulatorConfiguration implements GameConfiguration {
     @Contract(pure = false, value = "_ -> this")
     public GameConfiguration setTimelapseModifier(int modifier) {
         Object tps = EnumSettings.TARGET_TPS_RATIO.getValue();
+        // setTimelapseModifier(int) resets the TPS ratio, which is why we record the previous TPS.
         Galemulator.setTimelapseModifier(modifier);
         EnumSettings.TARGET_TPS_RATIO.a(tps);
         return this;
