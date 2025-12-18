@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import com.badlogic.gdx.audio.Music;
 
@@ -23,8 +24,9 @@ public class TrackMixins implements Track {
     }
 
     @Override
+    @Unique(silent = true)
     public void adjustVolume() {
-        this.c();
+        this.shadow$c();
     }
 
     @Shadow
@@ -32,7 +34,7 @@ public class TrackMixins implements Track {
     }
 
     @Shadow
-    public void c() { // adjustVolume
+    public void shadow$c() { // adjustVolume
     }
 
     @Override
