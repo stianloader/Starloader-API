@@ -22,7 +22,7 @@ via our Event API.
 
 ## Building
 
-Warning: **Building SLAPI requires Java 11 or above**
+Warning: **Building SLAPI requires Java 17 or above**
 
 The project can be built via gradle as you are used to. Simply running
 `./gradlew build` on UNIX (on Windows you'd want to use `gradlew.bat`) will
@@ -49,8 +49,6 @@ are performed at a nightly basis, that is every commit should see a new
 alpha release. "Full" releases may occur from time to time - however
 a few years have passed since the last full release, so one shouldn't depend
 on the presence of such releases.
-
-Warning: **Publishing SLAPI requires Java 17 or above** (Javadocs needs it)
 
 To bind against your own version of SLAPI run
 
