@@ -1,9 +1,12 @@
 package de.geolykt.starloader.impl.asm;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.actor.StateActorSpawnPredicate;
 
+import snoddasmannen.galimulator.AuxiliaryListener;
+import snoddasmannen.galimulator.actors.Actor;
 import snoddasmannen.galimulator.actors.StateActorCreator;
 
 /**
@@ -14,6 +17,19 @@ import snoddasmannen.galimulator.actors.StateActorCreator;
  * @since 2.0.0
  */
 public final class SLIntrinsics {
+
+    /**
+     * Create an {@code ActorDragManager} instance using the given actor.
+     *
+     * @param actor The actor from which the drag manager is created.
+     * @return An {@code ActorDragManager} created with the provided actor. Instance is cast to {@link AuxiliaryListener} due to javac shenanigans.
+     * @since 2.0.0-a20251219.1
+     */
+    @NotNull
+    @AvailableSince("2.0.0-a20251219.1")
+    public static final AuxiliaryListener createActorDragManager(@NotNull Actor actor) {
+        throw new UnsupportedOperationException("The SLIntrinsics class is meant to be transformed at runtime.");
+    }
 
     /**
      * Create a {@link StateActorSpawnPredicate} that uses the given creator and has a given chance to trigger.

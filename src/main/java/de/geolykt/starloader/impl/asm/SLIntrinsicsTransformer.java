@@ -16,6 +16,7 @@ import de.geolykt.starloader.starplane.annotations.RemapMemberReference.Referenc
 import de.geolykt.starloader.transformers.ASMTransformer;
 
 import snoddasmannen.galimulator.Space.ActorSpawningPredicate;
+import snoddasmannen.galimulator.actors.Actor;
 import snoddasmannen.galimulator.actors.StateActorCreator;
 
 /**
@@ -25,6 +26,9 @@ import snoddasmannen.galimulator.actors.StateActorCreator;
  */
 public class SLIntrinsicsTransformer extends ASMTransformer {
 
+    @RemapMemberReference(owner = "snoddasmannen/galimulator/actors/Actor$ActorDragManager", name = "<init>", methodDesc = @MethodDesc(args = {Actor.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
+    private static String dragManagerConstructor = ReferenceSource.getStringValue();
+
     @RemapMemberReference(ownerType = ActorSpawningPredicate.class, name = "<init>", methodDesc = @MethodDesc(args = {StateActorCreator.class, float.class}, ret = void.class), format = ReferenceFormat.COMBINED_LEGACY)
     private static String predicateConstructor = ReferenceSource.getStringValue();
 
@@ -33,19 +37,30 @@ public class SLIntrinsicsTransformer extends ASMTransformer {
         if (!node.name.equals("de/geolykt/starloader/impl/asm/SLIntrinsics")) {
             return false;
         }
+
         for (MethodNode method : node.methods) {
             if (method.name.equals("createPredicate")) {
                 method.instructions.clear();
                 method.maxStack = 4;
-                String[] parts = predicateConstructor.split("\\.");
+                String[] parts = SLIntrinsicsTransformer.predicateConstructor.split("\\.");
                 method.instructions.add(new TypeInsnNode(Opcodes.NEW, parts[0]));
                 method.instructions.add(new InsnNode(Opcodes.DUP));
                 method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0)); // ALOAD creator
                 method.instructions.add(new VarInsnNode(Opcodes.FLOAD, 1)); // FLOAD chance
                 method.instructions.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, parts[0], "<init>", parts[1].substring(parts[1].indexOf('('))));
                 method.instructions.add(new InsnNode(Opcodes.ARETURN));
+            } else if (method.name.equals("createActorDragManager")) {
+                method.instructions.clear();
+                method.maxStack = 3;
+                String[] parts = SLIntrinsicsTransformer.dragManagerConstructor.split("\\.");
+                method.instructions.add(new TypeInsnNode(Opcodes.NEW, parts[0]));
+                method.instructions.add(new InsnNode(Opcodes.DUP));
+                method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0)); // ALOAD actor
+                method.instructions.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, parts[0], "<init>", parts[1].substring(parts[1].indexOf('('))));
+                method.instructions.add(new InsnNode(Opcodes.ARETURN));
             }
         }
+
         return true;
     }
 

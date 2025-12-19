@@ -128,7 +128,7 @@ public class TransformCallbacks {
         Actor selectedActor = access.slapi$getSelectedActor();
         if (!access.slapi$isDraggingSelectedActor() && selectedActor != null && Space.a(selectedActor.getOwner())) {
             access.slapi$setDraggingSelectedActor(true);
-            Space.addAuxiliaryListener(selectedActor.new ActorDragManager());
+            Space.addAuxiliaryListener(SLIntrinsics.createActorDragManager(selectedActor));
         }
 
         @SuppressWarnings("deprecation") // CoordinateGrid.WIDGET is used as intended
