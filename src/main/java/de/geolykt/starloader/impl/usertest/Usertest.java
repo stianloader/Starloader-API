@@ -30,6 +30,7 @@ public abstract class Usertest {
         USERTESTS.add(new StarlaneGenerationBenchmarks());
         USERTESTS.add(new ScreenClickTest());
         USERTESTS.add(new CanvasConsoleTest());
+        USERTESTS.add(new Screen2CanvasTest());
         USERTESTS.add(new TPSOverrideTest());
     }
 }

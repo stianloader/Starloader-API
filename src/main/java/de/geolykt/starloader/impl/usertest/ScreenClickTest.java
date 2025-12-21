@@ -1,5 +1,6 @@
 package de.geolykt.starloader.impl.usertest;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Camera;
@@ -12,9 +13,10 @@ import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
 
-public class ScreenClickTest extends Usertest{
+public class ScreenClickTest extends Usertest {
 
-    private static class ReactiveClickTestComponent implements ScreenComponent, ReactiveComponent {
+    @ApiStatus.Internal
+    static class ReactiveClickTestComponent implements ScreenComponent, ReactiveComponent {
         @NotNull
         private final Screen s;
         private float lastX;

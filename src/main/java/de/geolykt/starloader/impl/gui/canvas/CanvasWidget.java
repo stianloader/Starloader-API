@@ -22,6 +22,7 @@ import de.geolykt.starloader.api.gui.canvas.MultiCanvas;
 import de.geolykt.starloader.impl.gui.AsyncWidgetInput;
 import de.geolykt.starloader.impl.gui.GLScissorState;
 import de.geolykt.starloader.impl.gui.SLAbstractWidget;
+import de.geolykt.starloader.impl.gui.SLScreenWidget;
 
 import snoddasmannen.galimulator.GalColor;
 import snoddasmannen.galimulator.Space;
@@ -60,7 +61,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
 
     @Override
     public Widget addChild(Widget widget) {
-        if (widget instanceof CanvasWidget) {
+        if (widget instanceof CanvasWidget || widget instanceof SLScreenWidget) {
             if (this.layout == null) {
                 if (this.orientation == ChildObjectOrientation.LEFT_TO_RIGHT) {
                     this.layout = new FlowLayout(FlowDirection.HORIZONTAL, this.internalCamera);
@@ -70,7 +71,7 @@ public class CanvasWidget extends SLAbstractWidget implements MultiCanvas, Async
             }
             widget.setPositioning(WIDGET_POSITIONING.LAYOUT);
         }
-        if (widget.getHeight() > getHeight() || widget.getWidth() > getWidth()) {
+        if (widget.getHeight() > this.getHeight() || widget.getWidth() > this.getWidth()) {
             if (widget instanceof CanvasWidget) {
                 CanvasWidget cw = (CanvasWidget) widget;
                 if (!cw.getContext().allowNonsensicalDimensions() && !this.getContext().allowNonsensicalDimensions()) {
