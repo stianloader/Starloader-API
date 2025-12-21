@@ -51,6 +51,17 @@ public class GalFXMixins {
         return GalFXMixins.slapi$slFetchTexture(string);
     }
 
+    /*@Overwrite
+    private static float drawText(float x, float y, float rotation, @NotNull Vector3 rotationOrigin, @NotNull String text, @NotNull GalColor color, @NotNull GalFX.@NotNull FONT_TYPE font, float scale, @NotNull Camera camera) {
+        RenderCache rendercache = GalFXMixins.RENDERCACHE_LOCAL.get();
+        if (rendercache != null) {// 671
+            rendercache.pushItem(new TextRenderItem(x, y, rotation, rotationOrigin, text, color, font, scale, camera));
+            return text.length() * 5;
+        } else {
+            return DrawingManager.drawText(x, y, rotation, rotationOrigin, text, color, font, scale, camera);
+        }
+    }*/
+
     @Inject(at = @At("HEAD"), target = @Desc(value = "drawPolygon", args = PolygonSprite.class))
     private static void slapi$onDrawPolygon(@NotNull PolygonSprite polygon, CallbackInfo ci) {
         if (polygon.getVertices().length == 0) {
