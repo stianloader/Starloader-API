@@ -1290,6 +1290,7 @@ public final class Galimulator {
      *
      * @return A {@link Vector} of {@link Empire empires} that are known
      * @deprecated This API breaches several design principles present in modern releases of SLAPI.
+     * Replaced by {@link Dimension#getEmpiresView()}.
      */
     @SuppressWarnings("null")
     @Deprecated

@@ -19,11 +19,20 @@ import de.geolykt.starloader.api.gui.screen.ScreenComponent;
  */
 public class LineChartComponentSupplier implements ComponentSupplier {
 
-    private @Nullable LineChart chart;
-    private final @NotNull ChartData<? extends Object> graph;
+    @Nullable
+    private LineChart chart;
+
+    @NotNull
+    private final ChartData<? extends Object> graph;
+
     private final int height;
-    private final @NotNull LineWrappingInfo lwinfo;
-    private @Nullable Screen screen;
+
+    @NotNull
+    private final LineWrappingInfo lwinfo;
+
+    @Nullable
+    private Screen screen;
+
     private final int width;
 
     /**

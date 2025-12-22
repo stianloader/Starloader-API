@@ -2,11 +2,14 @@ package de.geolykt.starloader.api.gui.graph;
 
 import java.util.Objects;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 
+import de.geolykt.starloader.api.dimension.Empire;
 import de.geolykt.starloader.api.empire.Alliance;
 import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
@@ -74,25 +77,20 @@ public class LineChart implements ScreenComponent {
         @NotNull Color white = Color.WHITE;
 
         DrawingImpl graphics = Drawing.requireInstance();
-        AsyncRenderer.fillWindow(x, y, getWidth(), -getHeight(), white, camera);
+        AsyncRenderer.fillWindow(x, y, this.getWidth(), -this.getHeight(), white, camera);
 
-        float pixelsPerValue = getChartHeight() / chart.getHeight();
-        float pixelsPerIntervall;
-        if (chart instanceof RollingChartData) {
-            pixelsPerIntervall = getChartWidth() / (((RollingChartData<?>) chart).getCurrentPositon() - 1);
-        } else {
-            pixelsPerIntervall = getChartWidth() / chart.getWidth();
-        }
-        float thickness = getLineThickness();
-        x += getChartXOffset();
-        y -= getChartYOffset();
+        float pixelsPerValue = this.getChartHeight() / chart.getHeight();
+        float pixelsPerIntervall = this.getChartWidth() / chart.getWidth();
+        float thickness = this.getLineThickness();
+        x += this.getChartXOffset();
+        y -= this.getChartYOffset();
 
         for (ValueEdge<? extends Object> edge : chart.getEdges()) {
             if (edge.vertex1Position < 0) {
                 continue;
             }
-            float x1 = x + (edge.vertex1Position - 1) * pixelsPerIntervall;
-            float x2 = x + (edge.vertex2Position - 1) * pixelsPerIntervall;
+            float x1 = x + edge.vertex1Position * pixelsPerIntervall;
+            float x2 = x + edge.vertex2Position * pixelsPerIntervall;
             float y1 = edge.vertex1Value * pixelsPerValue;
             float y2 = edge.vertex2Value * pixelsPerValue;
             if (y1 < 0) {
@@ -104,12 +102,12 @@ public class LineChart implements ScreenComponent {
             // Galimulator draws from bottom-to-top, but SLAPI places components top-to-bottom (this should not be true). As such "y" is the MAXIMUM coordinate we may draw to.
             // Comment from Nov 11 2021: I have no idea what above comment refers to, other than that the y coordinates of drawing operations are confusing
             // It is best to assume that this is the right way.
-            y1 = y - getHeight() + y1;
-            y2 = y - getHeight() + y2;
-            graphics.drawLine(x1, y1, x2, y2, thickness, getColor(edge.vertex1), camera);
+            y1 = y - this.getHeight() + y1;
+            y2 = y - this.getHeight() + y2;
+            graphics.drawLine(x1, y1, x2, y2, thickness, this.getColor(edge.vertex1), camera);
         }
-        chart.getEdges();
-        return getWidth();
+
+        return this.getWidth();
     }
 
     protected float getChartHeight() {
@@ -125,24 +123,37 @@ public class LineChart implements ScreenComponent {
     }
 
     protected float getChartWidth() {
-        return getWidth() - 20.0F;
+        return this.getWidth() - 20.0F;
     }
 
     protected float getLineThickness() {
         return 2.0F;
     }
 
+    /**
+     * Obtains the color that should be used for a given vertex element.
+     *
+     * <p>This method may be overridden by API consumers to provide custom vertex colouring.
+     *
+     * @param element The vertex element
+     * @return The color for the vertex element.
+     * @since 1.5.0
+     */
     @SuppressWarnings("deprecation")
     @NotNull
-    protected Color getColor(@NotNull Object o) {
-        if (o instanceof de.geolykt.starloader.api.empire.Empire) {
-            return ((de.geolykt.starloader.api.empire.Empire) o).getGDXColor();
-        } else if (o instanceof de.geolykt.starloader.api.dimension.Empire) {
-            return ((de.geolykt.starloader.api.dimension.Empire) o).getGDXColor();
-        } else if (o instanceof Alliance) {
-            return ((Alliance) o).getGDXColor();
+    @Contract(pure = true)
+    @AvailableSince("1.5.0")
+    protected Color getColor(@NotNull Object element) {
+        if (element instanceof Empire) {
+            return ((Empire) element).getMapColor();
+        } else if (element instanceof de.geolykt.starloader.api.empire.Empire) {
+            return ((de.geolykt.starloader.api.empire.Empire) element).getGDXColor();
+        } else if (element instanceof Alliance) {
+            return ((Alliance) element).getGDXColor();
+        } else if (element instanceof Color) {
+            return (Color) element;
         } else {
-            Color c = new Color(o.hashCode());
+            Color c = new Color(element.hashCode());
             c.a = 1.0F;
             return c;
         }
