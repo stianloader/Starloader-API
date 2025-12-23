@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.annotation.Nonnegative;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -60,7 +62,7 @@ public final class LEB128 {
      * @throws IOException If the underlying stream throws the exception
      * @since 2.0.0
      */
-    public static final void encodeUnsigned(int val, @NotNull OutputStream out) throws IOException {
+    public static final void encodeUnsigned(@Nonnegative int val, @NotNull OutputStream out) throws IOException {
         do {
             int maskedValue = val & 0x7F;
             val >>= 7;

@@ -65,33 +65,38 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
     @Override
     public void loadGameState(byte[] data) throws IOException {
         try (ByteArrayInputStream in = new ByteArrayInputStream(data)) {
-            loadGameState(in);
+            this.loadGameState(in);
         }
     }
 
     @Override
     public synchronized void loadGameState(@NotNull InputStream in) throws IOException {
-        byte[] header = new byte[FORMAT_HEADER.length];
+        byte[] header = new byte[BoilerplateSavegameFormat.FORMAT_HEADER.length];
+
         if (JavaInterop.readNBytes(in, header, 0, header.length) != header.length) {
             throw new IOException("Input stream exhausted prematurely");
         }
-        if (!Arrays.equals(FORMAT_HEADER, header)) {
+
+        if (!Arrays.equals(BoilerplateSavegameFormat.FORMAT_HEADER, header)) {
             try {
                 // We already read a few bytes, so we have to prepend those bytes to the input stream again
                 JoiningInputStream fullIn = new JoiningInputStream(new ByteArrayInputStream(header), in);
                 VanillaSavegameFormat.INSTANCE.loadGameState(fullIn);
                 return;
             } catch (Throwable t) {
-                t.addSuppressed(new IOException("Header mismatch for the SLAPI/0 savegame format! (likely wrong format)"));
+                t.addSuppressed(new IOException("Header mismatch for the SLAPI/0 savegame format! (likely wrong format)").fillInStackTrace());
                 throw t;
             }
         }
+
         EventManager.handleEvent(new GalaxyLoadingEvent());
         DataInputStream dataIn = new DataInputStream(in);
         int version = dataIn.readInt();
+
         if (version != 0) {
             throw new IOException("Unknown version: " + version + ". Only version 0 is supported.");
         }
+
         dataIn.readInt(); // Discard amount of stars
         dataIn.readInt(); // Discard game year
         dataIn.readBoolean(); // Discard sandbox modifier
@@ -104,6 +109,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
         }
 
         WriteableMetadataState metadataState = new WriteableMetadataState();
+
         for (int read = dataIn.readInt(); read != -1; read = dataIn.readInt()) {
             NamespacedKey metadataKey = keyCache[read];
             NamespacedKey encodingKey = keyCache[dataIn.readInt()];
@@ -135,7 +141,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
             EventManager.handleEvent(new GalaxySavingEvent(reason, location, collector));
 
             DataOutputStream dataOut = new DataOutputStream(out);
-            dataOut.write(FORMAT_HEADER); // Format Header
+            dataOut.write(BoilerplateSavegameFormat.FORMAT_HEADER); // Format Header
             dataOut.writeInt(0); // Version
             dataOut.writeInt(Galimulator.getUniverse().getStarsView().size()); // Amount of stars
             dataOut.writeInt(Galimulator.getGameYear()); // Game year
@@ -184,6 +190,7 @@ public class BoilerplateSavegameFormat implements SavegameFormat {
                 LEB128.encodeUnsigned(serialized.length, out);
                 dataOut.write(serialized);
             }
+
             dataOut.writeInt(-1);
 
             try {

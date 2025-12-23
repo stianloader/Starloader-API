@@ -18,6 +18,7 @@ import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.SidebarInjector;
 import de.geolykt.starloader.api.gui.effects.EffectFactory;
+import de.geolykt.starloader.api.gui.graph.RollingChartData;
 import de.geolykt.starloader.api.gui.modconf.ModConf;
 import de.geolykt.starloader.api.gui.screen.ScreenBuilder;
 import de.geolykt.starloader.api.registry.Registry;
@@ -38,6 +39,7 @@ import de.geolykt.starloader.impl.gui.GalFXAsyncRenderer;
 import de.geolykt.starloader.impl.gui.SLScreenBuilder;
 import de.geolykt.starloader.impl.gui.effects.SLEffectImplFactory;
 import de.geolykt.starloader.impl.registry.SLRegistryExpander;
+import de.geolykt.starloader.impl.serial.codec.RollingChartDataCodec;
 import de.geolykt.starloader.impl.serial.codec.StringCodec;
 import de.geolykt.starloader.impl.util.SLNoiseProvider;
 import de.geolykt.starloader.mod.Extension;
@@ -86,6 +88,7 @@ public class StarloaderAPIExtension extends Extension {
      */
     private static void registerBuiltinCodecs() {
         Registry.CODECS.register(StringCodec.INSTANCE.getRegistryKey(), StringCodec.INSTANCE, String.class);
+        Registry.CODECS.register(RollingChartDataCodec.codec().getRegistryKey(), RollingChartDataCodec.codec(), RollingChartData.class);
     }
 
     /**

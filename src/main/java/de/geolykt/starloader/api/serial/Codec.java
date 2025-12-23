@@ -22,7 +22,7 @@ public abstract class Codec<T> implements Encoder<T>, Decoder<T>, RegistryKeyed 
     private final NamespacedKey key;
 
     public Codec(@NotNull NamespacedKey encoderKey) {
-        this.key = encoderKey;
+        this.key = Objects.requireNonNull(encoderKey, "'encoderKey' may not be null");
     }
 
     @Override

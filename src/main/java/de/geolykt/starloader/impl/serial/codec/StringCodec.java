@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.jetbrains.annotations.NotNull;
 
+import de.geolykt.starloader.api.NamespacedKey;
 import de.geolykt.starloader.api.serial.Codec;
 import de.geolykt.starloader.impl.JavaInterop;
 
@@ -15,13 +16,13 @@ import de.geolykt.starloader.impl.JavaInterop;
  *
  * @since 2.0.0
  */
-public class StringCodec extends Codec<@NotNull String> {
+public final class StringCodec extends Codec<@NotNull String> {
 
     @NotNull
     public static final StringCodec INSTANCE = new StringCodec();
 
-    protected StringCodec() {
-        super(new BuiltinKey("string"));
+    private StringCodec() {
+        super(NamespacedKey.fromString("builtin", "string"));
     }
 
     @Override
@@ -45,6 +46,6 @@ public class StringCodec extends Codec<@NotNull String> {
     @Override
     @NotNull
     public String decode(@NotNull DataInputStream input) throws IOException {
-        return decode(JavaInterop.readAllBytes(input));
+        return this.decode(JavaInterop.readAllBytes(input));
     }
 }

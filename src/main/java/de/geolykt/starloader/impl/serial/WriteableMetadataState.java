@@ -38,19 +38,21 @@ public class WriteableMetadataState implements MetadataState {
      * @since 2.0.0
      */
     public void add(@NotNull NamespacedKey key, @NotNull NamespacedKey encoding, byte @NotNull[] data) {
-        deserialized.put(key, data);
-        encodingKeys.put(key, encoding);
+        this.deserialized.put(key, data);
+        this.encodingKeys.put(key, encoding);
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
     public <T> Optional<T> getDeserializedForm(@NotNull NamespacedKey key) {
-        byte[] data = deserialized.get(key);
+        byte[] data = this.deserialized.get(key);
+
         if (data == null) {
             return Optional.empty();
         }
-        Decoder<T> decoder = Registry.CODECS.requireDecoder(encodingKeys.get(key));
+
+        Decoder<T> decoder = Registry.CODECS.requireDecoder(this.encodingKeys.get(key));
         return Optional.of(decoder.decode(data));
     }
 
@@ -58,13 +60,13 @@ public class WriteableMetadataState implements MetadataState {
     @Override
     @NotNull
     public Collection<@NotNull NamespacedKey> getKeys() {
-        return Collections.unmodifiableCollection(deserialized.keySet());
+        return Collections.unmodifiableCollection(this.deserialized.keySet());
     }
 
     @SuppressWarnings("null")
     @Override
     @NotNull
     public Optional<byte @NotNull []> getSerializedForm(@NotNull NamespacedKey key) {
-        return Optional.ofNullable(deserialized.get(key));
+        return Optional.ofNullable(this.deserialized.get(key));
     }
 }

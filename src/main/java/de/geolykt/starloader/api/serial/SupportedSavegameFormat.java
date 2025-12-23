@@ -1,5 +1,7 @@
 package de.geolykt.starloader.api.serial;
 
+import org.jetbrains.annotations.ApiStatus.Obsolete;
+
 import de.geolykt.starloader.DeprecatedSince;
 
 /**
@@ -26,5 +28,6 @@ public enum SupportedSavegameFormat {
      */
     @DeprecatedSince("2.0.0")
     @Deprecated
+    @Obsolete
     VANILLA;
 }

@@ -22,7 +22,7 @@ public class BasicMetadataCollector implements MetadataCollector {
     @Override
     @NotNull
     public Collection<@NotNull NamespacedKey> getKeys() {
-        return Collections.unmodifiableCollection(metadata.keySet());
+        return Collections.unmodifiableCollection(this.metadata.keySet());
     }
 
     @Override
@@ -49,6 +49,6 @@ public class BasicMetadataCollector implements MetadataCollector {
 
     @Override
     public void put(@NotNull NamespacedKey key, Object object) {
-        metadata.put(key, object);
+        this.metadata.put(key, object);
     }
 }

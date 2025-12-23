@@ -32,9 +32,9 @@ public class MissingDecoderException extends RuntimeException {
     private final NamespacedKey decoderKey;
 
     /**
-     * Constructor.
-     * Keep in mind that this constructor is not public API and should usually not be called be other mods.
-     * It may receive breaking changes without further notice.
+     * Create a new {@link MissingDecoderException} instance.
+     *
+     * <p>The exception message will be generated based on the provided {@link NamespacedKey}.
      *
      * @param decoderKey The encoding key of the decoder that is not present
      * @since 2.0.0
@@ -54,6 +54,6 @@ public class MissingDecoderException extends RuntimeException {
      */
     @NotNull
     public NamespacedKey getDecoderKey() {
-        return decoderKey;
+        return this.decoderKey;
     }
 }

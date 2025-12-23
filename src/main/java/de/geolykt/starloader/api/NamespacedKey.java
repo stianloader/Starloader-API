@@ -53,6 +53,10 @@ public class NamespacedKey {
     }
 
     protected NamespacedKey(@NotNull String namespace, @NotNull String key) {
+        if (namespace.isEmpty()) {
+            throw new IllegalArgumentException("Namespace may not be empty");
+        }
+
         this.namespaceString = namespace;
         this.keyString = key;
         this.namespaceNamesake = null;

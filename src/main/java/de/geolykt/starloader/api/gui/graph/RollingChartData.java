@@ -1,5 +1,10 @@
 package de.geolykt.starloader.api.gui.graph;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +12,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,29 +20,40 @@ import java.util.Objects;
 import javax.annotation.Nonnegative;
 
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.registry.Registry;
+import de.geolykt.starloader.api.serial.Codec;
+import de.geolykt.starloader.api.serial.Decoder;
+import de.geolykt.starloader.api.serial.Encoder;
+import de.geolykt.starloader.api.serial.MissingDecoderException;
+import de.geolykt.starloader.impl.util.LEB128;
 
 /**
  * An implementation of {@link ChartData} that allows to incrementally add nodes to the
  * chart. These nodes are then converted to Edges.
  * While the main goal of this implementation was to have relatively low runtime complexities,
  * storing all too much data may produce issues with visualisation. Due to the underlying
- * use of {@link ArrayDeque} and {@link HashMap}, this class is <b>NOT</b> concurrency-safe.
+ * use of {@link ArrayDeque} and {@link HashMap}, this class is <b>NOT</b> concurrency-safe,
+ * however it supports asynchronous reads.
  *
- * <p>To support asynchronous reads, the {@link #incrementPosition()} and {@link #getEdges()}
- * methods must both be overridden with {@code synchronize}, and the {@link #getEdges()}
- * must clone the returned collection. However, keep in mind that this still may lead to data
- * inconsistencies when paired with {@link #getCurrentPositon()}, for future versions
- * a deep clone of the collection returned by {@link #getEdges()} may be necessary
- * to combat such inconsistencies.
+ * <p>This class has a built-in {@link Codec} instance registered. Please note that
+ * this {@link Codec} is incapable of (de-)serialising subclasses of {@link RollingChartData}
+ * for technical reasons. Further, serialisation results in any nodes added to this graph but
+ * which haven't been committed via a {@link #incrementPosition()} call to be lost.
+ * Further, the next {@link #incrementPosition()} call after de-serialisation will be a NOP.
  *
  * @param <T> The type used for the vertices/nodes within the graph.
  * @since 1.5.0
+ * @apiNote Starting from 2.0.0-a20251223 instances of this class support asynchronous
+ * reads and serialisation. Older versions cannot be serialised, nor do they
+ * support asynchronous {@link #getEdges()} calls.
  */
 @AvailableSince("1.5.0")
 public class RollingChartData<T> implements ChartData<T> {
@@ -72,11 +89,13 @@ public class RollingChartData<T> implements ChartData<T> {
      */
     private int readHead = 0;
 
+    private boolean ignoreIncrement = false;
+
     /**
      * For how many positions a value inserted by {@link #addNode(Object, int)} should last.
      * Each period begins with a {@link #incrementPosition()}.
      */
-    private final int validityPeriod;
+    private int validityPeriod;
 
     /**
      * Creates a new instance of the class.
@@ -164,9 +183,10 @@ public class RollingChartData<T> implements ChartData<T> {
      * @implSpec Since 2.0.0-a20251222, the returned collection is unmodifiable and will not be modified by another thread.
      * @implNote From 1.5.0 to 2.0.0-a20251221.1 (inclusive), this method had a bug in that the vertex position values could
      * go outside the bounds defined through the constructor.
-     * @implNote If thread-safe read access is desired, the {@link RollingChartData} class must be subclassed
-     * and this method be declared as {@code synchronized} alongside {@link #incrementPosition()}. {@link #addNode(Object, int)}
-     * can be called concurrently to this method without any issues.
+     * @implNote If thread-safe read access is desired on version 2.0.0-a20251222 and earlier, 
+     * he {@link RollingChartData} class must be subclassed and this method be declared as {@code synchronized}
+     * alongside {@link #incrementPosition()}. {@link #addNode(Object, int)} can be called concurrently to this method
+     * without any issues. From version 2.0.0-a20251223 onwards this method is guaranteed to be thread-safe out of the box.
      */
     @SuppressWarnings("null")
     @Override
@@ -174,7 +194,7 @@ public class RollingChartData<T> implements ChartData<T> {
     @Unmodifiable
     @Contract(pure = true)
     @AvailableSince("1.5.0")
-    public Collection<ValueEdge<T>> getEdges() {
+    public synchronized Collection<ValueEdge<T>> getEdges() {
         List<ValueEdge<T>> graphEdges = new ArrayList<>();
 
         for (ValueEdge<T> edge : this.edges) {
@@ -205,7 +225,12 @@ public class RollingChartData<T> implements ChartData<T> {
      */
     @AvailableSince("1.5.0")
     @Contract(pure = false, mutates = "this")
-    public void incrementPosition() {
+    public synchronized void incrementPosition() {
+        if (this.ignoreIncrement) {
+            this.ignoreIncrement = false;
+            return;
+        }
+
         for (T node : this.previousNodes.keySet()) {
             if (!this.currentNodes.containsKey(node)) {
                 node = Objects.requireNonNull(node);
@@ -233,5 +258,144 @@ public class RollingChartData<T> implements ChartData<T> {
         }
 
         this.readHead = Math.max(0, this.currentPosition - this.validityPeriod);
+    }
+
+    @Internal
+    @Contract(pure = false, mutates = "this")
+    @AvailableSince("2.0.0-a20251223")
+    public void serialDecode(@NotNull DataInputStream dataIn) throws IOException {
+        if (this.currentPosition >= 0) {
+            throw new IllegalStateException("RollingChartData.serialDecode() may only be called on newly created RollingChartData objects.");
+        }
+
+        int version = dataIn.read();
+        if (version != 0) {
+            throw new IOException("Unexpected version. Expected 0, got " + version);
+        }
+
+        this.ignoreIncrement = true;
+        this.validityPeriod = LEB128.decodeUnsigned(dataIn);
+        this.readHead = LEB128.decodeUnsigned(dataIn);
+        this.currentPosition = LEB128.decodeUnsigned(dataIn);
+        int edgeCount = LEB128.decodeUnsigned(dataIn);
+        List<ValueEdge<Integer>> edgeProtos = new ArrayList<>(edgeCount);
+        int oidMax = -1;
+
+        while (edgeCount-- != 0) {
+            int pos1 = LEB128.decodeUnsigned(dataIn);
+            int val1 = dataIn.readInt();
+            int pos2 = LEB128.decodeUnsigned(dataIn);
+            int val2 = dataIn.readInt();
+            int oid = LEB128.decodeUnsigned(dataIn);
+            oidMax = Math.max(oid, oidMax);
+
+            edgeProtos.add(new ValueEdge<>(oid, val1, pos1, oid, val2, pos2));
+        }
+
+        @SuppressWarnings("unchecked")
+        T[] objects = (T[]) new Object[oidMax + 1];
+        Decoder<T> decoder = null;
+
+        for (int oid = 0; oid <= oidMax; oid++) {
+            int nslen = LEB128.decodeUnsigned(dataIn);
+
+            if (nslen != 0) {
+                byte[] nsdata = new byte[nslen];
+                dataIn.readFully(nsdata);
+                byte[] keydata = new byte[LEB128.decodeUnsigned(dataIn)];
+                dataIn.readFully(keydata);
+
+                String namespace = new String(nsdata, StandardCharsets.UTF_8);
+                String key = new String(keydata, StandardCharsets.UTF_8);
+                NamespacedKey decoderKey = NamespacedKey.fromString(namespace, key);
+
+                try {
+                    decoder = Registry.CODECS.requireDecoder(decoderKey);
+                } catch (MissingDecoderException e) {
+                    throw new IOException(e);
+                }
+            } else if (decoder == null) {
+                throw new IOException("No decoder specified.");
+            }
+
+            byte[] data = new byte[LEB128.decodeUnsigned(dataIn)];
+            dataIn.readFully(data);
+            objects[oid] = Objects.requireNonNull(decoder.decode(data), "Decoded object may not be null");
+        }
+
+        for (ValueEdge<Integer> proto : edgeProtos) {
+            T vertex = objects[proto.vertex1];
+            assert vertex != null;
+            this.edges.add(new ValueEdge<>(vertex, proto.vertex1Value, proto.vertex1Position, vertex, proto.vertex2Value, proto.vertex2Position));
+        }
+    }
+
+    @Internal
+    @Contract(pure = true)
+    @AvailableSince("2.0.0-a20251223")
+    public synchronized byte @NotNull[] serialEncode() throws IOException {
+        Map<@NotNull T, Integer> idLookup = new LinkedHashMap<>();
+        Collection<ValueEdge<T>> edges = this.edges;
+
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                DataOutputStream dataOut = new DataOutputStream(baos)) {
+            dataOut.write(0); // Version
+            LEB128.encodeUnsigned(this.validityPeriod, dataOut);
+            LEB128.encodeUnsigned(this.readHead, dataOut);
+            LEB128.encodeUnsigned(this.currentPosition, dataOut);
+            LEB128.encodeUnsigned(edges.size(), dataOut);
+
+            for (ValueEdge<T> edge : edges) {
+                assert edge.vertex1 == edge.vertex2;
+                assert edge.vertex1Position >= 0;
+                assert edge.vertex2Position >= 0;
+
+                LEB128.encodeUnsigned(edge.vertex1Position, dataOut);
+                dataOut.writeInt(edge.vertex1Value);
+                LEB128.encodeUnsigned(edge.vertex2Position, dataOut);
+                dataOut.writeInt(edge.vertex2Value);
+
+                int objectId = idLookup.compute(edge.vertex1, (key, value) -> {
+                    if (value == null) {
+                        return idLookup.size();
+                    } else {
+                        return value;
+                    }
+                });
+
+                LEB128.encodeUnsigned(objectId, dataOut);
+            }
+
+            Encoder<T> encoder = null;
+            for (T value : idLookup.keySet()) {
+                if (encoder == null || !encoder.canEncode(value)) {
+                    encoder = Registry.CODECS.getEncoder(value);
+
+                    if (encoder == null) {
+                        throw new IOException("Cannot serialize object of class '" + value.getClass().getName() + "': No encoder for object.");
+                    }
+
+                    byte[] encoderKeyNamespace = encoder.getEncodingKey().getNamespace().getBytes(StandardCharsets.UTF_8);
+
+                    if (encoderKeyNamespace.length == 0) {
+                        throw new IllegalStateException("Encoder key without namespace? " + encoder.getEncodingKey() + " (a " + encoder.getClass().getName() + ")");
+                    }
+
+                    LEB128.encodeUnsigned(encoderKeyNamespace.length, dataOut);
+                    dataOut.write(encoderKeyNamespace);
+                    byte[] encoderKeyKey = encoder.getEncodingKey().getKey().getBytes(StandardCharsets.UTF_8);
+                    LEB128.encodeUnsigned(encoderKeyKey.length, dataOut);
+                    dataOut.write(encoderKeyKey);
+                } else {
+                    dataOut.write(0); // Keep active encoder instance
+                }
+
+                byte[] data = encoder.encode(value);
+                LEB128.encodeUnsigned(data.length, dataOut);
+                dataOut.write(data);
+            }
+
+            return baos.toByteArray();
+        }
     }
 }
