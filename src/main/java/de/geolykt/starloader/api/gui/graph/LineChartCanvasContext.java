@@ -22,6 +22,7 @@ import de.geolykt.starloader.api.gui.canvas.CanvasManager;
 import de.geolykt.starloader.api.gui.canvas.CanvasSettings;
 import de.geolykt.starloader.api.gui.canvas.prefab.AbstractResizeableCanvasContext;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+import de.geolykt.starloader.api.serial.references.PersistentEmpireReference;
 
 /**
  * A visualisation of a {@link ChartData} instance as a simple line chart.
@@ -114,7 +115,9 @@ public class LineChartCanvasContext<E> extends AbstractResizeableCanvasContext {
     @Contract(pure = true)
     @AvailableSince("2.0.0-a20251222")
     protected Color getColor(@NotNull E element) {
-        if (element instanceof Empire) {
+        if (element instanceof PersistentEmpireReference) {
+            return ((PersistentEmpireReference) element).getGdxColor();
+        } else if (element instanceof Empire) {
             return ((Empire) element).getMapColor();
         } else if (element instanceof de.geolykt.starloader.api.empire.Empire) {
             return ((de.geolykt.starloader.api.empire.Empire) element).getGDXColor();

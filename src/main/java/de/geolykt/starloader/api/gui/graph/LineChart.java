@@ -17,6 +17,7 @@ import de.geolykt.starloader.api.gui.DrawingImpl;
 import de.geolykt.starloader.api.gui.screen.LineWrappingInfo;
 import de.geolykt.starloader.api.gui.screen.Screen;
 import de.geolykt.starloader.api.gui.screen.ScreenComponent;
+import de.geolykt.starloader.api.serial.references.PersistentEmpireReference;
 
 /**
  * A simple visualisation of a {@link ChartData} object.
@@ -144,7 +145,9 @@ public class LineChart implements ScreenComponent {
     @Contract(pure = true)
     @AvailableSince("1.5.0")
     protected Color getColor(@NotNull Object element) {
-        if (element instanceof Empire) {
+        if (element instanceof PersistentEmpireReference) {
+            return ((PersistentEmpireReference) element).getGdxColor();
+        } else if (element instanceof Empire) {
             return ((Empire) element).getMapColor();
         } else if (element instanceof de.geolykt.starloader.api.empire.Empire) {
             return ((de.geolykt.starloader.api.empire.Empire) element).getGDXColor();

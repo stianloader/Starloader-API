@@ -290,6 +290,7 @@ public class RollingChartData<T> implements ChartData<T> {
             oidMax = Math.max(oid, oidMax);
 
             edgeProtos.add(new ValueEdge<>(oid, val1, pos1, oid, val2, pos2));
+            this.maxValue = Math.max(this.maxValue, Math.max(val1, val2));
         }
 
         @SuppressWarnings("unchecked")
