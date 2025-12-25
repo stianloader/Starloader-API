@@ -248,7 +248,12 @@ public class StackedChartCanvasContext<E> extends AbstractResizeableCanvasContex
                 currentFractions.clear();
                 previousPosition = currentPosition;
                 currentPosition = edge.vertex1Position;
-                columnHeight = columnHeights.get(currentPosition);
+                Long cheight = columnHeights.get(currentPosition);
+                if (cheight == null) {
+                    columnHeight = Double.NaN;
+                } else {
+                    columnHeight = cheight.longValue();
+                }
             } else if (edge.vertex1Position < 0) {
                 continue;
             }
