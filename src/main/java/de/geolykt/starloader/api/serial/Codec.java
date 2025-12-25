@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import de.geolykt.starloader.api.NamespacedKey;
+import de.geolykt.starloader.api.registry.CodecRegistry;
 import de.geolykt.starloader.api.registry.RegistryKeyed;
 
 /**
@@ -21,6 +22,15 @@ public abstract class Codec<T> implements Encoder<T>, Decoder<T>, RegistryKeyed 
     @NotNull
     private final NamespacedKey key;
 
+    /**
+     * Create a new {@link Codec} instance with the specified registry/encoding key.
+     *
+     * <p>The used registry key should be equal to the key used in the
+     * {@link CodecRegistry#register(NamespacedKey, Codec, Class)} call (or comparable calls).
+     *
+     * @param encoderKey The encoder key/registry key to use.
+     * @since 2.0.0
+     */
     public Codec(@NotNull NamespacedKey encoderKey) {
         this.key = Objects.requireNonNull(encoderKey, "'encoderKey' may not be null");
     }

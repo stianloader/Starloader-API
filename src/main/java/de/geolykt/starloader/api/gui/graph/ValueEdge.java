@@ -22,6 +22,12 @@ public class ValueEdge<V> {
     public final int vertex2Position;
 
     public ValueEdge(@NotNull V vertex1, int value1, int pos1, @NotNull V vertex2, int value2, int pos2) {
+        if (pos1 < 0) {
+            throw new IllegalStateException("Negative position not supported!");
+        }
+        if (pos1 == pos2) {
+            throw new IllegalStateException("Not exactly useful edge");
+        }
         this.vertex1 = vertex1;
         this.vertex1Value = value1;
         this.vertex1Position = pos1;

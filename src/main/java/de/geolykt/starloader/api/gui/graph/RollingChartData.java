@@ -130,11 +130,7 @@ public class RollingChartData<T> implements ChartData<T> {
     public void addNode(@NotNull T node, int value) {
         this.maxValue = Math.max(this.maxValue, value);
         if (this.currentPosition < 1) {
-            if (this.currentPosition == 0) {
-                ValueEdge<T> edge = new ValueEdge<>(node, value, 0, node, value, 0);
-                this.currentNodes.put(node, edge);
-                this.edges.addLast(edge);
-            } else {
+            if (this.currentPosition != 0) {
                 throw new IllegalStateException("Illegal position: " + this.currentPosition + ". Did you call .incrementPosition?");
             }
         } else {

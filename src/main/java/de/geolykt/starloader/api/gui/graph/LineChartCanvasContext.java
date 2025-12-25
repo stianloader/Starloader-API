@@ -44,8 +44,6 @@ import de.geolykt.starloader.api.serial.references.PersistentEmpireReference;
  * without any children, {@link CanvasSettings#DEFAULT_SEMISOLID} ought to be enough though.
  *
  * <p>Remember that the {@link ChartData} instance must allow reads from the UI thread.
- * This means that {@link RollingChartData} on it's own is not supported, unless it is
- * being updated on the UI/Input thread as per {@link Drawing#isRenderThread()}.
  * Failures to obey will not be caught by SLAPI, but may result in crashes within SLAPI code.
  *
  * @since 2.0.0-a20251222
@@ -155,7 +153,7 @@ public class LineChartCanvasContext<E> extends AbstractResizeableCanvasContext {
         final float thickness = this.lineThickness;
         final DrawingImpl graphics = Drawing.getInstance();
 
-        for (ValueEdge<E> edge : chart.getEdges()) {
+        for (ValueEdge<E> edge : this.chart.getEdges()) {
             if (edge.vertex1Position < 0) {
                 continue;
             }

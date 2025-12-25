@@ -63,6 +63,10 @@ public final class LEB128 {
      * @since 2.0.0
      */
     public static final void encodeUnsigned(@Nonnegative int val, @NotNull OutputStream out) throws IOException {
+        if (val < 0) {
+            throw new IllegalArgumentException("value must be nonnegative.");
+        }
+
         do {
             int maskedValue = val & 0x7F;
             val >>= 7;
