@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.annotation.Nonnegative;
 
@@ -39,9 +39,7 @@ import de.geolykt.starloader.impl.util.LEB128;
  * An implementation of {@link ChartData} that allows to incrementally add nodes to the
  * chart. These nodes are then converted to Edges.
  * While the main goal of this implementation was to have relatively low runtime complexities,
- * storing all too much data may produce issues with visualisation. Due to the underlying
- * use of {@link ArrayDeque} and {@link HashMap}, this class is <b>NOT</b> concurrency-safe,
- * however it supports asynchronous reads.
+ * storing all too much data may produce issues with visualisation.
  *
  * <p>This class has a built-in {@link Codec} instance registered. Please note that
  * this {@link Codec} is incapable of (de-)serialising subclasses of {@link RollingChartData}
@@ -51,7 +49,7 @@ import de.geolykt.starloader.impl.util.LEB128;
  *
  * @param <T> The type used for the vertices/nodes within the graph.
  * @since 1.5.0
- * @apiNote Starting from 2.0.0-a20251223 instances of this class support asynchronous
+ * @apiNote Starting from 2.0.0-a20251226 instances of this class support asynchronous
  * reads and serialisation. Older versions cannot be serialised, nor do they
  * support asynchronous {@link #getEdges()} calls.
  */
@@ -74,7 +72,7 @@ public class RollingChartData<T> implements ChartData<T> {
      * The raw edges stored by the chart.
      */
     @NotNull
-    private final Deque<ValueEdge<T>> edges = new ArrayDeque<>();
+    private final Deque<ValueEdge<T>> edges = new ConcurrentLinkedDeque<>();
 
     /**
      * The highest encountered value.
@@ -127,7 +125,7 @@ public class RollingChartData<T> implements ChartData<T> {
      */
     @AvailableSince("1.5.0")
     @Contract(pure = false, mutates = "this")
-    public void addNode(@NotNull T node, int value) {
+    public synchronized void addNode(@NotNull T node, int value) {
         this.maxValue = Math.max(this.maxValue, value);
         if (this.currentPosition < 1) {
             if (this.currentPosition != 0) {
@@ -179,10 +177,8 @@ public class RollingChartData<T> implements ChartData<T> {
      * @implSpec Since 2.0.0-a20251222, the returned collection is unmodifiable and will not be modified by another thread.
      * @implNote From 1.5.0 to 2.0.0-a20251221.1 (inclusive), this method had a bug in that the vertex position values could
      * go outside the bounds defined through the constructor.
-     * @implNote If thread-safe read access is desired on version 2.0.0-a20251222 and earlier, 
-     * he {@link RollingChartData} class must be subclassed and this method be declared as {@code synchronized}
-     * alongside {@link #incrementPosition()}. {@link #addNode(Object, int)} can be called concurrently to this method
-     * without any issues. From version 2.0.0-a20251223 onwards this method is guaranteed to be thread-safe out of the box.
+     * @implNote Although versions before 2.0.0-a20251226 might claim that this method is thread-safe, this is
+     * actually not the case.
      */
     @SuppressWarnings("null")
     @Override
@@ -190,7 +186,7 @@ public class RollingChartData<T> implements ChartData<T> {
     @Unmodifiable
     @Contract(pure = true)
     @AvailableSince("1.5.0")
-    public synchronized Collection<ValueEdge<T>> getEdges() {
+    public Collection<ValueEdge<T>> getEdges() {
         List<ValueEdge<T>> graphEdges = new ArrayList<>();
 
         for (ValueEdge<T> edge : this.edges) {
@@ -215,7 +211,7 @@ public class RollingChartData<T> implements ChartData<T> {
     /**
      * Increments the position of the rollover chart and removes edges that are outside the defined validity period.
      *
-     * <p>This method may not be called at the same time as {@link #getEdges()} or {@link #addNode(Object, int)}.
+     * <p>This method may not be called at the same time as {@link #addNode(Object, int)}.
      *
      * @since 1.5.0
      */

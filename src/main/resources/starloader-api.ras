@@ -83,3 +83,9 @@ RAS v1 std
 
 # Platform-dependent concurrency-fixing hacks
 @runtime    0               ACC_SYNCHRONIZED org/lwjgl/LinuxSysImplementation                       openURL                 (Ljava/lang/String;)Z
+
+# Bulletin log concurrency fixes
+ all        0               ACC_SYNCHRONIZED snoddasmannen/galimulator/ui/class_5                   a                       ()V
+ all        0               ACC_SYNCHRONIZED snoddasmannen/galimulator/ui/class_5                   b                       ()V
+ all        0               ACC_SYNCHRONIZED snoddasmannen/galimulator/ui/class_5                   c                       ()V
+ all        0               ACC_SYNCHRONIZED snoddasmannen/galimulator/ui/class_5                   a                       (Lsnoddasmannen/galimulator/AbstractBulletin;)V
