@@ -101,7 +101,7 @@ public class StarloaderAPIExtension extends Extension {
     }
 
     static {
-        LoggerFactory.getLogger(StarloaderAPIExtension.class).info("Setting up SLAPI. Classloaded via {}", StarloaderAPIExtension.class.getClassLoader());
+        LoggerFactory.getLogger(StarloaderAPIExtension.class).info("Setting up SLAPI. JavaInterop for Java {}, classloaded via {}", JavaInterop.getInteropRelease(), StarloaderAPIExtension.class.getClassLoader());
         MinestomRootClassLoader.getInstance().addTransformer(new GLTransformer());
         File dataFolder = new File("data");
         DataFolderProvider.setProvider(new DataFolderProvider.SimpleDataFolderProvider(dataFolder, new FileHandle(dataFolder), Objects.requireNonNull(dataFolder.toPath())));

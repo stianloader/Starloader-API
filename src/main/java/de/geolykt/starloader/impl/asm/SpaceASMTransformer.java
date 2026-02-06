@@ -162,8 +162,8 @@ public class SpaceASMTransformer extends ASMTransformer {
      * unless absolutely necessary. In laymen's terms: It is not public API.
      * Handle with care.
      *
-     * <p>Further, this method does not perform any sanity check what the {@link Star}
-     * class hasn't yet been classloaded, so setting this flag may not have an effect
+     * <p>Further, this method does not perform any sanity check whether the {@link Star}
+     * class has already been classloaded, so setting this flag may not have an effect
      * if the transformation already occurred.
      *
      * @since 2.0.0-a20240509
@@ -420,7 +420,7 @@ public class SpaceASMTransformer extends ASMTransformer {
                 DebugNagException.nag("Cannot resolve method: " + methodName + " (" + starRenderOverlayMethod + ")");
                 throw new IllegalStateException("Unexpected error while transforming class: Cannot resolve method");
             }
-        } else if (source.name.equals(gestureListenerClass)) {
+        } else if (source.name.equals(SpaceASMTransformer.gestureListenerClass)) {
             boolean transformed = false;
             for (MethodNode method : source.methods) {
                 if (!method.name.equals("tap") || !method.desc.equals("(FFII)Z")) {

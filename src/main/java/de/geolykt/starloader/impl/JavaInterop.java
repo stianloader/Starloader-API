@@ -4,9 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.AccessibleObject;
 import java.util.Objects;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +30,13 @@ public final class JavaInterop {
         return subject.isAccessible();
     }
 
-    public static boolean equals(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
+    @NotNull
+    @AvailableSince("2.0.0-a20260206")
+    public static final MethodHandle dropReturn(@NotNull MethodHandle handle) {
+        return handle.asType(handle.type().changeReturnType(void.class));
+    }
+
+    public static final boolean equals(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
         return JavaInterop.mismatch(a, aFromIndex, aToIndex, b, bFromIndex, bToIndex) == -1;
     }
 
@@ -45,11 +53,11 @@ public final class JavaInterop {
         return 8;
     }
 
-    public static int mismatch(byte[] a, byte[] b) {
+    public static final int mismatch(byte[] a, byte[] b) {
         return JavaInterop.mismatch(a, 0, a.length, b, 0, b.length);
     }
 
-    public static int mismatch(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
+    public static final int mismatch(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
         int aLength = aToIndex - aFromIndex;
         int bLength = bToIndex - bFromIndex;
         if (aFromIndex < 0) throw new ArrayIndexOutOfBoundsException("aFromIndex (" + aFromIndex + ") < 0");

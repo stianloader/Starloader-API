@@ -46,6 +46,7 @@ import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent.Phase;
 import de.geolykt.starloader.api.gui.BackgroundTask;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
+import de.geolykt.starloader.api.resource.DataFolderProvider;
 import de.geolykt.starloader.api.serial.SavegameFormat;
 import de.geolykt.starloader.api.serial.SupportedSavegameFormat;
 import de.geolykt.starloader.api.sound.SoundHandler;
@@ -1259,6 +1260,36 @@ public final class Galimulator {
             throw new IllegalStateException("The implementation was not (yet) specified. This is a programmer error.");
         }
         return conf;
+    }
+
+    /**
+     * Convenience method for {@link DataFolderProvider#getProvider()}.
+     *
+     * <p>Obtains the current {@link DataFolderProvider} instance, which allows
+     * to effectively access the 'data' directory of the game. While in vanilla
+     * galimulator the 'data' directory is expected to be in the current working
+     * directory, and indeed this is still the case in modded galimulator as of
+     * 2026-02-06, future mods may seek to decouple the current working directory
+     * and galimulator's inner workings. The {@link DataFolderProvider} seeks
+     * to provide an interface to allow that independently of the status of the
+     * game's modding scene.
+     *
+     * @return The current {@link DataFolderProvider}
+     * @throws IllegalStateException If no {@link DataFolderProvider} instance
+     * is registered at this point in time.
+     * @since 2.0.0-a20260206
+     * @apiNote This method purely exists because I found myself searching for the
+     * {@link DataFolderProvider} class more times than once, which implies
+     * that the current design schema of that class does not follow the principles
+     * upheld by the rest of the SLAPI codebase. This might result in newcomers
+     * being completely unaware that the {@link DataFolderProvider} class exists.
+     * Hopefully this convenience method alleviates this issue.
+     */
+    @NotNull
+    @AvailableSince("2.0.0-a20260206")
+    @Contract(pure = true, value = "-> !null")
+    public static DataFolderProvider getDataDirectoryProvider() {
+        return DataFolderProvider.getProvider();
     }
 
     /**

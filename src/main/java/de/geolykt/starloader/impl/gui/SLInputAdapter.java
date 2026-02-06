@@ -21,6 +21,10 @@ import snoddasmannen.galimulator.ui.Widget;
  * and keyboard input handling.
  */
 public class SLInputAdapter extends InputAdapter {
+    public boolean scrolled(float amountX, float amountY) {
+        return this.scrolled((int) amountY);
+    }
+
     @Override
     public boolean scrolled(int scrollAmount) {
         Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);

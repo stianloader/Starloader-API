@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessibleObject;
 import java.util.Arrays;
 
@@ -27,7 +28,7 @@ public final class JavaInterop {
 
     @NotNull
     public static final MethodHandle dropReturn(@NotNull MethodHandle handle) {
-        return handle.asType(handle.type().changeReturnType(void.class));
+        return MethodHandles.dropReturn(handle);
     }
 
     public static final boolean equals(byte[] a, int aFromIndex, int aToIndex, byte[] b, int bFromIndex, int bToIndex) {
@@ -44,7 +45,7 @@ public final class JavaInterop {
      * @since 2.0.0
      */
     public static final int getInteropRelease() {
-        return 9;
+        return 16;
     }
 
     public static final int mismatch(byte[] a, byte[] b) {
