@@ -24,6 +24,7 @@ import de.geolykt.starloader.impl.gui.s2d.PixmapAtlas;
  * without any further modifications.
  *
  * <p>This event exists to allow mods to submit their own textures to the main texture atlas.
+ * Submitted textures can be obtained through the {@link AtlasPackedEvent}.
  *
  * <p>Pages within the main texture atlas are in vanilla galimulator 1024 x 1024 pixels in size.
  * However, SLAPI increases the default size to 4096 x 4096 pixels, though that size might
@@ -36,7 +37,9 @@ import de.geolykt.starloader.impl.gui.s2d.PixmapAtlas;
  *
  * <p>The exact point in time in which the method is getting invoked is undefined,
  * though it will be called before any graphical ticking occurs, and by extension before
- * any ticking whatsoever.
+ * any ticking whatsoever. It will also be called before {@link AtlasPackedEvent}.
+ * This method will only be called once, changes will be considered an API behaviour
+ * break and will not happen on the same major version, as per SemVer.
  *
  * @since 2.0.0-a20260206
  * @apiNote Keep in mind that the constructor of Event classes are in general not public APIs,

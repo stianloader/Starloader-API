@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import de.geolykt.starloader.api.Galimulator;
 import de.geolykt.starloader.api.event.EventManager;
+import de.geolykt.starloader.api.event.lifecycle.AtlasPackedEvent;
 import de.geolykt.starloader.api.event.lifecycle.AtlasPackingEvent;
 import de.geolykt.starloader.impl.JavaInterop;
 
@@ -59,10 +60,13 @@ public class PixmapAtlas {
                 }).forEachOrdered(pair -> {
                     PixmapAtlas.libGDXAgnosticsPack(packer, pair.getKey(), pair.getValue());
                 });
+
             EventManager.handleEvent(new AtlasPackingEvent(packer));
             TextureAtlas atlas = packer.generateTextureAtlas(TextureFilter.Linear, TextureFilter.Linear, false);
             LoggerFactory.getLogger(PixmapAtlas.class).info("Generated texture atlas in {} ms", (System.nanoTime() - startTime) / 1_000_000);
-            return Objects.requireNonNull(atlas, "'atlas' may not be null!");
+            EventManager.handleEvent(new AtlasPackedEvent(Objects.requireNonNull(atlas, "'atlas' may not be null!")));
+
+            return atlas;
         } catch (IOException e) {
             throw new UncheckedIOException("Failed to pack texture atlases!", e);
         } finally {
@@ -97,10 +101,6 @@ public class PixmapAtlas {
                 throw thrown;
             }
         }
-
-         if (handle == null) {
-             throw new AssertionError();
-         }
 
          MH_PIXMAP_PACKER_PACK = JavaInterop.dropReturn(handle);
     }
