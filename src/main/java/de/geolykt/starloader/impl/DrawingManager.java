@@ -51,7 +51,8 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @Deprecated
     private static final de.geolykt.starloader.impl.text.@NotNull StarloaderTextFactory TEXT_FACTORY = new de.geolykt.starloader.impl.text.StarloaderTextFactory();
 
-    private Collection<String> fonts;
+    @Nullable
+    private Collection<@NotNull String> fonts;
 
     @SuppressWarnings({ "null", "deprecation", "unused" })
     @Override
@@ -176,16 +177,20 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     }
 
     @Override
-    public @NotNull Collection<String> getAvailiableFonts() {
-        Collection<String> ret = fonts;
+    public @NotNull Collection<@NotNull String> getAvailiableFonts() {
+        Collection<@NotNull String> ret = this.fonts;
+
         if (ret == null) {
             Enum<?>[] galFxFonts = GalFX.FONT_TYPE.values();
             ret = new ArrayList<>(galFxFonts.length);
+
             for (Enum<?> font : galFxFonts) {
-                ret.add(font.name());
+                ret.add(Objects.requireNonNull(font.name(), "GalFX.FONT_TYPE#name() yielded null"));
             }
-            fonts = ret;
+
+            this.fonts = ret;
         }
+
         return ret;
     }
 

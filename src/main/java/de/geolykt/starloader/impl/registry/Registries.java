@@ -72,6 +72,7 @@ public final class Registries {
     public static void initConnectionMethods() {
         Registries.LOGGER.info("Registering star connection methods (also known as Starlane generators)");
         SimpleEnumRegistry<ConnectionMethod> generatorRegistry = new SimpleEnumRegistry<>(ConnectionMethod.class);
+
         @SuppressWarnings("null")
         @NotNull ConnectionMethod[] methods = new @NotNull ConnectionMethod[] {
                 ConnectionMethod.STANDARD,
@@ -80,6 +81,7 @@ public final class Registries {
                 ConnectionMethod.QUICK,
                 ConnectionMethod.TOTAL_CONNECTION
         };
+
         generatorRegistry.registerBulk(new @NotNull NamespacedKey[] {
             RegistryKeys.GALIMULATOR_STARLANES_STANDARD,
             RegistryKeys.GALIMULATOR_STARLANES_WEBBED,
@@ -87,18 +89,25 @@ public final class Registries {
             RegistryKeys.GALIMULATOR_STARLANES_QUICK,
             RegistryKeys.GALIMULATOR_STARLANES_TOTAL_CONNECTION
         }, methods);
+
         SLRegistryExpander expander = (SLRegistryExpander) RegistryExpander.requireImplementation();
+
         expander.starlaneGeneratorPrototypes.removeIf(prototype -> {
             generatorRegistry.register(prototype.key, new SLStarlaneGenerator(generatorRegistry.getSize(), prototype));
             return true;
         });
+
         Registry.STARLANE_GENERATORS = (Registry<StarlaneGenerator>) (Registry<?>) generatorRegistry;
+
         EventManager.handleEvent(new RegistryRegistrationEvent(generatorRegistry, ConnectionMethod.class, RegistryRegistrationEvent.REGISTRY_STARLANE_GENERATORS));
+
         expander.frozenStarlaneRegistry = true;
+
         expander.starlaneGeneratorPrototypes.removeIf(prototype -> {
             generatorRegistry.register(prototype.key, new SLStarlaneGenerator(generatorRegistry.getSize(), prototype));
             return true;
         });
+
         generatorRegistry.freeze();
     }
 

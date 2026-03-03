@@ -144,6 +144,7 @@ public class NamespacedKey {
     }
 
     @Override
+    @NotNull
     public String toString() {
         return this.getNamespace() + ":" + this.keyString;
     }

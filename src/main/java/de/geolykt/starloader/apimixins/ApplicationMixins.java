@@ -1,6 +1,7 @@
 package de.geolykt.starloader.apimixins;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Desc;
@@ -19,6 +20,7 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStopEvent;
 import de.geolykt.starloader.api.event.lifecycle.RegistryRegistrationEvent;
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.KeystrokeInputHandler;
 import de.geolykt.starloader.api.registry.Registry;
 import de.geolykt.starloader.impl.GalimulatorImplementation;
@@ -68,21 +70,31 @@ public class ApplicationMixins {
     @Inject(target = @Desc("create"), at = @At("HEAD"))
     private void start(CallbackInfo ci) {
         try {
-            if (Boolean.getBoolean("de.geolykt.starloader.lwjgl3ify.killOnReturn")) {
+            if (Boolean.getBoolean("de.geolykt.starloader.lwjgl3ify.killOnReturn")
+                    || Boolean.getBoolean("org.stianloader.lwjgl3ify.killOnReturn")) {
                 // We are probably (read: definitely) running on LWJGL3, so we need to run LJWGL3 compatibility code
                 Settings.a(); // Initialize settings
                 class_11.a(); // Initialize steam
             }
+
+            if (!Drawing.isRenderThread()) {
+                LoggerFactory.getLogger(ApplicationMixins.class).warn("SLAPI: Galemulator#create() called outside of the render thread. Assuming incorrectly configured environment.");
+                GalimulatorImplementation.forceRenderThread();
+            }
+
             Gdx.input.setInputProcessor(new SLInputAdapter());
             Throwable t = EventManager.handleEventExcept(new ApplicationStartEvent());
+
             if (t != null) {
                 throw t;
             }
+
             KeybindHelper.registerAll(KeystrokeInputHandler.getInstance());
         } catch (Throwable t) {
             if (t instanceof ThreadDeath) {
                 throw (ThreadDeath) t;
             }
+
             Galimulator.panic("Failed to start up. Likely mod caused. (Do you have incompatible mods?)", false, t);
         }
     }

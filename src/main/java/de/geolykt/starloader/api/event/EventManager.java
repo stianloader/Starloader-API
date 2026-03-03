@@ -91,13 +91,21 @@ public final class EventManager {
         LISTENERS.forEach((listener, handles) -> {
             for (Method handle : handles) {
                 EventHandler info = handle.getDeclaredAnnotation(EventHandler.class);
+
+                if (info == null) {
+                    throw new AssertionError();
+                }
+
                 Class<?> clazz = handle.getParameters()[0].getType();
+
                 while (Event.class.isAssignableFrom(clazz)) {
                     List<Map.Entry<Listener, Method>> eventHandles = EVENT_HANDLERS.get(info.value().ordinal())
                             .get(clazz);
+
                     if (eventHandles == null) {
                         eventHandles = new ArrayList<>();
                     }
+
                     eventHandles.add(new AbstractMap.SimpleImmutableEntry<>(listener, handle));
                     EVENT_HANDLERS.get(info.value().ordinal()).put(clazz, eventHandles);
                     clazz = clazz.getSuperclass();

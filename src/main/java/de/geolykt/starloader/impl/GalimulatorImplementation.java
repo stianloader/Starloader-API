@@ -44,6 +44,7 @@ import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.empire.War;
 import de.geolykt.starloader.api.empire.people.DynastyMember;
 import de.geolykt.starloader.api.gui.BackgroundTask;
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
@@ -244,6 +245,28 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
         while ((r = GalimulatorImplementation.SCHEDULED_TASKS_NEXT_TICK.removeFirst()) != GalimulatorImplementation.NEXT_TICK_TASK) {
             r.run();
         }
+    }
+
+    /**
+     * Forcefully marks the current thread as the main rendering thread as per {@link Drawing#isRenderThread()}.
+     *
+     * <p>This is mainly required when the name-based thread matching logic doesn't apply.
+     * In real-world usecases, <a href="https://github.com/fourlastor-alexandria/roast">roast</a> will
+     * cause the main thread to be called "Thread-0" instead of "main", which is the expected name of the
+     * rendering thread under LWJGL 3.
+     * HOWEVER, since creating an unnamed thread outside of roast would cause that thread to be
+     * named "Thread-0", name-based matching logic may not be used else it might cause false positives.
+     *
+     * <p>This method should really only be called by SLAPI, but {@link GalimulatorImplementation} is
+     * private API anyways - at least in theory.
+     *
+     * @since 2.0.0-a20260302
+     */
+    @AvailableSince("2.0.0-a20260302")
+    @Contract(pure = false)
+    @Internal
+    public static void forceRenderThread() {
+        GalimulatorImplementation.RENDER_THREAD.set(true);
     }
 
     /**
@@ -470,7 +493,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @NotNull
     public Iterable<? extends SavegameFormat> getSavegameFormats() {
-        return SAVEGAME_FORMATS;
+        return GalimulatorImplementation.SAVEGAME_FORMATS;
     }
 
     @SuppressWarnings("null")
@@ -496,7 +519,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @NotNull
     public List<@NotNull Star> getStarList() {
-        return Collections.unmodifiableList(getStarsUnsafe());
+        return Collections.unmodifiableList(this.getStarsUnsafe());
     }
 
     @SuppressWarnings({ "null" })
@@ -504,8 +527,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @ScheduledForRemoval(inVersion = "3.0.0")
     @DeprecatedSince("2.0.0")
     @Deprecated
-    public @NotNull List<@NotNull Star> getStars() {
-        return getStarsUnsafe();
+    @NotNull
+    public List<@NotNull Star> getStars() {
+        return this.getStarsUnsafe();
     }
 
     @SuppressWarnings("rawtypes")
@@ -517,7 +541,7 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
     @Override
     @NotNull
     public SpawnPredicatesContainer getStateActorSpawningPredicates() {
-        return globalSpawningPredicates;
+        return this.globalSpawningPredicates;
     }
 
     // Since galim 5.0 / SLAPI 2.0

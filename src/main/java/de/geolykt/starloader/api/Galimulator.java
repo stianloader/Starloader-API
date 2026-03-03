@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 
@@ -43,7 +44,9 @@ import de.geolykt.starloader.api.event.lifecycle.ApplicationStartEvent;
 import de.geolykt.starloader.api.event.lifecycle.ApplicationStartedEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent;
 import de.geolykt.starloader.api.event.lifecycle.LogicalTickEvent.Phase;
+import de.geolykt.starloader.api.gui.AsyncRenderer;
 import de.geolykt.starloader.api.gui.BackgroundTask;
+import de.geolykt.starloader.api.gui.Drawing;
 import de.geolykt.starloader.api.gui.MapMode;
 import de.geolykt.starloader.api.gui.MouseInputListener;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
@@ -1460,7 +1463,7 @@ public final class Galimulator {
     @SuppressWarnings("null")
     @NotNull
     public static NoiseProvider getNoiseProvider() {
-        return noiseImpl;
+        return Galimulator.noiseImpl;
     }
 
     /**
@@ -1514,7 +1517,7 @@ public final class Galimulator {
      */
     @Nullable
     public static SavegameFormat getSavegameFormat(@NotNull InputStream input) {
-        return impl.getSavegameFormat(input);
+        return Galimulator.impl.getSavegameFormat(input);
     }
 
     /**
@@ -1697,7 +1700,35 @@ public final class Galimulator {
      * @return The global pause state
      */
     public static boolean isPaused() {
-        return impl.isPaused();
+        return Galimulator.impl.isPaused();
+    }
+
+    /**
+     * Convince method for {@link AsyncRenderer#isRenderThread()}.
+     *
+     * <p>Queries whether this method is the main thread. The implementation bases this
+     * off from the current Thread's name, or supplemental logic in edge cases (e.g. under
+     * <a href="https://github.com/fourlastor-alexandria/roast">roast</a>).
+     * The value is cached in a {@link ThreadLocal}.
+     *
+     * <p>In other words, this method returns <code>true</code> if the calling
+     * thread may render synchronously - that is without {@link Application#postRunnable(Runnable) posting a runnable}.
+     * Rendering operations include, but are not limited to, {@link Batch#begin()},
+     * {@link Batch#flush()}, {@link Batch#end()}, etc.
+     *
+     * @return <code>true</code> if the calling thread is the main rendering/drawing thread.
+     * @apiNote This method purely exists because I found myself searching for
+     * this method more times than once, which implies that the current design schema
+     * might be not be intuitive to the regular user. Since this method is used rather often
+     * within Galimulator modding, adding this method to the {@link Galimulator} class which
+     * honestly contains more than a few odd convenience methods, this should hopefully
+     * alleviate the issue at hand.
+     * @since 2.0.0-a20260302
+     */
+    @AvailableSince("2.0.0-a20260302")
+    @Contract(pure = true)
+    public static boolean isRenderThread() {
+        return Drawing.isRenderThread();
     }
 
     /**

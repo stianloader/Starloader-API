@@ -181,9 +181,10 @@ public interface DrawingImpl {
     /**
      * Obtains the font types that are available in this implementation.
      *
-     * @return A collection of all Font names available at this current time
+     * @return A collection of all font names available at this current time
      */
-    public @NotNull Collection<String> getAvailiableFonts();
+    @NotNull
+    public Collection<@NotNull String> getAvailiableFonts();
 
     /**
      * Obtains the {@link OrthographicCamera} camera used for projecting the game's map.

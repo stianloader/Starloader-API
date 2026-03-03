@@ -78,6 +78,11 @@ public class AtlasPackingEvent extends Event {
      * @return The current {@link AtlasPackingEvent} instance, for chaining.
      * @since 2.0.0-a20260206
      * @see PixmapPacker#pack(String, Pixmap)
+     * @implSpec This method does not work for {@link Pixmap} objects that are
+     * <b>equal to</b> or larger than the underlying texture of the {@link PixmapPacker}.
+     * In other words, this method will fail to pack textures that are larger than,
+     * or equal to in size of 4096x4096 pixels. It is recommended for the provided
+     * {@link Pixmap} to be 2048 by 2048 in size at its largest.
      */
     @AvailableSince("2.0.0-a20260206")
     @Contract(mutates = "this", pure = false, value = "null, _ -> fail; _, null -> fail; !null, !null -> this")

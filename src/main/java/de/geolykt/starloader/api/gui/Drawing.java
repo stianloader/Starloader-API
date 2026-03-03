@@ -284,16 +284,18 @@ public final class Drawing {
      * @param font The font name from which the BitmapFont belong to
      * @return The {@link BitmapFont} associated under that name
      */
-    public static @Nullable BitmapFont getFontBitmap(@NotNull String font) {
+    @Nullable
+    public static BitmapFont getFontBitmap(@NotNull String font) {
         return Drawing.implementation.getFontBitmap(font);
     }
 
     /**
      * Obtains the font types that are available in this implementation.
      *
-     * @return A collection of all Font names available at this current time
+     * @return A collection of all font names available at this current time
      */
-    public static @NotNull Collection<String> getFonts() {
+    @NotNull
+    public static Collection<@NotNull String> getFonts() {
         return Drawing.implementation.getAvailiableFonts();
     }
 
