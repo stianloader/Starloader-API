@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 
@@ -34,6 +35,9 @@ import snoddasmannen.galimulator.rendersystem.RenderCache;
 @Mixin(GalFX.class)
 public class GalFXMixins {
 
+    @Shadow
+    private static OrthographicCamera m; // board camera
+
     @Unique
     private static Set<String> missingTextures = ConcurrentHashMap.newKeySet();
 
@@ -49,6 +53,20 @@ public class GalFXMixins {
     @Overwrite
     public static Texture a(String string) {
         return GalFXMixins.slapi$slFetchTexture(string);
+    }
+
+    @Overwrite
+    static void d() { // resetZoom
+        if (Galimulator.isRenderThread()) {
+            GalFXMixins.slapi$resetZoom();
+        } else {
+            Galimulator.runTaskOnNextFrame(GalFXMixins::slapi$resetZoom);
+        }
+    }
+
+    @Shadow
+    private static float e() { // getDesiredZoom
+        throw new AssertionError();
     }
 
     /*@Overwrite
@@ -85,22 +103,31 @@ public class GalFXMixins {
     }
 
     @Unique
+    private static void slapi$resetZoom() {
+        GalFXMixins.m.zoom = GalFXMixins.e();
+        GalFXMixins.m.update();
+    }
+
+    @Unique
     private static Texture slapi$slFetchTexture(String path) {
         if (GalFXMixins.slapi$texturecrash) {
             throw new IllegalStateException("GalFXMixins.slapi$texturecrash is set.");
         }
+
         Texture t = GalFXMixins.w.get(path);
+
         if (t != null) {
             return t;
         }
+
         FileHandle handle = Gdx.files.internal("data/" + path);
+
         if (!handle.exists()) {
             if (path.equals("sprites/flower.png")) {
                 GalFXMixins.slapi$texturecrash = true;
                 Galimulator.panic("Unable to find fallback texture (" + path + "). The corresponding file was most likely deleted.", true);
                 throw new IllegalStateException("GalFXMixins.slapi$texturecrash is set.");
-            }
-            if (GalFXMixins.missingTextures.add(path)) {
+            } else if (GalFXMixins.missingTextures.add(path)) {
                 try {
                     throw new IllegalStateException("Unable to find image at path " + path);
                 } catch (IllegalStateException e) {
@@ -109,19 +136,24 @@ public class GalFXMixins {
             } else {
                 LoggerFactory.getLogger(StarloaderAPIExtension.class).warn("Unable to find image at path \"{}\".", path);
             }
+
             Texture fallback = GalFX.a("sprites/flower.png");
             GalFXMixins.w.put(path, fallback);
             return fallback;
         }
+
         if (GalimulatorImplementation.isRenderThread()) {
             t = new Texture(handle);
             GalFXMixins.w.put(path, t);
             return t;
         }
+
         LoggerFactory.getLogger(GalFX.class).warn("Asynchronous texture fetch request for texture \"{}\". This will likely result in undefined behaviour.", path);
+
         Gdx.app.postRunnable(() -> {
             GalFX.a(path);
         });
+
         return Drawing.getTextureProvider().getSinglePixelSquare().getTexture();
     }
 }

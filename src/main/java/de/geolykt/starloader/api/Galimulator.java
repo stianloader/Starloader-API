@@ -1723,9 +1723,9 @@ public final class Galimulator {
      * within Galimulator modding, adding this method to the {@link Galimulator} class which
      * honestly contains more than a few odd convenience methods, this should hopefully
      * alleviate the issue at hand.
-     * @since 2.0.0-a20260302
+     * @since 2.0.0-a20260303
      */
-    @AvailableSince("2.0.0-a20260302")
+    @AvailableSince("2.0.0-a20260303")
     @Contract(pure = true)
     public static boolean isRenderThread() {
         return Drawing.isRenderThread();

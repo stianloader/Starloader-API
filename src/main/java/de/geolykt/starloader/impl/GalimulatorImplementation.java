@@ -204,23 +204,27 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
             builder.append("The crash report has also been printed to the log, give the FULL logs to the mod devs, not a screenshot of this.\n");
             builder.append("Cause (for beginners): " + cause + "\n");
             builder.append("Installed mods:\n");
+
             for (Extension ext : Starloader.getExtensionManager().getExtensions()) {
                 builder.append("    " + ext.getDescription().getName() + " v" + ext.getDescription().getVersion() + "\n");
             }
+
             try {
                 Class.forName("com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application");
                 builder.append("\n[RED]Alert: LWJGL 3 detected.[][LIME]\n");
-            } catch (ClassNotFoundException ignored) {
-            }
+            } catch (ClassNotFoundException ignored) { }
+
             builder.append("\nStacktrace:\n");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             sw.flush();
             builder.append(sw.getBuffer().toString().replace("\t", "    "));
             listener.h = "[LIME]" + builder.toString();
+
             for (String s : builder.toString().split("\n")) {
                 LoggerFactory.getLogger("CrashReporter").error(s);
             }
+
             try {
                 Galimulator.getSimulationLoopLock().acquireSoftControl();
                 Galimulator.getSimulationLoopLock().acquireHardControl();
@@ -260,9 +264,9 @@ public class GalimulatorImplementation implements Galimulator.GameImplementation
      * <p>This method should really only be called by SLAPI, but {@link GalimulatorImplementation} is
      * private API anyways - at least in theory.
      *
-     * @since 2.0.0-a20260302
+     * @since 2.0.0-a20260303
      */
-    @AvailableSince("2.0.0-a20260302")
+    @AvailableSince("2.0.0-a20260303")
     @Contract(pure = false)
     @Internal
     public static void forceRenderThread() {
