@@ -7,7 +7,9 @@ import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Input.Keys;
@@ -77,6 +79,37 @@ public class KeystrokeInputHandler {
     }
 
     /**
+     * <b>WARNING</b>: This method is inherently broken by default, see the implementation notes of this method.
+     *
+     * <p>Obtain a user-friendly way of representing a scancode.
+     *
+     * <p>On a QWERTY keyboard this should be roughly equal to {@link Keys#toString(int)}.
+     * On non-QWERTY keyboard layouts (the used layout is left at the discretion of the implementation,
+     * but should ideally be polled from the system) the name of the key for the given scancode should be used
+     * instead.
+     *
+     * <p>This input keycode should be between 0 (unknown key) to 255 (maximum keycode accepted by libGDX's {@link Keys} class).
+     * However, implementations should not make any strict guarantees/expectations on that side.
+     * The behaviour of invalid keys is undocumented and left at the discretion of implementation developers.
+     *
+     * <p>At this point in time there is no method to convert from a string returned by this method to an
+     * integer scancode. In other words, no inverse of this method exists, mainly due to the fact that
+     * the user could change the keyboard layout between queries.
+     *
+     * @param scancode The LibGDX keycode of the key, as accepted by {@link #onKeyPress(int)} and similar.
+     * @return A {@link String} representing the given scancode for the end user, or null if no key is bound/known for that scancode.
+     * @since 2.0.0-a20260725
+     * @implNote SLAPI currently implements this method by forwarding to {@link Keys#toString(int)}. This is mainly due to
+     * neither LWJGL nor GLFW providing a method of obtaining the key's name in a way where it doesn't blow up when changing
+     * keyboard layouts, mainly due to overly eager caching. However, other mods might change SLAPI's behaviour.
+     */
+    @ApiStatus.AvailableSince("2.0.0-a20260725")
+    @Nullable
+    public String getKeyName(int scancode) {
+        return Keys.toString(scancode);
+    }
+
+    /**
      * Obtain the keys that need to be pressed as an array of scancodes as per the {@link Keys} class.
      *
      * <p>Before you attempt any seriously nefarious doings beware that a clone of the internal arrays
@@ -94,6 +127,7 @@ public class KeystrokeInputHandler {
                 return entry.requiredKeystrokes;
             }
         }
+
         throw new IllegalStateException("No keybind registered under given ID: " + key);
     }
 
@@ -111,6 +145,7 @@ public class KeystrokeInputHandler {
      */
     public void onKeyPress(int scancode) {
         final int keysPressed = this.pressedKeyCount.get();
+
         for (int i = 0; i < keysPressed; i++) {
             if (this.pressedKeys[i] == scancode) {
                 return; // Are we seeing phantoms? Whatever.
@@ -123,9 +158,9 @@ public class KeystrokeInputHandler {
         }
 
         this.pressedKeys[keysPressed] = scancode;
-
         KeybindEntry selectedKeybind = null;
         int keybindKeyCount = 0;
+
         loop1:
         for (KeybindEntry entry : this.entries) {
             if (entry.down || entry.requiredKeystrokes.length < keybindKeyCount) {

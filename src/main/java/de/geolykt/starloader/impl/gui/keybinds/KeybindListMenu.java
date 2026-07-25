@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,25 +22,28 @@ public class KeybindListMenu implements CanvasContext {
 
     private final int width;
     private final int height;
+    @NotNull
     private final KeystrokeInputHandler handler;
     private final List<Keybind> keybinds;
 
     private int scroll = 0;
 
-    public KeybindListMenu(KeystrokeInputHandler inputHandler, int width, int height) {
+    public KeybindListMenu(@NotNull KeystrokeInputHandler inputHandler, int width, int height) {
         this.handler = inputHandler;
         this.width = width;
         this.height = height;
         this.keybinds = new ArrayList<>(inputHandler.getKeybinds());
-        this.keybinds.sort(Keybind::compareTo);
+        this.keybinds.sort((k1, k2) -> k1.compareTo(k2));
     }
 
     @NotNull
-    private static final String keycodesToString(int[] scancodes, @NotNull StringBuilder sharedBuilder) {
+    private static final String keycodesToString(@NotNull KeystrokeInputHandler inputHandler, int[] scancodes, @NotNull StringBuilder sharedBuilder) {
         sharedBuilder.setLength(0);
+
         for (int scancode : scancodes) {
-            sharedBuilder.append(Keys.toString(scancode)).append(" + ");
+            sharedBuilder.append(inputHandler.getKeyName(scancode)).append(" + ");
         }
+
         sharedBuilder.setLength(sharedBuilder.length() - 3);
         return sharedBuilder.toString();
     }
@@ -51,20 +53,23 @@ public class KeybindListMenu implements CanvasContext {
         String[] descriptions = new String[this.keybinds.size()];
         String[] keys = new String[this.keybinds.size()];
         StringBuilder shared = new StringBuilder();
+
         for (int i = 0; i < keys.length; i++) {
             Keybind k = this.keybinds.get(i);
-            keys[i] = KeybindListMenu.keycodesToString(this.handler.getRequiredScancodes(k.getID()), shared);
+            keys[i] = KeybindListMenu.keycodesToString(this.handler, this.handler.getRequiredScancodes(k.getID()), shared);
             descriptions[i] = k.getDescription();
         }
 
         GlyphLayout layout = new GlyphLayout();
         BitmapFont font = Drawing.getSpaceFont();
         int y = 0;
+
         if ((keys.length - 1) < this.scroll) {
             this.scroll = keys.length - 1;
         } else if (this.scroll < (this.height / 30)) {
             this.scroll = this.height / 30;
         }
+
         for (int i = this.scroll; i >= 0; i--) {
             y += 30;
             if (y > this.height) {

@@ -90,57 +90,74 @@ public class KeybindHelper {
 
     public static void registerAll(@NotNull KeystrokeInputHandler handler) {
         int oldCount = handler.getKeybinds().size();
+
         handler.registerKeybind(new KeybindZoom("Zoom out", ZOOM_OUT, 1.1F), new int[]{Keys.X});
         handler.registerKeybind(new KeybindZoom("Zoom in", ZOOM_IN, 0.9F), new int[]{Keys.Z});
         handler.registerKeybind(new LambdaKeybind("Center camera", CENTER_CAMERA, GalFX::n), new int[]{Keys.C});
+
         handler.registerKeybind(new LambdaKeybind("Reset screen", RESET_SCREEN, () -> {
             Gdx.graphics.setWindowedMode(1280, 720);
         }), new int[]{Keys.Q});
+
         handler.registerKeybind(new LambdaKeybind("Close last window", CLOSE_LAST_WINDOW, () -> {
             boolean var1 = Space.C();
             if (!var1) {
                 SidebarWidget.openGameControl();
             }
         }), new int[]{Keys.ESCAPE});
+
         handler.registerKeybind(new LambdaKeybind("Reset screen", TOGGLE_UI, Space::ag), new int[]{Keys.F1});
+
         handler.registerKeybind(new LambdaKeybind("Take screenshot", TAKE_SCREENSHOT, () -> {
             // TODO reimplement (it'd be boring if we just copy & paste the galimulator implementation).
         }), new int[]{Keys.F2});
+
         handler.registerKeybind(new KeybindMove("Scroll left", MOVE_LEFT, -50F, 0F), new int[] {Keys.LEFT});
         handler.registerKeybind(new KeybindMove("Scroll right", MOVE_RIGHT, 50F, 0F), new int[] {Keys.RIGHT});
         handler.registerKeybind(new KeybindMove("Scroll up", MOVE_UP, 0F, 50F), new int[] {Keys.UP});
         handler.registerKeybind(new KeybindMove("Scroll down", MOVE_DOWN, 0F, -50F), new int[] {Keys.DOWN});
         handler.registerKeybind(new LambdaKeybind("Toggle fullscreen", FULLSCREEN, GalFX::p), new int[]{Keys.F});
+
         handler.registerKeybind(new LambdaKeybind("Upload modded items", UPLOAD_MODDED_ITEMS, () -> {
             Space.showWidget(ModUploadWidget.class);
         }), new int[]{Keys.M});
+
         handler.registerKeybind(new LambdaKeybind("Open war room", OPEN_WAR_ROOM, () -> {
             if (Space.getPlayer().b()) {
                 Space.Z();
             }
         }), new int[]{Keys.O});
+
         handler.registerKeybind(new LambdaKeybind("Toggle alliance map mode", ALLIANCE_MAP_MODE, () -> {
             MapMode.setCurrentMode(MapMode.getCurrentMode() == MapMode.MapModes.NORMAL ? MapMode.MapModes.ALLIANCES : MapMode.MapModes.NORMAL);
         }), new int[]{Keys.A});
+
         handler.registerKeybind(new LambdaKeybind("Toggle religion map mode", RELIGION_MAP_MODE, () -> {
             MapMode.setCurrentMode(MapMode.getCurrentMode() == MapMode.MapModes.NORMAL ? MapMode.MapModes.RELIGION : MapMode.MapModes.NORMAL);
         }), new int[]{Keys.R});
+
         handler.registerKeybind(new LambdaKeybind("Toggle wealth map mode", WEALTH_MAP_MODE, () -> {
             MapMode.setCurrentMode(MapMode.getCurrentMode() == MapMode.MapModes.NORMAL ? MapMode.MapModes.WEALTH : MapMode.MapModes.NORMAL);
         }), new int[]{Keys.W});
+
         handler.registerKeybind(new LambdaKeybind("Toggle heat map mode", HEAT_MAP_MODE, () -> {
             MapMode.setCurrentMode(MapMode.getCurrentMode() == MapMode.MapModes.NORMAL ? MapMode.MapModes.HEAT : MapMode.MapModes.NORMAL);
         }), new int[]{Keys.H});
+
         handler.registerKeybind(new LambdaKeybind("Show profiler data", OPEN_PROFILER, Space::ac), new int[]{Keys.P});
-        // Usage of Y & U is a rather strange descision due to QWERTZ (it makes sense on QWERTY keyboards though)
+
+        // Usage of Y & U is a rather strange decision on QWERTZ keyboards (it makes sense on QWERTY keyboards though)
         handler.registerKeybind(new KeybindRotate("Rotate the galaxy clockwise", ROTATE_CLOCKWISE, 45F), new int[] {Keys.Y});
         handler.registerKeybind(new KeybindRotate("Rotate the galaxy counter-clockwise", ROTATE_ANTICLOCKWISE, -45F), new int[] {Keys.U});
+
         handler.registerKeybind(new LambdaKeybind("Pause & Unpause the game", PAUSE, () -> {
             Galimulator.setPaused(!Galimulator.isPaused());
         }), new int[]{Keys.SPACE});
+
         handler.registerKeybind(new LambdaKeybind("Step forward 100 steps", STEP_100, () -> {
             Space.h(100);
         }), new int[]{Keys.S});
+
         for (int i = 1; i < 9; i++) {
             handler.registerKeybind(new KeybindSetTimelapseModifier("Set Timelapse Modifier (" + (1 << (i - 1)) + "x)", new NamespacedKey(StarloaderAPIExtension.getInstance(), "keybind_timelapse_" + (i - 1)), i - 1), new int[] {Keys.NUMPAD_0 + i});
         }
