@@ -65,25 +65,31 @@ public class InstanceMixins {
     @Overwrite
     public static boolean loadState(String location) {
         Path path = Paths.get(location);
+
         if (Files.notExists(path)) {
-            LOGGER.info("Savegame file does not exist: " + location);
+            InstanceMixins.LOGGER.info("Savegame file does not exist: " + location);
             return false;
         }
-        LOGGER.info("Loading savegame: " + location);
+
+        InstanceMixins.LOGGER.info("Loading savegame: " + location);
 
         if (location.equals("state.dat")) {
             Settings.b("StartedLoading", true);
         }
+
         Space.setBackgroundTaskDescription("Loading galaxy");
 
         boolean successful = true;
+
         try (InputStream is = Files.newInputStream(path)) {
             Galimulator.getSavegameFormat(SupportedSavegameFormat.SLAPI_BOILERPLATE).loadGameState(is);
         } catch (Throwable t) {
-            LOGGER.warn("Unable to load savegame", t);
+            InstanceMixins.LOGGER.warn("Unable to load savegame", t);
+
             if (t instanceof ThreadDeath) {
                 throw (ThreadDeath) t;
             }
+
             successful = false;
         } finally {
             Settings.b("StartedLoading", false);
@@ -91,6 +97,7 @@ public class InstanceMixins {
         }
 
         Drawing.sendBulletin("Welcome back to the galaxy");
+
         if (EnumSettings.PAUSE_AFTER_LOADING.getValue() == Boolean.TRUE) {
             Galimulator.setPaused(true);
         }

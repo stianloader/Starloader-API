@@ -21,6 +21,7 @@ public class SteamSharedLibraryLoaderMixins {
     private static void slapi$extractLibrary(File target, String librarySystemName, @NotNull CallbackInfo ci) throws IOException {
         Objects.requireNonNull(target, "target expected != null");
         Objects.requireNonNull(librarySystemName, "librarySystemName expected != null");
+
         if (SteamSharedLibraryLoaderMixins.class.getResource("/" + librarySystemName).equals(target.getCanonicalFile().toURI().toURL())) {
             ClassLoader cl = SteamSharedLibraryLoaderMixins.class.getClassLoader();
             if (cl instanceof HierarchyClassLoader) {

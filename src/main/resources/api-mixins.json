@@ -53,6 +53,7 @@
     "StarDragListenerMixins",
     "StarMixins",
     "StateActorMixins",
+    "SteamIntegrationMixins",
     "SteamSharedLibraryLoaderMixins",
     "TextInputDialogWidgetMixins",
     "TextureTextButtonWidgetMixins",
