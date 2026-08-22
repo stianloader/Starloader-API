@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.api.dimension.Dimension;
 
 /**
  * Represents a map that can be loaded into the game.
@@ -65,7 +66,8 @@ public interface Map {
      *
      * @return The generator's name.
      */
-    public @NotNull String getGeneratorName();
+    @NotNull
+    public String getGeneratorName();
 
     /**
      * Obtains the height of the map.
@@ -78,7 +80,10 @@ public interface Map {
      * this method should not be called too frequently.
      *
      * @return The height of the map
+     * @deprecated Replaced by {@link Dimension#getBoardHeight()}
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20260822")
     public float getHeight();
 
     /**
@@ -92,6 +97,9 @@ public interface Map {
      * and as such this operation should not be called too often.
      *
      * @return The width of the map
+     * @deprecated Replaced by {@link Dimension#getBoardWidth()}
      */
+    @Deprecated
+    @DeprecatedSince("2.0.0-a20260822")
     public float getWidth();
 }

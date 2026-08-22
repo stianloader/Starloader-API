@@ -1,6 +1,7 @@
 package de.geolykt.starloader.api;
 
 import de.geolykt.starloader.DeprecatedSince;
+import de.geolykt.starloader.api.dimension.Dimension;
 import de.geolykt.starloader.api.empire.Star;
 import de.geolykt.starloader.api.gui.Drawing;
 
@@ -15,6 +16,9 @@ public enum CoordinateGrid {
     /**
      * The coordinates internally used for the game board.
      * This is used for {@link Star#getCoordinates()} and similar.
+     *
+     * <p>The reported width of this space can be obtained from {@link Dimension#getBoardWidth()},
+     * and the height from {@link Dimension#getBoardHeight()} respectively.
      *
      * @since 2.0.0
      * @see Drawing#getBoardCamera()

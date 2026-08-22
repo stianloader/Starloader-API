@@ -70,6 +70,44 @@ public interface Dimension {
     public void disconnectStars(@NotNull Star starA, @NotNull Star starB);
 
     /**
+     * Obtains this dimension's board's height component, computed by taking the maximum Y coordinate and multiplying it by 2.
+     *
+     * <p>The coordinate 0/0 as such corresponds to the center of the galaxy.
+     *
+     * <p>The maximum position is taken from the dimension's star generator. Some star generator may
+     * incorrectly populate this value, so the returned value shouldn't be taken as being always correct.
+     *
+     * <p>For the procedural star generator, it is the square root of the amount of stars/100
+     * multiplied by 1.6. As it perform a square rooting operation that is generally NOT cached,
+     * this method should not be called too frequently.
+     *
+     * @return The height of this dimension.
+     * @since 2.0.0-a20260822
+     */
+    @Contract(pure = true)
+    @AvailableSince("2.0.0-a20260822")
+    public double getBoardHeight();
+
+    /**
+     * Obtains this dimension's board's width component, computed by taking the maximum X coordinate and multiplying it by 2.
+     *
+     * <p>The coordinate 0/0 as such corresponds to the center of the galaxy.
+     *
+     * <p>The maximum position is taken from the dimension's star generator. Some star generator may
+     * incorrectly populate this value, so the returned value shouldn't be taken as being always correct.
+     *
+     * <p>For the Procedural generation, it is {@link #getBoardHeight()} {@code * 1.7777778F}
+     * (this is the "wide" aspect ratio for fractal star generation). Note that this operation tends
+     * to indirectly perform {@link Math#sqrt(double)} and as such this operation should not be called too often.
+     *
+     * @return The width of this dimension.
+     * @since 2.0.0-a20260822
+     */
+    @Contract(pure = true)
+    @AvailableSince("2.0.0-a20260822")
+    public double getBoardWidth();
+
+    /**
      * Return a read-only <b>view</b> (that is changes in the underlying collection get mirrored),
      * of all correctly registered {@link Empire alive empires}.
      *

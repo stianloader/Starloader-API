@@ -4,13 +4,13 @@ public enum EventPriority {
 
     /**
      * The least important handler priority, called first and can be used to modify
-     * the event granularly.
+     * the event granularity.
      */
     HIGHEST,
 
     /**
      * The less important handler priority, called at second place and can be used
-     * to modify the event granularly.
+     * to modify the event granularity.
      */
     HIGH,
 

@@ -30,6 +30,16 @@ public class UniverseDimension implements Dimension {
         starB.removeNeighbour(starA);
     }
 
+    @Override
+    public double getBoardHeight() {
+        return Space.getMaxY() * 2;
+    }
+
+    @Override
+    public double getBoardWidth() {
+        return Space.getMaxX() * 2;
+    }
+
     @SuppressWarnings({"null", "unchecked"})
     @Override
     @NotNull
