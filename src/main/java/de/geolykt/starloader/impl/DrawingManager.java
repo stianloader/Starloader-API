@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -199,6 +201,30 @@ public class DrawingManager implements DrawingImpl, TextureProvider, Rendercache
     @NotNull
     public OrthographicCamera getBoardCamera() {
         return GalFX.get_m();
+    }
+
+    @Override
+    @Contract(pure = true)
+    @NotNull
+    public Rectangle getBoardCameraAABB() {
+        // Technically can be made more optimized, but w/e. If someone wishes to improve it, they can do so - I am not particularly
+        // attached to this (or any other) code in the first place.
+        // The secrets probably lie in #getBoardCamera() if you squint hard enough.
+
+        float screenW = Gdx.graphics.getWidth();
+        float screenH = Gdx.graphics.getHeight();
+
+        Vector3 coordsA = this.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGrid.BOARD, 0, 0);
+        Vector3 coordsB = this.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGrid.BOARD, 0, screenH);
+        Vector3 coordsC = this.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGrid.BOARD, screenW, 0);
+        Vector3 coordsD = this.convertCoordinates(CoordinateGrid.SCREEN, CoordinateGrid.BOARD, screenW, screenH);
+
+        float minX = Math.min(coordsA.x, Math.min(coordsB.x, Math.min(coordsC.x, coordsD.x)));
+        float maxX = Math.max(coordsA.x, Math.max(coordsB.x, Math.max(coordsC.x, coordsD.x)));
+        float minY = Math.min(coordsA.y, Math.min(coordsB.y, Math.min(coordsC.y, coordsD.y)));
+        float maxY = Math.max(coordsA.y, Math.max(coordsB.y, Math.max(coordsC.y, coordsD.y)));
+
+        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
     }
 
     @SuppressWarnings("null")

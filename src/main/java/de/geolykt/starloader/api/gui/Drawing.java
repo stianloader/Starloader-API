@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -244,6 +245,29 @@ public final class Drawing {
     @NotNull
     public static OrthographicCamera getBoardCamera() {
         return Drawing.implementation.getBoardCamera();
+    }
+
+    /**
+     * Obtains an <a href="https://en.wikipedia.org/wiki/Minimum_bounding_box#Axis-aligned_minimum_bounding_box">Axis-Aligned Bounding Box (AABB)</a> {@link Rectangle} which describes the smallest
+     * {@link Rectangle} that can fit in the {@link #getBoardCamera() board camera}'s viewport.
+     *
+     * <p>The returned {@link Rectangle} is in {@link CoordinateGrid#BOARD} coordinates.
+     *
+     * @return The board AABB.
+     * @see Camera#frustum
+     * @since 2.0.0-a20260826
+     * @implNote Though most of the time the board camera's viewport is axis-aligned, there are cases where that is not the case, especially when
+     * the board is rotated or 3D-transformed (e.g. when following an actor). This means that the board camera's viewport actually is a
+     * trapezoid in board coordinates (assuming no more shader shenanigans happen, but that would require more invasive mods as {@link OrthographicCamera} by
+     * itself does not support such transformations). To obtain the axis-aligned bounding box, the four edges of the screen
+     * are projected down to obtain the edges of the aforementioned trapezoid in {@link CoordinateGrid#BOARD board} coordinates.
+     * The AABB rectangle is sampled from those four points using minimum/maximum functions.
+     */
+    @AvailableSince("2.0.0-a20260826")
+    @Contract(pure = true)
+    @NotNull
+    public static Rectangle getBoardCameraAABB() {
+        return Drawing.implementation.getBoardCameraAABB();
     }
 
     /**
