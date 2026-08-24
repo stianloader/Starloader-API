@@ -6,7 +6,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Desc;
@@ -43,7 +42,6 @@ public class SteamIntegrationMixins {
             loadLibrariesCall = lookup.findStatic(SteamAPI.class, "loadLibraries", MethodType.methodType(boolean.class, steamLibraryLoader));
             loadLibrariesCall = MethodHandles.filterReturnValue(newLibraryLoader, JavaInterop.dropReturn(loadLibrariesCall));
         } catch (ClassNotFoundException expected) {
-            LoggerFactory.getLogger(SteamIntegrationMixins.class).warn("CNFE", expected);
             // Old API (valid with the steamworks4j version used by Galimulator out of the box - i.e. steamworks4j 1.8.0)
             try {
                 loadLibrariesCall = lookup.findStatic(SteamAPI.class, "loadLibraries", MethodType.methodType(void.class));
