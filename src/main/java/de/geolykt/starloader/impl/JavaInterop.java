@@ -44,7 +44,7 @@ public final class JavaInterop {
      * Obtains the Java version this interoperability layer was made for.
      * Note that the selected release can differ from the actually used java version - for example
      * because the classloader wrongfully does not make use of multi-release jars or
-     * because there is no point in having a Interop implementation for that version.
+     * because there is no point in having a interoperability implementation for that version.
      *
      * @return The version of java this {@link JavaInterop} implementation was made for.
      * @since 2.0.0

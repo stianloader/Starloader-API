@@ -26,6 +26,7 @@ public class MenuHandler {
     public static boolean render() {
         // Return true to suppress the "standard" galimulator stage
         Stage activeStage = MenuHandler.activeStage;
+
         if (activeStage != null) {
             float delta = Gdx.graphics.getDeltaTime();
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -33,11 +34,13 @@ public class MenuHandler {
             activeStage.draw();
             return true;
         }
+
         return false;
     }
 
     public static void resize(int w, int h) {
         Stage activeStage = MenuHandler.activeStage;
+
         if (activeStage != null) {
             activeStage.getViewport().update(w, h, true);
         }

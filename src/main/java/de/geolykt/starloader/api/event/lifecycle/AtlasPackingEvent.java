@@ -2,13 +2,17 @@ package de.geolykt.starloader.api.event.lifecycle;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnegative;
+
 import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import de.geolykt.starloader.api.event.Event;
 import de.geolykt.starloader.api.resource.DataFolderProvider;
@@ -89,6 +93,53 @@ public class AtlasPackingEvent extends Event {
     @NotNull
     public AtlasPackingEvent packTexture(@NotNull String path, @NotNull Pixmap texture) {
         PixmapAtlas.libGDXAgnosticsPack(this.packer, Objects.requireNonNull(path, "'path' may not be null"), Objects.requireNonNull(texture, "'texture' may not be null"));
+        return this;
+    }
+
+    /**
+     * Pack a given ARGB8888-packed texture under the given path into this event's {@link TextureAtlas} through the
+     * {@link PixmapPacker} API.
+     *
+     * <p>A null path is explicitly not supported by this method.
+     *
+     * <p>This method is agnostic to the version of libGDX and LWJGL being used.
+     * Under libGDX, the {@link Pixmap} constructors cannot operate with ARGB8888 textures.
+     * This method reorders the bytes within a texel and bypasses the {@link Pixmap} constructor.
+     *
+     * <p>This method is only intended for advanced users using low-level C APIs. If you're solely working with high-level java
+     * code, there is no legitimate reason for you to use this method, as performance will probably be not great regardless.
+     *
+     * <p>This method tries not to perform allocations and keep buffer copying to a minimum and decently fast.
+     * However, due to reordering semantics it should be expected that this method is slower than the RGBA8888 counterparts.
+     *
+     * <p>The source buffer is not modified and may be freed immediately after this method returns.
+     *
+     * <p>The <code>stride</code> parameter may be negative to invert the Y-axis, though in that case the <code>bufferAddress</code>
+     * parameter must be adjusted to point to the beginning of the last line, that is <code>bufferAddress = baseAddress - (stride * (textureHeight - 1))</code> (stride is already a negative value in this equation).
+     * A <code>stride</code> value of <code>0</code> results in all lines in the destination atlas to be identical
+     * and should generally be treated as a nonsensical value, though this method will accept such a value.
+     *
+     * <p>This method skips some steps that the {@link #packTexture(String, Pixmap)} otherwise does perform, such as stripping
+     * extraneous whitespace or special handling for {@link NinePatch} resources.
+     *
+     * @param path The path of this texture. Used later on to query the texture region from the atlas via {@link TextureAtlas#findRegion(String)}.
+     * @param bufferAddress The address of the first pixel in native memory. This address must be <code>int</code>-aligned (4 bytes/32 bits). May not point to NULL.
+     * @param textureWidth The <b>width in pixels</b> of the texture to upload to the atlas. May not be negative.
+     * @param textureHeight The <b>height in pixels</b> of the texture to upload to the atlas. May not be negative.
+     * @param stride The amount of <b>bytes</b> between the first pixel of the first line and the first pixel of the second line, and so on. Usually this value is <code>width * 4</code> but could be a different value when uploading only part of a bigger image to the atlas. This value must be <code>int</code>-aligned (4 bytes/32 bits).
+     * @return The current {@link AtlasPackingEvent} instance, for chaining.
+     * @since 2.0.0-a20260915
+     * @implSpec This method does not work for {@link Pixmap} objects that are
+     * <b>equal to</b> or larger than the underlying texture of the {@link PixmapPacker}.
+     * In other words, this method will fail to pack textures that are larger than,
+     * or equal to in size of 4096x4096 pixels. It is recommended for the provided
+     * {@link Pixmap} to be 2048 by 2048 in size at its largest.
+     */
+    @AvailableSince("2.0.0-a20260915")
+    @Contract(mutates = "this", pure = false, value = "null, _, _, _, _ -> fail; !null, _, _, _, _ -> this")
+    @NotNull
+    public AtlasPackingEvent packTextureARGB8888(@NotNull String path, long bufferAddress, @Nonnegative int textureWidth, @Nonnegative int textureHeight, int stride) {
+        PixmapAtlas.libGDXAgnosticsPackARGB8888(this.packer, Objects.requireNonNull(path, "'path' may not be null"), bufferAddress, textureWidth, textureHeight, stride);
         return this;
     }
 }

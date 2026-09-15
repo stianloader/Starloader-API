@@ -61,7 +61,8 @@ final class ScreenComponentPositioningMeta<T> {
     }
 
     @Override
+    @NotNull
     public String toString() {
-        return "ScreenComponentPositioningMeta[pos = " + pos + ", width = " + width + ", height = " + height + ", component = " + component.toString() + "]";
+        return "ScreenComponentPositioningMeta[pos = " + this.pos + ", width = " + this.width + ", height = " + this.height + ", component = " + this.component + "]";
     }
 }

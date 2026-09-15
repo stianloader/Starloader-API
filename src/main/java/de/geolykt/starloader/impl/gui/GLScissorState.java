@@ -100,6 +100,7 @@ public final class GLScissorState {
     }
 
     @Override
+    @NotNull
     public String toString() {
         return String.format("GLScissorState[x = %d (0x%X), y = %d (0x%X), w = %d (0x%X), h = %d (0x%X)]", this.x, this.x, this.y, this.y, this.width, this.width, this.height, this.height);
     }

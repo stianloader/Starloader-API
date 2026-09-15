@@ -1,3 +1,19 @@
+// The currently version of ASM used by our quite frankly ancient version of gsl-starplane is equally ancient.
+// Our gradle is also ancient, so naturally ASM isn't compatible with new versions of Java such as Java 25.
+// Thankfully the newest versions of ASM are very much still compatible with what were using years ago, so
+// the switch is as simple as forcing the ASM release for the buildscript
+buildscript {
+    configurations.all {
+        resolutionStrategy {
+            force 'org.ow2.asm:asm:9.10.1'
+            force 'org.ow2.asm:asm-analysis:9.10.1'
+            force 'org.ow2.asm:asm-commons:9.10.1'
+            force 'org.ow2.asm:asm-util:9.10.1'
+            force 'org.ow2.asm:asm-tree:9.10.1'
+        }
+    }
+}
+
 plugins {
     id 'java'
     id 'java-library'
@@ -15,7 +31,7 @@ base {
 }
 
 multiRelease {
-    targetVersions 8, 9, 16
+    targetVersions 8, 9, 16, 25
 }
 
 repositories {
@@ -47,6 +63,7 @@ configurations {
     compileOnlyApi.extendsFrom(galimulatorDependencies)
     java9CompileClasspath.extendsFrom(compileClasspath)
     java16CompileClasspath.extendsFrom(compileClasspath)
+    java25CompileClasspath.extendsFrom(compileClasspath)
 }
 
 dependencies {
@@ -66,11 +83,9 @@ dependencies {
     testImplementation 'org.ow2.asm:asm-util:9.10.1'
 }
 
-// Yes, we are using Java 11 to build. But actually Java 8 for compilation.
-// However, the javadoc tool is absolutely bricked with Java 8 - so we straight up use Java 17.
 tasks.withType(Javadoc) {
     javadocTool = javaToolchains.javadocToolFor {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -78,7 +93,7 @@ javadoc {
     options {
         addBooleanOption('html5', true)
         tags("apiNote:a:API Notice:", "implSpec:a:Implementation Specification:", "implNote:a:Implementation Notice:")
-        links "https://docs.oracle.com/en/java/javase/17/docs/api/"
+        links "https://docs.oracle.com/en/java/javase/25/docs/api/"
     }
 
     // see https://stackoverflow.com/a/56641766
