@@ -42,6 +42,7 @@
     "MissileMixins",
     "NativeMixins",
     "PersonMixins",
+    "PixmapPackerMixins",
     "ReligionMixins",
     "RenderCacheCollectorMixins",
     "RenderCacheMixins",
