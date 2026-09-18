@@ -249,8 +249,6 @@ public class PixmapPackerMixins implements PixmapPackerExtensions {
         try {
             rectW = (int) PixmapPackerMixins.SLAPI$MH_PIXMAP_RECT_GET_WIDTH.invokeExact(rect);
             rectH = (int) PixmapPackerMixins.SLAPI$MH_PIXMAP_RECT_GET_HEIGHT.invokeExact(rect);
-            rectX = (int) PixmapPackerMixins.SLAPI$MH_PIXMAP_RECT_GET_X.invokeExact(rect);
-            rectY = (int) PixmapPackerMixins.SLAPI$MH_PIXMAP_RECT_GET_Y.invokeExact(rect);
         } catch (Throwable t) {
             if (t instanceof Error) {
                 throw (Error) t;
@@ -271,6 +269,8 @@ public class PixmapPackerMixins implements PixmapPackerExtensions {
 
         try {
             page = (Page) PixmapPackerMixins.SLAPI$MH_PACK_STRATEGY_PACK.invokeExact(this.packStrategy, this, path, rect);
+            rectX = (int) PixmapPackerMixins.SLAPI$MH_PIXMAP_RECT_GET_X.invokeExact(rect);
+            rectY = (int) PixmapPackerMixins.SLAPI$MH_PIXMAP_RECT_GET_Y.invokeExact(rect);
         } catch (Throwable t) {
             if (t instanceof Error) {
                 throw (Error) t;
@@ -285,7 +285,7 @@ public class PixmapPackerMixins implements PixmapPackerExtensions {
 
         ByteBuffer destinationAddress = Objects.requireNonNull(page.getPixmap().getPixels(), "The page's pixel buffer may not be null");
         long dstStride = page.getPixmap().getWidth() * 4;
-        long dstOffset = (long) rectX * 4 + (long) rectY * dstStride;
+        long dstOffset = (long) rectX * 4 + (long) (rectY - 1) * dstStride;
 
         while (imageHeight-- != 0) {
             MemoryUtil.copyARGB8888ToRGBA8888(bufferAddress, destinationAddress, dstOffset, imageWidth);
