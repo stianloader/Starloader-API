@@ -36,9 +36,13 @@ public class MemoryUtil {
         long srcOffset = 0L;
 
         while (texelCount-- != 0) {
-            dstSegment.set(ValueLayout.JAVA_INT, dstOffset, srcSegment.get(ValueLayout.JAVA_INT, srcOffset));
+            int v =srcSegment.get(ValueLayout.JAVA_INT, srcOffset);
+            v = (v << 8) | (v >> 24);
+            dstSegment.set(ValueLayout.JAVA_INT, dstOffset, v);
+
             srcAddress += 4;
             dstOffset += 4;
+            srcOffset += 4;
         }
     }
 }

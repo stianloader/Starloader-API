@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
@@ -29,6 +30,9 @@ public class MemoryUtil {
     @NotNull
     private static final MethodHandle MH_MEMSET_INT;
 
+    @NotNull
+    private static final MethodHandle MH_GET_ADDR;
+
     static {
         try {
             Class<?> unsafeClass = Class.forName("sun.misc.Unsafe"); // For some reason eclipse doesn't let me reference the sun Unsafe directly, even though that should be valid in Java 8 land.
@@ -49,6 +53,27 @@ public class MemoryUtil {
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Cannot obtain handle on the sun Unsafe (try using Java 25+ where the sun Unsafe isn't required and make sure MRJ is configured properly).", e);
         }
+
+        MethodHandle mhGetAddr;
+
+        try {
+            // LWJGL 2 path
+            Class<?> lwjglMU = Class.forName("org.lwjgl.MemoryUtil");
+            mhGetAddr = MethodHandles.lookup().findStatic(lwjglMU, "getAddress", MethodType.methodType(long.class, ByteBuffer.class));
+        } catch (ClassNotFoundException e1) {
+            try {
+                // LWJGL 3 path
+                Class<?> lwjglMU = Class.forName("org.lwjgl.system.MemoryUtil");
+                mhGetAddr = MethodHandles.lookup().findStatic(lwjglMU, "memAddress", MethodType.methodType(long.class, ByteBuffer.class));
+            } catch (ReflectiveOperationException e2) {
+                e2.addSuppressed(e1);
+                throw new RuntimeException("Unable to get ByteBuffer -> long conversion MethodHandle: Tried both LWJGL 2 and LWJGL 3 paths.");
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Unable to get ByteBuffer -> long conversion MethodHandle: Using LWJGL 2 configuration.");
+        }
+
+        MH_GET_ADDR = mhGetAddr;
     }
 
     /**
@@ -64,11 +89,13 @@ public class MemoryUtil {
      */
     @AvailableSince("2.0.0-a20260915")
     public static final void copyARGB8888ToRGBA8888(long srcAddress, @NotNull ByteBuffer dst, long dstOffset, int texelCount) {
-        long dstAddress = org.lwjgl.MemoryUtil.getAddress(dst) + dstOffset;
-
         try {
+            long dstAddress = (long) MemoryUtil.MH_GET_ADDR.invokeExact(dst);
+
             while (texelCount-- != 0) {
-                MemoryUtil.MH_MEMSET_INT.invokeExact(dstAddress, Integer.rotateLeft((int) MemoryUtil.MH_MEMGET_INT.invokeExact(srcAddress), 8));
+                int v = (int) MemoryUtil.MH_MEMGET_INT.invokeExact(srcAddress);
+                v = (v << 8) | (v >> 24);
+                MemoryUtil.MH_MEMSET_INT.invokeExact(dstAddress, v);
                 srcAddress += 4;
                 dstAddress += 4;
             }
